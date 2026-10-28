@@ -1,17 +1,19 @@
 {
-  "version": "0.3.3",
+  "version": "0.3.4",
   "date": "2026-10-28",
-  "title": "Corner modules: clearance strip and blind width",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.3.rbz",
+  "title": "Configurator follows the selected module",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.4.rbz",
   "notes": [
-    "The clearance strip now stands perpendicular to the blind panel, at the carcass edge of the module on the other wall (behind its doors). That module butts…",
-    "The blind panel now covers that distance too: by default the other module’s depth + its front + the clearance (e.g. 580 + 18 + 50 = 648 mm). No strip in the…",
-    "Layout › Blind side width: from the other module (automatic), a blind panel width you type, or a door width you type (the blind side takes the rest)."
+    "Fixed: selecting another module in SketchUp did not always load it into the PanelPro Configurator (after opening another file, the selection watcher could…",
+    "Right-click › Edit module… (and the toolbar Edit) now always loads the selected module.",
+    "Clicking into the Configurator also picks up the module selected in SketchUp — only when the selection or the module changed, so unapplied edits are kept.…",
+    "If a module can’t be loaded, a message says why instead of nothing happening."
   ],
-  "title_es": "Esquineros: relleno de holgura y ancho ciego",
+  "title_es": "El configurador sigue al módulo seleccionado",
   "notes_es": [
-    "El relleno de holgura ahora va perpendicular al panel ciego, en el borde de la caja del módulo de la otra pared (detrás de sus puertas). Ese módulo se apoya…",
-    "El panel ciego ahora cubre también esa distancia: por defecto el fondo del otro módulo + su frente + la holgura (p. ej. 580 + 18 + 50 = 648 mm). Ya no hay…",
-    "Distribución › Ancho del lado ciego: según el otro módulo (automático), un ancho de panel ciego que escribes, o un ancho de puerta que escribes (el lado…"
+    "Corregido: al seleccionar otro módulo en SketchUp no siempre se cargaba en el configurador (tras abrir otro archivo se podía perder el seguimiento de la…",
+    "Clic derecho › Editar módulo… (y Editar en la barra) ahora siempre carga el módulo seleccionado.",
+    "Al hacer clic en el configurador también se toma el módulo seleccionado en SketchUp, solo si cambió la selección o el módulo, así se conservan los cambios…",
+    "Si un módulo no se puede cargar, aparece un mensaje con el motivo."
   ]
 }
