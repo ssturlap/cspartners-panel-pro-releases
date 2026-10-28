@@ -1,0 +1,11 @@
+{
+  "version": "0.2.6",
+  "date": "2026-10-28",
+  "title": "Automatic updates",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.2.6.rbz",
+  "notes": [
+    "PANEL PRO now checks for new versions by itself (at most once a day, a few seconds after SketchUp starts). When one is available it shows what is new and…",
+    "Extensions › CSPARTNERS PANEL PRO › Check for updates… checks right away.",
+    "New versions are published at github.com/ssturlap/cspartners-panel-pro-releases."
+  ]
+}
