@@ -1,30 +1,21 @@
 {
-  "version": "0.3.0",
+  "version": "0.3.1",
   "date": "2026-10-28",
-  "title": "Hand edits, finish sets, visible ends, prices",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.0.rbz",
+  "title": "Blind corner modules",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.1.rbz",
   "notes": [
-    "Panels edited by hand: change a part inside a module (size, position or a cut-out) and PanelPro notices. It shows orange in the preview and is listed under…",
-    "For each edited part choose what happens when the module changes: Keep the difference, Keep the proportion, Keep fixed or Reset to standard. Cut-outs keep…",
-    "Before Configurator changes reach a module with edited parts you confirm the rule per part. A Scale stretch uses the stored rules (keep the difference by…",
-    "Opening one part for editing makes it unique first, so its identical copies don’t change. The cut list uses the real size of edited parts and notes “edited…",
-    "Materials › Finish sets: save a module’s materials under a name (e.g. “Kitchen A”) and apply them to any module in one pick.",
-    "Visible end panels: tick the left and/or right side as visible to give it its own material (the fronts’ by default).",
-    "Optimizer: price per sheet for each decor and edge tape price per metre — cost per material and in total, also in the PDF.",
-    "Board library: say whether the wood grain in your images runs left–right or top–bottom, so textures follow each part’s length.",
-    "What’s new and the board-library warnings in Spanish. User guide under Extensions › CSPARTNERS PANEL PRO › User guide…"
+    "Layout tab › Corner module: Blind on the left or right. The closed (blind) side meets the side panel of the module on the other wall, forming an L.",
+    "In the front: a fixed blind panel (fronts’ material) as deep as the other module plus its front, then a clearance strip (filler, default 50 mm) so doors and…",
+    "Behind the door edge stands a hinge divider (70 mm deep, editable) from the bottom to the top of the carcass; the door hinges on it. Shelves are notched…",
+    "New presets: Kitchen — Base corner (blind) and Kitchen — Wall corner (blind). A readout shows the blind section and the door width.",
+    "Cut list: Blind panel, Corner filler and Hinge divider (Panel ciego, Relleno de esquina, Montante de bisagras)."
   ],
-  "title_es": "Ediciones a mano, juegos de acabados, costados vistos, precios",
+  "title_es": "Módulos de esquina ciega",
   "notes_es": [
-    "Ediciones a mano: si cambias una pieza dentro de un módulo (tamaño, posición o un recorte), PanelPro lo detecta. La pieza se ve en naranja en la vista…",
-    "Para cada pieza editada eliges qué pasa al cambiar el módulo: Mantener fija, Mantener la diferencia, Mantener la proporción o Restablecer. Los recortes…",
-    "Antes de aplicar cambios del configurador a un módulo con piezas editadas, se muestra la lista para confirmar qué hacer con cada una. Tras estirar con…",
-    "Al abrir una pieza para editarla se hace única primero, así sus copias idénticas no cambian.",
-    "La lista de corte usa la medida real de las piezas editadas y las marca como “editada a mano”.",
-    "Materiales › Juegos de acabados: guarda los materiales de un módulo con un nombre (p. ej. “Cocina A”) y aplícalos a cualquier otro módulo con un clic.",
-    "Costados vistos: marca el costado izquierdo y/o derecho como visto para darle su propio material (por defecto el de los frentes).",
-    "Optimizador: precio por tablero para cada decor y precio del canto por metro; muestra el costo por material y el total, también en el PDF.",
-    "Biblioteca de tableros: indica si la veta de tus imágenes va de izquierda a derecha o de arriba abajo, para que la textura siga el largo de cada pieza.",
-    "Novedades y avisos de la biblioteca en español. Guía de uso en Extensiones › CSPARTNERS PANEL PRO › Guía de uso."
+    "Distribución › Módulo de esquina: ciega a la izquierda o a la derecha. El lado cerrado (ciego) se junta con el costado del módulo de la otra pared y forman…",
+    "Al frente: un panel ciego fijo (material de los frentes) tan ancho como el fondo del otro módulo más su frente, luego un relleno de holgura (50 mm por…",
+    "Detrás del borde de la puerta va un montante de bisagras (70 mm de fondo, editable) desde el piso hasta el techo de la caja; la puerta se abisagra en él.…",
+    "Nuevos preajustes: Cocina — Bajo esquinero (ciego) y Cocina — Alacena esquinera (ciega). Se muestra el ancho de la sección ciega y de la puerta.",
+    "Lista de corte: Panel ciego, Relleno de esquina y Montante de bisagras."
   ]
 }

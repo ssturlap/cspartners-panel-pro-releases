@@ -51,6 +51,14 @@ thicknesses. One Undo reverts it.
 - **Thickness rule:** every panel uses the main panel thickness unless you untick *Same as panel thickness*.
   Thicker boards take space from the inside; the module never grows.
 
+### Corner modules (blind corners)
+Presets *Kitchen — Base corner (blind)* and *Wall corner (blind)*, or **Layout › Corner module** on any module:
+*Blind on the left / right*. The closed side meets the side panel of the module on the other wall (an L).
+From the corner outwards: a fixed **blind panel** (as deep as the other module plus its front), a **clearance
+strip** (filler, 50 mm by default) so fronts and handles don't clash, then the door(s) and drawers. A **hinge
+divider** (70 mm deep) stands behind the door edge, from the bottom to the top of the carcass; the door hinges
+on it. Set *Depth of the module on the other wall* to match that module.
+
 ## 4. Fronts and drawers
 Overlay or inset, reveals and gaps, slab / shaker / grooved fronts, hinge side (L, R, Top, Bottom),
 opening angles, soft-close, countertop clearance. Drawers: box, side-mount or metal box systems;
