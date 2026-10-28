@@ -1,17 +1,17 @@
 {
-  "version": "0.3.2",
+  "version": "0.3.3",
   "date": "2026-10-28",
-  "title": "Arrow keys while placing",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.2.rbz",
+  "title": "Corner modules: clearance strip and blind width",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.3.rbz",
   "notes": [
-    "Fixed: ← / → did nothing while placing a module when the Configurator still had the keyboard (right after clicking Place new). The keys now work from either…",
-    "New: ↑ / ↓ flips the module while placing (mirror — hinge sides, column order and the blind side of a corner module swap).",
-    "Esc in the Configurator’s placing bar cancels placing too."
+    "The clearance strip now stands perpendicular to the blind panel, at the carcass edge of the module on the other wall (behind its doors). That module butts…",
+    "The blind panel now covers that distance too: by default the other module’s depth + its front + the clearance (e.g. 580 + 18 + 50 = 648 mm). No strip in the…",
+    "Layout › Blind side width: from the other module (automatic), a blind panel width you type, or a door width you type (the blind side takes the rest)."
   ],
-  "title_es": "Flechas al colocar",
+  "title_es": "Esquineros: relleno de holgura y ancho ciego",
   "notes_es": [
-    "Corregido: ← / → no hacían nada al colocar un módulo cuando el configurador seguía con el teclado (justo después de Colocar nuevo). Ahora funcionan desde…",
-    "Nuevo: ↑ / ↓ voltea el módulo al colocarlo (espejo: se intercambian el lado de las bisagras, el orden de las columnas y el lado ciego de un esquinero).",
-    "Esc en la barra de colocación del configurador también cancela."
+    "El relleno de holgura ahora va perpendicular al panel ciego, en el borde de la caja del módulo de la otra pared (detrás de sus puertas). Ese módulo se apoya…",
+    "El panel ciego ahora cubre también esa distancia: por defecto el fondo del otro módulo + su frente + la holgura (p. ej. 580 + 18 + 50 = 648 mm). Ya no hay…",
+    "Distribución › Ancho del lado ciego: según el otro módulo (automático), un ancho de panel ciego que escribes, o un ancho de puerta que escribes (el lado…"
   ]
 }

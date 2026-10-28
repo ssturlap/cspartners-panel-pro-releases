@@ -54,10 +54,12 @@ espesores verdaderos. Un Deshacer lo revierte.
 ### Módulos de esquina (esquinas ciegas)
 Preajustes *Cocina — Bajo esquinero (ciego)* y *Alacena esquinera (ciega)*, o **Distribución › Módulo de esquina** en
 cualquier módulo: *Ciega a la izquierda / derecha*. El lado cerrado se junta con el costado del módulo de la otra pared
-(forman una L). Desde la esquina: un **panel ciego** fijo (tan ancho como el fondo del otro módulo más su frente), un
-**relleno de holgura** (50 mm por defecto) para que frentes y tiradores no choquen, y luego la(s) puerta(s) y gavetas.
-Un **montante de bisagras** (70 mm de fondo) va detrás del borde de la puerta, desde el piso hasta el techo de la caja;
-la puerta se abisagra en él. Ajusta *Fondo del módulo de la otra pared* a ese módulo.
+(forman una L). Desde la esquina: un **panel ciego** fijo y luego la(s) puerta(s) y gavetas. Un **montante de bisagras**
+(70 mm de fondo) va detrás del borde de la puerta, desde el piso hasta el techo de la caja; la puerta se abisagra en él.
+Un **relleno de holgura** (50 mm por defecto) va perpendicular al panel ciego, en el borde de la caja del módulo de la
+otra pared: ese módulo se apoya en él y queda separado, así puertas y tiradores no chocan.
+*Ancho del lado ciego*: según el otro módulo (su fondo + su frente + la holgura), un ancho de panel ciego que escribes o
+un ancho de puerta que escribes. Ajusta *Fondo del módulo de la otra pared* a ese módulo.
 
 ## 4. Frentes y gavetas
 Sobrepuestos o embutidos, holguras, frentes lisos / shaker / ranurados, lado de bisagra (Izq., Der., Arriba, Abajo),

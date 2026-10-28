@@ -54,10 +54,12 @@ thicknesses. One Undo reverts it.
 ### Corner modules (blind corners)
 Presets *Kitchen — Base corner (blind)* and *Wall corner (blind)*, or **Layout › Corner module** on any module:
 *Blind on the left / right*. The closed side meets the side panel of the module on the other wall (an L).
-From the corner outwards: a fixed **blind panel** (as deep as the other module plus its front), a **clearance
-strip** (filler, 50 mm by default) so fronts and handles don't clash, then the door(s) and drawers. A **hinge
-divider** (70 mm deep) stands behind the door edge, from the bottom to the top of the carcass; the door hinges
-on it. Set *Depth of the module on the other wall* to match that module.
+From the corner outwards: a fixed **blind panel**, then the door(s) and drawers. A **hinge divider** (70 mm deep)
+stands behind the door edge, from the bottom to the top of the carcass; the door hinges on it.
+A **clearance strip** (50 mm by default) stands perpendicular to the blind panel at the carcass edge of the module
+on the other wall: that module butts against it and is held away, so doors and handles don't clash.
+*Blind side width*: from the other module (its depth + its front + the clearance), a blind panel width you type,
+or a door width you type. Set *Depth of the module on the other wall* to match that module.
 
 ## 4. Fronts and drawers
 Overlay or inset, reveals and gaps, slab / shaker / grooved fronts, hinge side (L, R, Top, Bottom),
