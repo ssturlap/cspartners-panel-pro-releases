@@ -29,7 +29,7 @@ Open it from the toolbar or **Extensions › CSPARTNERS PANEL PRO › PanelPro C
 1. **Module** tab: pick a preset (it loads at once) and set width, height, depth.
    *The module size is the carcass*: doors, drawer fronts and the decorative top sit outside it.
 2. Adjust the other tabs.
-3. **Place new**, then click in the model (← / → rotate, Esc cancels). The click point is the front-left-bottom corner.
+3. **Place new**, then click in the model (← / → rotate 90°, ↑ / ↓ flip, Esc cancels). The click point is the front-left-bottom corner.
 
 ### Edit a module
 Select one module: the Configurator switches to **Editing**. Change anything, then **Apply to selected**

@@ -29,7 +29,7 @@ O usa **Extensiones › CSPARTNERS PANEL PRO › Buscar actualizaciones…**. De
 1. Pestaña **Módulo**: elige un preajuste (se carga al momento) y fija ancho, alto y fondo.
    *La medida del módulo es la caja*: puertas, frentes de gaveta y la tapa decorativa quedan fuera.
 2. Ajusta las demás pestañas.
-3. **Colocar nuevo** y haz clic en el modelo (← / → gira, Esc cancela). El punto de clic es la esquina frontal izquierda inferior.
+3. **Colocar nuevo** y haz clic en el modelo (← / → gira 90°, ↑ / ↓ voltea, Esc cancela). El punto de clic es la esquina frontal izquierda inferior.
 
 ### Editar un módulo
 Selecciona un módulo: el configurador pasa a **Editando**. Cambia lo que quieras y pulsa **Aplicar a selección**

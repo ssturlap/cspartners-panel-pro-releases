@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.1** — Blind corner modules  
-Download [cspartners_panel_pro_0.3.1.rbz](releases/cspartners_panel_pro_0.3.1.rbz) and install it in SketchUp:
+**Latest: 0.3.2** — Arrow keys while placing  
+Download [cspartners_panel_pro_0.3.2.rbz](releases/cspartners_panel_pro_0.3.2.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -13,6 +13,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.2 | [cspartners_panel_pro_0.3.2.rbz](releases/cspartners_panel_pro_0.3.2.rbz) |
 | 0.3.1 | [cspartners_panel_pro_0.3.1.rbz](releases/cspartners_panel_pro_0.3.1.rbz) |
 | 0.3.0 | [cspartners_panel_pro_0.3.0.rbz](releases/cspartners_panel_pro_0.3.0.rbz) |
 | 0.2.6 | [cspartners_panel_pro_0.2.6.rbz](releases/cspartners_panel_pro_0.2.6.rbz) |

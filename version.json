@@ -1,21 +1,17 @@
 {
-  "version": "0.3.1",
+  "version": "0.3.2",
   "date": "2026-10-28",
-  "title": "Blind corner modules",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.1.rbz",
+  "title": "Arrow keys while placing",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.2.rbz",
   "notes": [
-    "Layout tab › Corner module: Blind on the left or right. The closed (blind) side meets the side panel of the module on the other wall, forming an L.",
-    "In the front: a fixed blind panel (fronts’ material) as deep as the other module plus its front, then a clearance strip (filler, default 50 mm) so doors and…",
-    "Behind the door edge stands a hinge divider (70 mm deep, editable) from the bottom to the top of the carcass; the door hinges on it. Shelves are notched…",
-    "New presets: Kitchen — Base corner (blind) and Kitchen — Wall corner (blind). A readout shows the blind section and the door width.",
-    "Cut list: Blind panel, Corner filler and Hinge divider (Panel ciego, Relleno de esquina, Montante de bisagras)."
+    "Fixed: ← / → did nothing while placing a module when the Configurator still had the keyboard (right after clicking Place new). The keys now work from either…",
+    "New: ↑ / ↓ flips the module while placing (mirror — hinge sides, column order and the blind side of a corner module swap).",
+    "Esc in the Configurator’s placing bar cancels placing too."
   ],
-  "title_es": "Módulos de esquina ciega",
+  "title_es": "Flechas al colocar",
   "notes_es": [
-    "Distribución › Módulo de esquina: ciega a la izquierda o a la derecha. El lado cerrado (ciego) se junta con el costado del módulo de la otra pared y forman…",
-    "Al frente: un panel ciego fijo (material de los frentes) tan ancho como el fondo del otro módulo más su frente, luego un relleno de holgura (50 mm por…",
-    "Detrás del borde de la puerta va un montante de bisagras (70 mm de fondo, editable) desde el piso hasta el techo de la caja; la puerta se abisagra en él.…",
-    "Nuevos preajustes: Cocina — Bajo esquinero (ciego) y Cocina — Alacena esquinera (ciega). Se muestra el ancho de la sección ciega y de la puerta.",
-    "Lista de corte: Panel ciego, Relleno de esquina y Montante de bisagras."
+    "Corregido: ← / → no hacían nada al colocar un módulo cuando el configurador seguía con el teclado (justo después de Colocar nuevo). Ahora funcionan desde…",
+    "Nuevo: ↑ / ↓ voltea el módulo al colocarlo (espejo: se intercambian el lado de las bisagras, el orden de las columnas y el lado ciego de un esquinero).",
+    "Esc en la barra de colocación del configurador también cancela."
   ]
 }
