@@ -66,6 +66,18 @@ Sobrepuestos o embutidos, holguras, frentes lisos / shaker / ranurados, lado de 
 ángulos de apertura, cierre suave, holgura de cubierta. Gavetas: caja, correderas laterales o sistemas metálicos;
 numeradas de arriba abajo.
 
+### Tiradores
+**Frentes › Tiradores** — por separado para puertas y gavetas: *Barra en la cara*, *Cuña en un canto* o *Perfil a todo
+lo largo en un canto*; acabado negro, inoxidable, aluminio o dorado. Las posiciones usan las esquinas de la puerta,
+nombradas desde la bisagra: **A** arriba lado bisagra, **B** arriba lado apertura, **C** abajo lado bisagra, **D** abajo
+lado apertura (se reflejan en puertas izquierdas / derechas y pares). Gavetas: A arriba izquierda, B arriba derecha,
+C abajo izquierda, D abajo derecha, o *Centrado*. Cuñas y perfiles van en el canto superior/inferior o lateral de esa
+esquina; las distancias son el espacio libre desde el canto hasta donde empieza el tirador. El perfil se descuenta del
+tablero (tablero + perfil = el frente). Los tiradores aparecen en la lista de herrajes.
+
+**Medidas rápidas:** ancho de travesaño, retranqueo del fondo, alto y retranqueo del zócalo y el relleno de esquina tienen
+botones (p. ej. 50 · 70 · 100 · Personalizado). 1T / 2T siguen el espesor del tablero.
+
 ## 5. Materiales
 - Cada campo de material tiene lista de muestras (▾), **cuentagotas** (clic en una cara del modelo) y **Usar actual**.
 - **Igual que la caja:** todas las piezas siguen el material de la caja salvo que lo desmarques.

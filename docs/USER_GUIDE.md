@@ -66,6 +66,18 @@ Overlay or inset, reveals and gaps, slab / shaker / grooved fronts, hinge side (
 opening angles, soft-close, countertop clearance. Drawers: box, side-mount or metal box systems;
 numbered top to bottom.
 
+### Pulls
+**Fronts › Pulls** — for doors and for drawers separately: *T-bar on the face*, *Wedge on an edge* or
+*Full-length profile on an edge*; finish black, stainless, aluminium or gold. Positions use the door's corners,
+named from the hinge: **A** top hinge side, **B** top opening side, **C** bottom hinge side, **D** bottom opening side
+(they mirror on left / right doors and pairs). Drawers: A top left, B top right, C bottom left, D bottom right, or
+*Centred*. Wedges and profiles go on the top/bottom or side edge at that corner; gaps are the clear space from the
+edge to where the pull starts. A profile is taken off the panel (panel + profile = the front). Pulls appear in the
+hardware list.
+
+**Quick-pick sizes:** stretcher width, back recess, toe kick height and setback and the corner clearance strip have
+buttons (e.g. 50 · 70 · 100 · Custom). 1T / 2T follow the panel thickness.
+
 ## 5. Materials
 - Every material field has a swatch list (▾), an **eyedropper** (click a face in the model) and **Use current**.
 - **Same as carcass:** all panels follow the carcass material unless unticked.

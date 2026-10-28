@@ -1,13 +1,21 @@
 {
-  "version": "0.3.5",
+  "version": "0.3.6",
   "date": "2026-10-28",
-  "title": "Settings use the whole window",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.5.rbz",
+  "title": "Door and drawer pulls, quick-pick sizes",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.6.rbz",
   "notes": [
-    "Settings (⚙) now fill the whole Configurator window: the preview, tabs and Apply / Place buttons are hidden while you are in Settings. Done (top or bottom)…"
+    "Fronts tab › Pulls: T-bar on the face, wedge on an edge, or a full-length aluminium profile on an edge — chosen separately for doors and drawers, drawn in…",
+    "Position by corner: on doors A / B / C / D are named from the hinge (A top hinge side, B top opening side, C bottom hinge side, D bottom opening side), so…",
+    "Wedge and profile: top/bottom or side edge at that corner; wedge and T-bar: the gap from the edge to where the pull starts. Sizes are editable (T-bar 128 mm…",
+    "A profile takes its height off the panel, so panel + profile = the normal front; the cut list shows the shorter panel with a note. Pulls are listed in the…",
+    "Quick-pick buttons: stretcher width 50 / 70 / 100, back recess 1T / 2T, toe kick height 70 / 100 / 150, toe kick setback 1T / 2T / 50 / 60, corner clearance…"
   ],
-  "title_es": "Ajustes en toda la ventana",
+  "title_es": "Tiradores de puertas y gavetas, medidas rápidas",
   "notes_es": [
-    "Los ajustes (⚙) ahora ocupan toda la ventana del configurador: mientras estás en Ajustes se ocultan la vista previa, las pestañas y los botones Aplicar /…"
+    "Frentes › Tiradores: barra en la cara, cuña en un canto o perfil de aluminio a todo lo largo en un canto, por separado para puertas y gavetas; se dibujan en…",
+    "Posición por esquina: en puertas A / B / C / D se nombran desde la bisagra (A arriba lado bisagra, B arriba lado apertura, C abajo lado bisagra, D abajo…",
+    "Cuña y perfil: canto superior/inferior o lateral en esa esquina; cuña y barra: la distancia desde el canto hasta donde empieza el tirador. Medidas editables…",
+    "El perfil se descuenta del tablero, así tablero + perfil = el frente normal; la lista de corte muestra el tablero más corto con una nota. Los tiradores van…",
+    "Botones de medidas rápidas: ancho de travesaño 50 / 70 / 100, retranqueo del fondo 1T / 2T, alto de zócalo 70 / 100 / 150, retranqueo del zócalo 1T / 2T /…"
   ]
 }
