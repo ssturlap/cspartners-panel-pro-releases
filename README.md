@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.8** — Check for updates from Settings  
-Download [cspartners_panel_pro_0.3.8.rbz](releases/cspartners_panel_pro_0.3.8.rbz) and install it in SketchUp:
+**Latest: 0.3.9** — Slide fix and blind corner stretching  
+Download [cspartners_panel_pro_0.3.9.rbz](releases/cspartners_panel_pro_0.3.9.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -13,6 +13,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.9 | [cspartners_panel_pro_0.3.9.rbz](releases/cspartners_panel_pro_0.3.9.rbz) |
 | 0.3.8 | [cspartners_panel_pro_0.3.8.rbz](releases/cspartners_panel_pro_0.3.8.rbz) |
 | 0.3.7 | [cspartners_panel_pro_0.3.7.rbz](releases/cspartners_panel_pro_0.3.7.rbz) |
 | 0.3.6 | [cspartners_panel_pro_0.3.6.rbz](releases/cspartners_panel_pro_0.3.6.rbz) |
