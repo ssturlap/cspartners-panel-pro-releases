@@ -1,21 +1,19 @@
 {
-  "version": "0.3.6",
+  "version": "0.3.7",
   "date": "2026-10-28",
-  "title": "Door and drawer pulls, quick-pick sizes",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.6.rbz",
+  "title": "Real drawer slides in the model",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.7.rbz",
   "notes": [
-    "Fronts tab › Pulls: T-bar on the face, wedge on an edge, or a full-length aluminium profile on an edge — chosen separately for doors and drawers, drawn in…",
-    "Position by corner: on doors A / B / C / D are named from the hinge (A top hinge side, B top opening side, C bottom hinge side, D bottom opening side), so…",
-    "Wedge and profile: top/bottom or side edge at that corner; wedge and T-bar: the gap from the edge to where the pull starts. Sizes are editable (T-bar 128 mm…",
-    "A profile takes its height off the panel, so panel + profile = the normal front; the cut list shows the shorter panel with a note. Pulls are listed in the…",
-    "Quick-pick buttons: stretcher width 50 / 70 / 100, back recess 1T / 2T, toe kick height 70 / 100 / 150, toe kick setback 1T / 2T / 50 / 60, corner clearance…"
+    "Side-mount drawer slides are now drawn with your slide model (closed and open) instead of plain boxes: against the cabinet side, front flush with the…",
+    "Opening a drawer shows the open slide model; closing it shows the closed one again. The state is kept through edits and rebuilds.",
+    "New modules and the built-in presets now use side-mount full-extension slides by default (modules and presets you saved keep their drawer system).",
+    "Existing modules: select them and Rebuild (right-click) to get the slide models. The Configurator preview still shows simple slides."
   ],
-  "title_es": "Tiradores de puertas y gavetas, medidas rápidas",
+  "title_es": "Correderas reales en el modelo",
   "notes_es": [
-    "Frentes › Tiradores: barra en la cara, cuña en un canto o perfil de aluminio a todo lo largo en un canto, por separado para puertas y gavetas; se dibujan en…",
-    "Posición por esquina: en puertas A / B / C / D se nombran desde la bisagra (A arriba lado bisagra, B arriba lado apertura, C abajo lado bisagra, D abajo…",
-    "Cuña y perfil: canto superior/inferior o lateral en esa esquina; cuña y barra: la distancia desde el canto hasta donde empieza el tirador. Medidas editables…",
-    "El perfil se descuenta del tablero, así tablero + perfil = el frente normal; la lista de corte muestra el tablero más corto con una nota. Los tiradores van…",
-    "Botones de medidas rápidas: ancho de travesaño 50 / 70 / 100, retranqueo del fondo 1T / 2T, alto de zócalo 70 / 100 / 150, retranqueo del zócalo 1T / 2T /…"
+    "Las correderas laterales se dibujan ahora con tu modelo de corredera (cerrada y abierta) en lugar de cajas simples: contra el costado, a ras del frente de…",
+    "Al abrir una gaveta se ve la corredera abierta; al cerrarla, la cerrada. El estado se mantiene al editar y reconstruir.",
+    "Los módulos nuevos y los preajustes incluidos usan por defecto correderas laterales de extensión total (los módulos y preajustes que guardaste mantienen su…",
+    "Módulos existentes: selecciónalos y Reconstruir (clic derecho) para ver los modelos de corredera. La vista previa del configurador sigue mostrando…"
   ]
 }
