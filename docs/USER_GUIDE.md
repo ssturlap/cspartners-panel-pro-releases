@@ -24,6 +24,7 @@ Open it from the toolbar or **Extensions › CSPARTNERS PANEL PRO › PanelPro C
 - **Preview:** 2D or 3D (navigate like SketchUp: middle-drag orbit, Shift+middle pan, wheel zoom).
   *Doors / Fronts / Boxes* show or hide those parts; *Open doors / drawers* animates them.
 - **Tabs:** Module · Box · Base · Layout · Fronts · Drawers · Materials · Cut list.
+- **Module tab:** *Inner width (between the sides)* under Width — type either one. **Layout tab:** auto widths and heights show what they came out as.
 - **Number fields** accept a calculation: `330-18`, `600/2`, `(720-2*18)/3`, `2x18` — it is worked out when you leave the field.
 
 ### Place a module
@@ -88,6 +89,18 @@ hardware list.
 
 **Quick-pick sizes:** stretcher width, back recess, toe kick height and setback and the corner clearance strip have
 buttons (e.g. 50 · 70 · 100 · Custom). 1T / 2T follow the panel thickness.
+
+### Drawer boxes
+**Drawers** tab. Wood boxes: the bottom is *nested* between the box sides, flush underneath (default), or *slotted*
+into 6 mm grooves and raised 10 mm. Metal box systems: choose **Blum MERIVOBOX** or **LEGRABOX** and the system
+height; side height, bottom (MERIVOBOX LW − 51 × NL − 26) and back (LW − 51 × side − 8) fill in. *Gallery rails*
+add rails on low sides and a tall back (160 / 192 / 224 / 256). With 18 mm boards the cut list says to rebate the
+bottom's left and right edges underneath, and the back's ends on the back face, to 16 mm. *Enter the sizes by hand*
+for any other system.
+
+### Hardware models
+Side-mount slides and hinges on side-hung doors are drawn with real models (closed / open, swapped as the drawer or
+door opens). Several drawers or doors open one after another: drawers top to bottom, doors left to right.
 
 ## 5. Materials
 - Every material field has a swatch list (▾), an **eyedropper** (click a face in the model) and **Use current**.

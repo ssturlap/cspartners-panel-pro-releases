@@ -24,6 +24,7 @@ O usa **Extensiones › CSPARTNERS PANEL PRO › Buscar actualizaciones…**. De
 - **Vista previa:** 2D o 3D (se navega como en SketchUp: botón central orbita, Mayús+central desplaza, rueda zoom).
   *Puertas / Frentes / Cajas* muestran u ocultan esas piezas; *Abrir puertas / gavetas* las anima.
 - **Pestañas:** Módulo · Caja · Base · Distribución · Frentes · Gavetas · Materiales · Lista de corte.
+- **Pestaña Módulo:** *Ancho interior (entre costados)* debajo de Ancho — escribe cualquiera de los dos. **Pestaña Distribución:** los anchos y altos en auto muestran su resultado.
 - **Campos numéricos** aceptan una operación: `330-18`, `600/2`, `(720-2*18)/3`, `2x18` — se calcula al salir del campo.
 
 ### Colocar un módulo
@@ -88,6 +89,19 @@ tablero (tablero + perfil = el frente). Los tiradores aparecen en la lista de he
 
 **Medidas rápidas:** ancho de travesaño, retranqueo del fondo, alto y retranqueo del zócalo y el relleno de esquina tienen
 botones (p. ej. 50 · 70 · 100 · Personalizado). 1T / 2T siguen el espesor del tablero.
+
+### Cajas de gaveta
+Pestaña **Gavetas**. Cajas de madera: el fondo va *encajado* entre los lados, a ras por debajo (por defecto), o *en
+ranuras* de 6 mm y elevado 10 mm. Sistemas de caja metálica: elige **Blum MERIVOBOX** o **LEGRABOX** y la altura del
+sistema; la altura del lateral, el fondo (MERIVOBOX LW − 51 × NL − 26) y el respaldo (LW − 51 × lateral − 8) se
+completan solos. *Barandillas* añade barandillas sobre lados bajos y un respaldo alto (160 / 192 / 224 / 256). Con
+tablero de 18 mm la lista de corte indica rebajar a 16 mm los cantos izquierdo y derecho del fondo por debajo, y los
+extremos del respaldo por la cara trasera. *Escribir las medidas a mano* para cualquier otro sistema.
+
+### Modelos de herrajes
+Las correderas laterales y las bisagras de puertas batientes se dibujan con modelos reales (cerrado / abierto, se
+cambian al abrir la gaveta o la puerta). Varias gavetas o puertas se abren una tras otra: gavetas de arriba abajo,
+puertas de izquierda a derecha.
 
 ## 5. Materiales
 - Cada campo de material tiene lista de muestras (▾), **cuentagotas** (clic en una cara del modelo) y **Usar actual**.

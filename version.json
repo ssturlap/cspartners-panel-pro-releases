@@ -1,19 +1,27 @@
 {
-  "version": "0.3.12",
+  "version": "0.3.13",
   "date": "2026-10-29",
-  "title": "Fridge enclosure module",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.12.rbz",
+  "title": "Real hinges, MERIVOBOX / LEGRABOX, inner width, drawer bottoms",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.13.rbz",
   "notes": [
-    "New preset Kitchen — Fridge enclosure: two tall sides on the floor (carcass material), a top cabinet of its own nested between them with its front flush…",
-    "Module tab › Fridge enclosure: top cabinet height (400) and depth (350), gap at each side (15) and above the fridge (50); the info line shows the opening…",
-    "Size it by the module, or type the fridge width / height / depth and press \"Fit module to fridge\", then fine-tune. The top cabinet takes its doors, layout…",
-    "Number fields accept calculations: 330-18, 600/2, (720-2*18)/3, 2x18 — worked out when you leave the field (also column widths, section heights and the…"
+    "Module tab: \"Inner width (between the sides)\" under Width. Type either one — the other follows (the sides, and decorative side panels fitted inside the…",
+    "Drawers › Box bottom: nested between the box sides, flush underneath (new default — now drawn with its own edges), or slotted into 6 mm grooves and raised…",
+    "Drawers › Metal box system: choose Blum MERIVOBOX or LEGRABOX and the system height (MERIVOBOX N 68.5 / M 91 / K 129 / E 192; LEGRABOX N / M / K / C / F) —…",
+    "Gallery rails for low metal sides: the rails are drawn and listed, and the back becomes a tall back (160 / 192 / 224 / 256 or your own).",
+    "Box bottom and back are cut from the main board thickness; with 18 mm the cut list says to rebate them to 16 mm (bottom: left and right edges underneath;…",
+    "Real hinges: side-hung doors are now drawn with your hinge model (closed and open) at each cup, mirrored on right-hinged doors; opening a door shows the…",
+    "Layout tab: column widths and row heights set to auto now show what they came out as (e.g. \"auto = 156.7\").",
+    "Opening or closing several drawers or doors runs one after another: drawers top to bottom, doors left to right, each starting when the one before is a…"
   ],
-  "title_es": "Módulo mueble de nevera",
+  "title_es": "Bisagras reales, MERIVOBOX / LEGRABOX, ancho interior, fondos de gaveta",
   "notes_es": [
-    "Nuevo preajuste Cocina — Mueble de nevera: dos costados altos sobre el piso (material de caja), un módulo superior propio encajado entre ellos con el frente…",
-    "Pestaña Módulo › Mueble de nevera: alto (400) y fondo (350) del módulo superior, holgura a cada lado (15) y sobre la nevera (50); la línea de información…",
-    "Dimensiónalo por el módulo, o escribe ancho / alto / fondo de la nevera y pulsa \"Ajustar el módulo a la nevera\"; luego afina. El módulo superior toma…",
-    "Los campos numéricos aceptan operaciones: 330-18, 600/2, (720-2*18)/3, 2x18 — se calculan al salir del campo (también anchos de columna, altos de sección y…"
+    "Pestaña Módulo: \"Ancho interior (entre costados)\" debajo de Ancho. Escribe cualquiera de los dos y el otro se ajusta (la diferencia son los costados, y los…",
+    "Gavetas › Fondo de la caja: encajado entre los lados, a ras por debajo (nuevo valor por defecto — ahora se dibuja con sus propias aristas), o en ranuras de…",
+    "Gavetas › Sistema de caja metálica: elige Blum MERIVOBOX o LEGRABOX y la altura del sistema (MERIVOBOX N 68,5 / M 91 / K 129 / E 192; LEGRABOX N / M / K / C…",
+    "Barandillas para laterales metálicos bajos: se dibujan y se listan, y el respaldo pasa a ser un respaldo alto (160 / 192 / 224 / 256 o el tuyo).",
+    "El fondo y el respaldo de la caja se cortan del espesor principal; con 18 mm la lista de corte indica rebajarlos a 16 mm (fondo: cantos izquierdo y derecho…",
+    "Bisagras reales: las puertas batientes se dibujan ahora con tu modelo de bisagra (cerrada y abierta) en cada cazoleta, en espejo en las puertas que abren a…",
+    "Pestaña Distribución: los anchos de columna y altos de fila en auto muestran ahora el resultado (p. ej. \"auto = 156.7\").",
+    "Al abrir o cerrar varias gavetas o puertas se mueven una tras otra: gavetas de arriba abajo, puertas de izquierda a derecha, cada una empieza cuando la…"
   ]
 }
