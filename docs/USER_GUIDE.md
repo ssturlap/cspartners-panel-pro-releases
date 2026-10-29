@@ -24,6 +24,7 @@ Open it from the toolbar or **Extensions › CSPARTNERS PANEL PRO › PanelPro C
 - **Preview:** 2D or 3D (navigate like SketchUp: middle-drag orbit, Shift+middle pan, wheel zoom).
   *Doors / Fronts / Boxes* show or hide those parts; *Open doors / drawers* animates them.
 - **Tabs:** Module · Box · Base · Layout · Fronts · Drawers · Materials · Cut list.
+- **Number fields** accept a calculation: `330-18`, `600/2`, `(720-2*18)/3`, `2x18` — it is worked out when you leave the field.
 
 ### Place a module
 1. **Module** tab: pick a preset (it loads at once) and set width, height, depth.
@@ -60,6 +61,16 @@ A **clearance strip** (50 mm by default) stands perpendicular to the blind panel
 on the other wall: that module butts against it and is held away, so doors and handles don't clash.
 *Blind side width*: from the other module (its depth + its front + the clearance), a blind panel width you type,
 or a door width you type. Set *Depth of the module on the other wall* to match that module.
+
+### Fridge enclosure
+Preset *Kitchen — Fridge enclosure*. Two **tall sides** stand on the floor, full height and full depth. Between them
+at the top sits a **top cabinet** that is a module of its own (its own sides, bottom, top and back), front flush with
+the tall sides' front edge; its doors, layout and pulls come from the Fronts and Layout tabs.
+**Module** tab › *Fridge enclosure*: back behind the fridge (full, floor to top — or none, only the top cabinet's back),
+top cabinet height (400) and depth (350), gap at each side of the fridge (15) and above it (50).
+The info line shows the opening and the largest fridge that fits. Size it either way: type the module's width / height
+/ depth, or type the fridge's width / height / depth under *Fridge size* and press **Fit module to fridge**,
+then fine-tune.
 
 ## 4. Fronts and drawers
 Overlay or inset, reveals and gaps, slab / shaker / grooved fronts, hinge side (L, R, Top, Bottom),

@@ -24,6 +24,7 @@ O usa **Extensiones › CSPARTNERS PANEL PRO › Buscar actualizaciones…**. De
 - **Vista previa:** 2D o 3D (se navega como en SketchUp: botón central orbita, Mayús+central desplaza, rueda zoom).
   *Puertas / Frentes / Cajas* muestran u ocultan esas piezas; *Abrir puertas / gavetas* las anima.
 - **Pestañas:** Módulo · Caja · Base · Distribución · Frentes · Gavetas · Materiales · Lista de corte.
+- **Campos numéricos** aceptan una operación: `330-18`, `600/2`, `(720-2*18)/3`, `2x18` — se calcula al salir del campo.
 
 ### Colocar un módulo
 1. Pestaña **Módulo**: elige un preajuste (se carga al momento) y fija ancho, alto y fondo.
@@ -60,6 +61,16 @@ Un **relleno de holgura** (50 mm por defecto) va perpendicular al panel ciego, e
 otra pared: ese módulo se apoya en él y queda separado, así puertas y tiradores no chocan.
 *Ancho del lado ciego*: según el otro módulo (su fondo + su frente + la holgura), un ancho de panel ciego que escribes o
 un ancho de puerta que escribes. Ajusta *Fondo del módulo de la otra pared* a ese módulo.
+
+### Mueble de nevera
+Preajuste *Cocina — Mueble de nevera*. Dos **costados altos** van sobre el piso, a todo el alto y el fondo. Entre ellos,
+arriba, va un **módulo superior** que es un módulo propio (sus costados, piso, techo y respaldo), con el frente al ras
+del borde delantero de los costados altos; sus puertas, distribución y tiradores salen de las pestañas Frentes y
+Distribución. Pestaña **Módulo** › *Mueble de nevera*: respaldo detrás de la nevera (completo, del piso arriba — o
+ninguno, solo el respaldo del módulo superior), alto (400) y fondo (350) del módulo superior, holgura a cada lado de la
+nevera (15) y encima (50). La línea de información muestra el hueco y la nevera más grande que cabe. Se dimensiona de
+dos maneras: escribe ancho / alto / fondo del módulo, o escribe las medidas de la nevera en *Medidas de la nevera* y
+pulsa **Ajustar el módulo a la nevera**; luego afina.
 
 ## 4. Frentes y gavetas
 Sobrepuestos o embutidos, holguras, frentes lisos / shaker / ranurados, lado de bisagra (Izq., Der., Arriba, Abajo),
