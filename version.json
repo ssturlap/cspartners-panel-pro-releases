@@ -1,15 +1,21 @@
 {
-  "version": "0.3.9",
-  "date": "2026-10-28",
-  "title": "Slide fix and blind corner stretching",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.9.rbz",
+  "version": "0.3.10",
+  "date": "2026-10-29",
+  "title": "Kitchen defaults and a second corner filler",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.10.rbz",
   "notes": [
-    "Drawer slides now sit against the cabinet sides when a decorative side panel is fitted inside the module width (they were off by the panel thickness).…",
-    "Blind corner modules stretched or squeezed with the Scale tool keep the blind side as it is; the door gets wider or narrower. A module set to \"Door width…"
+    "Stretchers are 70 mm wide by default (front and rear).",
+    "Kitchen base modules: front stretcher on edge (vertical), rear stretcher on and flat by default — the sink base now has a rear stretcher too.",
+    "Kitchen modules: the back is set in flush with the rear edge of the sides by default (no recess), so they gain 16 mm inside and longer slides may fit. The…",
+    "Blind corner modules: a second clearance strip at the outer edge, so the module on the other wall rests on two points. Both are in the cut list.",
+    "These defaults apply to new modules; modules already in your models and presets you saved keep their settings."
   ],
-  "title_es": "Corrección de correderas y estirado de esquineros",
+  "title_es": "Valores de cocina y un segundo relleno de esquina",
   "notes_es": [
-    "Las correderas se colocan ahora contra los costados cuando hay un panel lateral decorativo dentro del ancho del módulo (quedaban corridas el espesor del…",
-    "Al estirar o encoger un esquinero ciego con la herramienta Escala, el lado ciego se mantiene y la puerta se hace más ancha o más angosta. Un módulo con…"
+    "Los travesaños miden 70 mm de ancho por defecto (delantero y trasero).",
+    "Módulos bajos de cocina: travesaño delantero de canto (vertical) y travesaño trasero activo y plano por defecto; el bajo fregadero también lleva travesaño…",
+    "Módulos de cocina: el respaldo va entre costados, al ras del borde trasero, por defecto (sin retiro), así ganan 16 mm por dentro y pueden caber correderas…",
+    "Esquineros ciegos: un segundo relleno de esquina en el borde exterior, para que el módulo de la otra pared se apoye en dos puntos. Ambos salen en la lista…",
+    "Estos valores aplican a módulos nuevos; los módulos ya dibujados y los preajustes que guardaste mantienen su configuración."
   ]
 }
