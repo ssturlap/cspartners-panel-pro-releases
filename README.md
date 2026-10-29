@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.10** — Kitchen defaults and a second corner filler  
-Download [cspartners_panel_pro_0.3.10.rbz](releases/cspartners_panel_pro_0.3.10.rbz) and install it in SketchUp:
+**Latest: 0.3.11** — Plastic stainless-look toe kick  
+Download [cspartners_panel_pro_0.3.11.rbz](releases/cspartners_panel_pro_0.3.11.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -13,6 +13,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.11 | [cspartners_panel_pro_0.3.11.rbz](releases/cspartners_panel_pro_0.3.11.rbz) |
 | 0.3.10 | [cspartners_panel_pro_0.3.10.rbz](releases/cspartners_panel_pro_0.3.10.rbz) |
 | 0.3.9 | [cspartners_panel_pro_0.3.9.rbz](releases/cspartners_panel_pro_0.3.9.rbz) |
 | 0.3.8 | [cspartners_panel_pro_0.3.8.rbz](releases/cspartners_panel_pro_0.3.8.rbz) |

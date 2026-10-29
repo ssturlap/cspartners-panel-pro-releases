@@ -1,21 +1,17 @@
 {
-  "version": "0.3.10",
+  "version": "0.3.11",
   "date": "2026-10-29",
-  "title": "Kitchen defaults and a second corner filler",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.10.rbz",
+  "title": "Plastic stainless-look toe kick",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.11.rbz",
   "notes": [
-    "Stretchers are 70 mm wide by default (front and rear).",
-    "Kitchen base modules: front stretcher on edge (vertical), rear stretcher on and flat by default — the sink base now has a rear stretcher too.",
-    "Kitchen modules: the back is set in flush with the rear edge of the sides by default (no recess), so they gain 16 mm inside and longer slides may fit. The…",
-    "Blind corner modules: a second clearance strip at the outer edge, so the module on the other wall rests on two points. Both are in the cut list.",
-    "These defaults apply to new modules; modules already in your models and presets you saved keep their settings."
+    "With adjustable legs, the toe kick is now a clip-on plastic kick with a stainless-steel look by default: 16 mm thick, drawn in brushed grey, not in the…",
+    "It comes 100 or 150 mm high; any other toe kick height shows a warning. Untick \"Plastic kick\" (Base tab) to use a board toe kick in the toe kick material…",
+    "Modules already in your models and presets you saved keep their board toe kick."
   ],
-  "title_es": "Valores de cocina y un segundo relleno de esquina",
+  "title_es": "Zócalo plástico aspecto inox",
   "notes_es": [
-    "Los travesaños miden 70 mm de ancho por defecto (delantero y trasero).",
-    "Módulos bajos de cocina: travesaño delantero de canto (vertical) y travesaño trasero activo y plano por defecto; el bajo fregadero también lleva travesaño…",
-    "Módulos de cocina: el respaldo va entre costados, al ras del borde trasero, por defecto (sin retiro), así ganan 16 mm por dentro y pueden caber correderas…",
-    "Esquineros ciegos: un segundo relleno de esquina en el borde exterior, para que el módulo de la otra pared se apoye en dos puntos. Ambos salen en la lista…",
-    "Estos valores aplican a módulos nuevos; los módulos ya dibujados y los preajustes que guardaste mantienen su configuración."
+    "Con patas regulables, el zócalo es ahora por defecto un zócalo plástico con clip y aspecto de acero inoxidable: 16 mm de espesor, dibujado en gris…",
+    "Viene de 100 o 150 mm de alto; con otra altura de zócalo aparece un aviso. Desmarca \"Zócalo plástico\" (pestaña Base) para usar un zócalo de tablero con el…",
+    "Los módulos ya dibujados y los preajustes que guardaste mantienen su zócalo de tablero."
   ]
 }
