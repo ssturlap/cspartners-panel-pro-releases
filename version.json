@@ -1,17 +1,19 @@
 {
-  "version": "0.3.14",
+  "version": "0.3.15",
   "date": "2026-10-29",
-  "title": "Doors follow the hinges, wedge pulls fixed",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.14.rbz",
+  "title": "Hinge plates sit on the cabinet side",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.15.rbz",
   "notes": [
-    "Doors with the real hinge models now open the way those hinges move: the swing angle and turning point are read from the closed and open hinge models, so…",
-    "Wedge (edge) pulls were drawn backwards: the flange now sits on the back face of the door or drawer front and the pull wraps the edge toward the front.",
-    "Toolbar: the \"Open / close doors & drawers\" button shows pressed while the tool is on; clicking it again turns the tool off."
+    "The hinge model is now placed so its mounting plate sits flat on the inside face of the cabinet side (measured from your hinge model) instead of putting the…",
+    "Window › Ruby Console shows what was read from the hinge models (cup found, plate distance, swing, cup distance from the door edge).",
+    "Hinges sat too far into the cabinet: the hinge model is now set so the mounting plate’s front screw holes are on the 37 mm line from the carcass front edge…",
+    "Cut list: door notes no longer give hinge cup positions (hinges are drawn for the picture, not as a drilling guide); they say how many hinges and which side."
   ],
-  "title_es": "Las puertas siguen a las bisagras, tiradores de canto corregidos",
+  "title_es": "Las placas de bisagra apoyan en el costado",
   "notes_es": [
-    "Las puertas con los modelos reales de bisagra se abren ahora como se mueven esas bisagras: el ángulo y el punto de giro se leen de los modelos cerrado y…",
-    "Los tiradores de canto (cuña) estaban al revés: la pestaña va ahora en la cara trasera de la puerta o del frente de gaveta y el tirador envuelve el canto…",
-    "Barra de herramientas: el botón \"Abrir / cerrar puertas y gavetas\" se ve presionado mientras la herramienta está activa; al pulsarlo otra vez se desactiva."
+    "El modelo de bisagra se coloca ahora con su placa de montaje apoyada en la cara interior del costado (medido de tu modelo de bisagra) en lugar de poner la…",
+    "Ventana › Consola Ruby muestra lo que se leyó de los modelos de bisagra (cazoleta encontrada, distancia de la placa, giro, distancia de la cazoleta al canto).",
+    "Las bisagras quedaban muy adentro: el modelo de bisagra se coloca ahora con los tornillos delanteros de la placa en la línea de 37 mm desde el canto…",
+    "Lista de corte: las notas de puertas ya no indican posiciones de cazoletas (las bisagras se dibujan para la imagen, no como guía de taladro); dicen cuántas…"
   ]
 }

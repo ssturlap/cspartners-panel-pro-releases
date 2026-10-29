@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.14** — Doors follow the hinges, wedge pulls fixed  
-Download [cspartners_panel_pro_0.3.14.rbz](releases/cspartners_panel_pro_0.3.14.rbz) and install it in SketchUp:
+**Latest: 0.3.15** — Hinge plates sit on the cabinet side  
+Download [cspartners_panel_pro_0.3.15.rbz](releases/cspartners_panel_pro_0.3.15.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -13,6 +13,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.15 | [cspartners_panel_pro_0.3.15.rbz](releases/cspartners_panel_pro_0.3.15.rbz) |
 | 0.3.14 | [cspartners_panel_pro_0.3.14.rbz](releases/cspartners_panel_pro_0.3.14.rbz) |
 | 0.3.13 | [cspartners_panel_pro_0.3.13.rbz](releases/cspartners_panel_pro_0.3.13.rbz) |
 | 0.3.12 | [cspartners_panel_pro_0.3.12.rbz](releases/cspartners_panel_pro_0.3.12.rbz) |
