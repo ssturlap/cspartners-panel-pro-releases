@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.16** — Hinges and doors placed like your hand-fitted door  
-Download [cspartners_panel_pro_0.3.16.rbz](releases/cspartners_panel_pro_0.3.16.rbz) and install it in SketchUp:
+**Latest: 0.3.18** — Module manual, snap to the right edge  
+Download [cspartners_panel_pro_0.3.18.rbz](releases/cspartners_panel_pro_0.3.18.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -13,6 +13,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.18 | [cspartners_panel_pro_0.3.18.rbz](releases/cspartners_panel_pro_0.3.18.rbz) |
 | 0.3.16 | [cspartners_panel_pro_0.3.16.rbz](releases/cspartners_panel_pro_0.3.16.rbz) |
 | 0.3.15 | [cspartners_panel_pro_0.3.15.rbz](releases/cspartners_panel_pro_0.3.15.rbz) |
 | 0.3.14 | [cspartners_panel_pro_0.3.14.rbz](releases/cspartners_panel_pro_0.3.14.rbz) |

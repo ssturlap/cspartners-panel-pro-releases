@@ -1,17 +1,19 @@
 {
-  "version": "0.3.16",
+  "version": "0.3.18",
   "date": "2026-10-29",
-  "title": "Hinges and doors placed like your hand-fitted door",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.16.rbz",
+  "title": "Module manual, snap to the right edge",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.18.rbz",
   "notes": [
-    "Hinges now sit exactly where you placed them by hand on a test door: on the inside face of the cabinet side, 22.9 mm in front of the door’s back face; the…",
-    "Doors with hinge models open 98° about the hinge’s real turning point (measured from your hand-fitted open door), so the door stays on its hinges. Left and…",
-    "These values live in models/hinge.json next to the hinge models — another hinge model only needs its own numbers there."
+    "Cut list tab › Module manual…: a document for the selected modules (or all) — cover with the module index, one spec page per module and a project parts…",
+    "Each module page: code, name, type, size, materials, doors, drawers, hinges, slide pairs and length, legs; front, front without doors and fronts, top, left,…",
+    "Project parts: hardware totals and the plastic toe kick cut from 4 m bars with the least waste (pieces per bar, offcut, 3 mm saw cut; runs over 4 m are…",
+    "New ⇥ button in the Configurator header: snaps the window to the right edge of the screen at full height, like a tray; press it again to float it back where…"
   ],
-  "title_es": "Bisagras y puertas colocadas como tu puerta ajustada a mano",
+  "title_es": "Manual de módulos, acoplar al borde derecho",
   "notes_es": [
-    "Las bisagras quedan ahora justo donde las pusiste a mano en una puerta de prueba: en la cara interior del costado, 22,9 mm delante de la cara trasera de la…",
-    "Las puertas con modelos de bisagra se abren 98° alrededor del punto de giro real de la bisagra (medido de tu puerta abierta ajustada a mano), así la puerta…",
-    "Estos valores están en models/hinge.json junto a los modelos de bisagra — otro modelo de bisagra solo necesita sus propios números ahí."
+    "Pestaña Lista de corte › Manual de módulos…: un documento de los módulos seleccionados (o todos) — portada con el índice, una ficha por módulo y una página…",
+    "Cada ficha: código, nombre, tipo, medida, materiales, puertas, gavetas, bisagras, pares de correderas y su largo, patas; vistas frontal, frontal sin puertas…",
+    "Piezas del proyecto: total de herrajes y el zócalo plástico cortado de barras de 4 m con el menor desperdicio (piezas por barra, sobrante, corte de sierra…",
+    "Nuevo botón ⇥ en la cabecera del configurador: acopla la ventana al borde derecho de la pantalla a todo el alto, como una bandeja; púlsalo otra vez para que…"
   ]
 }
