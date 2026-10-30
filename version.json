@@ -1,13 +1,13 @@
 {
-  "version": "0.3.19",
+  "version": "0.3.20",
   "date": "2026-10-30",
-  "title": "Pulls meet on stacked doors",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.19.rbz",
+  "title": "Slides that move like real ones",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.20.rbz",
   "notes": [
-    "Doors stacked in one column now have their pulls meet at the joint, like a door pair meets in the middle: the upper door’s pull at its bottom, the lower…"
+    "Drawer slides are now drawn from your three slide parts: the cabinet rail stays on the cabinet side, the drawer rail moves with the drawer and the middle…"
   ],
-  "title_es": "Tiradores que se encuentran en puertas apiladas",
+  "title_es": "Correderas que se mueven como las reales",
   "notes_es": [
-    "Las puertas apiladas en una columna tienen ahora los tiradores encontrados en la junta, como una pareja de puertas en el centro: el de la puerta de arriba…"
+    "Las correderas se dibujan ahora con tus tres piezas: el riel de la caja queda en el costado, el riel de la gaveta se mueve con la gaveta y el riel del medio…"
   ]
 }

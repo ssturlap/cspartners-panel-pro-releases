@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.19** — Pulls meet on stacked doors  
-Download [cspartners_panel_pro_0.3.19.rbz](releases/cspartners_panel_pro_0.3.19.rbz) and install it in SketchUp:
+**Latest: 0.3.20** — Slides that move like real ones  
+Download [cspartners_panel_pro_0.3.20.rbz](releases/cspartners_panel_pro_0.3.20.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -13,6 +13,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.20 | [cspartners_panel_pro_0.3.20.rbz](releases/cspartners_panel_pro_0.3.20.rbz) |
 | 0.3.19 | [cspartners_panel_pro_0.3.19.rbz](releases/cspartners_panel_pro_0.3.19.rbz) |
 | 0.3.18 | [cspartners_panel_pro_0.3.18.rbz](releases/cspartners_panel_pro_0.3.18.rbz) |
 | 0.3.16 | [cspartners_panel_pro_0.3.16.rbz](releases/cspartners_panel_pro_0.3.16.rbz) |
