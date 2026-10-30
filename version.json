@@ -1,19 +1,13 @@
 {
-  "version": "0.3.18",
-  "date": "2026-10-29",
-  "title": "Module manual, snap to the right edge",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.18.rbz",
+  "version": "0.3.19",
+  "date": "2026-10-30",
+  "title": "Pulls meet on stacked doors",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.19.rbz",
   "notes": [
-    "Cut list tab › Module manual…: a document for the selected modules (or all) — cover with the module index, one spec page per module and a project parts…",
-    "Each module page: code, name, type, size, materials, doors, drawers, hinges, slide pairs and length, legs; front, front without doors and fronts, top, left,…",
-    "Project parts: hardware totals and the plastic toe kick cut from 4 m bars with the least waste (pieces per bar, offcut, 3 mm saw cut; runs over 4 m are…",
-    "New ⇥ button in the Configurator header: snaps the window to the right edge of the screen at full height, like a tray; press it again to float it back where…"
+    "Doors stacked in one column now have their pulls meet at the joint, like a door pair meets in the middle: the upper door’s pull at its bottom, the lower…"
   ],
-  "title_es": "Manual de módulos, acoplar al borde derecho",
+  "title_es": "Tiradores que se encuentran en puertas apiladas",
   "notes_es": [
-    "Pestaña Lista de corte › Manual de módulos…: un documento de los módulos seleccionados (o todos) — portada con el índice, una ficha por módulo y una página…",
-    "Cada ficha: código, nombre, tipo, medida, materiales, puertas, gavetas, bisagras, pares de correderas y su largo, patas; vistas frontal, frontal sin puertas…",
-    "Piezas del proyecto: total de herrajes y el zócalo plástico cortado de barras de 4 m con el menor desperdicio (piezas por barra, sobrante, corte de sierra…",
-    "Nuevo botón ⇥ en la cabecera del configurador: acopla la ventana al borde derecho de la pantalla a todo el alto, como una bandeja; púlsalo otra vez para que…"
+    "Las puertas apiladas en una columna tienen ahora los tiradores encontrados en la junta, como una pareja de puertas en el centro: el de la puerta de arriba…"
   ]
 }
