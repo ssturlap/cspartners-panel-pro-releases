@@ -1,17 +1,13 @@
 {
-  "version": "0.3.21",
+  "version": "0.3.22",
   "date": "2026-10-30",
-  "title": "Glass doors; manual heights and bigger text",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.21.rbz",
+  "title": "Module library",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.22.rbz",
   "notes": [
-    "Module manual: the front, side and back views now show the toe kick / leg height and the module height as a chain (e.g. 100 + 770), and the overall height…",
-    "Module manual: bigger dimension text; short dimensions get their number written upright beside the line.",
-    "Layout › Front: new Glass door and Glass door pair — a black aluminium frame (45 mm face, 20 mm deep) with bronze glass in a front rebate, 8 mm in from the…"
+    "New ▦ button next to the module list: opens the Module library, a narrow window against the Configurator’s left side with every preset (built-in and yours)…"
   ],
-  "title_es": "Puertas de vidrio; alturas del manual y texto más grande",
+  "title_es": "Biblioteca de módulos",
   "notes_es": [
-    "Manual de módulos: las vistas frontal, laterales y posterior muestran ahora la altura del zócalo / patas y la del módulo en cadena (p. ej. 100 + 770), y la…",
-    "Manual de módulos: texto de medidas más grande; las medidas cortas llevan el número en horizontal junto a la línea.",
-    "Distribución › Frente: nuevas Puerta de vidrio y Par de puertas de vidrio — marco de aluminio negro (45 mm de frente, 20 mm de fondo) con vidrio bronce en…"
+    "Nuevo botón ▦ junto a la lista de módulos: abre la Biblioteca de módulos, una ventana estrecha pegada al lado izquierdo del configurador con cada preajuste…"
   ]
 }
