@@ -1,19 +1,17 @@
 {
-  "version": "0.3.15",
+  "version": "0.3.16",
   "date": "2026-10-29",
-  "title": "Hinge plates sit on the cabinet side",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.15.rbz",
+  "title": "Hinges and doors placed like your hand-fitted door",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.16.rbz",
   "notes": [
-    "The hinge model is now placed so its mounting plate sits flat on the inside face of the cabinet side (measured from your hinge model) instead of putting the…",
-    "Window › Ruby Console shows what was read from the hinge models (cup found, plate distance, swing, cup distance from the door edge).",
-    "Hinges sat too far into the cabinet: the hinge model is now set so the mounting plate’s front screw holes are on the 37 mm line from the carcass front edge…",
-    "Cut list: door notes no longer give hinge cup positions (hinges are drawn for the picture, not as a drilling guide); they say how many hinges and which side."
+    "Hinges now sit exactly where you placed them by hand on a test door: on the inside face of the cabinet side, 22.9 mm in front of the door’s back face; the…",
+    "Doors with hinge models open 98° about the hinge’s real turning point (measured from your hand-fitted open door), so the door stays on its hinges. Left and…",
+    "These values live in models/hinge.json next to the hinge models — another hinge model only needs its own numbers there."
   ],
-  "title_es": "Las placas de bisagra apoyan en el costado",
+  "title_es": "Bisagras y puertas colocadas como tu puerta ajustada a mano",
   "notes_es": [
-    "El modelo de bisagra se coloca ahora con su placa de montaje apoyada en la cara interior del costado (medido de tu modelo de bisagra) en lugar de poner la…",
-    "Ventana › Consola Ruby muestra lo que se leyó de los modelos de bisagra (cazoleta encontrada, distancia de la placa, giro, distancia de la cazoleta al canto).",
-    "Las bisagras quedaban muy adentro: el modelo de bisagra se coloca ahora con los tornillos delanteros de la placa en la línea de 37 mm desde el canto…",
-    "Lista de corte: las notas de puertas ya no indican posiciones de cazoletas (las bisagras se dibujan para la imagen, no como guía de taladro); dicen cuántas…"
+    "Las bisagras quedan ahora justo donde las pusiste a mano en una puerta de prueba: en la cara interior del costado, 22,9 mm delante de la cara trasera de la…",
+    "Las puertas con modelos de bisagra se abren 98° alrededor del punto de giro real de la bisagra (medido de tu puerta abierta ajustada a mano), así la puerta…",
+    "Estos valores están en models/hinge.json junto a los modelos de bisagra — otro modelo de bisagra solo necesita sus propios números ahí."
   ]
 }
