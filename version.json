@@ -1,13 +1,17 @@
 {
-  "version": "0.3.22",
+  "version": "0.3.23",
   "date": "2026-10-30",
-  "title": "Module library",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.22.rbz",
+  "title": "Module library inside the Configurator",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.23.rbz",
   "notes": [
-    "New ▦ button next to the module list: opens the Module library, a narrow window against the Configurator’s left side with every preset (built-in and yours)…"
+    "The Module library is now a strip on the Configurator’s left side instead of a separate window: ▦ makes the window wider on its left to show it (the…",
+    "Glass doors moved to Fronts › Front style › Glass (black aluminium frame): all doors of the module become glass, drawer fronts stay wood. The Layout tab’s…",
+    "Glass doors are drawn as one “Glass door” component holding a black aluminium “Frame” component (mitred 45° corners) and a bronze “Glass” component (the…"
   ],
-  "title_es": "Biblioteca de módulos",
+  "title_es": "Biblioteca de módulos dentro del configurador",
   "notes_es": [
-    "Nuevo botón ▦ junto a la lista de módulos: abre la Biblioteca de módulos, una ventana estrecha pegada al lado izquierdo del configurador con cada preajuste…"
+    "La Biblioteca de módulos es ahora una franja en el lado izquierdo del configurador en lugar de una ventana aparte: ▦ ensancha la ventana por la izquierda…",
+    "Las puertas de vidrio pasan a Frentes › Estilo de frente › Vidrio (marco de aluminio negro): todas las puertas del módulo son de vidrio, los frentes de…",
+    "Las puertas de vidrio se dibujan como un componente «Puerta de vidrio» con un componente «Marco» de aluminio negro (esquinas a inglete de 45°) y un…"
   ]
 }
