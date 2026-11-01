@@ -183,9 +183,9 @@ button { cursor: pointer; }
 .err { background: #fde8e6; color: var(--danger); }
 
 /* ---------------------------------------------------------------- full editor (tabs + settings) */
-.etabs { display: flex; gap: 4px; overflow-x: auto; margin: 14px -2px 4px; padding: 2px; scrollbar-width: none; }
+.etabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 4px; }
 .etabs::-webkit-scrollbar { display: none; }
-.etabs button { flex: none; height: 40px; padding: 0 14px; border-radius: 20px; border: 1.5px solid var(--line); background: var(--card); font-weight: 600; font-size: 15px; color: var(--ink-2); }
+.etabs button { flex: 0 1 auto; height: 40px; padding: 0 14px; border-radius: 20px; border: 1.5px solid var(--line); background: var(--card); font-weight: 600; font-size: 15px; color: var(--ink-2); }
 .etabs button[aria-selected="true"] { background: var(--tape); border-color: var(--tape-deep); color: var(--tape-ink); }
 .fields { padding: 4px 12px 8px; }
 .grp { font-size: 13px; color: var(--muted); font-weight: 700; margin: 16px 0 2px; padding-top: 10px; border-top: 1px solid #e3e8ea; }
