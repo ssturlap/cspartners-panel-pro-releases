@@ -60,6 +60,7 @@
     renderer.domElement.style.height = h + 'px';
     persp.aspect = w / h;
     persp.updateProjectionMatrix();
+    sizeLabels();
     dirty = true;
   };
 
@@ -281,9 +282,95 @@
       g.computeBoundingBox();
       bbox.union(g.boundingBox);
     });
+    buildDims();
     if (!hasView && !bbox.isEmpty()) { P3D.reset('iso'); hasView = true; }
     dirty = true;
   };
+
+  // ------------------------------------------------------------------ overall dimension lines
+  // Width, height and depth of everything drawn (doors, top, legs included; doors closed), as
+  // dimension lines beside the module with the size in mm. Off unless the app turns it on.
+  var dimsOn = false, dimsGroup = null;
+  var DIM_LINE = new T.LineBasicMaterial({ color: 0x1d2a30 });
+  function dimLabel(txt, h) {
+    var c = document.createElement('canvas'), x = c.getContext('2d');
+    var fs = 64;
+    x.font = '700 ' + fs + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+    var tw = Math.ceil(x.measureText(txt).width);
+    c.width = tw + 36; c.height = fs + 28;
+    x.font = '700 ' + fs + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+    x.fillStyle = 'rgba(255,255,255,0.92)';
+    var r = 14, w = c.width, hh = c.height;
+    x.beginPath(); x.moveTo(r, 0); x.lineTo(w - r, 0); x.quadraticCurveTo(w, 0, w, r); x.lineTo(w, hh - r);
+    x.quadraticCurveTo(w, hh, w - r, hh); x.lineTo(r, hh); x.quadraticCurveTo(0, hh, 0, hh - r); x.lineTo(0, r);
+    x.quadraticCurveTo(0, 0, r, 0); x.fill();
+    x.strokeStyle = 'rgba(29,42,48,0.35)'; x.lineWidth = 3; x.stroke();
+    x.fillStyle = '#1d2a30'; x.textBaseline = 'middle'; x.textAlign = 'center';
+    x.fillText(txt, w / 2, hh / 2 + 2);
+    var tex = new T.CanvasTexture(c);
+    var sp = new T.Sprite(new T.SpriteMaterial({ map: tex, depthTest: false, depthWrite: false, transparent: true, sizeAttenuation: false }));
+    sp.userData.aspect = w / hh;
+    sp.renderOrder = 10;
+    return sp;
+  }
+  function buildDims() {
+    if (dimsGroup) {
+      scene.remove(dimsGroup);
+      dimsGroup.traverse(function (o) {
+        if (o.geometry) { o.geometry.dispose(); }
+        if (o.material && o.material.map) { o.material.map.dispose(); o.material.dispose(); }
+      });
+      dimsGroup = null;
+    }
+    if (!dimsOn || bbox.isEmpty()) { return; }
+    var mn = bbox.min, mx = bbox.max, size = bbox.getSize(new T.Vector3());
+    var big = Math.max(size.x, size.y, size.z);
+    var off = Math.max(60, big * 0.09), tick = Math.max(12, big * 0.018), lh = Math.max(40, big * 0.055);
+    var pts = [];
+    dimsGroup = new T.Group();
+    function seg(a, b) { pts.push(a.x, a.y, a.z, b.x, b.y, b.z); }
+    // a → b measured, drawn moved out along o (unit vector)
+    function dim(a, b, o, value) {
+      var o1 = o.clone().multiplyScalar(off), gap = o.clone().multiplyScalar(off * 0.15), over = o.clone().multiplyScalar(off * 1.12);
+      var A = a.clone().add(o1), B = b.clone().add(o1);
+      seg(a.clone().add(gap), a.clone().add(over));
+      seg(b.clone().add(gap), b.clone().add(over));
+      seg(A, B);
+      var dir = B.clone().sub(A).normalize();
+      var tk = dir.clone().add(o).normalize().multiplyScalar(tick / 2);
+      seg(A.clone().sub(tk), A.clone().add(tk));
+      seg(B.clone().sub(tk), B.clone().add(tk));
+      var lbl = dimLabel(String(Math.round(value * 10) / 10), lh);
+      lbl.position.copy(A).add(B).multiplyScalar(0.5).add(o.clone().multiplyScalar(lh * 0.75));
+      dimsGroup.add(lbl);
+    }
+    var V = function (x, y, z) { return new T.Vector3(x, y, z); };
+    dim(V(mn.x, mn.y, mn.z), V(mx.x, mn.y, mn.z), V(0, -1, 0), size.x);   // width, along the front at the floor
+    dim(V(mn.x, mx.y, mn.z), V(mn.x, mx.y, mx.z), V(-1, 0, 0), size.z);   // height, up the back-left edge (clear of the side)
+    dim(V(mx.x, mn.y, mn.z), V(mx.x, mx.y, mn.z), V(1, 0, 0), size.y);    // depth, along the right side
+    var g = new T.BufferGeometry();
+    g.setAttribute('position', new T.Float32BufferAttribute(pts, 3));
+    dimsGroup.add(new T.LineSegments(g, DIM_LINE));
+    scene.add(dimsGroup);
+    sizeLabels();
+  }
+  // Labels keep the same size on screen (about 20 px tall) at any zoom and on any screen.
+  function sizeLabels() {
+    if (!dimsGroup || !host) { return; }
+    var k = 20 / (host.clientHeight || 300) * 2 * Math.tan(T.MathUtils.degToRad(FOV) / 2);
+    dimsGroup.children.forEach(function (o) { if (o.isSprite) { o.scale.set(k * o.userData.aspect, k, 1); } });
+  }
+  // Turn the overall dimension lines on / off (PanelPro Web shows them; the plugin leaves them off).
+  P3D.setDims = function (on) {
+    dimsOn = !!on;
+    if (renderer) { buildDims(); dirty = true; }
+  };
+  P3D.dimsOn = function () { return dimsOn; };
+  function viewBox() {
+    var b = bbox.clone();
+    if (dimsGroup) { b.union(new T.Box3().setFromObject(dimsGroup)); }
+    return b;
+  }
 
   // ------------------------------------------------------------------ still pictures
   // Draw a module on a hidden canvas and return it as a JPEG data URL (module manual).
@@ -341,13 +428,14 @@
   // ------------------------------------------------------------------ views
   function fit(dir, keepDir) {
     if (bbox.isEmpty()) { return; }
-    var c = bbox.getCenter(new T.Vector3());
-    var sphere = bbox.getBoundingSphere(new T.Sphere());
+    var vb = viewBox();
+    var c = vb.getCenter(new T.Vector3());
+    var sphere = vb.getBoundingSphere(new T.Sphere());
     var d = keepDir ? persp.position.clone().sub(target).normalize() : dir.clone().normalize();
     var dist = sphere.radius / Math.sin(T.MathUtils.degToRad(FOV) / 2) * 1.02;
     target.copy(c);
     persp.position.copy(c).addScaledVector(d, dist);
-    var size = bbox.getSize(new T.Vector3());
+    var size = vb.getSize(new T.Vector3());
     var a = (host.clientWidth || 300) / (host.clientHeight || 200);
     orthoHalf = Math.max(size.z / 2, size.x / 2 / a, size.y / 2 / a) * 1.12;
     if (!keepDir) { orthoHalf = Math.max(size.z / 2, size.x / 2 / a) * 1.12; }

@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.24';
-  var BUILD = '43f231bec7';
+  var BUILD = '88c9a5afc4';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -29,7 +29,8 @@
     'Grooved': 'Ranurado', 'Glass': 'Vidrio', 'Toe kick': 'Zócalo', 'Legs': 'Patas', 'Plinth': 'Zócalo aparte',
     'Built in': 'Integrado', 'None': 'Ninguno', 'Kick height': 'Altura del zócalo', 'Off the floor': 'Altura desde el piso',
     'Add to site': 'Agregar a la obra', 'Save changes': 'Guardar cambios', 'Duplicate': 'Duplicar', 'Delete module': 'Eliminar módulo',
-    'Open all': 'Abrir todo', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
+    'Open all': 'Abrir todo', 'Sizes': 'Medidas', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
+    'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
     'Share PDF': 'Compartir PDF', 'Share Excel': 'Compartir Excel', 'File ready': 'Archivo listo', 'Share': 'Compartir',
     'Summary': 'Resumen', 'Sheet size': 'Tamaño de tablero', 'Sheets': 'Tableros', 'Warnings': 'Avisos', 'Bar': 'Barra',
@@ -70,6 +71,8 @@
     return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
   }
   function now() { return new Date().toISOString(); }
+  function dimsShown() { return load('panelpro.web.dims', true) !== false; }
+  function finePointer() { return !!(window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches); }
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
   function fmt(v) {
     var n = Number(v);
@@ -311,7 +314,7 @@
       '<header class="top"><h1>' + esc(t('Sites')) + '</h1>' +
       '<button type="button" class="text-btn" id="langBtn" aria-label="' + esc(t('Language')) + '">' + (lang === 'es' ? 'EN' : 'ES') + '</button>' +
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
-      '<div class="page">' +
+      '<div class="page page-wide">' +
       (list.length ? '<div class="list">' + list.map(function (s) {
         var n = s.modules.length;
         return '<button type="button" class="row-card" data-site="' + esc(s.id) + '"><span class="grow"><span class="t1">' + esc(s.name) + '</span>' +
@@ -366,7 +369,7 @@
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button>' +
       '<h1>' + esc(s.name) + (s.client ? '<span class="sub">' + esc(s.client) + '</span>' : '') + '</h1>' +
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
-      '<div class="page">' +
+      '<div class="page page-wide">' +
       (s.notes ? '<p class="meta-line">' + esc(s.notes) + '</p>' : '') +
       (mods.length ? '<div class="list">' + mods.map(function (m) {
         return '<button type="button" class="row-card" data-mod="' + esc(m.id) + '">' +
@@ -416,7 +419,7 @@
     info.presets.forEach(function (p) { if (cats.indexOf(p.category) < 0) { cats.push(p.category); } });
     show(
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Pick a module')) + '</h1></header>' +
-      '<div class="page">' + cats.map(function (c) {
+      '<div class="page page-wide">' + cats.map(function (c) {
         return '<h2 class="section-h">' + esc(t(c)) + '</h2><div class="cards">' + info.presets.filter(function (p) { return p.category === c; }).map(function (p) {
           var full = t(p.label), nm = full.indexOf(' — ') > 0 ? full.split(' — ').slice(1).join(' — ') : full;
           return '<button type="button" class="mcard" data-key="' + esc(p.key) + '"><img class="pic wait" alt="" data-pk="' + esc(p.key) + '">' +
@@ -476,20 +479,29 @@
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button>' +
       '<h1>' + esc(title) + '</h1>' +
       (mod ? '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button>' : '') + '</header>' +
-      '<div class="view3d" id="v3d"><span class="view-hint">' + esc(t('Drag to turn · pinch to zoom · tap a door')) + '</span>' +
-      '<div class="view-tools"><button type="button" id="openAll">' + esc(t('Open all')) + '</button><button type="button" id="fitBtn">' + esc(t('Fit')) + '</button></div></div>' +
-      '<div class="page" id="editBody"></div>' +
-      '<div class="dock"><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save changes') : t('Add to site')) + '</button></div>'
+      '<div class="edit-layout">' +
+      '<div class="view3d" id="v3d"><span class="view-hint">' + esc(t(finePointer() ? 'Drag to turn · scroll to zoom · click a door' : 'Drag to turn · pinch to zoom · tap a door')) + '</span>' +
+      '<div class="view-tools"><button type="button" id="dimsBtn" aria-pressed="' + dimsShown() + '">' + esc(t('Sizes')) + '</button>' +
+      '<button type="button" id="openAll">' + esc(t('Open all')) + '</button><button type="button" id="fitBtn">' + esc(t('Fit')) + '</button></div></div>' +
+      '<div class="edit-side"><div class="page" id="editBody"></div>' +
+      '<div class="dock"><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save changes') : t('Add to site')) + '</button></div></div>' +
+      '</div>'
     );
     var host = $('#v3d');
     host.insertBefore(ensureViewer(), host.firstChild);
     if (!has3d) { host.innerHTML = '<div class="view-err">3D view is not available on this device.</div>'; }
-    else { P3D.resize(); draw3d(true); }
+    else { P3D.setDims(dimsShown()); P3D.resize(); draw3d(true); }
     $('#back').onclick = function () {
       if (E.dirty && mod && !confirm(t('Discard your changes?'))) { return; }
       E = null; history.back();
     };
     $('#fitBtn').onclick = function () { if (has3d) { P3D.zoomExtents(); } };
+    $('#dimsBtn').onclick = function () {
+      var on = !dimsShown();
+      save('panelpro.web.dims', on);
+      this.setAttribute('aria-pressed', String(on));
+      if (has3d) { P3D.setDims(on); P3D.zoomExtents(); }
+    };
     $('#openAll').onclick = function () {
       if (!has3d) { return; }
       var opened = P3D.toggle('all');
@@ -704,9 +716,9 @@
     show(
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button>' +
       '<h1>' + esc(t('Cut list')) + '<span class="sub">' + esc(s.name) + '</span></h1></header>' +
-      '<div class="page">' +
+      '<div class="page page-wide">' +
       (warns.length ? '<div class="warn">' + warns.map(function (w) { return '<p>' + esc(w) + '</p>'; }).join('') + '</div>' : '') +
-      html +
+      '<div class="cut-layout"><div class="cut-main">' + html + '</div><aside class="cut-side">' +
       (cut.hardware.length ? '<h2 class="section-h">' + esc(t('Hardware')) + '</h2><div class="box totals">' +
         cut.hardware.map(function (h) { return '<div><span>' + esc(h.item) + '</span><b>' + h.qty + '</b></div>'; }).join('') + '</div>' : '') +
       (kick ? '<h2 class="section-h">' + esc(t('Toe kick bars (4 m)')) + '</h2><div class="box totals">' + kick + '</div>' : '') +
@@ -714,7 +726,7 @@
         cut.banding.map(function (b) { return '<div><span>' + esc(b.mat) + '</span><b>' + fmt(b.m) + ' m</b></div>'; }).join('') + '</div>' : '') +
       (cut.sheets.length ? '<h2 class="section-h">' + esc(t('Sheets (estimate incl. 15% waste)')) + '</h2><div class="box totals">' +
         cut.sheets.map(function (x) { return '<div><span>' + esc(x.mat) + ' · ' + fmt(x.T) + ' mm · ' + esc(x.size) + '</span><b>' + x.sheets + '</b></div>'; }).join('') + '</div>' : '') +
-      '</div>' +
+      '</aside></div></div>' +
       '<div class="dock"><button type="button" class="btn primary" id="sharePdf">' + esc(t('Share PDF')) + '</button>' +
       '<button type="button" class="btn primary" id="shareXlsx">' + esc(t('Share Excel')) + '</button></div>'
     );
