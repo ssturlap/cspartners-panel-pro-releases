@@ -79,6 +79,8 @@
     if (animate()) { dirty = true; }
     if (!dirty || !renderer) { return; }
     dirty = false;
+    // the camera went round to another side: move the dimension lines to the sides now in view
+    if (dimsGroup && dimsSide().join(',') !== dimsKey) { buildDims(); }
     persp.lookAt(target);
     if (useOrtho) { syncOrtho(); }
     renderer.render(scene, cam());
@@ -290,7 +292,13 @@
   // ------------------------------------------------------------------ overall dimension lines
   // Width, height and depth of everything drawn (doors, top, legs included; doors closed), as
   // dimension lines beside the module with the size in mm. Off unless the app turns it on.
-  var dimsOn = false, dimsGroup = null;
+  var dimsOn = false, dimsGroup = null, dimsKey = '';
+  // Which side of the module the camera is on: [-1 left / +1 right, -1 front / +1 back].
+  function dimsSide() {
+    var c = bbox.getCenter(new T.Vector3()), p = cam().position;
+    if (useOrtho) { p = persp.position; }
+    return [p.x < c.x - 1e-6 ? -1 : 1, p.y < c.y + 1e-6 ? -1 : 1];
+  }
   var DIM_LINE = new T.LineBasicMaterial({ color: 0x1d2a30 });
   function dimLabel(txt, h) {
     var c = document.createElement('canvas'), x = c.getContext('2d');
@@ -345,9 +353,16 @@
       dimsGroup.add(lbl);
     }
     var V = function (x, y, z) { return new T.Vector3(x, y, z); };
-    dim(V(mn.x, mn.y, mn.z), V(mx.x, mn.y, mn.z), V(0, -1, 0), size.x);   // width, along the front at the floor
-    dim(V(mn.x, mx.y, mn.z), V(mn.x, mx.y, mx.z), V(-1, 0, 0), size.z);   // height, up the back-left edge (clear of the side)
-    dim(V(mx.x, mn.y, mn.z), V(mx.x, mx.y, mn.z), V(1, 0, 0), size.y);    // depth, along the right side
+    // Put each line on a side the camera sees, so the module never hides it: width along the
+    // floor on the near face (front or back), depth along the floor on the near side (left or
+    // right), height up the far corner of that side (the edge of the module's outline).
+    var k = dimsSide();
+    var sx = k[0], sy = k[1];
+    var xs = sx < 0 ? mn.x : mx.x, ys = sy < 0 ? mn.y : mx.y, yf = sy < 0 ? mx.y : mn.y;
+    dim(V(mn.x, ys, mn.z), V(mx.x, ys, mn.z), V(0, sy, 0), size.x);   // width
+    dim(V(xs, yf, mn.z), V(xs, yf, mx.z), V(sx, 0, 0), size.z);       // height
+    dim(V(xs, mn.y, mn.z), V(xs, mx.y, mn.z), V(sx, 0, 0), size.y);   // depth
+    dimsKey = k.join(',');
     var g = new T.BufferGeometry();
     g.setAttribute('position', new T.Float32BufferAttribute(pts, 3));
     dimsGroup.add(new T.LineSegments(g, DIM_LINE));

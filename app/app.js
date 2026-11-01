@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.24';
-  var BUILD = '88c9a5afc4';
+  var BUILD = '91b17cf17e';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -29,7 +29,8 @@
     'Grooved': 'Ranurado', 'Glass': 'Vidrio', 'Toe kick': 'Zócalo', 'Legs': 'Patas', 'Plinth': 'Zócalo aparte',
     'Built in': 'Integrado', 'None': 'Ninguno', 'Kick height': 'Altura del zócalo', 'Off the floor': 'Altura desde el piso',
     'Add to site': 'Agregar a la obra', 'Save changes': 'Guardar cambios', 'Duplicate': 'Duplicar', 'Delete module': 'Eliminar módulo',
-    'Open all': 'Abrir todo', 'Sizes': 'Medidas', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
+    'Open all': 'Abrir todo', 'Sizes': 'Medidas', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
     'Share PDF': 'Compartir PDF', 'Share Excel': 'Compartir Excel', 'File ready': 'Archivo listo', 'Share': 'Compartir',
@@ -461,9 +462,6 @@
     elevation: [0, 1400, 1450, 1500]
   };
   var FRONT_CHOICES = [['door', 'Door'], ['door_pair', 'Door pair'], ['drawer', 'Drawer'], ['false_front', 'False front'], ['none', 'Open']];
-  var STYLE_CHOICES = [['slab', 'Slab'], ['shaker', 'Shaker'], ['plank', 'Plank'], ['grooved', 'Grooved'], ['glass', 'Glass']];
-  var KICK_CHOICES = [['legs', 'Legs'], ['plinth', 'Plinth'], ['integral', 'Built in'], ['none', 'None']];
-  var HINGE_LABEL = { L: 'Hinge left', R: 'Hinge right', T: 'Lift up', B: 'Drop down' };
 
   function renderEdit(s, mod, presetKey) {
     if (!E || E.site !== s || E.mod !== mod || (!mod && E.presetKey !== presetKey)) {
@@ -555,118 +553,235 @@
     }).join('') + '</div>';
   }
 
+  // ---- full editor: the plugin's Configurator settings (ui/fields.js, shared), drawn for touch
+  var TABS = [['layout', 'Layout', ['layout']], ['module', 'Module', ['module']], ['box', 'Box', ['box']], ['base', 'Base', ['base']],
+              ['fronts', 'Fronts', ['fronts', 'frame', 'pulls', 'motion']], ['drawers', 'Drawers', ['drawers']], ['materials', 'Materials', ['materials']]];
+  var SKIP = { width: 1, height: 1, depth: 1 };                 // in the measurement bar above
+  var WEB_LABEL = { elevation: 'Off the floor' };               // plugin wording that means something else here
+  var SAME_MAT = ['mat_back', 'mat_front', 'mat_frame', 'mat_drawer', 'mat_top', 'mat_kick', 'mat_skin', 'mat_end'];
+  var HINGE_CH = [['L', 'Hinge left'], ['R', 'Hinge right'], ['T', 'Lift up'], ['B', 'Drop down']];
+  var INTERIOR_CH = [['none', 'Empty'], ['shelves', 'Shelves'], ['hang', 'Hang rail']];
+  var editTab = load('panelpro.web.tab', 'layout');
+
+  function F() { return window.PPFields; }
+  function lenText(v, type) {
+    if (v === 'auto' || v == null) { return t('auto'); }
+    return fmt(v) + (type === 'deg' ? '°' : type === 'pct' ? ' %' : ' mm');
+  }
+  function fieldHtml(d, p) {
+    var key = d[0], label = t(WEB_LABEL[key] || d[1]), type = d[2];
+    var c = F().cond(type === 'sel' ? d[4] : d[3]);
+    if (key === '#') { return F().cond(d[2])(p) ? '<h3 class="grp">' + esc(label) + '</h3>' : ''; }
+    if (SKIP[key] || type === 'info' || !c(p)) { return ''; }
+    if (type === 'btn') { return '<button type="button" class="btn small fbtn" data-btn="' + key + '">' + esc(label) + '</button>'; }
+    var ctl;
+    if (type === 'len' || type === 'deg' || type === 'pct') {
+      var v = key === 'inner_w' ? p.width - F().innerExtra(p) : p[key];
+      ctl = '<button type="button" class="valbtn" data-len="' + key + '" data-type="' + type + '">' + esc(lenText(v, type)) + '</button>';
+    } else if (type === 'bool') {
+      ctl = '<label class="switch"><input type="checkbox" data-bool="' + key + '"' + (p[key] ? ' checked' : '') + '><span></span></label>';
+    } else if (type === 'sel') {
+      var opts = d[3];
+      if (key === 'bx_height') {
+        var hs = (F().BOXSYS[p.bx_brand] || F().BOXSYS.merivobox).heights;
+        opts = opts.filter(function (o) { return hs[o[0]]; });
+      }
+      ctl = '<select class="sel" data-sel="' + key + '">' + opts.map(function (o) {
+        return '<option value="' + esc(o[0]) + '"' + (String(p[key]) === o[0] ? ' selected' : '') + '>' + esc(t(o[1])) + '</option>';
+      }).join('') + '</select>';
+      return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>';
+    } else if (type === 'mat') {
+      var same = SAME_MAT.indexOf(key) >= 0 ? p[key + '_same'] !== false : false;
+      ctl = '<input class="text-in" data-text="' + key + '" value="' + esc(p[key] || '') + '"' + (same ? ' disabled' : '') + '>' +
+        (SAME_MAT.indexOf(key) >= 0 ? '<label class="chk"><input type="checkbox" data-same="' + key + '"' + (same ? ' checked' : '') + '> ' +
+          esc(t(key === 'mat_end' ? 'Same as fronts' : 'Same as carcass')) + '</label>' : '');
+      return '<div class="frow-f stack"><span class="flbl"><i class="swatch" style="background:' + esc((matInfo(p[key]) || {}).color || '#ddd') + '"></i>' + esc(label) + '</span>' + ctl + '</div>';
+    } else {
+      ctl = '<input class="text-in" data-text="' + key + '" value="' + esc(p[key] == null ? '' : p[key]) + '" autocomplete="off">';
+      return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>';
+    }
+    var picks = '';
+    if (F().PICKS[key]) {
+      var mk = F().MODE_KEYS[key], active = mk && F().tMult(p[mk]) ? p[mk] : null;
+      picks = '<div class="seg picks">' + F().PICKS[key].map(function (x) {
+        var on = active ? String(x) === active : (typeof x === 'number' && Math.abs(x - p[key]) < 0.01);
+        return '<button type="button" class="num-chip" data-pick="' + key + '" data-v="' + x + '" aria-pressed="' + on + '">' + esc(x === 0 ? t('Flush') : String(x)) + '</button>';
+      }).join('') + '</div>';
+    }
+    return '<div class="frow-f"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>' + picks;
+  }
+
+  function layoutHtml(p) {
+    var lay = (E.res && E.res.layout) || [];
+    var h = '';
+    (p.columns || []).forEach(function (col, ci) {
+      var L = lay[ci] || {};
+      h += '<div class="box colbox"><div class="col-head"><b>' + esc(t('Column')) + ' ' + (ci + 1) + '</b>' +
+        '<button type="button" class="hbtn" data-colw="' + ci + '">' + esc(col.w === 'auto' ? t('auto') + (L.w ? ' = ' + fmt(L.w) : '') : fmt(col.w) + ' mm') + '</button>' +
+        '<span class="grow"></span>' +
+        (p.columns.length > 1 ? '<button type="button" class="xbtn" data-colmv="' + ci + ',-1" aria-label="Move left">←</button><button type="button" class="xbtn" data-colmv="' + ci + ',1" aria-label="Move right">→</button>' +
+          '<button type="button" class="xbtn" data-colx="' + ci + '" aria-label="Remove column">✕</button>' : '') + '</div>' +
+        '<div class="seg" style="margin:6px 0 4px">' + [['normal', 'Cabinet section'], ['kneehole', 'Kneehole (open, no box)']].map(function (o) {
+          return '<button type="button" data-colkind="' + ci + '" data-v="' + o[0] + '" aria-pressed="' + (col.kind === o[0]) + '">' + esc(t(o[1])) + '</button>';
+        }).join('') + '</div>';
+      if (col.kind === 'kneehole') { h += '<p class="meta-line">' + esc(t('Open kneehole — no bottom, back or fronts; adjacent partitions become pedestal sides.')) + '</p></div>'; return; }
+      (col.rows || []).forEach(function (row, ri) {
+        var front = row.front.replace(/^glass_/, ''), door = front === 'door', drawer = front === 'drawer';
+        var rh = (L.rows || [])[ri];
+        h += '<div class="frow"><div class="frow-head"><span>' + esc(t('Row')) + ' ' + (ri + 1) + '</span><span class="grow"></span>' +
+          '<button type="button" class="hbtn" data-rowh="' + ci + ',' + ri + '">' + esc(row.h === 'auto' ? t('auto') + (rh ? ' = ' + fmt(rh) : '') : fmt(row.h) + ' mm') + '</button>' +
+          (col.rows.length > 1 ? '<button type="button" class="xbtn" data-rowx="' + ci + ',' + ri + '" aria-label="Remove row">✕</button>' : '') + '</div>' +
+          seg('front:' + ci + ',' + ri, FRONT_CHOICES, front) +
+          (door ? '<div class="sub-seg">' + seg('hinge:' + ci + ',' + ri, HINGE_CH, row.hinge || 'L') + '</div>' : '') +
+          (!drawer ? '<div class="sub-seg">' + seg('interior:' + ci + ',' + ri, INTERIOR_CH, row.interior || 'none') + '</div>' : '') +
+          (!drawer && row.interior === 'shelves' ? '<div class="stepper"><span>' + esc(t('Shelves')) + '</span>' +
+            '<button type="button" data-shelf="' + ci + ',' + ri + ',-1" aria-label="Fewer shelves">−</button><b>' + (row.shelves || 0) + '</b>' +
+            '<button type="button" data-shelf="' + ci + ',' + ri + ',1" aria-label="More shelves">+</button></div>' : '') +
+          '</div>';
+      });
+      h += '<button type="button" class="btn small quiet addrow" data-rowadd="' + ci + '">' + esc(t('+ Row')) + '</button></div>';
+    });
+    h += '<button type="button" class="btn small addcol" id="addCol">' + esc(t('+ Add column')) + '</button>';
+    h += '<p class="meta-line">' + esc(t('Columns run left → right, rows top → bottom. Leave auto to share what’s left.')) + '</p>';
+    return h;
+  }
+
   function renderEditBody() {
     var body = $('#editBody');
     if (!body) { return; }
     var p = E.params;
-    var html = '';
-    html += '<div class="measure">' + ['width', 'height', 'depth'].map(function (k) {
+    var scrollY = body.scrollTop;
+    var html = '<div class="measure">' + ['width', 'height', 'depth'].map(function (k) {
       return '<button type="button" data-dim="' + k + '" class="' + (E.changed[k] ? 'changed' : '') + '"><span class="lbl">' + esc(t(k[0].toUpperCase() + k.slice(1))) + '</span>' +
         '<span class="num">' + fmt(p[k]) + '</span><span class="unit">mm</span></button>';
     }).join('') + '</div>';
-
     if (E.error) {
       html += '<div class="warn err"><p><b>' + esc(t('This module cannot be built:')) + '</b></p><p>' + esc(E.error) + '</p></div>';
     } else if (E.res && E.res.warnings && E.res.warnings.length) {
       html += '<div class="warn">' + E.res.warnings.map(function (w) { return '<p>' + esc(w) + '</p>'; }).join('') + '</div>';
     }
-
-    html += '<label class="field"><span>' + esc(t('Name')) + '</span><input class="text-in" id="mName" autocomplete="off" value="' + esc(p.name || '') + '"></label>';
-
-    // fronts per column / row
-    html += '<div class="box"><h3>' + esc(t('Fronts')) + '</h3>';
-    (p.columns || []).forEach(function (col, ci) {
-      if (p.columns.length > 1) { html += '<div class="frow-head" style="margin-top:' + (ci ? 12 : 0) + 'px"><b>' + esc(t('Section')) + ' ' + (ci + 1) + '</b><span class="grow"></span>' + (col.w === 'auto' ? '' : fmt(col.w) + ' mm') + '</div>'; }
-      if (col.kind === 'kneehole') { html += '<div class="frow">' + esc(t('Kneehole (open)')) + '</div>'; return; }
-      (col.rows || []).forEach(function (row, ri) {
-        var door = /door/.test(row.front);
-        html += '<div class="frow"><div class="frow-head"><span>' + esc(t('Row')) + ' ' + (ri + 1) + '</span><span class="grow"></span>' +
-          '<button type="button" class="hbtn" data-rowh="' + ci + ',' + ri + '">' + (row.h === 'auto' ? esc(t('auto')) : fmt(row.h) + ' mm') + '</button>' +
-          (col.rows.length > 1 ? '<button type="button" class="xbtn" data-rowx="' + ci + ',' + ri + '" aria-label="Remove row">✕</button>' : '') + '</div>' +
-          seg('front:' + ci + ',' + ri, FRONT_CHOICES, row.front.replace(/^glass_/, '')) +
-          (door && row.front !== 'door_pair' && row.front !== 'glass_door_pair' ? '<div style="margin-top:6px">' + seg('hinge:' + ci + ',' + ri, [['L', HINGE_LABEL.L], ['R', HINGE_LABEL.R], ['T', HINGE_LABEL.T], ['B', HINGE_LABEL.B]], row.hinge || 'L') + '</div>' : '') +
-          '</div>';
-      });
-      html += '<button type="button" class="btn small quiet addrow" data-rowadd="' + ci + '">' + esc(t('+ Row')) + '</button>';
-    });
+    html += '<nav class="etabs" role="tablist">' + TABS.map(function (tb) {
+      return '<button type="button" role="tab" data-tab="' + tb[0] + '" aria-selected="' + (editTab === tb[0]) + '">' + esc(t(tb[1])) + '</button>';
+    }).join('') + '</nav>';
+    var tab = TABS.find(function (x) { return x[0] === editTab; }) || TABS[0];
+    html += '<div class="tabbody">';
+    if (tab[0] === 'layout') { html += layoutHtml(p); }
+    var fields = '';
+    tab[2].forEach(function (sec) { (F().SECTIONS[sec] || []).forEach(function (d) { fields += fieldHtml(d, p); }); });
+    if (fields) { html += '<div class="box fields">' + fields + '</div>'; }
     html += '</div>';
-
-    html += '<div class="box"><h3>' + esc(t('Front style')) + '</h3>' + seg('front_style', STYLE_CHOICES, p.front_style) + '</div>';
-
-    html += '<div class="box"><h3>' + esc(t('Toe kick')) + '</h3>' + seg('kick_type', KICK_CHOICES, p.kick_type);
-    if (p.kick_type !== 'none') {
-      var kh = [[100, '100'], [150, '150']];
-      if ([100, 150].indexOf(Number(p.kick_h)) < 0) { kh.push([p.kick_h, fmt(p.kick_h)]); }
-      kh.push(['custom', '…']);
-      html += '<div class="field" style="margin-bottom:0"><span>' + esc(t('Kick height')) + ' (mm)</span>' + seg('kick_h', kh, Number(p.kick_h), 'num-chip') + '</div>';
-    }
-    html += '</div>';
-
-    html += '<div class="box"><h3><span class="grow">' + esc(t('Off the floor')) + '</span>' +
-      '<button type="button" class="hbtn" id="elevBtn">' + fmt(p.elevation || 0) + ' mm</button></h3></div>';
-
     if (E.res) { html += '<p class="meta-line">' + E.res.parts.filter(function (x) { return x.cut; }).length + ' ' + esc(t('parts')) + '</p>'; }
     body.innerHTML = html;
+    body.scrollTop = scrollY;
+    wireEditBody(body);
+  }
 
-    body.querySelectorAll('[data-dim]').forEach(function (b) {
-      b.onclick = function () {
-        var k = b.getAttribute('data-dim');
-        openPad({ label: t(k[0].toUpperCase() + k.slice(1)), value: p[k], chips: CHIPS[k], done: function (v) {
-          E.params[k] = v; E.changed[k] = true; changed(true);
-        } });
-      };
-    });
-    $('#mName').onchange = function () { E.params.name = this.value.trim(); E.dirty = true; };
-    body.querySelectorAll('[data-seg]').forEach(function (g) {
-      g.addEventListener('click', function (e) {
-        var b = e.target.closest('button[data-v]');
-        if (!b) { return; }
-        var id = g.getAttribute('data-seg'), v = b.getAttribute('data-v');
-        var m = /^(front|hinge):(\d+),(\d+)$/.exec(id);
-        if (m) {
-          var row = E.params.columns[+m[2]].rows[+m[3]];
-          if (m[1] === 'front') { row.front = v; } else { row.hinge = v; }
-        } else if (id === 'kick_h') {
-          if (v === 'custom') {
-            openPad({ label: t('Kick height'), value: E.params.kick_h, chips: CHIPS.kick, done: function (x) { E.params.kick_h = x; changed(false); } });
-            return;
-          }
-          E.params.kick_h = Number(v);
-        } else {
-          E.params[id] = v;
-        }
-        changed(false);
-      });
-    });
-    body.querySelectorAll('[data-rowh]').forEach(function (b) {
-      b.onclick = function () {
-        var ix = b.getAttribute('data-rowh').split(',').map(Number), row = E.params.columns[ix[0]].rows[ix[1]];
+  function setP(key, v) {
+    var p = E.params;
+    if (key === 'inner_w') { p.width = Math.round((v + F().innerExtra(p)) * 1000) / 1000; E.changed.width = true; return; }
+    if (F().MODE_KEYS[key]) { p[F().MODE_KEYS[key]] = 'custom'; }
+    p[key] = v;
+  }
+
+  function wireEditBody(body) {
+    var p = E.params;
+    body.onclick = function (e) {
+      var b = e.target.closest('button');
+      if (!b || !body.contains(b)) { return; }
+      var a;
+      if ((a = b.getAttribute('data-tab'))) { editTab = a; save('panelpro.web.tab', a); renderEditBody(); $('#editBody').scrollTop = 0; return; }
+      if ((a = b.getAttribute('data-dim'))) {
+        openPad({ label: t(a[0].toUpperCase() + a.slice(1)), value: p[a], chips: CHIPS[a], done: function (v) { E.params[a] = v; E.changed[a] = true; changed(true); } });
+        return;
+      }
+      if ((a = b.getAttribute('data-len'))) {
+        var type = b.getAttribute('data-type'), d = null;
+        Object.keys(F().SECTIONS).forEach(function (s) { F().SECTIONS[s].forEach(function (x) { if (x[0] === a) { d = x; } }); });
+        var cur = a === 'inner_w' ? p.width - F().innerExtra(p) : p[a];
+        openPad({ label: t(WEB_LABEL[a] || (d ? d[1] : a)), value: cur, allowZero: true,
+                  chips: (F().PICKS[a] || []).filter(function (x) { return typeof x === 'number'; }),
+                  done: function (v) { setP(a, v); changed(a === 'inner_w'); } });
+        return;
+      }
+      if ((a = b.getAttribute('data-pick'))) {
+        var x = b.getAttribute('data-v'), mk = F().MODE_KEYS[a];
+        if (F().tMult(x)) { p[mk] = x; p[a] = p.t * F().tMult(x); } else { if (mk) { p[mk] = 'custom'; } p[a] = Number(x); }
+        changed(false); return;
+      }
+      if ((a = b.getAttribute('data-btn')) === 'fridge_fit') {
+        try { E.params = Engine.call('fridge_fit', { params: p }); toast(t('Module sized to the fridge: ') + dimsOf(E.params) + ' mm'); } catch (err) { toast(err.message); }
+        E.changed.width = E.changed.height = E.changed.depth = true; changed(true); return;
+      }
+      if ((a = b.getAttribute('data-colw'))) {
+        var col = p.columns[+a];
+        openPad({ label: t('Clear interior width'), value: col.w, auto: true, done: function (v) { col.w = v; changed(false); } });
+        return;
+      }
+      if ((a = b.getAttribute('data-colkind'))) {
+        var ck = p.columns[+a]; ck.kind = b.getAttribute('data-v');
+        if (ck.kind === 'normal' && (!ck.rows || !ck.rows.length)) { ck.rows = [{ h: 'auto', front: 'door', hinge: 'L', interior: 'shelves', shelves: 1 }]; }
+        changed(false); return;
+      }
+      if ((a = b.getAttribute('data-colmv'))) {
+        var m = a.split(',').map(Number), to = m[0] + m[1];
+        if (to >= 0 && to < p.columns.length) { p.columns.splice(to, 0, p.columns.splice(m[0], 1)[0]); changed(false); }
+        return;
+      }
+      if ((a = b.getAttribute('data-colx'))) { p.columns.splice(+a, 1); changed(false); return; }
+      if (b.id === 'addCol') { p.columns.push({ w: 'auto', kind: 'normal', rows: [{ h: 'auto', front: 'door', hinge: 'R', interior: 'shelves', shelves: 1 }] }); changed(false); return; }
+      if ((a = b.getAttribute('data-rowh'))) {
+        var ix = a.split(',').map(Number), row = p.columns[ix[0]].rows[ix[1]];
         openPad({ label: t('Height of this row'), value: row.h, chips: CHIPS.row, auto: true, done: function (v) { row.h = v; changed(false); } });
-      };
-    });
-    body.querySelectorAll('[data-rowx]').forEach(function (b) {
-      b.onclick = function () {
-        var ix = b.getAttribute('data-rowx').split(',').map(Number);
-        E.params.columns[ix[0]].rows.splice(ix[1], 1);
+        return;
+      }
+      if ((a = b.getAttribute('data-rowx'))) { var rx = a.split(',').map(Number); p.columns[rx[0]].rows.splice(rx[1], 1); changed(false); return; }
+      if ((a = b.getAttribute('data-rowadd'))) {
+        var c2 = p.columns[+a], last = c2.rows[c2.rows.length - 1];
+        c2.rows.push({ h: 'auto', front: last ? last.front : 'drawer', hinge: last ? last.hinge : 'L', interior: 'none', shelves: 0 });
+        changed(false); return;
+      }
+      if ((a = b.getAttribute('data-shelf'))) {
+        var sx = a.split(',').map(Number), r2 = p.columns[sx[0]].rows[sx[1]];
+        r2.shelves = Math.max(0, Math.min(12, (r2.shelves || 0) + sx[2])); changed(false); return;
+      }
+      var g = b.closest('[data-seg]');
+      if (g) {
+        var id = g.getAttribute('data-seg'), v = b.getAttribute('data-v');
+        var mm = /^(front|hinge|interior):(\d+),(\d+)$/.exec(id);
+        if (mm) {
+          var rr = p.columns[+mm[2]].rows[+mm[3]];
+          if (mm[1] === 'front') { rr.front = v; }
+          else if (mm[1] === 'hinge') { rr.hinge = v; }
+          else { rr.interior = v; if (v === 'shelves' && !rr.shelves) { rr.shelves = 1; } }
+          changed(false);
+        }
+      }
+    };
+    body.onchange = function (e) {
+      var el = e.target, a;
+      if ((a = el.getAttribute('data-bool'))) {
+        p[a] = el.checked;
+        if (a === 'skin_add') { p.skin_fit = el.checked ? 'add' : 'inside'; }
         changed(false);
-      };
-    });
-    body.querySelectorAll('[data-rowadd]').forEach(function (b) {
-      b.onclick = function () {
-        var col = E.params.columns[+b.getAttribute('data-rowadd')];
-        var last = col.rows[col.rows.length - 1];
-        col.rows.push({ h: 'auto', front: last ? last.front : 'drawer', hinge: last ? last.hinge : 'L', interior: 'none', shelves: 0 });
+      } else if ((a = el.getAttribute('data-sel'))) {
+        p[a] = el.value; changed(false);
+      } else if ((a = el.getAttribute('data-same'))) {
+        p[a + '_same'] = el.checked;
+        if (el.checked) { p[a] = a === 'mat_end' ? p.mat_front : p.mat_carcass; }
         changed(false);
-      };
-    });
-    $('#elevBtn').onclick = function () {
-      openPad({ label: t('Off the floor'), value: E.params.elevation || 0, chips: CHIPS.elevation, allowZero: true, done: function (v) { E.params.elevation = v; changed(false); } });
+      } else if ((a = el.getAttribute('data-text'))) {
+        p[a] = el.value.trim();
+        if (a === 'mat_carcass') { SAME_MAT.forEach(function (k) { if (k !== 'mat_end' && p[k + '_same'] !== false) { p[k] = p.mat_carcass; } }); }
+        if (a === 'mat_front' && p.mat_end_same !== false) { p.mat_end = p.mat_front; }
+        if (a === 'name') { E.dirty = true; return; }
+        changed(false);
+      }
     };
   }
 
   function saveModule() {
     var s = E.site;
-    var nameIn = $('#mName');
+    var nameIn = document.querySelector('[data-text="name"]');
     if (nameIn) { E.params.name = nameIn.value.trim(); }
     if (E.mod) {
       E.mod.params = clone(E.params); E.mod.updated = now();
