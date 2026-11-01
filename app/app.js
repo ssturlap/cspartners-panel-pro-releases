@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.24';
-  var BUILD = 'df0aed43d8';
+  var BUILD = '43f231bec7';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -31,9 +31,11 @@
     'Add to site': 'Agregar a la obra', 'Save changes': 'Guardar cambios', 'Duplicate': 'Duplicar', 'Delete module': 'Eliminar módulo',
     'Open all': 'Abrir todo', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
-    'Share cut list (CSV)': 'Compartir lista de corte (CSV)', 'Hardware': 'Herrajes', 'Edge banding': 'Canto',
+    'Share PDF': 'Compartir PDF', 'Share Excel': 'Compartir Excel', 'File ready': 'Archivo listo', 'Share': 'Compartir',
+    'Summary': 'Resumen', 'Sheet size': 'Tamaño de tablero', 'Sheets': 'Tableros', 'Warnings': 'Avisos', 'Bar': 'Barra',
+    'offcut': 'sobrante', 'cont.': 'cont.', 'Edge': 'Canto', 'L × W mm': 'Largo × Ancho mm', 'Hardware': 'Herrajes', 'Edge banding': 'Canto',
     'Sheets (estimate incl. 15% waste)': 'Tableros (estimado con 15% de desperdicio)', 'Toe kick bars (4 m)': 'Barras de zócalo (4 m)',
-    'bars': 'barras', 'pieces': 'piezas', 'Saved': 'Guardado', 'Added to the site': 'Agregado a la obra',
+    'bars': 'barras', 'bar': 'barra', 'pieces': 'piezas', 'Saved': 'Guardado', 'Added to the site': 'Agregado a la obra',
     'Deleted': 'Eliminado', 'Delete this site and its modules?': '¿Eliminar esta obra y sus módulos?',
     'Delete this module?': '¿Eliminar este módulo?', 'Discard your changes?': '¿Descartar los cambios?',
     'This file is not a PanelPro project.': 'Este archivo no es un proyecto PanelPro.',
@@ -697,7 +699,7 @@
     }).join('');
     var warns = (cut.warnings || []).concat((d.errors || []).map(function (e) { return e.code + ': ' + e.error; }));
     var kick = (d.kick || []).map(function (k) {
-      return '<div><span>' + fmt(k.h) + ' mm · ' + k.pieces + ' ' + esc(t('pieces')) + ' · ' + fmt(k.metres) + ' m</span><b>' + k.bars.length + ' ' + esc(t('bars')) + '</b></div>';
+      return '<div><span>' + fmt(k.h) + ' mm · ' + k.pieces + ' ' + esc(t('pieces')) + ' · ' + fmt(k.metres) + ' m</span><b>' + k.bars.length + ' ' + esc(t(k.bars.length === 1 ? 'bar' : 'bars')) + '</b></div>';
     }).join('');
     show(
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button>' +
@@ -713,22 +715,62 @@
       (cut.sheets.length ? '<h2 class="section-h">' + esc(t('Sheets (estimate incl. 15% waste)')) + '</h2><div class="box totals">' +
         cut.sheets.map(function (x) { return '<div><span>' + esc(x.mat) + ' · ' + fmt(x.T) + ' mm · ' + esc(x.size) + '</span><b>' + x.sheets + '</b></div>'; }).join('') + '</div>' : '') +
       '</div>' +
-      '<div class="dock"><button type="button" class="btn primary" id="shareCsv">' + esc(t('Share cut list (CSV)')) + '</button></div>'
+      '<div class="dock"><button type="button" class="btn primary" id="sharePdf">' + esc(t('Share PDF')) + '</button>' +
+      '<button type="button" class="btn primary" id="shareXlsx">' + esc(t('Share Excel')) + '</button></div>'
     );
     $('#back').onclick = function () { history.back(); };
-    $('#shareCsv').onclick = function () {
-      shareFile(fileName(s.name) + ' - ' + t('Cut list') + '.csv', '﻿' + d.cutlist.csv, 'text/csv');
+    var meta = {
+      site: s.name, client: s.client, notes: s.notes, date: new Date().toLocaleDateString(lang), version: VERSION, t: t,
+      head: d.cutlist.csv.split(/\r?\n/)[0].split(',')
     };
+    var base = fileName(s.name) + ' - ' + t('Cut list');
+    function make(kind, btn) {
+      btn.disabled = true;
+      loadExport(kind).then(function () { return PPExport[kind](d, meta); }).then(function (blob) {
+        btn.disabled = false;
+        shareFile(base + (kind === 'pdf' ? '.pdf' : '.xlsx'), blob,
+                  kind === 'pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      }, function (e) { btn.disabled = false; toast(String(e && e.message || e)); });
+    }
+    $('#sharePdf').onclick = function () { make('pdf', this); };
+    $('#shareXlsx').onclick = function () { make('xlsx', this); };
+  }
+
+  // The PDF / Excel libraries load only when first used (they are in the offline cache either way).
+  var loaded = {};
+  function loadScript(src) {
+    if (!loaded[src]) {
+      loaded[src] = new Promise(function (ok, bad) {
+        var el = document.createElement('script');
+        el.src = src; el.onload = ok; el.onerror = function () { delete loaded[src]; bad(new Error(src + ' did not load')); };
+        document.head.appendChild(el);
+      });
+    }
+    return loaded[src];
+  }
+  function loadExport(kind) {
+    return Promise.all([loadScript(kind === 'pdf' ? 'vendor/pdf-lib.min.js' : 'vendor/jszip.min.js'), loadScript('export.js')]);
   }
 
   // ------------------------------------------------------------------ files: share / open
-  function fileName(s) { return String(s || 'site').replace(/[\\/:*?"<>|]+/g, '-').trim().slice(0, 60) || 'site'; }
-  function shareFile(name, text, mime) {
-    var blob = new Blob([text], { type: mime });
+  // File names without accents: some phones drop a downloaded file's name when it has them.
+  function fileName(s) {
+    return String(s || 'site').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7e]+/g, '')
+      .replace(/[\\/:*?"<>|]+/g, '-').trim().slice(0, 60) || 'site';
+  }
+  // Share sheet (WhatsApp, email, Drive…) where the phone allows that file type, else a download.
+  function shareFile(name, data, mime) {
+    var blob = data instanceof Blob ? data : new Blob([data], { type: mime });
     var file = null;
     try { file = new File([blob], name, { type: mime }); } catch (e) { file = null; }
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({ files: [file], title: name }).then(function () { toast(t('Shared')); }, function () {});
+      var go = function () {
+        navigator.share({ files: [file], title: name }).then(function () { toast(t('Shared')); }, function (e) {
+          // the tap "expired" while the file was being made: one more tap shares it
+          if (e && e.name === 'NotAllowedError') { toast(t('File ready'), { label: t('Share'), run: go }); }
+        });
+      };
+      go();
       return;
     }
     var a = document.createElement('a');

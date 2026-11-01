@@ -81,6 +81,7 @@ button { cursor: pointer; }
 }
 .btn.primary { flex: 1; background: var(--tape); border-color: var(--tape-deep); color: var(--tape-ink); font-size: 17px; }
 .btn.primary:active { background: var(--tape-deep); }
+.btn:disabled { opacity: .55; }
 .btn.quiet { background: transparent; }
 .btn.danger { color: var(--danger); }
 .btn.small { min-height: 40px; padding: 0 14px; font-size: 15px; }
