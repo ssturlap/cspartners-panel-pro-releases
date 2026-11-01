@@ -347,7 +347,7 @@
       C.mode = C.mode === '2d' ? '3d' : '2d'; A.savePref('panelpro.web.cmode', C.mode); redraw(true);
     };
     document.getElementById('cFit').onclick = function () { if (C.mode === '2d') { fitBox(); draw2d(); } else { P3D.zoomExtents(); } };
-    document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('d-all'); this.textContent = t(o ? 'Close all' : 'Open all'); };
+    document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('all'); this.textContent = t(o ? 'Close all' : 'Open all'); };
     document.getElementById('cMore').onclick = function () {
       A.menu(t('Composition'), [
         { label: t('Arrange again side by side'), run: function () {

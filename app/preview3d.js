@@ -382,7 +382,9 @@
   };
   P3D.dimsOn = function () { return dimsOn; };
   function viewBox() {
-    var b = bbox.clone();
+    // what is on screen now: open doors and pulled-out drawers reach past the closed module
+    var b = root ? new T.Box3().setFromObject(root) : bbox.clone();
+    if (b.isEmpty()) { b = bbox.clone(); }
     if (dimsGroup) { b.union(new T.Box3().setFromObject(dimsGroup)); }
     return b;
   }
