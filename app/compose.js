@@ -57,10 +57,43 @@
 
   // ------------------------------------------------------------------ 2D wall
   var vb = null; // current viewBox { x, y, w, h } (y = −z)
+  // Dimension rows under the floor: 1+ rows of each module's width (stacked modules get their
+  // own row), one row of each group of touching modules, then the overall width.
+  var EPS = 1;
+  function widthRows() {
+    var rows = [];
+    C.items.map(function (it) { return { it: it, w: world(it) }; })
+      .sort(function (a, b) { return (b.w.z1 - b.w.z0) - (a.w.z1 - a.w.z0); })
+      .forEach(function (o) {
+        // first row where it doesn't overlap anything already there
+        var r = rows.find(function (row) { return row.every(function (q) { return q.w.x1 <= o.w.x0 + EPS || q.w.x0 >= o.w.x1 - EPS; }); });
+        if (!r) { r = []; rows.push(r); }
+        r.push(o);
+      });
+    rows.forEach(function (row) { row.sort(function (a, b) { return a.w.x0 - b.w.x0; }); });
+    return rows;
+  }
+  // Runs of modules whose sides touch or overlap (left to right).
+  function groups() {
+    var list = C.items.map(world).sort(function (a, b) { return a.x0 - b.x0; }), out = [];
+    list.forEach(function (w) {
+      var g = out[out.length - 1];
+      if (g && w.x0 <= g.x1 + EPS) { g.x1 = Math.max(g.x1, w.x1); g.n += 1; } else { out.push({ x0: w.x0, x1: w.x1, n: 1 }); }
+    });
+    return out;
+  }
+  // A group row only helps when there are several groups and one of them joins modules.
+  function showGroups(g) { return g.length > 1 && g.some(function (x) { return x.n > 1; }); }
+  function dimRowCount() {
+    var g = groups();
+    return widthRows().length + (showGroups(g) ? 1 : 0) + 1;
+  }
+
   function fitBox() {
     var e = extents(), w = e.x1 - e.x0, h = e.z1 - e.z0;
     var m = Math.max(w, h) * 0.08 + 150;
-    vb = { x: e.x0 - m, y: -(e.z1 + m * 0.6), w: w + 2 * m, h: h + m * 1.6 + 120 };
+    var vw = w + 2 * m, row = vw * 0.05;
+    vb = { x: e.x0 - m, y: -(e.z1 + m * 0.6), w: vw, h: h + m * 0.6 + row * (dimRowCount() + 0.8) + 60 };
   }
 
   function moduleSvg(it) {
@@ -81,14 +114,60 @@
 
   function dimsSvg() {
     if (!C.items.length) { return ''; }
-    var e = extents(), off = vb.w * 0.035, fs = vb.w * 0.026, tk = vb.w * 0.008;
-    var y = -e.z0 + off * 1.6, x = e.x0 - off * 1.4;
-    var line = function (x1, y1, x2, y2) { return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>'; };
-    return '<g class="cdims" stroke-width="' + vb.w * 0.0015 + '">' +
-      line(e.x0, y, e.x1, y) + line(e.x0, y - tk, e.x0, y + tk) + line(e.x1, y - tk, e.x1, y + tk) +
-      '<text x="' + (e.x0 + e.x1) / 2 + '" y="' + (y + fs * 1.25) + '" font-size="' + fs + '">' + A.LU(e.x1 - e.x0) + '</text>' +
-      line(x, -e.z0, x, -e.z1) + line(x - tk, -e.z0, x + tk, -e.z0) + line(x - tk, -e.z1, x + tk, -e.z1) +
-      '<text x="' + (x - fs * 0.5) + '" y="' + (-(e.z0 + e.z1) / 2) + '" font-size="' + fs + '" transform="rotate(-90 ' + (x - fs * 0.5) + ' ' + (-(e.z0 + e.z1) / 2) + ')">' + A.LU(e.z1 - e.z0) + '</text></g>';
+    var e = extents(), row = vb.w * 0.05, fs = vb.w * 0.022, fs2 = fs * 0.8, tk = vb.w * 0.007;
+    var out = [];
+    function line(x1, y1, x2, y2, cls) { out.push('<line' + (cls ? ' class="' + cls + '"' : '') + ' x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>'); }
+    function ticks(x, y) { line(x - tk, y + tk, x + tk, y - tk); }
+    // a horizontal dimension from x0 to x1 at height y (svg units), label under it
+    function hdim(x0, x1, y, size, cls) {
+      if (x1 - x0 < 1) { return; }
+      line(x0, y, x1, y, cls); ticks(x0, y); ticks(x1, y);
+      var txt = A.LU(x1 - x0), wpx = (x1 - x0);
+      var f = Math.min(size, wpx / (txt.length * 0.62));   // shrink to fit narrow modules
+      if (f < size * 0.45) { return; }
+      out.push('<text class="' + (cls || '') + '" x="' + (x0 + x1) / 2 + '" y="' + (y - f * 0.35) + '" font-size="' + f + '">' + A.esc(txt) + '</text>');
+    }
+    // a vertical dimension (heights), label rotated, to the left of the line
+    function vdim(x, z0, z1, size, cls) {
+      if (z1 - z0 < 1) { return; }
+      line(x, -z0, x, -z1, cls); ticks(x, -z0); ticks(x, -z1);
+      var txt = A.LU(z1 - z0), f = Math.min(size, (z1 - z0) / (txt.length * 0.62));
+      if (f < size * 0.45) { return; }
+      var cy = -(z0 + z1) / 2, cx = x - f * 0.35;
+      out.push('<text class="' + (cls || '') + '" x="' + cx + '" y="' + cy + '" font-size="' + f + '" transform="rotate(-90 ' + cx + ' ' + cy + ')">' + A.esc(txt) + '</text>');
+    }
+    // 1. each module's width (and the gaps between), one row per level of stacking
+    var y = -e.z0 + row * 0.9;
+    widthRows().forEach(function (r) {
+      r.forEach(function (o, i) {
+        hdim(o.w.x0, o.w.x1, y, fs2);
+        var next = r[i + 1];
+        if (next && next.w.x0 - o.w.x1 > EPS) { hdim(o.w.x1, next.w.x0, y, fs2, 'd-gap'); }
+      });
+      y += row;
+    });
+    // 2. groups of touching modules (only when it adds something)
+    var gs = groups();
+    if (showGroups(gs)) {
+      gs.forEach(function (g, i) {
+        hdim(g.x0, g.x1, y, fs, 'd-grp');
+        var next = gs[i + 1];
+        if (next) { hdim(g.x1, next.x0, y, fs2, 'd-gap'); }
+      });
+      y += row;
+    }
+    // 3. overall width
+    hdim(e.x0, e.x1, y, fs * 1.1, 'd-all');
+    // heights: each module inside its own outline (near its left side), the whole on the far left
+    C.items.forEach(function (it) {
+      var w = world(it), inset = Math.min((w.x1 - w.x0) * 0.16, row);
+      vdim(w.x0 + inset + fs2, w.z0, w.z1, fs2, 'd-in');
+      // height off the floor, when nothing stands under it
+      var under = C.items.some(function (o) { if (o === it) { return false; } var v = world(o); return v.x0 < w.x1 - EPS && v.x1 > w.x0 + EPS && v.z1 <= w.z0 + EPS && v.z1 > e.z0 + EPS; });
+      if (w.z0 > EPS && !under) { vdim(w.x0 + inset + fs2 * 2.6, e.z0, w.z0, fs2, 'd-gap'); }
+    });
+    vdim(e.x0 - row * 0.9, e.z0, e.z1, fs * 1.1, 'd-all');
+    return '<g class="cdims" stroke-width="' + vb.w * 0.0013 + '">' + out.join('') + '</g>';
   }
 
   function draw2d() {
@@ -196,6 +275,10 @@
       '<span class="muted">' + esc(A.dimsOf(it.m.params)) + '</span></div>' +
       '<div class="crow"><span class="flbl">' + esc(t('From the left')) + '</span><button type="button" class="valbtn" data-cpos="x">' + esc(A.LU(w.x0)) + '</button></div>' +
       '<div class="crow"><span class="flbl">' + esc(t('Off the floor')) + '</span><button type="button" class="valbtn" data-cpos="z">' + esc(A.LU(w.z0)) + '</button></div>' +
+      (it.m.params.panel ? '<div class="crow seg cturn">' + [['top', 'Flat (over a module)'], ['side', 'On edge (beside a module)'], ['filler', 'Upright (front / gap)']].map(function (o) {
+        var k = it.m.params.panel_kind === 'back' ? 'filler' : it.m.params.panel_kind;
+        return '<button type="button" data-turn="' + o[0] + '" aria-pressed="' + (k === o[0]) + '">' + esc(t(o[1])) + '</button>';
+      }).join('') + '</div>' : '') +
       '<div class="crow"><button type="button" class="btn small" id="cEdit" style="flex:1">' + esc(t('Edit module')) + '</button>' +
       '<button type="button" class="btn small" id="cFloor" style="flex:1">' + esc(t('Put on the floor')) + '</button></div>';
     box.querySelectorAll('[data-cpos]').forEach(function (b) {
@@ -207,8 +290,29 @@
         } });
       };
     });
+    box.querySelectorAll('[data-turn]').forEach(function (b) {
+      b.onclick = function () { turnPanel(it, b.getAttribute('data-turn')); };
+    });
     document.getElementById('cEdit').onclick = function () { A.go('#/site/' + encodeURIComponent(C.s.id) + '/m/' + encodeURIComponent(it.m.id)); };
     document.getElementById('cFloor').onclick = function () { it.m.pos.z = -it.bb.z0; A.persist(); fitBox(); redraw(false); panel(); };
+  }
+
+  // Turn a loose panel: its two face sizes move to the new orientation (the length stays the
+  // length), the thickness becomes the third size. The engine re-normalizes it.
+  function turnPanel(it, kind) {
+    var p = it.m.params, k = p.panel_kind;
+    var a = k === 'top' ? [p.width, p.depth] : k === 'side' ? [p.height, p.depth] : [p.width, p.height];
+    var len = Math.max(a[0], a[1]), wid = Math.min(a[0], a[1]);
+    var q = Object.assign({}, p, { panel_kind: kind === 'filler' && k === 'back' ? 'back' : kind });
+    if (kind === 'top') { q.width = len; q.depth = wid; }
+    else if (kind === 'side') { q.height = len; q.depth = wid; }
+    else { q.width = len; q.height = wid; }
+    var w0 = world(it);
+    it.m.params = A.normalize(q);
+    it.m.updated = new Date().toISOString();
+    it.res = A.buildModule(it.m); it.bb = bboxOf(it.res);
+    it.m.pos = { x: w0.x0 - it.bb.x0, z: w0.z0 - it.bb.z0 };   // keep its bottom-left corner where it was
+    A.persist(); fitBox(); redraw(false); panel();
   }
 
   function redraw(reset) {
@@ -243,7 +347,7 @@
       C.mode = C.mode === '2d' ? '3d' : '2d'; A.savePref('panelpro.web.cmode', C.mode); redraw(true);
     };
     document.getElementById('cFit').onclick = function () { if (C.mode === '2d') { fitBox(); draw2d(); } else { P3D.zoomExtents(); } };
-    document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('all'); this.textContent = t(o ? 'Close all' : 'Open all'); };
+    document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('d-all'); this.textContent = t(o ? 'Close all' : 'Open all'); };
     document.getElementById('cMore').onclick = function () {
       A.menu(t('Composition'), [
         { label: t('Arrange again side by side'), run: function () {

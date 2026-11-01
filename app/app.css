@@ -265,12 +265,18 @@ button { cursor: pointer; }
 .csvg .chip rect { fill: var(--ink); }
 .csvg .chip text { fill: var(--tape); font-weight: 700; text-anchor: middle; font-family: system-ui, sans-serif; }
 .csvg .cdims line { stroke: var(--ink-2); }
-.csvg .cdims text { fill: var(--ink); text-anchor: middle; font-weight: 700; font-family: system-ui, sans-serif; }
+.csvg .cdims text { fill: var(--ink); text-anchor: middle; font-weight: 650; font-family: system-ui, sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 6px; stroke-linejoin: round; }
+.csvg .cdims text.d-all, .csvg .cdims text.d-grp { font-weight: 800; }
+.csvg .cdims text.d-gap { fill: var(--muted); font-weight: 500; }
+.csvg .cdims line.d-gap { stroke: var(--muted); stroke-dasharray: 6 5; vector-effect: non-scaling-stroke; }
+.csvg .cdims text.d-in { fill: var(--ink-2); }
 .cpanel { background: var(--ground); border-top: 1px solid var(--line); padding: 10px 14px calc(12px + var(--safe-b)); }
 .cpanel .crow { display: flex; align-items: center; gap: 10px; min-height: 46px; }
 .cpanel .crow .grow { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cpanel .flbl { flex: 1; }
 .cpanel .meta-line { margin: 4px 0; }
+.cpanel .cturn { flex-wrap: wrap; gap: 6px; padding: 4px 0; }
+.cpanel .cturn button { min-height: 38px; font-size: 14px; }
 @media (min-width: 960px) {
   .compose { flex-direction: row; }
   .cpanel { width: 380px; border-top: 0; border-left: 1px solid var(--line); padding-top: 18px; }

@@ -2,7 +2,7 @@
  * LIB = Ruby (ruby.wasm) + vendored libraries: named by their content, so an update downloads
  *       them again only when they really change (they are ~19 MB).
  * APP = the screens and the shared module engine code: small, refreshed with every update. */
-var CACHE = 'panelpro-app-0.3.25-cebf63a7e7';
+var CACHE = 'panelpro-app-0.3.25-de50e45605';
 var FILES = ["./","app.css","app.js","compose.js","engine.js","engine/lib.json","export.js","fields.js","i18n.js","icons/icon-180.png","icons/icon-192.png","icons/icon-512-maskable.png","icons/icon-512.png","manifest.webmanifest","manual.js","preview3d.js","reports.js"];
 var LIB = 'panelpro-lib-e5079da39a';
 var LIB_FILES = ["engine/ruby.wasm","vendor/jszip.LICENSE.md","vendor/jszip.min.js","vendor/pdf-lib.LICENSE.md","vendor/pdf-lib.min.js","vendor/ruby-wasm.LICENSE.txt","vendor/ruby-wasm.umd.js","vendor/three.LICENSE.txt","vendor/three.min.js"];
