@@ -1,17 +1,17 @@
 {
-  "version": "0.3.24",
+  "version": "0.3.25",
   "date": "2026-11-01",
-  "title": "PanelPro Web, the phone app",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.24.rbz",
+  "title": "Panel module: overpanels, end panels, fillers",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.25.rbz",
   "notes": [
-    "New companion phone app, PanelPro Web: create a site, pick a module, type its width, height and depth (calculations like 900-18 work), set fronts, front…",
-    "The 3D preview also works with touch: drag to turn, pinch to zoom, two fingers to pan, tap a door or drawer to open it, double tap to fit. Mouse use is…",
-    "Sheet optimizer: one inner loop rewritten so it also runs in the phone app (same layouts as before)."
+    "New module “Kitchen — Panel”: one panel on its own, to place and stretch over several modules or across a gap. Kinds: top / overpanel (lies flat), end panel…",
+    "The phone app (PanelPro Web) now has the same settings as this Configurator, your presets (the same presets file, so Export / Import moves them between…",
+    "Behind the scenes: the settings list, the 2D view, the readouts and the cutting plan drawings are shared with the phone app; nothing changes in how they…"
   ],
-  "title_es": "PanelPro Web, la app para el teléfono",
+  "title_es": "Módulo Panel: sobrepaneles, paneles terminales, rellenos",
   "notes_es": [
-    "Nueva app para el teléfono, PanelPro Web: crea una obra, elige un módulo, escribe su ancho, alto y fondo (se aceptan cálculos como 900-18), define frentes,…",
-    "La vista 3D también funciona con el dedo: arrastra para girar, pellizca para zoom, dos dedos para desplazar, toca una puerta o gaveta para abrirla, doble…",
-    "Optimizador de tableros: un bucle interno reescrito para que también funcione en la app del teléfono (mismos resultados que antes)."
+    "Nuevo módulo «Cocina — Panel»: un panel suelto para colocar y estirar sobre varios módulos o a lo largo de un hueco. Tipos: sobrepanel (acostado), panel…",
+    "La app del teléfono (PanelPro Web) ya tiene los mismos ajustes que este configurador, tus presets (el mismo archivo de presets, así que Exportar / Importar…",
+    "Por dentro: la lista de ajustes, la vista 2D, los datos bajo los campos y los dibujos del plan de corte se comparten con la app del teléfono; aquí se ven…"
   ]
 }

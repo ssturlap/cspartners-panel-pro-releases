@@ -1,6 +1,9 @@
 /* PanelPro Web — phone screens. Light, high contrast for sunlight on site; tape-measure
    yellow marks what you act on and the measurements themselves. */
 :root {
+  /* 2D front view part colours (same as the plugin's preview) */
+  --carcass: #ece7db; --back: #cfc7b6; --front: #a7b8ca; --frame: #b98a5b; --base: #5d5a55;
+  --top: #7d6a56; --skin: #e4dfd2; --drawer: #e2c494; --shelf: #f4efe3; --hardware: #9aa0a6; --stroke: #3b3833;
   --ink: #1d2a30;
   --ink-2: #3c4a50;
   --muted: #5d6b71;
@@ -125,6 +128,10 @@ button { cursor: pointer; }
 /* ---------------------------------------------------------------- editor */
 .view3d { position: sticky; top: calc(56px + var(--safe-t)); z-index: 4; height: 36vh; min-height: 220px; background: #fff; border-bottom: 1px solid var(--line); }
 .view3d .view3d-host { position: absolute; inset: 0; }
+.view3d .elev { position: absolute; inset: 28px 12px 56px; width: calc(100% - 24px); height: calc(100% - 84px); display: none; }
+.view3d.is2d .elev { display: block; }
+.view3d.is2d .view3d-host { visibility: hidden; }
+.readout { margin: 4px 0 8px; padding: 8px 10px; background: #f2f5f6; border-radius: 10px; font-size: 13.5px; color: var(--ink-2); }
 .view3d canvas { display: block; width: 100% !important; height: 100% !important; }
 .view-tools { position: absolute; right: 8px; bottom: 8px; display: flex; gap: 6px; }
 .view-tools button { height: 40px; min-width: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.92); font-size: 14px; font-weight: 600; }
@@ -226,6 +233,48 @@ button { cursor: pointer; }
 .totals { font-size: 14px; }
 .totals div { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-top: 1px solid #edf0f1; }
 .totals div:first-child { border-top: 0; }
+
+/* ---------------------------------------------------------------- documents, cutting plan */
+.actions-row { display: flex; gap: 10px; margin: 2px 0 12px; }
+.actions-row .btn { flex: 1; }
+.docview { position: fixed; inset: 0; z-index: 35; background: #e9e6e0; display: flex; flex-direction: column; }
+.docview iframe { flex: 1; width: 100%; border: 0; background: #e9e6e0; }
+.stats { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); margin-bottom: 8px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+.stat b { display: block; font-size: 24px; letter-spacing: -0.02em; }
+.stat span { color: var(--muted); font-size: 13px; }
+.optgrp h3 { margin: 0 0 2px; font-size: 16px; }
+.sheets { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-top: 8px; }
+.sheet { margin: 0; background: #fff; border: 1px solid #e3e8ea; border-radius: 10px; padding: 6px; }
+.sheet svg { width: 100%; height: auto; display: block; }
+.sheet figcaption { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.muted { color: var(--muted); font-weight: 400; }
+
+/* ---------------------------------------------------------------- composition */
+.compose { display: flex; flex-direction: column; height: calc(100vh - 56px - var(--safe-t)); }
+.compose .cview { position: relative; top: 0; flex: 1; height: auto; min-height: 0; }
+.csvg { position: absolute; inset: 0; width: 100%; height: 100%; display: none; touch-action: none; background: #fff; }
+.cview.is2d .csvg { display: block; }
+.cview.is2d .view3d-host { visibility: hidden; }
+.csvg .floor { stroke: var(--ink-2); }
+.csvg .cmod { cursor: grab; }
+.csvg .cmod polygon { stroke: var(--stroke); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.csvg .cmod .hit { fill: transparent; }
+.csvg .cmod .selbox { fill: none; stroke: none; }
+.csvg .cmod.on .selbox { stroke: var(--tape-deep); stroke-width: 3; stroke-dasharray: 8 6; vector-effect: non-scaling-stroke; }
+.csvg .chip rect { fill: var(--ink); }
+.csvg .chip text { fill: var(--tape); font-weight: 700; text-anchor: middle; font-family: system-ui, sans-serif; }
+.csvg .cdims line { stroke: var(--ink-2); }
+.csvg .cdims text { fill: var(--ink); text-anchor: middle; font-weight: 700; font-family: system-ui, sans-serif; }
+.cpanel { background: var(--ground); border-top: 1px solid var(--line); padding: 10px 14px calc(12px + var(--safe-b)); }
+.cpanel .crow { display: flex; align-items: center; gap: 10px; min-height: 46px; }
+.cpanel .crow .grow { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cpanel .flbl { flex: 1; }
+.cpanel .meta-line { margin: 4px 0; }
+@media (min-width: 960px) {
+  .compose { flex-direction: row; }
+  .cpanel { width: 380px; border-top: 0; border-left: 1px solid var(--line); padding-top: 18px; }
+}
 
 /* ---------------------------------------------------------------- menu sheet */
 .menu { position: fixed; inset: 0; z-index: 30; background: rgba(15,22,25,.45); display: flex; align-items: flex-end; }

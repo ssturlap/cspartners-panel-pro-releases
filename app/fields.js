@@ -9,6 +9,7 @@
   var SKIN = function (p) { return !!(p.skin_l || p.skin_r); };
   var DECO = function (p) { return !!(p.skin_l || p.skin_r || p.add_top); };
   var FRIDGE = function (p) { return !!p.fridge; };
+  var PANEL = function (p) { return !!p.panel; };
   var SECTIONS = {
     module: [
       ['name', 'Name', 'text'],
@@ -28,7 +29,13 @@
       ['fridge_w', 'Fridge width', 'len', FRIDGE],
       ['fridge_h', 'Fridge height', 'len', FRIDGE],
       ['fridge_d', 'Fridge depth', 'len', FRIDGE],
-      ['fridge_fit', 'Fit module to fridge', 'btn', FRIDGE]
+      ['fridge_fit', 'Fit module to fridge', 'btn', FRIDGE],
+      ['#', 'Panel', PANEL],
+      ['panel_kind', 'Kind of panel', 'sel', [['top', 'Top / overpanel (lies flat over modules)'], ['side', 'End panel (stands at the side)'], ['filler', 'Filler (closes a gap at the front)'], ['back', 'Back cover']], PANEL],
+      ['panel_info', '', 'info', PANEL],
+      ['panel_t_same', 'Same as panel thickness', 'bool', PANEL],
+      ['panel_t', 'Thickness', 'len', function (p) { return p.panel && !p.panel_t_same; }],
+      ['panel_eb', 'Edge banding', 'sel', [['front', 'One long edge (the one in view)'], ['long', 'Both long edges'], ['all', 'All four edges'], ['none', 'None']], PANEL]
     ],
     box: [
       ['#', 'Construction'],
@@ -260,7 +267,7 @@
   function skinT(p) { return p.skin_t_same !== false ? p.t : p.skin_t; }
 
   window.PPFields = {
-    SECTIONS: SECTIONS, NAMED_COND: NAMED_COND, cond: cond, YES: YES, SKIN: SKIN, DECO: DECO, FRIDGE: FRIDGE,
+    SECTIONS: SECTIONS, NAMED_COND: NAMED_COND, cond: cond, YES: YES, SKIN: SKIN, DECO: DECO, FRIDGE: FRIDGE, PANEL: PANEL,
     FRONTS: FRONTS, OLD_FRONTS: OLD_FRONTS, INTERIORS: INTERIORS, HINGES: HINGES,
     PICKS: PICKS, MODE_KEYS: MODE_KEYS, tMult: tMult, BOXSYS: BOXSYS, applyBox: applyBox,
     innerExtra: innerExtra, skinT: skinT
