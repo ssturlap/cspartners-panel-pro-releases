@@ -2,17 +2,20 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.23** — Module library inside the Configurator  
-Download [cspartners_panel_pro_0.3.23.rbz](releases/cspartners_panel_pro_0.3.23.rbz) and install it in SketchUp:
+**Latest: 0.3.24** — PanelPro Web, the phone app  
+Download [cspartners_panel_pro_0.3.24.rbz](releases/cspartners_panel_pro_0.3.24.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
+
+**Phone app (PanelPro Web):** open https://ssturlap.github.io/cspartners-panel-pro-releases/app/ on the phone and add it to the home screen.
 
 Installed copies check `version.json` here (at most once a day, or *Extensions › CSPARTNERS PANEL PRO › Check for updates…*)
 and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.24 | [cspartners_panel_pro_0.3.24.rbz](releases/cspartners_panel_pro_0.3.24.rbz) |
 | 0.3.23 | [cspartners_panel_pro_0.3.23.rbz](releases/cspartners_panel_pro_0.3.23.rbz) |
 | 0.3.22 | [cspartners_panel_pro_0.3.22.rbz](releases/cspartners_panel_pro_0.3.22.rbz) |
 | 0.3.21 | [cspartners_panel_pro_0.3.21.rbz](releases/cspartners_panel_pro_0.3.21.rbz) |

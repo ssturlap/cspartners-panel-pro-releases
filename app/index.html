@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d2a30">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Size cabinet modules on site: pick a module, type its measurements, see it in 3D and get the cut list.">
+<title>PanelPro Web</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="app">
+  <section id="boot" class="boot">
+    <div class="boot-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+    <h1>PanelPro Web</h1>
+    <p id="bootMsg">Loading the module engine…</p>
+    <div class="bar"><i id="bootBar"></i></div>
+    <p class="boot-note" id="bootNote">The first time takes a moment. After that it opens offline.</p>
+  </section>
+  <main id="screen" hidden></main>
+</div>
+
+<!-- dimension keypad (one sheet for every number in the app) -->
+<div id="pad" class="pad" hidden>
+  <div class="pad-sheet" role="dialog" aria-modal="true" aria-labelledby="padLabel">
+    <div class="pad-head">
+      <span id="padLabel">Width</span>
+      <button type="button" class="pad-x" data-pad="cancel" aria-label="Cancel">✕</button>
+    </div>
+    <div class="pad-read"><span id="padExpr"></span><span class="pad-unit">mm</span></div>
+    <div class="pad-result" id="padResult"></div>
+    <div class="pad-chips" id="padChips"></div>
+    <div class="pad-keys">
+      <button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button><button type="button" class="op" data-k="/">÷</button>
+      <button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button><button type="button" class="op" data-k="*">×</button>
+      <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button><button type="button" class="op" data-k="-">−</button>
+      <button type="button" data-k=".">.</button><button type="button" data-k="0">0</button><button type="button" class="op" data-k="back" aria-label="Delete">⌫</button><button type="button" class="op" data-k="+">+</button>
+    </div>
+    <div class="pad-foot">
+      <button type="button" class="pad-auto" data-pad="auto" hidden>Auto</button>
+      <button type="button" class="pad-set" data-pad="set">Set</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<input type="file" id="fileIn" accept=".json,application/json,text/plain" hidden>
+
+<script src="vendor/three.min.js"></script>
+<script src="preview3d.js"></script>
+<script src="i18n.js"></script>
+<script src="vendor/ruby-wasm.umd.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,17 +1,17 @@
 {
-  "version": "0.3.23",
-  "date": "2026-10-30",
-  "title": "Module library inside the Configurator",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.23.rbz",
+  "version": "0.3.24",
+  "date": "2026-11-01",
+  "title": "PanelPro Web, the phone app",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.24.rbz",
   "notes": [
-    "The Module library is now a strip on the Configurator’s left side instead of a separate window: ▦ makes the window wider on its left to show it (the…",
-    "Glass doors moved to Fronts › Front style › Glass (black aluminium frame): all doors of the module become glass, drawer fronts stay wood. The Layout tab’s…",
-    "Glass doors are drawn as one “Glass door” component holding a black aluminium “Frame” component (mitred 45° corners) and a bronze “Glass” component (the…"
+    "New companion phone app, PanelPro Web: create a site, pick a module, type its width, height and depth (calculations like 900-18 work), set fronts, front…",
+    "The 3D preview also works with touch: drag to turn, pinch to zoom, two fingers to pan, tap a door or drawer to open it, double tap to fit. Mouse use is…",
+    "Sheet optimizer: one inner loop rewritten so it also runs in the phone app (same layouts as before)."
   ],
-  "title_es": "Biblioteca de módulos dentro del configurador",
+  "title_es": "PanelPro Web, la app para el teléfono",
   "notes_es": [
-    "La Biblioteca de módulos es ahora una franja en el lado izquierdo del configurador en lugar de una ventana aparte: ▦ ensancha la ventana por la izquierda…",
-    "Las puertas de vidrio pasan a Frentes › Estilo de frente › Vidrio (marco de aluminio negro): todas las puertas del módulo son de vidrio, los frentes de…",
-    "Las puertas de vidrio se dibujan como un componente «Puerta de vidrio» con un componente «Marco» de aluminio negro (esquinas a inglete de 45°) y un…"
+    "Nueva app para el teléfono, PanelPro Web: crea una obra, elige un módulo, escribe su ancho, alto y fondo (se aceptan cálculos como 900-18), define frentes,…",
+    "La vista 3D también funciona con el dedo: arrastra para girar, pellizca para zoom, dos dedos para desplazar, toca una puerta o gaveta para abrirla, doble…",
+    "Optimizador de tableros: un bucle interno reescrito para que también funcione en la app del teléfono (mismos resultados que antes)."
   ]
 }
