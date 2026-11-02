@@ -18,6 +18,8 @@
     'Crown (strip on edge on top, up to the ceiling)': 'Corona (pieza de canto arriba, hasta el techo)',
     'Tap the modules of the run, then Next.': 'Toque los módulos del tramo y luego Siguiente.', 'Next': 'Siguiente',
     'Panels created': 'Paneles creados', 'selected': 'seleccionados',
+    'Inside': 'Interior', 'Auto: shares the space left — tap to fix this size': 'Auto: reparte el espacio que queda — toque para fijar esta medida',
+    'Fixed size — tap to make it auto': 'Medida fija — toque para hacerla auto',
     'Panels are not part of a run': 'Los paneles no forman parte de un tramo',
     // tabs, header, footer
     'Module': 'Módulo', 'Box': 'Caja', 'Base': 'Base', 'Layout': 'Distribución', 'Fronts': 'Frentes',

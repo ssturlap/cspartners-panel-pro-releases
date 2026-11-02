@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.28';
-  var BUILD = 'f3b020690b';
+  var BUILD = '58fdaf9d03';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -938,8 +938,16 @@
     renderEditBody();
   }
 
-  function seg(id, choices, value, extraCls) {
-    return '<div class="seg" data-seg="' + id + '">' + choices.map(function (c) {
+  // A size in the layout: the number only, and an "auto" switch beside it (on = shares what is left).
+  function sizeCtl(kind, idx, v, computed) {
+    var auto = v === 'auto', shown = auto ? (computed ? L(computed) : '—') : L(v);
+    return '<span class="szc"><button type="button" class="hbtn szv' + (auto ? ' is-auto' : '') + '" data-' + kind + '="' + idx + '">' + esc(shown) + '</button>' +
+      '<button type="button" class="autob" data-auto="' + kind + ':' + idx + '" data-calc="' + (computed || '') + '" aria-pressed="' + auto + '" title="' +
+      esc(t(auto ? 'Auto: shares the space left — tap to fix this size' : 'Fixed size — tap to make it auto')) + '">' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M4 12l4-4M4 12l4 4M20 12l-4-4M20 12l-4 4"/></svg><span>' + esc(t('auto')) + '</span></button></span>';
+  }
+  function seg(id, choices, value, extraCls, segCls) {
+    return '<div class="seg' + (segCls ? ' ' + segCls : '') + '" data-seg="' + id + '">' + choices.map(function (c) {
       return '<button type="button" class="' + (extraCls || '') + '" data-v="' + esc(c[0]) + '" aria-pressed="' + (String(value) === String(c[0])) + '">' + esc(t(c[1])) + '</button>';
     }).join('') + '</div>';
   }
@@ -1034,10 +1042,10 @@
     (p.columns || []).forEach(function (col, ci) {
       var LY = lay[ci] || {};
       h += '<div class="box colbox"><div class="col-head"><b>' + esc(t('Column')) + ' ' + (ci + 1) + '</b>' +
-        '<button type="button" class="hbtn" data-colw="' + ci + '">' + esc(col.w === 'auto' ? t('auto') + (LY.w ? ' = ' + L(LY.w) : '') : LU(col.w)) + '</button>' +
+        sizeCtl('colw', String(ci), col.w, LY.w) +
         '<span class="grow"></span>' +
         (p.columns.length > 1 ? '<button type="button" class="xbtn" data-colmv="' + ci + ',-1" aria-label="Move left">←</button><button type="button" class="xbtn" data-colmv="' + ci + ',1" aria-label="Move right">→</button>' +
-          '<button type="button" class="xbtn" data-colx="' + ci + '" aria-label="Remove column">✕</button>' : '') + '</div>' +
+          '<button type="button" class="xbtn del" data-colx="' + ci + '" aria-label="Remove column">✕</button>' : '') + '</div>' +
         '<div class="seg" style="margin:6px 0 4px">' + [['normal', 'Cabinet section'], ['kneehole', 'Kneehole (open, no box)']].map(function (o) {
           return '<button type="button" data-colkind="' + ci + '" data-v="' + o[0] + '" aria-pressed="' + (col.kind === o[0]) + '">' + esc(t(o[1])) + '</button>';
         }).join('') + '</div>';
@@ -1045,20 +1053,22 @@
       (col.rows || []).forEach(function (row, ri) {
         var front = row.front.replace(/^glass_/, ''), door = front === 'door', drawer = front === 'drawer';
         var rh = (LY.rows || [])[ri];
-        h += '<div class="frow"><div class="frow-head"><span>' + esc(t('Row')) + ' ' + (ri + 1) + '</span><span class="grow"></span>' +
-          '<button type="button" class="hbtn" data-rowh="' + ci + ',' + ri + '">' + esc(row.h === 'auto' ? t('auto') + (rh ? ' = ' + L(rh) : '') : LU(row.h)) + '</button>' +
-          (col.rows.length > 1 ? '<button type="button" class="xbtn" data-rowx="' + ci + ',' + ri + '" aria-label="Remove row">✕</button>' : '') + '</div>' +
-          seg('front:' + ci + ',' + ri, FRONT_CHOICES, front) +
-          (door ? '<div class="sub-seg">' + seg('hinge:' + ci + ',' + ri, HINGE_CH, row.hinge || 'L') + '</div>' : '') +
-          (!drawer ? '<div class="sub-seg">' + seg('interior:' + ci + ',' + ri, INTERIOR_CH, row.interior || 'none') + '</div>' : '') +
+        // front = the category (one joined control); hinge and interior = its details, set apart below
+        var details = (door ? '<div class="opt-l">' + esc(t('Hinge')) + '</div>' + seg('hinge:' + ci + ',' + ri, HINGE_CH, row.hinge || 'L', 'chip') : '') +
+          (!drawer ? '<div class="opt-l">' + esc(t('Inside')) + '</div>' + seg('interior:' + ci + ',' + ri, INTERIOR_CH, row.interior || 'none', 'chip') : '') +
           (!drawer && row.interior === 'shelves' ? '<div class="stepper"><span>' + esc(t('Shelves')) + '</span>' +
             '<button type="button" data-shelf="' + ci + ',' + ri + ',-1" aria-label="Fewer shelves">−</button><b>' + (row.shelves || 0) + '</b>' +
-            '<button type="button" data-shelf="' + ci + ',' + ri + ',1" aria-label="More shelves">+</button></div>' : '') +
+            '<button type="button" data-shelf="' + ci + ',' + ri + ',1" aria-label="More shelves">+</button></div>' : '');
+        h += '<div class="frow"><div class="frow-head"><span class="rlbl">' + esc(t('Row')) + ' ' + (ri + 1) + '</span>' +
+          sizeCtl('rowh', ci + ',' + ri, row.h, rh) + '<span class="grow"></span>' +
+          (col.rows.length > 1 ? '<button type="button" class="xbtn del" data-rowx="' + ci + ',' + ri + '" aria-label="Remove row">✕</button>' : '') + '</div>' +
+          '<div class="opt-l">' + esc(t('Front')) + '</div>' + seg('front:' + ci + ',' + ri, FRONT_CHOICES, front, '', 'seg-joined') +
+          (details ? '<div class="row-details">' + details + '</div>' : '') +
           '</div>';
       });
-      h += '<button type="button" class="btn small quiet addrow" data-rowadd="' + ci + '">' + esc(t('+ Row')) + '</button></div>';
+      h += '<button type="button" class="btn small addbtn addrow" data-rowadd="' + ci + '">' + esc(t('+ Row')) + '</button></div>';
     });
-    h += '<button type="button" class="btn small addcol" id="addCol">' + esc(t('+ Add column')) + '</button>';
+    h += '<button type="button" class="btn small addbtn addcol" id="addCol">' + esc(t('+ Add column')) + '</button>';
     h += '<p class="meta-line">' + esc(t('Columns run left → right, rows top → bottom. Leave auto to share what’s left.')) + '</p>';
     return h;
   }
@@ -1131,9 +1141,21 @@
         try { E.params = Engine.call('fridge_fit', { params: p }); toast(t('Module sized to the fridge: ') + dimsOf(E.params) + ' mm'); } catch (err) { toast(err.message); }
         E.changed.width = E.changed.height = E.changed.depth = true; changed(true); return;
       }
+      if ((a = b.getAttribute('data-auto'))) {
+        // auto on ↔ off; off keeps the size it came out as
+        var am = /^(colw|rowh):(\d+)(?:,(\d+))?$/.exec(a);
+        if (am) {
+          var tgt = am[1] === 'colw' ? p.columns[+am[2]] : p.columns[+am[2]].rows[+am[3]], key = am[1] === 'colw' ? 'w' : 'h';
+          var calc = parseFloat(b.getAttribute('data-calc'));
+          if (tgt[key] === 'auto') { if (isFinite(calc) && calc > 0) { tgt[key] = Math.round(calc * 10) / 10; } else { return; } }
+          else { tgt[key] = 'auto'; }
+          changed(false);
+        }
+        return;
+      }
       if ((a = b.getAttribute('data-colw'))) {
-        var col = p.columns[+a];
-        openPad({ label: t('Clear interior width'), value: col.w, auto: true, done: function (v) { col.w = v; changed(false); } });
+        var col = p.columns[+a], cw = col.w === 'auto' ? (((E.res && E.res.layout) || [])[+a] || {}).w : col.w;
+        openPad({ label: t('Clear interior width'), value: cw || col.w, auto: true, done: function (v) { col.w = v; changed(false); } });
         return;
       }
       if ((a = b.getAttribute('data-colkind'))) {
@@ -1150,7 +1172,8 @@
       if (b.id === 'addCol') { p.columns.push({ w: 'auto', kind: 'normal', rows: [{ h: 'auto', front: 'door', hinge: 'R', interior: 'shelves', shelves: 1 }] }); changed(false); return; }
       if ((a = b.getAttribute('data-rowh'))) {
         var ix = a.split(',').map(Number), row = p.columns[ix[0]].rows[ix[1]];
-        openPad({ label: t('Height of this row'), value: row.h, chips: CHIPS.row, auto: true, done: function (v) { row.h = v; changed(false); } });
+        var rh0 = row.h === 'auto' ? ((((E.res && E.res.layout) || [])[ix[0]] || {}).rows || [])[ix[1]] : row.h;
+        openPad({ label: t('Height of this row'), value: rh0 || row.h, chips: CHIPS.row, auto: true, done: function (v) { row.h = v; changed(false); } });
         return;
       }
       if ((a = b.getAttribute('data-rowx'))) { var rx = a.split(',').map(Number); p.columns[rx[0]].rows.splice(rx[1], 1); changed(false); return; }
