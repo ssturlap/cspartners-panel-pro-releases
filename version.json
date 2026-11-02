@@ -1,15 +1,13 @@
 {
-  "version": "0.3.26",
+  "version": "0.3.27",
   "date": "2026-11-02",
-  "title": "3D preview fits narrow windows; PanelPro Web accounts",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.26.rbz",
+  "title": "Drawer slides fixed for SketchUp 2027",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.27.rbz",
   "notes": [
-    "The 3D preview now fits the whole module when its window is tall and narrow (it used to cut off the sides).",
-    "PanelPro Web, the phone and computer app, now has Google sign-in: projects, materials and settings sync across your devices, with companies (shared projects…"
+    "SketchUp 2027 loads the slide models stood on end, so the rails stuck out above and below the cabinet. The plugin now turns each loaded rail the right way…"
   ],
-  "title_es": "La vista 3D cabe en ventanas angostas; cuentas en PanelPro Web",
+  "title_es": "Correderas de gaveta corregidas para SketchUp 2027",
   "notes_es": [
-    "La vista 3D ahora muestra el módulo completo cuando su ventana es alta y angosta (antes cortaba los lados).",
-    "PanelPro Web, la app para teléfono y computadora, ahora tiene inicio de sesión con Google: proyectos, materiales y ajustes se sincronizan entre sus…"
+    "SketchUp 2027 carga los modelos de corredera de pie, así que los rieles salían por encima y por debajo del mueble. Ahora el plugin gira cada riel a la…"
   ]
 }
