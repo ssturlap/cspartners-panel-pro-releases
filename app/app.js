@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.29';
-  var BUILD = 'dbafdbb002';
+  var VERSION = '0.3.30';
+  var BUILD = '04b3dac670';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -988,7 +988,7 @@
   }
   function fieldHtml(d, p) {
     var key = d[0], label = t(WEB_LABEL[key] || d[1]), type = d[2];
-    var c = F().cond(type === 'sel' ? d[4] : d[3]);
+    var c = F().condOf(d);
     if (key === '#') { return F().cond(d[2])(p) ? '<h3 class="grp">' + esc(label) + '</h3>' : ''; }
     if (SKIP[key] || !c(p) || (p.panel && key === 'inner_w')) { return ''; }
     if (type === 'info') {
@@ -996,6 +996,12 @@
       return txt ? '<p class="readout">' + esc(txt) + '</p>' : '';
     }
     if (type === 'btn') { return '<button type="button" class="btn small fbtn" data-btn="' + key + '">' + esc(label) + '</button>'; }
+    if (type === 'cards') {
+      return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span><div class="cards" data-cards="' + key + '">' + d[3].map(function (o) {
+        return '<button type="button" class="card" data-v="' + esc(o[0]) + '" aria-pressed="' + (String(p[key]) === o[0]) + '">' + F().cardSvg(o) +
+          '<span><b>' + esc(t(o[1])) + '</b><small>' + esc(t(o[2])) + '</small></span></button>';
+      }).join('') + '</div></div>';
+    }
     var ctl;
     if (type === 'len' || type === 'deg' || type === 'pct') {
       var v = key === 'inner_w' ? p.width - F().innerExtra(p) : p[key];
@@ -1036,9 +1042,15 @@
     return '<div class="frow-f"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>' + picks;
   }
 
+  var nkSel = null, nkN = 2;
   function layoutHtml(p) {
     var lay = (E.res && E.res.layout) || [];
-    var h = '';
+    var nk = p.layout_mode === 'nooks';
+    // layout mode: columns and rows, or NOOKS (ui/nooks.js draws its editor into #nkHost after render)
+    var h = '<div class="seg lmode" data-lmode="1">' + [['cols', 'Columns and rows'], ['nooks', 'NOOKS']].map(function (o) {
+      return '<button type="button" data-lm="' + o[0] + '" aria-pressed="' + ((o[0] === 'nooks') === nk) + '">' + esc(t(o[1])) + '</button>';
+    }).join('') + '</div>';
+    if (nk) { return h + '<p class="meta-line">' + esc(t('Split the box into spaces as you like (nooks).')) + '</p><div id="nkHost" class="box"></div>'; }
     (p.columns || []).forEach(function (col, ci) {
       var LY = lay[ci] || {};
       h += '<div class="box colbox"><div class="col-head"><b>' + esc(t('Column')) + ' ' + (ci + 1) + '</b>' +
@@ -1104,6 +1116,15 @@
     body.innerHTML = html;
     body.scrollTop = scrollY;
     wireEditBody(body);
+    var nh = document.getElementById('nkHost');
+    if (nh && window.PPNooks) {
+      window.PPNooks.render(nh, {
+        t: t, show: function (v) { return L(v); }, units: U(), params: p, layout: E.res && E.res.nooks, sel: nkSel, n: nkN,
+        parse: function (v) { var x = window.PP_CALC ? window.PP_CALC(v) : parseFloat(String(v).replace(',', '.')); return x == null || !isFinite(x) ? null : x * uk(); },
+        select: function (path) { nkSel = path; renderEditBody(); },
+        changed: function () { changed(false); }, setN: function (n) { nkN = n; }
+      });
+    }
   }
 
   // The settings of a tab as html; a group title with nothing under it is left out.
@@ -1127,6 +1148,13 @@
       if (!b || !body.contains(b)) { return; }
       var a;
       if ((a = b.getAttribute('data-tab'))) { editTab = a; save('panelpro.web.tab', a); renderEditBody(); $('#editBody').scrollTop = 0; return; }
+      if ((a = b.getAttribute('data-lm'))) {
+        if (a === 'nooks') { p.layout_mode = 'nooks'; if (!p.nooks && window.PPNooks) { p.nooks = window.PPNooks.fromColumns(p.columns); } } else { delete p.layout_mode; }
+        nkSel = null; changed(false); return;
+      }
+      if (b.closest('#nkHost')) { return; }   // the NOOKS editor handles its own buttons
+      var cg = b.closest('[data-cards]');
+      if (cg) { p[cg.getAttribute('data-cards')] = b.getAttribute('data-v'); changed(false); return; }
       if ((a = b.getAttribute('data-dim'))) {
         openPad({ label: t(a[0].toUpperCase() + a.slice(1)), value: p[a], chips: CHIPS[a], done: function (v) { E.params[a] = v; E.changed[a] = true; changed(true); } });
         return;

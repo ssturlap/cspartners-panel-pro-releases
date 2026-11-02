@@ -1,23 +1,23 @@
 {
-  "version": "0.3.29",
+  "version": "0.3.30",
   "date": "2026-11-02",
-  "title": "Cleaner Configurator, Panel module, hand-drawn panels in the cut list",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.29.rbz",
+  "title": "NOOKS, carcass construction cards, palette",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.30.rbz",
   "notes": [
-    "The Configurator shows only the settings for what the module has: no corner, hanging rail, shelf or kneehole settings unless the module has them, no door…",
-    "Layout tab: the columns and rows come first; underneath, only the settings your layout brings (between rows, shelf setback, hanging rail, kneehole). Corner…",
-    "Panel is its own module (no longer under Kitchen) with a short form: name, orientation (flat, on edge or standing sideways), length, width, thickness, edge…",
-    "Right-click a group or component you drew yourself › CSPARTNERS PANEL PRO › Count in cut list: it is listed with its real size (thinnest side = thickness),…",
-    "New decorative back panel (for islands and visible backs): behind the carcass, full width, same height as the side panels.",
-    "Materials tab: the show/hide buttons were removed (use the preview buttons, or the toolbar and Extensions menu for the model)."
+    "NOOKS (Layout tab): split the box into spaces as you like — tap a space in the drawing, split it side by side (partitions) or one above the other (fixed…",
+    "Box tab: the carcass construction is now four picture cards, with a new one — top full width (top over the sides, bottom between them). The back is two…",
+    "Back applied to the rear: down to the floor, a height of its own, and it may go past the module height.",
+    "Visible top, bottom and back (next to the visible sides): they take the visible-end material.",
+    "Quick sizes in one line (70 · 100 · 150 · box): typing your own number in the box is the custom choice.",
+    "New palette (toolbar button or Extensions menu): the buttons in a floating window, one per line with their names; it remembers its place and opens again…"
   ],
-  "title_es": "Configurador más limpio, módulo Panel, paneles dibujados a mano en la lista de corte",
+  "title_es": "NOOKS, tarjetas de construcción de la caja, paleta",
   "notes_es": [
-    "El Configurador muestra solo los ajustes de lo que el módulo tiene: sin ajustes de esquina, tubo, entrepaños o hueco para piernas si el módulo no los tiene,…",
-    "Pestaña Distribución: primero las columnas y filas; debajo, solo los ajustes que su distribución trae (entre filas, retiro de entrepaños, tubo, faldón). Los…",
-    "Panel es un módulo propio (ya no está en Cocina) con un formulario corto: nombre, orientación (acostado, de canto o de pie al costado), largo, ancho,…",
-    "Clic derecho en un grupo o componente que usted dibujó › CSPARTNERS PANEL PRO › Contar en lista de corte: sale con su medida real (el lado más delgado =…",
-    "Nuevo panel decorativo trasero (para islas y respaldos vistos): detrás de la caja, a todo el ancho, de la misma altura que los costados decorativos.",
-    "Pestaña Materiales: se quitaron los botones de mostrar/ocultar (use los de la vista previa, o la barra de herramientas y el menú Extensiones para el modelo)."
+    "NOOKS (pestaña Distribución): divida la caja en espacios como quiera — toque un espacio en el dibujo, divídalo lado a lado (divisiones) o uno sobre otro…",
+    "Pestaña Caja: la construcción de la caja son ahora cuatro tarjetas con dibujo, con una nueva — tapa superior a ancho completo (tapa sobre los laterales,…",
+    "Respaldo aplicado atrás: hasta el piso, altura propia, y puede pasar la altura del módulo.",
+    "Techo, piso y respaldo vistos (junto a los costados vistos): toman el material de piezas vistas.",
+    "Medidas rápidas en una línea (70 · 100 · 150 · casilla): escribir su propio número en la casilla es la opción personalizada.",
+    "Nueva paleta (botón de la barra o menú Extensiones): los botones en una ventana flotante, uno por línea con su nombre; recuerda su lugar y se abre de nuevo…"
   ]
 }

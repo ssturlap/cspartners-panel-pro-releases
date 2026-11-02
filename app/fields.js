@@ -14,7 +14,13 @@
 
   // ---- what the module actually has (from its layout). A setting tied to one of these shows only
   // when the module has that thing — unless "Show all settings" is on (PPFields.showAll).
+  function nookLeaves(n, out) {
+    if (!n) { return out; }
+    if (n.parts) { n.parts.forEach(function (q) { nookLeaves(q, out); }); } else { out.push(n); }
+    return out;
+  }
   function rowsOf(p) {
+    if (p.layout_mode === 'nooks' && p.nooks) { return nookLeaves(p.nooks, []); }
     var out = [];
     (p.columns || []).forEach(function (c) { if (c.kind !== 'kneehole') { (c.rows || []).forEach(function (r) { out.push(r); }); } });
     return out;
@@ -31,8 +37,8 @@
     front: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'none' && frontOf(r) !== ''; }); },
     shelves: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'drawer' && r.interior === 'shelves' && (r.shelves || 0) > 0; }); },
     hang: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'drawer' && r.interior === 'hang'; }); },
-    knee: function (p) { return (p.columns || []).some(function (c) { return c.kind === 'kneehole'; }); },
-    rows2: function (p) { return (p.columns || []).some(function (c) { return c.kind !== 'kneehole' && (c.rows || []).length > 1; }); },
+    knee: function (p) { return p.layout_mode !== 'nooks' && (p.columns || []).some(function (c) { return c.kind === 'kneehole'; }); },
+    rows2: function (p) { return p.layout_mode !== 'nooks' && (p.columns || []).some(function (c) { return c.kind !== 'kneehole' && (c.rows || []).length > 1; }); },
     corner: function (p) { return !!p.corner && p.corner !== 'none'; },
     box: function (p) { return !p.panel; }
   };
@@ -84,11 +90,21 @@
     box: [
       ['#', 'Construction'],
       ['construction', 'Construction type', 'sel', [['frameless', 'Frameless (European)'], ['face_frame', 'Face frame']]],
-      ['joint', 'Carcass joint', 'sel', [['sides_full', 'Sides full height'], ['bottom_full', 'Bottom under sides'], ['top_bottom_full', 'Top & bottom over sides']]],
+      ['joint', 'Carcass joint', 'cards', [
+        ['sides_full', 'Sides full height', 'Top and bottom between the sides (standard)', 'M0 0h6v44H0zM34 0h6v44h-6z|M6 0h28v6H6zM6 38h28v6H6z'],
+        ['top_full', 'Top full width', 'Top over the sides · bottom between the sides', 'M0 6h6v38H0zM34 6h6v38h-6z|M0 0h40v6H0zM6 38h28v6H6z'],
+        ['bottom_full', 'Bottom full width', 'Bottom under the sides · top between the sides', 'M0 0h6v38H0zM34 0h6v38h-6z|M6 0h28v6H6zM0 38h40v6H0z'],
+        ['top_bottom_full', 'Top and bottom full width', 'Both over the sides', 'M0 6h6v32H0zM34 6h6v32h-6z|M0 0h40v6H0zM0 38h40v6H0z']]],
       ['t', 'Panel thickness', 'len'],
       ['#', 'Back'],
-      ['back_mount', 'Back panel (respaldo)', 'sel', [['inset', 'Set in (between sides)'], ['applied', 'Applied to rear']]],
+      ['back_mount', 'Back panel (respaldo)', 'cards', [
+        ['inset', 'Inside (set in)', 'Set in between the sides', 'M0 0h6v40H0zM34 0h6v40h-6z|M6 30h28v5H6z'],
+        ['applied', 'Outside (applied)', 'Applied to the rear', 'M0 0h6v40H0zM34 0h6v40h-6z|M0 40h40v5H0z']]],
       ['back_slot', 'Slotted into grooves', 'bool', function (p) { return p.back_mount === 'inset'; }],
+      ['back_floor', 'Back: down to the floor', 'bool', function (p) { return p.back_mount === 'applied'; }],
+      ['back_hset', 'Back: height of its own', 'bool', function (p) { return p.back_mount === 'applied'; }],
+      ['back_h', 'Back height', 'len', function (p) { return p.back_mount === 'applied' && p.back_hset; }],
+      ['back_over', 'Back: may go past the module height', 'bool', function (p) { return p.back_mount === 'applied' && p.back_hset; }],
       ['back_t_same', 'Same thickness as carcass panels', 'bool'],
       ['back_t', 'Back thickness', 'len', function (p) { return !p.back_t_same; }],
       ['back_recess', 'Back recess from rear edge', 'len', function (p) { return p.back_mount === 'inset'; }],
@@ -236,7 +252,7 @@
       ['#', 'Materials'],
       ['mat_carcass', 'Carcass, shelves', 'mat'],
       ['mat_back', 'Back', 'mat'],
-      ['mat_front', 'Fronts', 'mat', function (p) { return FRONT(p) || p.end_l || p.end_r; }],
+      ['mat_front', 'Fronts', 'mat', function (p) { return FRONT(p) || p.end_l || p.end_r || p.end_top || p.end_bottom || p.end_back; }],
       ['mat_frame', 'Face frame', 'mat', function (p) { return F_.showAll || p.construction === 'face_frame'; }],
       ['mat_drawer', 'Drawer boxes', 'mat', DRAWER],
       ['mat_top', 'Decorative top', 'mat', function (p) { return F_.showAll || !!p.add_top; }],
@@ -245,7 +261,10 @@
       ['#', 'Visible end panels'],
       ['end_l', 'Left side is visible', 'bool'],
       ['end_r', 'Right side is visible', 'bool'],
-      ['mat_end', 'Visible end panels', 'mat', function (p) { return p.end_l || p.end_r; }],
+      ['end_top', 'Top is visible', 'bool', function (p) { return F_.showAll || !p.panel; }],
+      ['end_bottom', 'Bottom is visible', 'bool', function (p) { return F_.showAll || !p.panel; }],
+      ['end_back', 'Back is visible', 'bool', function (p) { return F_.showAll || !p.panel; }],
+      ['mat_end', 'Visible end panels', 'mat', function (p) { return p.end_l || p.end_r || p.end_top || p.end_bottom || p.end_back; }],
       ['#', 'Cut list'],
       ['grain_rule', 'Length (L) in the cut list', 'sel', [['longest', 'Longest side (box parts; fronts keep grain)'], ['design', 'Designed grain direction']]]
     ]
@@ -263,6 +282,15 @@
   var INTERIORS = [['none', '—'], ['shelves', 'Shelves'], ['hang', 'Hang rail']];
   var HINGES = [['L', 'L'], ['R', 'R'], ['T', 'Top'], ['B', 'Bot']];
 
+
+  // Picture-card choices: [value, title, subtitle, 'sides path|top-bottom path'] in a 40 × 45 box
+  // (front view for joints, plan view for the back). Both apps draw them with this.
+  function cardSvg(c) {
+    var d = String(c[3] || '').split('|');
+    return '<svg viewBox="-2 -2 44 49" aria-hidden="true"><rect x="0" y="0" width="40" height="45" fill="#f6efe4"/>' +
+      '<path d="' + (d[0] || '') + '" fill="#e2c9a4" stroke="#8a6a44" stroke-width="1"/>' +
+      '<path d="' + (d[1] || '') + '" fill="#c79c66" stroke="#8a6a44" stroke-width="1"/></svg>';
+  }
 
   function cond(spec) {
     if (typeof spec === 'function') { return spec; }
@@ -303,7 +331,9 @@
     SECTIONS: SECTIONS, NAMED_COND: NAMED_COND, cond: cond, YES: YES, SKIN: SKIN, DECO: DECO, FRIDGE: FRIDGE, PANEL: PANEL,
     FRONTS: FRONTS, OLD_FRONTS: OLD_FRONTS, INTERIORS: INTERIORS, HINGES: HINGES,
     PICKS: PICKS, MODE_KEYS: MODE_KEYS, tMult: tMult, BOXSYS: BOXSYS, applyBox: applyBox,
-    innerExtra: innerExtra, skinT: skinT, HAS: HAS, ctx: ctx
+    innerExtra: innerExtra, skinT: skinT, HAS: HAS, ctx: ctx, cardSvg: cardSvg,
+    // where a setting's show-condition sits: after the choices for 'sel' and 'cards'
+    condOf: function (d) { return cond(d[2] === 'sel' || d[2] === 'cards' ? d[4] : d[3]); }
   };
   // "Show all settings": both apps set PPFields.showAll; the context rules read it here
   Object.defineProperty(window.PPFields, 'showAll', { get: function () { return F_.showAll; }, set: function (v) { F_.showAll = !!v; } });
