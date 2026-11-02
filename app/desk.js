@@ -114,7 +114,7 @@
     var m = document.createElement('div');
     m.className = 'menu pop';
     m.innerHTML = '<div class="menu-sheet" role="menu">' + (title ? '<div class="menu-title">' + esc(title) + '</div>' : '') +
-      items.map(function (it, i) { return '<button type="button" role="menuitem" data-i="' + i + '" class="' + (it.danger ? 'danger' : '') + '">' + esc(it.label) + '</button>'; }).join('') + '</div>';
+      items.map(function (it, i) { return '<button type="button" role="menuitem" data-i="' + i + '" class="' + (it.danger ? 'danger' : '') + '">' + A.menuItemHtml(it) + '</button>'; }).join('') + '</div>';
     document.body.appendChild(m);
     place(m.firstChild, 'menu');
     var close = function () { m.remove(); document.removeEventListener('keydown', key, true); };

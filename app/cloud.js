@@ -499,7 +499,7 @@
     backBtn(blocked ? null : '#/account');
     if (blocked) { $('#back').hidden = true; }
     $('#moreBtn').onclick = function () {
-      A.menu(user.email, [{ label: t('Account'), run: function () { A.go('#/account'); } }, { label: t('Sign out'), run: function () { FB.signOut(auth); } }]);
+      A.menu(user.email, [{ label: t('Account'), icon: 'user', run: function () { A.go('#/account'); } }, { label: t('Sign out'), icon: 'logout', run: function () { FB.signOut(auth); } }]);
     };
     if (!pp.client_id) { return; }
     loadPayPal(pp.client_id).then(function (paypal) {
@@ -605,8 +605,8 @@
     if (!admin) { return; }
     $('#moreBtn').onclick = function () {
       A.menu(c.name, [
-        { label: t('Rename company'), run: function () { var n = (prompt(t('Company name'), c.name) || '').trim(); if (n) { FB.updateDoc(dref('companies/' + cid), { name: n }).catch(err); } } },
-        { label: t('Delete company'), danger: true, run: function () { deleteCompany(c); } }
+        { label: t('Rename company'), icon: 'edit', run: function () { var n = (prompt(t('Company name'), c.name) || '').trim(); if (n) { FB.updateDoc(dref('companies/' + cid), { name: n }).catch(err); } } },
+        { label: t('Delete company'), icon: 'trash', danger: true, run: function () { deleteCompany(c); } }
       ]);
     };
     document.querySelectorAll('[data-mem]').forEach(function (b) {
@@ -614,8 +614,8 @@
         var uid = b.getAttribute('data-mem'), m = c.members[uid];
         var isAd = (c.admins || []).indexOf(uid) >= 0;
         A.menu(m.name || m.email, [
-          isAd ? null : { label: t('Make admin'), run: function () { var up = {}; up['members.' + uid + '.role'] = 'admin'; up.admins = FB.arrayUnion(uid); FB.updateDoc(dref('companies/' + cid), up).catch(err); } },
-          { label: t('Remove from company'), danger: true, run: function () {
+          isAd ? null : { label: t('Make admin'), icon: 'shield', run: function () { var up = {}; up['members.' + uid + '.role'] = 'admin'; up.admins = FB.arrayUnion(uid); FB.updateDoc(dref('companies/' + cid), up).catch(err); } },
+          { label: t('Remove from company'), icon: 'userx', danger: true, run: function () {
             var up = {}; up['members.' + uid] = FB.deleteField(); up.memberIds = FB.arrayRemove(uid); up.admins = FB.arrayRemove(uid);
             FB.updateDoc(dref('companies/' + cid), up).catch(err);
           } }
@@ -640,7 +640,7 @@
           A.toast(t('Invitation sent')); $('#ivMail').value = ''; loadInv();
           var link = (window.PP_WEB_URL || location.href.split('#')[0]);
           var msg = (A.lang() === 'es' ? 'Le invité a ' + c.name + ' en PanelPro. Entre con su cuenta de Google (' + mail + '): ' : 'I invited you to ' + c.name + ' on PanelPro. Sign in with your Google account (' + mail + '): ') + link;
-          A.menu(t('Invitation sent'), [{ label: t('Send the invitation by WhatsApp'), run: function () { window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank'); } }]);
+          A.menu(t('Invitation sent'), [{ label: t('Send the invitation by WhatsApp'), icon: 'chat', run: function () { window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank'); } }]);
         }, err);
     };
   }
@@ -659,7 +659,7 @@
     var targets = [{ id: 'user', name: t('Personal') }].concat(companies.map(function (c) { return { id: c.id, name: c.name }; }))
       .filter(function (x) { return !(space.kind === 'user' ? x.id === 'user' : x.id === space.id); });
     A.menu(t('Move to'), targets.map(function (x) {
-      return { label: x.name, run: function () {
+      return { label: x.name, icon: x.id === 'user' ? 'user' : 'building', run: function () {
         var root = x.id === 'user' ? 'users/' + user.uid : 'companies/' + x.id, st = siteState(s);
         FB.setDoc(dref(root + '/sites/' + s.id), { f: st.f, m: st.m, at: FB.serverTimestamp() }).then(function () {
           var arr = A.sites(), i = arr.indexOf(s);
@@ -671,9 +671,9 @@
     }));
   }
   function spaceMenu() {
-    var items = [{ label: (space.kind === 'user' ? '✓ ' : '') + t('Personal'), run: function () { pickSpace('user'); } }]
-      .concat(companies.map(function (c) { return { label: (space.id === c.id ? '✓ ' : '') + c.name, run: function () { pickSpace(c.id); } }; }))
-      .concat([{ label: t('Companies') + '…', run: function () { A.go('#/companies'); } }]);
+    var items = [{ label: t('Personal'), icon: space.kind === 'user' ? 'check' : 'user', run: function () { pickSpace('user'); } }]
+      .concat(companies.map(function (c) { return { label: c.name, icon: space.id === c.id ? 'check' : 'building', run: function () { pickSpace(c.id); } }; }))
+      .concat([{ label: t('Companies') + '…', icon: 'settings', run: function () { A.go('#/companies'); } }]);
     A.menu(t('Work in'), items);
   }
 
@@ -708,10 +708,10 @@
     if (!isDev() && item.author.uid !== user.uid) { return null; }
     return function () {
       A.menu(item.name, [
-        isDev() ? { label: t(item.official ? 'Not official' : 'Mark official'), run: function () {
+        isDev() ? { label: t(item.official ? 'Not official' : 'Mark official'), icon: 'star', run: function () {
           FB.updateDoc(dref('gallery_' + kind + '/' + item.id), { official: !item.official }).then(function () { gal[kind] = null; done(); }, err);
         } } : null,
-        { label: t('Remove from gallery'), danger: true, run: function () {
+        { label: t('Remove from gallery'), icon: 'trash', danger: true, run: function () {
           if (!confirm(t('Remove this item from the public gallery?'))) { return; }
           FB.deleteDoc(dref('gallery_' + kind + '/' + item.id)).then(function () { gal[kind] = null; done(); }, err);
         } }
@@ -740,7 +740,7 @@
           var sites = A.sites().slice().sort(function (a, c) { return a.updated < c.updated ? 1 : -1; });
           if (!sites.length) { A.toast(A.t('No sites yet')); return; }
           A.menu(A.t('Add to site'), sites.slice(0, 12).map(function (st) {
-            return { label: st.name, run: function () { A.go('#/site/' + encodeURIComponent(st.id) + '/new/' + encodeURIComponent('gal:' + b.getAttribute('data-gal'))); } };
+            return { label: st.name, icon: 'folder', run: function () { A.go('#/site/' + encodeURIComponent(st.id) + '/new/' + encodeURIComponent('gal:' + b.getAttribute('data-gal'))); } };
           }));
         };
       });

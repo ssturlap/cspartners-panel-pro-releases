@@ -441,7 +441,7 @@
     document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('all'); A.setOpenBtn(this, o); };
     document.getElementById('cMore').onclick = function () {
       A.menu(t('Composition'), [
-        { label: t('Arrange again side by side'), run: function () {
+        { label: t('Arrange again side by side'), icon: 'layout', run: function () {
           C.items.forEach(function (it) { delete it.m.pos; }); autoPlace(C.items); A.persist(); fitBox(); redraw(true); panel();
         } }
       ]);

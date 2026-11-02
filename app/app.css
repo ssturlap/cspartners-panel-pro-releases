@@ -688,3 +688,10 @@ body.desk .compose { height: 100%; }
 .app-ver b { color: var(--ink); }
 .dk-ver { font-size: 11px; color: #6f8389; padding: 2px 10px 0; }
 .dk-ver { text-decoration: none; display: block; }
+/* menu icons */
+.menu-sheet button { display: flex !important; align-items: center; gap: 14px; }
+.menu-sheet .mi { width: 22px; height: 22px; flex: none; fill: none; stroke: var(--ink-2); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.menu-sheet .danger .mi { stroke: var(--danger); }
+.menu-sheet button span { flex: 1; min-width: 0; }
+.menu.pop .menu-sheet button { gap: 10px; }
+.menu.pop .menu-sheet .mi { width: 18px; height: 18px; }

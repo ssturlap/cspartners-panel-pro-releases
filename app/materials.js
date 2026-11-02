@@ -222,8 +222,8 @@
     });
     document.getElementById('moreBtn').onclick = function () {
       A.menu(null, [
-        { label: t('Export materials…'), run: exportList },
-        readOnly() ? null : { label: t('Import materials…'), run: function () { A.pickFile(importList); } }
+        { label: t('Export materials…'), icon: 'download', run: exportList },
+        readOnly() ? null : { label: t('Import materials…'), icon: 'upload', run: function () { A.pickFile(importList); } }
       ].filter(Boolean));
     };
     wireTabs();

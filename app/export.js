@@ -178,11 +178,12 @@
         });
         if (warns.length) { y -= 8; }
 
-        // columns: qty | part (+ edges) | L × W | T | material / notes
-        var cQ = M + 6, cP = M + 34, cS = M + 300, cT = M + 336, cN = M + 348, wP = 160, wN = W - M - cN - 4;
+        // columns: qty | part (+ edges) | length | width | thickness | material / notes (sizes in mm, one column each)
+        var cQ = M + 6, cP = M + 34, cL = M + 262, cW = M + 316, cT = M + 356, cN = M + 368, wP = 150, wN = W - M - cN - 4;
         function colHead() {
           text(head[3], cQ, y, 7.5, Bd, GREY); text(head[2], cP, y, 7.5, Bd, GREY);
-          rtext(t('L × W mm'), cS, y, 7.5, Bd, GREY); rtext('T', cT, y, 7.5, Bd, GREY);
+          rtext(head[4], cL, y, 7.5, Bd, GREY); rtext(head[5], cW, y, 7.5, Bd, GREY);
+          rtext(/^Esp/i.test(head[6]) ? 'Esp. mm' : 'Thick. mm', cT, y, 7.5, Bd, GREY);
           text(head[11] + ' / ' + head[12], cN, y, 7.5, Bd, GREY);
           page.drawLine({ start: { x: M, y: y - 4 }, end: { x: W - M, y: y - 4 }, thickness: 0.5, color: LINE });
           y -= 17;
@@ -212,7 +213,8 @@
             text(r.qty + '×', cQ, yy, 9.5, Bd);
             part.forEach(function (l, k) { text(l, cP, yy - k * 11, 9.5, R); });
             if (r.eb) { text(t('Edge') + ' ' + r.eb, cP, yy - part.length * 11, 7.5, R, GREY); }
-            rtext(fmt(r.L) + ' × ' + fmt(r.W), cS, yy, 10, Bd);
+            rtext(fmt(r.L), cL, yy, 10, Bd);
+            rtext(fmt(r.W), cW, yy, 10, Bd);
             rtext(fmt(r.T), cT, yy, 9, R);
             notes.forEach(function (l, k) { text(l, cN, yy - k * 11, 8, R, GREY); });
             y -= h;

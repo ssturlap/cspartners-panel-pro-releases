@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.26';
-  var BUILD = 'c6b7af5527';
+  var BUILD = '91b5023339';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -48,7 +48,7 @@
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
-    'Share PDF': 'Compartir PDF', 'Share Excel': 'Compartir Excel', 'File saved to Downloads: ': 'Archivo guardado en Descargas: ', 'Could not save the file: ': 'No se pudo guardar el archivo: ', 'File ready': 'Archivo listo', 'Share': 'Compartir',
+    'Share PDF': 'Compartir PDF', 'Share Excel': 'Compartir Excel', 'Save PDF': 'Guardar PDF', 'Save Excel': 'Guardar Excel', 'File saved to Downloads: ': 'Archivo guardado en Descargas: ', 'Could not save the file: ': 'No se pudo guardar el archivo: ', 'File ready': 'Archivo listo', 'Share': 'Compartir',
     'Summary': 'Resumen', 'Sheet size': 'Tamaño de tablero', 'Sheets': 'Tableros', 'Warnings': 'Avisos', 'Bar': 'Barra',
     'offcut': 'sobrante', 'cont.': 'cont.', 'Edge': 'Canto', 'L × W mm': 'Largo × Ancho mm', 'Hardware': 'Herrajes', 'Edge banding': 'Canto',
     'Sheets (estimate incl. 15% waste)': 'Tableros (estimado con 15% de desperdicio)', 'Toe kick bars (4 m)': 'Barras de zócalo (4 m)',
@@ -316,13 +316,55 @@
   }
 
   // ------------------------------------------------------------------ menu sheet
+  // Each item can name an icon (item.icon); a ✓ at the start of a label becomes a check icon.
+  var MENU_ICONS = {
+    user: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.5 3.6-5.5 7-5.5s6.2 2 7 5.5"/>',
+    building: '<path d="M4 20V8l6-3v15M10 20V10h10v10M3 20h18M13 13h1M17 13h1M13 16h1M17 16h1"/>',
+    file: '<path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7V5h6"/>',
+    materials: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M10 4v16"/>',
+    settings: '<circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/>',
+    share: '<path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 12v7h14v-7"/>',
+    edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+    move: '<rect x="3" y="5" width="11" height="14" rx="1.5"/><path d="M14 12h7M18 9l3 3-3 3"/>',
+    trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',
+    eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+    door: '<rect x="4" y="3.5" width="10" height="17" rx="1"/><path d="M14 4.5l6 2v13l-6-1.5M11 12h.01"/>',
+    drawer: '<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 12h18M10 8.5h4M10 15.5h4"/>',
+    mirror: '<path d="M12 3v18M9 7L4 12l5 5M15 7l5 5-5 5"/>',
+    bookmark: '<path d="M6 3h12v18l-6-4-6 4z"/>',
+    refresh: '<path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/>',
+    palette: '<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.5-.8 1.2-1.6-.4-1 .2-2.4 1.6-2.4H17a4 4 0 0 0 4-4c0-5.5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>',
+    globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.4 3.5 5.2 3.5 8.5s-1 6.1-3.5 8.5c-2.5-2.4-3.5-5.2-3.5-8.5s1-6.1 3.5-8.5z"/>',
+    copy: '<rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V4H4v12h4"/>',
+    folder: '<path d="M3 6.5h7l2 2h9v10.5H3z"/>',
+    logout: '<path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10"/>',
+    shield: '<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/>',
+    userx: '<circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.8-3.5 3.3-5.5 6.5-5.5 1.5 0 2.8.4 3.9 1.1M16 15l5 5M21 15l-5 5"/>',
+    chat: '<path d="M4 18l1.3-3.8A7.5 7.5 0 1 1 8.5 18.6z"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    star: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z"/>',
+    download: '<path d="M12 4v11M8 11l4 4 4-4M5 20h14"/>',
+    upload: '<path d="M12 15V4M8 8l4-4 4 4M5 20h14"/>',
+    layout: '<path d="M3 20h18M5 20V10h5v10M12 20V6h7v14"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    close: '<path d="M6 6l12 12M18 6L6 18"/>',
+    blank: ''
+  };
+  function menuItemHtml(it) {
+    var label = String(it.label), icon = it.icon || 'blank';
+    if (/^✓ /.test(label)) { label = label.slice(2); icon = 'check'; } else if (/^ {1,2}/.test(label) && it.icon == null) { label = label.trim(); }
+    return menuIcon(icon) + '<span>' + esc(label) + '</span>';
+  }
+  function menuIcon(name) {
+    return '<svg class="mi" viewBox="0 0 24 24" aria-hidden="true">' + (MENU_ICONS[name] || '') + '</svg>';
+  }
   function menu(title, items) {
     if (desk()) { window.PPDesk.menu(title, items); return; }
     var m = document.createElement('div');
     m.className = 'menu';
     m.innerHTML = '<div class="menu-sheet" role="menu">' + (title ? '<div class="menu-title">' + esc(title) + '</div>' : '') +
-      items.map(function (it, i) { return '<button type="button" role="menuitem" data-i="' + i + '" class="' + (it.danger ? 'danger' : '') + '">' + esc(it.label) + '</button>'; }).join('') +
-      '<button type="button" data-i="-1">' + esc(t('Cancel')) + '</button></div>';
+      items.map(function (it, i) { return '<button type="button" role="menuitem" data-i="' + i + '" class="' + (it.danger ? 'danger' : '') + '">' + menuItemHtml(it) + '</button>'; }).join('') +
+      '<button type="button" data-i="-1">' + menuIcon('close') + '<span>' + esc(t('Cancel')) + '</span></button></div>';
     document.body.appendChild(m);
     m.addEventListener('click', function (e) {
       var b = e.target.closest('button');
@@ -429,7 +471,7 @@
     qi.oninput = function () { deskQuery = qi.value; var pos = qi.selectionStart; renderSitesDesk(cloud); var n = $('#dkQ'); n.focus(); n.setSelectionRange(pos, pos); };
     $('#newSite').onclick = function () { go('#/newsite'); };
     $('#moreBtn').onclick = function () {
-      menu(null, [{ label: t('Open a project file'), run: function () { pickFile(null); } }]);
+      menu(null, [{ label: t('Open a project file'), icon: 'file', run: function () { pickFile(null); } }]);
     };
     // a 3D picture of each project's first module, one by one
     var imgs = Array.prototype.slice.call(screen.querySelectorAll('[data-sthumb]'));
@@ -469,11 +511,11 @@
     if (cloud) { $('#spaceBtn').onclick = cloud.spaceMenu; cloud.wireInvites(); }
     $('#moreBtn').onclick = function () {
       menu(cloud ? cloud.user().email : null, [
-        cloud ? { label: cloud.t('Account') + ' · ' + cloud.planLine(), run: function () { go('#/account'); } } : null,
-        cloud ? { label: cloud.t('Companies'), run: function () { go('#/companies'); } } : null,
-        { label: t('Open a project file'), run: function () { pickFile(null); } },
-        { label: window.PPMaterials ? window.PPMaterials.t('Materials') : 'Materials', run: function () { go('#/materials'); } },
-        { label: t('Settings'), run: function () { go('#/settings'); } }
+        cloud ? { label: cloud.t('Account') + ' · ' + cloud.planLine(), icon: 'user', run: function () { go('#/account'); } } : null,
+        cloud ? { label: cloud.t('Companies'), icon: 'building', run: function () { go('#/companies'); } } : null,
+        { label: t('Open a project file'), icon: 'file', run: function () { pickFile(null); } },
+        { label: window.PPMaterials ? window.PPMaterials.t('Materials') : 'Materials', icon: 'materials', run: function () { go('#/materials'); } },
+        { label: t('Settings'), icon: 'settings', run: function () { go('#/settings'); } }
       ].filter(Boolean));
     };
   }
@@ -592,10 +634,10 @@
   }
   function siteMenu(s) {
       menu(s.name, [
-        { label: t('Share project file'), run: function () { shareSite(s); } },
-        { label: t('Rename site'), run: function () { renderNewSite(s); } },
-        window.PPCloud && window.PPCloud.on && (window.PPCloud.hasCompanies() || window.PPCloud.space().kind === 'company') ? { label: window.PPCloud.t('Move to a company…'), run: function () { window.PPCloud.moveSite(s); } } : null,
-        { label: t('Delete site'), danger: true, run: function () {
+        { label: t('Share project file'), icon: 'share', run: function () { shareSite(s); } },
+        { label: t('Rename site'), icon: 'edit', run: function () { renderNewSite(s); } },
+        window.PPCloud && window.PPCloud.on && (window.PPCloud.hasCompanies() || window.PPCloud.space().kind === 'company') ? { label: window.PPCloud.t('Move to a company…'), icon: 'move', run: function () { window.PPCloud.moveSite(s); } } : null,
+        { label: t('Delete site'), icon: 'trash', danger: true, run: function () {
           if (!confirm(t('Delete this site and its modules?'))) { return; }
           sites = sites.filter(function (x) { return x !== s; }); persist(); toast(t('Deleted')); go('#/', true);
         } }
@@ -769,13 +811,13 @@
       (r.movers || []).forEach(function (m) { n[m.kind] = (n[m.kind] || 0) + 1; });
       var mark = function (on) { return on ? '✓ ' : '  '; };
       var items = [
-        { label: mark(view.vis.doors) + t('Show doors'), run: function () { view.vis.doors = !view.vis.doors; saveView(); draw3d(false); } },
-        { label: mark(view.vis.dfronts) + t('Show drawer fronts'), run: function () { view.vis.dfronts = !view.vis.dfronts; saveView(); draw3d(false); } },
-        { label: mark(view.vis.dboxes) + t('Show drawer boxes'), run: function () { view.vis.dboxes = !view.vis.dboxes; saveView(); draw3d(false); } }
+        { label: t('Show doors'), icon: view.vis.doors ? 'check' : 'blank', run: function () { view.vis.doors = !view.vis.doors; saveView(); draw3d(false); } },
+        { label: t('Show drawer fronts'), icon: view.vis.dfronts ? 'check' : 'blank', run: function () { view.vis.dfronts = !view.vis.dfronts; saveView(); draw3d(false); } },
+        { label: t('Show drawer boxes'), icon: view.vis.dboxes ? 'check' : 'blank', run: function () { view.vis.dboxes = !view.vis.dboxes; saveView(); draw3d(false); } }
       ];
       if (has3d && view.mode === '3d') {
-        if (n.door) { items.push({ label: t(P3D.isOpen('door') ? 'Close doors' : 'Open doors'), run: function () { P3D.toggle('door'); } }); }
-        if (n.drawer) { items.push({ label: t(P3D.isOpen('drawer') ? 'Close drawers' : 'Open drawers'), run: function () { P3D.toggle('drawer'); } }); }
+        if (n.door) { items.push({ label: t(P3D.isOpen('door') ? 'Close doors' : 'Open doors'), icon: 'door', run: function () { P3D.toggle('door'); } }); }
+        if (n.drawer) { items.push({ label: t(P3D.isOpen('drawer') ? 'Close drawers' : 'Open drawers'), icon: 'drawer', run: function () { P3D.toggle('drawer'); } }); }
       }
       menu(t('View'), items);
     };
@@ -792,26 +834,26 @@
 
   function editMenu(s, mod, title) {
     var items = [
-      { label: t('Mirror (left ↔ right)'), run: function () {
+      { label: t('Mirror (left ↔ right)'), icon: 'mirror', run: function () {
         try { E.params = Engine.call('mirror', { params: E.params }); changed(false); toast(t('Mirrored')); } catch (e) { toast(e.message); }
       } },
-      { label: t('Save as my preset…'), run: function () { savePresetFlow(); } }
+      { label: t('Save as my preset…'), icon: 'bookmark', run: function () { savePresetFlow(); } }
     ];
     if (E.presetKey && /^user:/.test(E.presetKey) && prefs.book[E.presetKey.slice(5)]) {
-      items.push({ label: t('Update my preset “') + prefs.book[E.presetKey.slice(5)].name + '”', run: function () {
+      items.push({ label: t('Update my preset “') + prefs.book[E.presetKey.slice(5)].name + '”', icon: 'refresh', run: function () {
         var r = Engine.call('presets_update', { book: prefs.book, key: E.presetKey.slice(5), params: E.params });
         prefs.book = r.book; savePrefs(); presetThumbs['user:' + E.presetKey.slice(5)] = null; toast(t('Preset updated'));
       } });
     }
     var fins = Object.keys(prefs.finishes).sort();
     if (fins.length) {
-      items.push({ label: t('Apply a finish set…'), run: function () {
+      items.push({ label: t('Apply a finish set…'), icon: 'palette', run: function () {
         menu(t('Finish sets'), fins.map(function (name) {
-          return { label: name, run: function () { Object.assign(E.params, prefs.finishes[name]); changed(false); toast(t('Finish set applied: ') + name); } };
+          return { label: name, icon: 'palette', run: function () { Object.assign(E.params, prefs.finishes[name]); changed(false); toast(t('Finish set applied: ') + name); } };
         }));
       } });
     }
-    items.push({ label: t('Save these materials as a finish set…'), run: function () {
+    items.push({ label: t('Save these materials as a finish set…'), icon: 'bookmark', run: function () {
       var name = (prompt(t('Name for these materials, e.g. Kitchen A')) || '').trim();
       if (!name) { return; }
       prefs.finishes[name] = Engine.call('finish', { params: E.params }); savePrefs(); toast(t('Saved'));
@@ -819,12 +861,12 @@
     if (mod && window.PPCloud && window.PPCloud.on) {
       var G = window.PPCloud;
       items.push(mod.gallery_id
-        ? { label: G.t('Remove from public gallery'), run: function () { G.gallery.unshareModule(mod); } }
-        : { label: G.t('Share to public gallery'), run: function () { G.gallery.shareModule(mod, presetTitle(mod.preset || ''), moduleThumb(mod)).catch(function (e) { toast(e.code || e.message); }); } });
+        ? { label: G.t('Remove from public gallery'), icon: 'globe', run: function () { G.gallery.unshareModule(mod); } }
+        : { label: G.t('Share to public gallery'), icon: 'globe', run: function () { G.gallery.shareModule(mod, presetTitle(mod.preset || ''), moduleThumb(mod)).catch(function (e) { toast(e.code || e.message); }); } });
     }
     if (mod) {
-      items.push({ label: t('Duplicate'), run: function () { duplicateModule(); } });
-      items.push({ label: t('Delete module'), danger: true, run: function () {
+      items.push({ label: t('Duplicate'), icon: 'copy', run: function () { duplicateModule(); } });
+      items.push({ label: t('Delete module'), icon: 'trash', danger: true, run: function () {
         if (!confirm(t('Delete this module?'))) { return; }
         s.modules = s.modules.filter(function (x) { return x !== mod; }); touch(s); persist();
         E = null; toast(t('Deleted')); go('#/site/' + encodeURIComponent(s.id), true);
@@ -838,7 +880,7 @@
     var name = (prompt(t('Preset name'), E.params.name || '') || '').trim();
     if (!name) { return; }
     menu(t('Category'), CATS.map(function (c) {
-      return { label: t(c), run: function () {
+      return { label: t(c), icon: 'folder', run: function () {
         var r = Engine.call('presets_save', { book: prefs.book, name: name, category: c, params: E.params });
         prefs.book = r.book; savePrefs(); E.presetKey = 'user:' + r.key; presetThumbs['user:' + r.key] = null;
         toast(t('Saved as my preset: ') + name);
@@ -1237,8 +1279,8 @@
       (cut.sheets.length ? '<h2 class="section-h">' + esc(t('Sheets (estimate incl. 15% waste)')) + '</h2><div class="box totals">' +
         cut.sheets.map(function (x) { return '<div><span>' + esc(x.mat) + ' · ' + fmt(x.T) + ' mm · ' + esc(x.size) + '</span><b>' + x.sheets + '</b></div>'; }).join('') + '</div>' : '') +
       '</aside></div></div>' +
-      '<div class="dock"><button type="button" class="btn primary" id="sharePdf">' + esc(t('Share PDF')) + '</button>' +
-      '<button type="button" class="btn primary" id="shareXlsx">' + esc(t('Share Excel')) + '</button></div>'
+      '<div class="dock"><button type="button" class="btn primary" id="sharePdf">' + esc(t(finePointer() || desk() ? 'Save PDF' : 'Share PDF')) + '</button>' +
+      '<button type="button" class="btn primary" id="shareXlsx">' + esc(t(finePointer() || desk() ? 'Save Excel' : 'Share Excel')) + '</button></div>'
     );
     $('#back').onclick = function () { history.back(); };
     var meta = {
@@ -1534,6 +1576,8 @@
   // isn't allowed. Any failure falls back to saving the file, so the button always does something.
   function shareFile(name, data, mime) {
     var blob = data instanceof Blob ? data : new Blob([data], { type: mime });
+    // on a computer (mouse / trackpad) the file is saved to Downloads; the share sheet is for phones
+    if (finePointer() || desk()) { download(blob, name); return; }
     var tries = [[name, mime]];
     if (/json/.test(mime)) { tries.push([name, 'text/plain'], [name.replace(/\.json$/i, '') + '.txt', 'text/plain']); }
     var file = null;
@@ -1543,11 +1587,12 @@
       try { if (f && navigator.canShare && navigator.share && navigator.canShare({ files: [f] })) { file = f; } } catch (e) { file = null; }
     }
     if (file) {
+      var retried = false;
       var go = function () {
         navigator.share({ files: [file], title: name }).then(function () { toast(t('Shared')); }, function (e) {
           if (e && e.name === 'AbortError') { return; } // closed the share sheet
           // the tap "expired" while the file was being made: one more tap shares it
-          if (e && e.name === 'NotAllowedError') { toast(t('File ready'), { label: t('Share'), run: go }); return; }
+          if (e && e.name === 'NotAllowedError' && !retried) { retried = true; toast(t('File ready'), { label: t('Share'), run: go }); return; }
           download(blob, name);
         });
       };
@@ -1661,7 +1706,7 @@
     t: t, esc: esc, fmt: fmt, L: L, LU: LU, U: U, show: show, go: go, menu: menu, toast: toast, openPad: openPad,
     persist: function () { persist(); }, codesOf: codesOf, codeSort: codeSort, dimsOf: dimsOf, matInfo: matInfo,
     viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown,
-    loadPref: load, savePref: save, uid: uid, version: VERSION, build: BUILD, vtBtn: vtBtn, setOpenBtn: setOpenBtn, lang: function () { return lang; }, site: site, uk: uk,
+    loadPref: load, savePref: save, uid: uid, menuItemHtml: menuItemHtml, version: VERSION, build: BUILD, vtBtn: vtBtn, setOpenBtn: setOpenBtn, lang: function () { return lang; }, site: site, uk: uk,
     prefsOpt: function () { return prefs.opt; }, shareFile: shareFile, pickFile: pickFile,
     sites: function () { return sites; }, prefs: function () { return prefs; }, resetPrefs: resetPrefs, fixPrefs: fixPrefs,
     route: function () { route(); }, setLang: setLang, presetThumb: presetThumb, moduleThumb: function (m) { return moduleThumb(m); },
