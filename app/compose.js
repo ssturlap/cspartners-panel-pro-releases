@@ -139,7 +139,7 @@
     function hdim(x0, x1, y, size, cls) {
       if (x1 - x0 < 1) { return; }
       line(x0, y, x1, y, cls); ticks(x0, y); ticks(x1, y);
-      var txt = A.LU(x1 - x0);
+      var txt = A.L(x1 - x0);
       var f = Math.min(size, (x1 - x0) / (txt.length * 0.6));   // shrink to fit narrow modules
       if (f < MIN) { return; }
       // labels that would run into a neighbour's go under the line; if that is taken too, zoom shows them
@@ -154,7 +154,7 @@
     function vdim(x, z0, z1, size, cls) {
       if (z1 - z0 < 1) { return; }
       line(x, -z0, x, -z1, cls); ticks(x, -z0); ticks(x, -z1);
-      var txt = A.LU(z1 - z0), f = Math.min(size, (z1 - z0) / (txt.length * 0.6));
+      var txt = A.L(z1 - z0), f = Math.min(size, (z1 - z0) / (txt.length * 0.6));
       if (f < MIN) { return; }
       var cy = -(z0 + z1) / 2, cx = x - f * 0.35;
       out.push('<text class="' + (cls || '') + '" x="' + cx + '" y="' + cy + '" font-size="' + f + '" transform="rotate(-90 ' + cx + ' ' + cy + ')">' + A.esc(txt) + '</text>');
@@ -425,6 +425,7 @@
       '<h1>' + esc(t('Composition')) + '<span class="sub">' + esc(s.name) + '</span></h1>' +
       '<button type="button" class="icon-btn" id="cMore" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
       '<div class="compose"><div class="cview view3d" id="cview"><svg id="csvg" class="csvg" preserveAspectRatio="xMidYMid meet"></svg>' +
+      '<div class="dim-note" id="cNote">' + esc(t('Dimensions in ' + A.U())) + '</div>' +
       '<div class="view-tools"><button type="button" id="cMode" class="vt vt-txt" title="2D / 3D">3D</button>' + A.vtBtn('cOpen', 'open', t('Open all'), ' aria-pressed="false"') +
       A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
       '<div class="cpanel" id="cpanel"></div></div>'
@@ -447,7 +448,7 @@
     };
     wire2d(document.getElementById('csvg'));
     fitBox();                                       // again, now that the drawing area has its size
-    if (A.has3d()) { P3D.setDims(A.dimsShown()); }
+    if (A.has3d()) { P3D.setDimUnits(A.uk(), A.U()); P3D.setDims(A.dimsShown()); }
     redraw(true);
     panel();
   }

@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.26';
-  var BUILD = 'd0f33032bb';
+  var BUILD = '0d15e07edf';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -746,7 +746,7 @@
       requestAnimationFrame(function () { if (has3d && view.mode === '3d' && $('#v3d')) { P3D.resize(); P3D.reset('iso'); } });
     }
     if (!has3d) { view.mode = '2d'; }
-    else { P3D.setDims(dimsShown()); P3D.resize(); }
+    else { P3D.setDimUnits(uk(), U()); P3D.setDims(dimsShown()); P3D.resize(); }
     setViewMode(view.mode, true);
     $('#back').onclick = function () {
       if (E.dirty && mod && !confirm(t('Discard your changes?'))) { return; }

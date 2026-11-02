@@ -21,7 +21,7 @@
     'Open / close everything in the preview': 'Abrir / cerrar todo en la vista previa',
     'Navigate like SketchUp:\n• Middle-drag: orbit\n• Shift + middle-drag: pan\n• Wheel: zoom toward cursor\n• Double-click middle: centre on point\n• O / H / Z: left-drag orbits / pans / zooms\n• Shift+Z: zoom extents · Esc: back to orbit\n• Left-drag orbits, Shift+left pans (trackpads)\n• Click a door or drawer: open / close it':
       'Navegue como en SketchUp:\n• Arrastre con botón central: orbitar\n• Shift + botón central: desplazar\n• Rueda: zoom hacia el cursor\n• Doble clic central: centrar en el punto\n• O / H / Z: el botón izquierdo orbita / desplaza / hace zoom\n• Shift+Z: ver todo · Esc: volver a orbitar\n• Arrastre izquierdo orbita, Shift+izquierdo desplaza (trackpads)\n• Clic en una puerta o gaveta: abrirla / cerrarla',
-    'parts': 'piezas',
+    'parts': 'piezas', 'Dimensions in mm': 'Medidas en mm', 'Dimensions in cm': 'Medidas en cm',
     // compact bar
     'Placing module': 'Colocando módulo', 'Placing: ': 'Colocando: ',
     'Click in the model to place · ← / → rotate · ↑ / ↓ flip · Esc cancel': 'Clic en el modelo para colocar · ← / → girar · ↑ / ↓ voltear · Esc cancelar',

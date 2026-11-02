@@ -676,3 +676,7 @@ body.desk .compose { height: 100%; }
 .csvg .cdims line.d-gap { stroke-dasharray: 5 4; stroke-width: 1px; }
 .csvg .cdims text { stroke-width: var(--halo, 4px); }
 .csvg .cdims text.d-in { fill: var(--ink); font-weight: 650; }
+/* "Dimensions in mm": one note for the drawing instead of a unit on every label */
+.dim-note { position: absolute; left: 8px; bottom: 8px; z-index: 2; font-size: 11.5px; font-weight: 600; color: var(--ink-2); background: rgba(255,255,255,.85); padding: 2px 7px; border-radius: 6px; pointer-events: none; display: none; }
+.cview.is2d .dim-note { display: block; }
+.cview.is2d .p3d-note { display: none !important; }

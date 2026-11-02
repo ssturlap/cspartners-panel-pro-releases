@@ -293,6 +293,27 @@
   // Width, height and depth of everything drawn (doors, top, legs included; doors closed), as
   // dimension lines beside the module with the size in mm. Off unless the app turns it on.
   var dimsOn = false, dimsGroup = null, dimsKey = '';
+  // Dimension labels are plain numbers; one note in the corner names the unit.
+  var dimUnit = { k: 1, name: 'mm' }, noteEl = null;
+  function dimNote() {
+    if (!host) { return; }
+    if (!noteEl) {
+      noteEl = document.createElement('div');
+      noteEl.className = 'p3d-note';
+      noteEl.style.cssText = 'position:absolute;left:8px;bottom:8px;z-index:2;font:600 11.5px/1.3 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;' +
+        'color:#3c4a50;background:rgba(255,255,255,.85);padding:2px 7px;border-radius:6px;pointer-events:none;';
+      if (getComputedStyle(host).position === 'static') { host.style.position = 'relative'; }
+      host.appendChild(noteEl);
+    }
+    var en = 'Dimensions in ' + dimUnit.name;
+    noteEl.textContent = window.I18N && window.I18N.t ? window.I18N.t(en) : en;
+    noteEl.style.display = dimsOn && !bbox.isEmpty() ? '' : 'none';
+  }
+  // units of the labels: k = millimetres per unit (10 for cm)
+  P3D.setDimUnits = function (k, name) {
+    dimUnit = { k: k || 1, name: name || 'mm' };
+    dimsKey = ''; buildDims(); dirty = true;
+  };
   // Which side of the module the camera is on: [-1 left / +1 right, -1 front / +1 back].
   function dimsSide() {
     var c = bbox.getCenter(new T.Vector3()), p = cam().position;
@@ -330,6 +351,7 @@
       });
       dimsGroup = null;
     }
+    dimNote();
     if (!dimsOn || bbox.isEmpty()) { return; }
     var mn = bbox.min, mx = bbox.max, size = bbox.getSize(new T.Vector3());
     var big = Math.max(size.x, size.y, size.z);
@@ -348,7 +370,7 @@
       var tk = dir.clone().add(o).normalize().multiplyScalar(tick / 2);
       seg(A.clone().sub(tk), A.clone().add(tk));
       seg(B.clone().sub(tk), B.clone().add(tk));
-      var lbl = dimLabel(String(Math.round(value * 10) / 10), lh);
+      var lbl = dimLabel(String(Math.round(value / dimUnit.k * 10) / 10), lh);
       lbl.position.copy(A).add(B).multiplyScalar(0.5).add(o.clone().multiplyScalar(lh * 0.75));
       dimsGroup.add(lbl);
     }
