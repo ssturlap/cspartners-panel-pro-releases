@@ -668,3 +668,11 @@ body.desk .view-tools .vt svg { width: 18px; height: 18px; }
 .view3d { top: calc(48px + var(--safe-t)); }
 .compose { height: calc(100vh - 48px - var(--safe-t)); }
 body.desk .compose { height: 100%; }
+
+/* composition drawing: lines one screen pixel wide at any zoom, real dashes, labels with a halo */
+.csvg .floor { stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+.csvg .cdims line { stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.csvg .cdims line.d-all, .csvg .cdims line.d-grp { stroke-width: 1.3px; }
+.csvg .cdims line.d-gap { stroke-dasharray: 5 4; stroke-width: 1px; }
+.csvg .cdims text { stroke-width: var(--halo, 4px); }
+.csvg .cdims text.d-in { fill: var(--ink); font-weight: 650; }

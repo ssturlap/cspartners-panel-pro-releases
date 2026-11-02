@@ -89,12 +89,26 @@
     return widthRows().length + (showGroups(g) ? 1 : 0) + 1;
   }
 
-  function fitBox() {
-    var e = extents(), w = e.x1 - e.x0, h = e.z1 - e.z0;
-    var m = Math.max(w, h) * 0.08 + 150;
-    var vw = w + 2 * m, row = vw * 0.05;
-    vb = { x: e.x0 - m, y: -(e.z1 + m * 0.6), w: vw, h: h + m * 0.6 + row * (dimRowCount() + 0.8) + 60 };
+  // Fitted view: the modules plus room for the dimension rows (sized in screen pixels).
+  var ROW_PX = 30;
+  function viewPx() {
+    var el = document.getElementById('csvg'), r = el && el.getBoundingClientRect();
+    return r && r.width > 50 ? { w: r.width, h: r.height } : { w: Math.min(innerWidth, 1000), h: innerHeight * 0.6 };
   }
+  function fitBox() {
+    var e = extents(), w = e.x1 - e.x0, h = e.z1 - e.z0, px = viewPx();
+    var m = Math.max(w, h) * 0.04 + 80, n = dimRowCount() + 0.9, vw = w + 2 * m, vh = h * 1.3, left = m, top = m;
+    for (var i = 0; i < 4; i++) {                       // labels take pixels, so the scale decides their size in mm
+      var k = Math.max(vw / px.w, vh / px.h);
+      left = m + ROW_PX * 1.6 * k;                      // the overall height and its label, left of everything
+      top = m * 0.4 + 28 * k;                           // the module code tags above the tallest one
+      vw = w + left + m;
+      vh = h + top + ROW_PX * k * n + 16 * k;
+    }
+    vb = { x: e.x0 - left, y: -(e.z1 + top), w: vw, h: vh };
+    C.view = null;
+  }
+  function cur() { return C.view || vb; }
 
   function moduleSvg(it) {
     var R = window.PPReports, polys = [];
@@ -103,7 +117,7 @@
       if (g) { polys.push('<polygon points="' + g.map(function (q) { return q[0].toFixed(1) + ',' + (-q[1]).toFixed(1); }).join(' ') + '" fill="var(--' + p.role + ')"/>'); }
     });
     var b = it.bb, sel = C.sel === it.m.id;
-    var cx = (b.x0 + b.x1) / 2, chip = Math.max(70, Math.min(140, (b.x1 - b.x0) * 0.3));
+    var cx = (b.x0 + b.x1) / 2, chip = Math.min(Math.max(30 * (C.k || 1), 60), Math.max((b.x1 - b.x0) * 0.8, 60));   // ~30 px wide on screen
     return '<g class="cmod' + (sel ? ' on' : '') + '" data-mid="' + A.esc(it.m.id) + '" transform="translate(' + it.m.pos.x + ' ' + (-it.m.pos.z) + ')">' +
       '<rect class="hit" x="' + b.x0 + '" y="' + (-b.z1) + '" width="' + (b.x1 - b.x0) + '" height="' + (b.z1 - b.z0) + '"/>' +
       '<g class="parts">' + polys.join('') + '</g>' +
@@ -114,25 +128,34 @@
 
   function dimsSvg() {
     if (!C.items.length) { return ''; }
-    var e = extents(), row = vb.w * 0.05, fs = vb.w * 0.022, fs2 = fs * 0.8, tk = vb.w * 0.007;
-    var out = [];
+    var svg = document.getElementById('csvg'), k = svg ? svgScale(svg) : cur().w / viewPx().w;
+    // label sizes in screen pixels: readable at any zoom; a label that doesn't fit its span at
+    // MIN px is left out (zoom in to see it)
+    var e = extents(), row = ROW_PX * k, fs = 13 * k, fs2 = 12 * k, tk = 5 * k, MIN = 10 * k;
+    var out = [], placed = [];
     function line(x1, y1, x2, y2, cls) { out.push('<line' + (cls ? ' class="' + cls + '"' : '') + ' x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>'); }
     function ticks(x, y) { line(x - tk, y + tk, x + tk, y - tk); }
     // a horizontal dimension from x0 to x1 at height y (svg units), label under it
     function hdim(x0, x1, y, size, cls) {
       if (x1 - x0 < 1) { return; }
       line(x0, y, x1, y, cls); ticks(x0, y); ticks(x1, y);
-      var txt = A.LU(x1 - x0), wpx = (x1 - x0);
-      var f = Math.min(size, wpx / (txt.length * 0.62));   // shrink to fit narrow modules
-      if (f < size * 0.45) { return; }
-      out.push('<text class="' + (cls || '') + '" x="' + (x0 + x1) / 2 + '" y="' + (y - f * 0.35) + '" font-size="' + f + '">' + A.esc(txt) + '</text>');
+      var txt = A.LU(x1 - x0);
+      var f = Math.min(size, (x1 - x0) / (txt.length * 0.6));   // shrink to fit narrow modules
+      if (f < MIN) { return; }
+      // labels that would run into a neighbour's go under the line; if that is taken too, zoom shows them
+      var cx = (x0 + x1) / 2, half = txt.length * 0.3 * f + 2 * k;
+      var free = function (ty) { return !placed.some(function (q) { return Math.abs(q.y - ty) < f && q.a < cx + half && q.b > cx - half; }); };
+      var ty = y - f * 0.35;
+      if (!free(ty)) { ty = y + f * 1.05; if (!free(ty)) { return; } }
+      placed.push({ y: ty, a: cx - half, b: cx + half });
+      out.push('<text class="' + (cls || '') + '" x="' + cx + '" y="' + ty + '" font-size="' + f + '">' + A.esc(txt) + '</text>');
     }
     // a vertical dimension (heights), label rotated, to the left of the line
     function vdim(x, z0, z1, size, cls) {
       if (z1 - z0 < 1) { return; }
       line(x, -z0, x, -z1, cls); ticks(x, -z0); ticks(x, -z1);
-      var txt = A.LU(z1 - z0), f = Math.min(size, (z1 - z0) / (txt.length * 0.62));
-      if (f < size * 0.45) { return; }
+      var txt = A.LU(z1 - z0), f = Math.min(size, (z1 - z0) / (txt.length * 0.6));
+      if (f < MIN) { return; }
       var cy = -(z0 + z1) / 2, cx = x - f * 0.35;
       out.push('<text class="' + (cls || '') + '" x="' + cx + '" y="' + cy + '" font-size="' + f + '" transform="rotate(-90 ' + cx + ' ' + cy + ')">' + A.esc(txt) + '</text>');
     }
@@ -161,26 +184,28 @@
     // heights: each module inside its own outline (near its left side), the whole on the far left
     C.items.forEach(function (it) {
       var w = world(it), inset = Math.min((w.x1 - w.x0) * 0.16, row);
-      vdim(w.x0 + inset + fs2, w.z0, w.z1, fs2, 'd-in');
+      vdim(w.x0 + inset + fs2, w.z0, w.z1, fs2, 'd-in');   // inside the module, on a white label
       // height off the floor, when nothing stands under it
       var under = C.items.some(function (o) { if (o === it) { return false; } var v = world(o); return v.x0 < w.x1 - EPS && v.x1 > w.x0 + EPS && v.z1 <= w.z0 + EPS && v.z1 > e.z0 + EPS; });
       if (w.z0 > EPS && !under) { vdim(w.x0 + inset + fs2 * 2.6, e.z0, w.z0, fs2, 'd-gap'); }
     });
     vdim(e.x0 - row * 0.9, e.z0, e.z1, fs * 1.1, 'd-all');
-    return '<g class="cdims" stroke-width="' + vb.w * 0.0013 + '">' + out.join('') + '</g>';
+    return '<g class="cdims" style="--halo:' + (3.5 * k).toFixed(2) + 'px">' + out.join('') + '</g>';
   }
 
   function draw2d() {
     var svg = document.getElementById('csvg');
     if (!svg) { return; }
-    svg.setAttribute('viewBox', vb.x + ' ' + vb.y + ' ' + vb.w + ' ' + vb.h);
-    var floor = '<line class="floor" x1="' + (vb.x - vb.w) + '" y1="0" x2="' + (vb.x + 2 * vb.w) + '" y2="0" stroke-width="' + vb.w * 0.002 + '"/>';
+    var v = cur();
+    svg.setAttribute('viewBox', v.x + ' ' + v.y + ' ' + v.w + ' ' + v.h);
+    C.k = svgScale(svg);
+    var floor = '<line class="floor" x1="' + (v.x - 2 * v.w) + '" y1="0" x2="' + (v.x + 3 * v.w) + '" y2="0"/>';
     svg.innerHTML = floor + C.items.map(moduleSvg).join('') + dimsSvg();
   }
 
   function svgScale(svg) { // mm per screen pixel (viewBox is fitted with "meet")
-    var r = svg.getBoundingClientRect();
-    return Math.max(vb.w / r.width, vb.h / r.height);
+    var r = svg.getBoundingClientRect(), v = cur();
+    return Math.max(v.w / (r.width || 1), v.h / (r.height || 1));
   }
 
   function snap(it, x, z, tol) {
@@ -199,34 +224,99 @@
     return { x: bestX === null ? x : bestX, z: bestZ === null ? z : bestZ };
   }
 
+  // Drag a module to move it; drag the background to pan; pinch (or the mouse wheel) to zoom;
+  // double-tap the background or press Fit to see everything again.
   function wire2d(svg) {
-    var drag = null;
+    var drag = null, pts = {}, pinch = null, pan = null, lastTap = 0;
+    // the view as the screen shows it (same proportions, so screen and drawing map linearly)
+    function screenView() {
+      var r = svg.getBoundingClientRect(), v = cur(), k = svgScale(svg);
+      var w = r.width * k, h = r.height * k;
+      return { x: v.x + (v.w - w) / 2, y: v.y + (v.h - h) / 2, w: w, h: h };
+    }
+    function setView(v, redrawAll) {
+      var min = 150, max = vb.w * 8;
+      var f = v.w < min ? min / v.w : v.w > max ? max / v.w : 1;
+      if (f !== 1) { var cx = v.x + v.w / 2, cy = v.y + v.h / 2; v = { x: cx - v.w * f / 2, y: cy - v.h * f / 2, w: v.w * f, h: v.h * f }; }
+      C.view = v;
+      if (redrawAll) { draw2d(); } else { svg.setAttribute('viewBox', v.x + ' ' + v.y + ' ' + v.w + ' ' + v.h); }
+    }
+    function zoomAt(clientX, clientY, factor, v0) {
+      var r = svg.getBoundingClientRect(), v = v0 || screenView();
+      var fx = (clientX - r.left) / r.width, fy = (clientY - r.top) / r.height;
+      var px = v.x + fx * v.w, py = v.y + fy * v.h, w = v.w * factor, h = v.h * factor;
+      return { x: px - fx * w, y: py - fy * h, w: w, h: h };
+    }
+    function two() { var k = Object.keys(pts); return k.length >= 2 ? [pts[k[0]], pts[k[1]]] : null; }
     svg.addEventListener('pointerdown', function (e) {
-      var g = e.target.closest('[data-mid]');
-      if (!g) { if (C.sel) { C.sel = null; draw2d(); panel(); } return; }
-      var it = C.items.find(function (x) { return x.m.id === g.getAttribute('data-mid'); });
-      drag = { it: it, sx: e.clientX, sy: e.clientY, x: it.m.pos.x, z: it.m.pos.z, moved: false, k: svgScale(svg), g: g };
+      pts[e.pointerId] = { x: e.clientX, y: e.clientY };
       svg.setPointerCapture(e.pointerId);
       e.preventDefault();
+      var p2 = two();
+      if (p2) {                                   // second finger: zoom, and undo a module drag
+        if (drag) { drag.it.m.pos = { x: drag.x, z: drag.z }; drag.g.setAttribute('transform', 'translate(' + drag.x + ' ' + (-drag.z) + ')'); drag = null; }
+        pan = null;
+        var r = svg.getBoundingClientRect();
+        pinch = { d: Math.hypot(p2[0].x - p2[1].x, p2[0].y - p2[1].y) || 1, v: screenView(),
+                  mx: (p2[0].x + p2[1].x) / 2, my: (p2[0].y + p2[1].y) / 2, r: r };
+        return;
+      }
+      var g = e.target.closest('[data-mid]');
+      if (!g) { pan = { sx: e.clientX, sy: e.clientY, v: screenView(), moved: false }; return; }
+      var it = C.items.find(function (x) { return x.m.id === g.getAttribute('data-mid'); });
+      drag = { it: it, sx: e.clientX, sy: e.clientY, x: it.m.pos.x, z: it.m.pos.z, moved: false, k: svgScale(svg), g: g };
     });
     svg.addEventListener('pointermove', function (e) {
+      if (!pts[e.pointerId]) { return; }
+      pts[e.pointerId] = { x: e.clientX, y: e.clientY };
+      if (pinch) {
+        var p2 = two(); if (!p2) { return; }
+        var d = Math.hypot(p2[0].x - p2[1].x, p2[0].y - p2[1].y) || 1, mx = (p2[0].x + p2[1].x) / 2, my = (p2[0].y + p2[1].y) / 2;
+        var v = zoomAt(pinch.mx, pinch.my, pinch.d / d, pinch.v);          // zoom about where the fingers started
+        v.x -= (mx - pinch.mx) / pinch.r.width * v.w; v.y -= (my - pinch.my) / pinch.r.height * v.h;   // and follow them
+        setView(v, false);
+        return;
+      }
+      if (pan) {
+        var r = svg.getBoundingClientRect(), dx = e.clientX - pan.sx, dy = e.clientY - pan.sy;
+        if (!pan.moved && Math.abs(dx) + Math.abs(dy) < 6) { return; }
+        pan.moved = true;
+        setView({ x: pan.v.x - dx / r.width * pan.v.w, y: pan.v.y - dy / r.height * pan.v.h, w: pan.v.w, h: pan.v.h }, false);
+        return;
+      }
       if (!drag) { return; }
-      var dx = (e.clientX - drag.sx) * drag.k, dz = -(e.clientY - drag.sy) * drag.k;
+      var ddx = (e.clientX - drag.sx) * drag.k, dz = -(e.clientY - drag.sy) * drag.k;
       if (!drag.moved && Math.abs(e.clientX - drag.sx) + Math.abs(e.clientY - drag.sy) < 6) { return; }
       drag.moved = true;
-      var p = snap(drag.it, drag.x + dx, drag.z + dz, SNAP_PX * drag.k);
-      drag.it.m.pos = { x: Math.round(p.x * 10) / 10, z: Math.round(p.z * 10) / 10 };
+      var sp = snap(drag.it, drag.x + ddx, drag.z + dz, SNAP_PX * drag.k);
+      drag.it.m.pos = { x: Math.round(sp.x * 10) / 10, z: Math.round(sp.z * 10) / 10 };
       drag.g.setAttribute('transform', 'translate(' + drag.it.m.pos.x + ' ' + (-drag.it.m.pos.z) + ')');
     });
-    function end() {
+    function end(e) {
+      delete pts[e.pointerId];
+      if (pinch) { if (!two()) { pinch = null; draw2d(); } return; }   // labels redrawn at the new size
+      if (pan) {
+        var pn = pan; pan = null;
+        if (pn.moved) { draw2d(); return; }
+        var now = Date.now();
+        if (now - lastTap < 350) { fitBox(); draw2d(); lastTap = 0; return; }   // double tap: see everything
+        lastTap = now;
+        if (C.sel) { C.sel = null; draw2d(); panel(); }
+        return;
+      }
       if (!drag) { return; }
       var d = drag; drag = null;
       C.sel = d.it.m.id;
-      if (d.moved) { A.persist(); fitBox(); }
+      if (d.moved) { A.persist(); if (!C.view) { fitBox(); } }
       draw2d(); panel();
     }
     svg.addEventListener('pointerup', end);
     svg.addEventListener('pointercancel', end);
+    svg.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      setView(zoomAt(e.clientX, e.clientY, Math.pow(1.0015, e.deltaY)), false);
+      clearTimeout(svg._wz); svg._wz = setTimeout(draw2d, 160);
+    }, { passive: false });
   }
 
   // ------------------------------------------------------------------ 3D
@@ -356,6 +446,7 @@
       ]);
     };
     wire2d(document.getElementById('csvg'));
+    fitBox();                                       // again, now that the drawing area has its size
     if (A.has3d()) { P3D.setDims(A.dimsShown()); }
     redraw(true);
     panel();
