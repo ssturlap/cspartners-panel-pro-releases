@@ -335,8 +335,8 @@
       '<h1>' + esc(t('Composition')) + '<span class="sub">' + esc(s.name) + '</span></h1>' +
       '<button type="button" class="icon-btn" id="cMore" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
       '<div class="compose"><div class="cview view3d" id="cview"><svg id="csvg" class="csvg" preserveAspectRatio="xMidYMid meet"></svg>' +
-      '<div class="view-tools"><button type="button" id="cMode">3D</button><button type="button" id="cOpen">' + esc(t('Open all')) + '</button>' +
-      '<button type="button" id="cFit">' + esc(t('Fit')) + '</button></div></div>' +
+      '<div class="view-tools"><button type="button" id="cMode" class="vt vt-txt" title="2D / 3D">3D</button>' + A.vtBtn('cOpen', 'open', t('Open all'), ' aria-pressed="false"') +
+      A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
       '<div class="cpanel" id="cpanel"></div></div>'
     );
     var host = document.getElementById('cview');
@@ -347,7 +347,7 @@
       C.mode = C.mode === '2d' ? '3d' : '2d'; A.savePref('panelpro.web.cmode', C.mode); redraw(true);
     };
     document.getElementById('cFit').onclick = function () { if (C.mode === '2d') { fitBox(); draw2d(); } else { P3D.zoomExtents(); } };
-    document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('all'); this.textContent = t(o ? 'Close all' : 'Open all'); };
+    document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('all'); A.setOpenBtn(this, o); };
     document.getElementById('cMore').onclick = function () {
       A.menu(t('Composition'), [
         { label: t('Arrange again side by side'), run: function () {

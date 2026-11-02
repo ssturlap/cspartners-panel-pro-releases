@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.26';
-  var BUILD = 'af5dab0c7e';
+  var BUILD = 'b38de7269b';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -356,6 +356,22 @@
     if (p[0] === 'settings') { return renderSettings(); }
     if (p[0] === 'materials' && window.PPMaterials) { return window.PPMaterials.route(p); }
     renderSites();
+  }
+  // Small icon buttons over the 3D view (the label shows as a tooltip and is read out).
+  var VT_ICONS = {
+    sizes: '<path d="M3.5 15.5 15.5 3.5l5 5-12 12z"/><path d="M7.5 11.5l2 2M10.5 8.5l2 2M13.5 5.5l2 2"/>',
+    view: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+    open: '<rect x="4" y="3.5" width="10" height="17" rx="1"/><path d="M14 4.5l6 2v13l-6-1.5M11 12h.01"/>',
+    fit: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'
+  };
+  function vtBtn(id, icon, label, extra) {
+    return '<button type="button" id="' + id + '" class="vt" title="' + esc(label) + '" aria-label="' + esc(label) + '"' + (extra || '') + '>' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true">' + VT_ICONS[icon] + '</svg></button>';
+  }
+  function setOpenBtn(b, opened) {
+    if (!b) { return; }
+    var l = t(opened ? 'Close all' : 'Open all');
+    b.setAttribute('aria-pressed', String(!!opened)); b.title = l; b.setAttribute('aria-label', l);
   }
   function desk() { return !!(window.PPDesk && window.PPDesk.on()); }
   function show(html) {
@@ -715,10 +731,9 @@
       '<div class="edit-layout' + (desk() ? ' ws' : '') + '">' + (desk() ? deskModsHtml(s, mod ? mod.id : 'new') : '') +
       '<div class="view3d" id="v3d"><svg class="elev" id="elev" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<span class="view-hint" id="viewHint"></span>' +
-      '<div class="view-tools"><button type="button" id="dimBtn">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
-      '<button type="button" id="dimsBtn" aria-pressed="' + dimsShown() + '">' + esc(t('Sizes')) + '</button>' +
-      '<button type="button" id="viewBtn" aria-label="' + esc(t('View')) + '">' + esc(t('View')) + ' ▾</button>' +
-      '<button type="button" id="openAll">' + esc(t('Open all')) + '</button><button type="button" id="fitBtn">' + esc(t('Fit')) + '</button></div></div>' +
+      '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" title="2D / 3D">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
+      vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View')) +
+      vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
       '<div class="edit-side"><div class="page" id="editBody"></div>' +
       '<div class="dock"><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save changes') : t('Add to site')) + '</button></div></div>' +
       '</div>'
@@ -764,9 +779,9 @@
     $('#openAll').onclick = function () {
       if (!has3d || view.mode !== '3d') { return; }
       var opened = P3D.toggle('all');
-      $('#openAll').textContent = t(opened ? 'Close all' : 'Open all');
+      setOpenBtn($('#openAll'), opened);
     };
-    if (window.P3D) { P3D.onMotion = function () { var b = $('#openAll'); if (b) { b.textContent = t(P3D.isOpen('all') ? 'Close all' : 'Open all'); } }; }
+    if (window.P3D) { P3D.onMotion = function () { setOpenBtn($('#openAll'), P3D.isOpen('all')); }; }
     $('#saveMod').onclick = saveModule;
     $('#moreBtn').onclick = function () { editMenu(s, mod, title); };
     renderEditBody();
@@ -859,7 +874,7 @@
     var r = E.res || { parts: [], movers: [] };
     var parts = shownParts(r);
     var b = $('#openAll');
-    if (b) { b.textContent = t('Open all'); b.hidden = view.mode !== '3d' || !(r.movers && r.movers.length); }
+    if (b) { setOpenBtn(b, false); b.hidden = view.mode !== '3d' || !(r.movers && r.movers.length); }
     if (view.mode === '2d' || !has3d) {
       var e = window.PPReports.elevation(parts.length ? parts : [{ shape: 'prism', axis: 'y', pos: 0, thk: 1, pts: [[0, 0], [1, 0], [1, 1], [0, 1]], role: 'carcass' }]);
       var svg = $('#elev');
@@ -1616,7 +1631,7 @@
     t: t, esc: esc, fmt: fmt, L: L, LU: LU, U: U, show: show, go: go, menu: menu, toast: toast, openPad: openPad,
     persist: function () { persist(); }, codesOf: codesOf, codeSort: codeSort, dimsOf: dimsOf, matInfo: matInfo,
     viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown,
-    loadPref: load, savePref: save, uid: uid, lang: function () { return lang; }, site: site, uk: uk,
+    loadPref: load, savePref: save, uid: uid, vtBtn: vtBtn, setOpenBtn: setOpenBtn, lang: function () { return lang; }, site: site, uk: uk,
     prefsOpt: function () { return prefs.opt; }, shareFile: shareFile, pickFile: pickFile,
     sites: function () { return sites; }, prefs: function () { return prefs; }, resetPrefs: resetPrefs, fixPrefs: fixPrefs,
     route: function () { route(); }, setLang: setLang, presetThumb: presetThumb, moduleThumb: function (m) { return moduleThumb(m); },

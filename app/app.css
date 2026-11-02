@@ -609,3 +609,62 @@ body.desk .cards > p { grid-column: 1 / -1; }
 .signin .boot-mark { margin-bottom: 4px; }
 .signin p { margin-left: auto; margin-right: auto; }
 .signin .gbtn { width: 100%; max-width: 340px; min-height: 52px; font-size: 16px; }
+
+/* ================================================================ phone: compact (2 Nov 2026)
+   Smaller controls so more of the module and its settings fit; the buttons over the 3D view are
+   small icons so they don't cover the model. (Desktop rules above use body.desk and stay as they are.) */
+body { font-size: 15px; }
+.top { min-height: 50px; padding-top: calc(4px + var(--safe-t)); padding-bottom: 4px; }
+.top h1 { font-size: 17px; }
+.icon-btn { min-width: 40px; height: 40px; font-size: 20px; }
+.btn { min-height: 44px; border-radius: 12px; }
+.btn.primary { font-size: 16px; }
+.btn.small { min-height: 36px; font-size: 14px; }
+.dock { padding: 8px 14px calc(8px + var(--safe-b)); }
+.page { padding-top: 12px; }
+.row-card { min-height: 56px; padding: 8px 10px; }
+.row-card .t1 { font-size: 16px; }
+.row-card .t2 { font-size: 13px; }
+.row-card .thumb { width: 60px; height: 46px; }
+.box { padding: 10px 12px; margin: 8px 0; }
+.text-in { height: 42px; font-size: 16px; border-radius: 10px; }
+.sel { height: 40px; font-size: 15px; border-radius: 10px; }
+.measure { gap: 6px; margin: 10px 0 2px; }
+.measure button { min-height: 62px; padding: 5px 4px 6px; border-width: 1.5px; border-radius: 12px; }
+.measure .num { font-size: 24px; }
+.measure .lbl, .measure .unit { font-size: 12px; }
+.etabs { gap: 5px; margin: 10px 0 2px; }
+.etabs button { height: 32px; padding: 0 11px; font-size: 13.5px; border-width: 1px; border-radius: 16px; }
+.seg { gap: 5px; }
+.seg button { min-height: 34px; padding: 0 11px; font-size: 14px; border-width: 1px; border-radius: 17px; }
+.frow-f { min-height: 42px; gap: 10px; }
+.frow-f .flbl { font-size: 14.5px; }
+.valbtn { min-width: 78px; height: 36px; font-size: 15px; border-radius: 9px; border-width: 1px; }
+.xbtn { width: 32px; height: 32px; font-size: 16px; }
+.hbtn { height: 32px; font-size: 13.5px; }
+.stepper button { width: 34px; height: 34px; font-size: 19px; }
+.switch { width: 44px; height: 26px; }
+.switch span { border-radius: 13px; }
+.switch span::after { width: 20px; height: 20px; }
+.switch input:checked + span::after { transform: translateX(18px); }
+.warn { font-size: 13.5px; padding: 8px 10px; }
+.section-h { font-size: 14px; }
+.mcard { min-height: 0; }
+.mcard .nm { font-size: 14px; }
+.view3d { height: 40vh; }
+.view-hint { font-size: 11.5px; }
+.menu-sheet button { min-height: 46px; font-size: 16px; }
+
+/* icon buttons over the 3D view */
+.view-tools { gap: 6px; right: 8px; bottom: 8px; }
+.view-tools .vt { width: 36px; height: 36px; min-width: 0; padding: 0; display: inline-grid; place-items: center; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.88); backdrop-filter: blur(4px); }
+.view-tools .vt svg { width: 20px; height: 20px; fill: none; stroke: var(--ink); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.view-tools .vt-txt { font-size: 12.5px; font-weight: 750; letter-spacing: -0.02em; }
+.view-tools .vt[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.view-tools .vt[aria-pressed="true"] svg { stroke: #fff; }
+body.desk .view-tools .vt { width: 32px; height: 32px; }
+body.desk .view-tools .vt svg { width: 18px; height: 18px; }
+@media (hover: hover) and (pointer: fine) { .view-tools .vt:hover:not([aria-pressed="true"]) { border-color: var(--ink-2); background: #fff; } }
+.view3d { top: calc(48px + var(--safe-t)); }
+.compose { height: calc(100vh - 48px - var(--safe-t)); }
+body.desk .compose { height: 100%; }
