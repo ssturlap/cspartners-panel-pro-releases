@@ -1,25 +1,23 @@
 {
-  "version": "0.3.28",
+  "version": "0.3.29",
   "date": "2026-11-02",
-  "title": "Panels for a run, edge banding per side, Excel cut list",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.28.rbz",
+  "title": "Cleaner Configurator, Panel module, hand-drawn panels in the cut list",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.29.rbz",
   "notes": [
-    "New toolbar button “Panels for selection”: select a run of modules (e.g. wall cabinets) and create an underpanel, an overpanel and/or a crown (a strip on…",
-    "Cut list: click L1, L2, W1 or W2 to switch the edge banding of a panel side on or off; “All” does the four sides of a panel, and the “All” on a module line…",
-    "Export Excel (.xlsx) instead of CSV: sheet 1 is the cut list (edge columns centred), sheet 2 has hardware, edge banding, the sheet estimate and warnings.",
-    "Adjustable legs: the toe kick is bought, not cut — it is no longer drawn or listed in the cut list, only in hardware and the 4 m bar plan. Rebuild modules…",
-    "Fridge enclosure: a visible tall side takes the visible-end material (fronts by default). The back can now be the same as the fronts, the same as the…",
-    "Edit module: the preview shows panels painted by hand in the model.",
-    "Drawer slides: the three rails of each slide now sit on one centre line in SketchUp 2027 (no more stepped rails). Rebuild drawer modules."
+    "The Configurator shows only the settings for what the module has: no corner, hanging rail, shelf or kneehole settings unless the module has them, no door…",
+    "Layout tab: the columns and rows come first; underneath, only the settings your layout brings (between rows, shelf setback, hanging rail, kneehole). Corner…",
+    "Panel is its own module (no longer under Kitchen) with a short form: name, orientation (flat, on edge or standing sideways), length, width, thickness, edge…",
+    "Right-click a group or component you drew yourself › CSPARTNERS PANEL PRO › Count in cut list: it is listed with its real size (thinnest side = thickness),…",
+    "New decorative back panel (for islands and visible backs): behind the carcass, full width, same height as the side panels.",
+    "Materials tab: the show/hide buttons were removed (use the preview buttons, or the toolbar and Extensions menu for the model)."
   ],
-  "title_es": "Paneles para un tramo, canto por lado, lista de corte en Excel",
+  "title_es": "Configurador más limpio, módulo Panel, paneles dibujados a mano en la lista de corte",
   "notes_es": [
-    "Nuevo botón «Paneles para la selección»: seleccione un tramo de módulos (p. ej. muebles altos) y cree de una vez un panel inferior, un sobrepanel y/o una…",
-    "Lista de corte: haga clic en L1, L2, W1 o W2 para poner o quitar el canto de un lado de la pieza; «Todo» hace los cuatro lados de la pieza, y el «Todo» de…",
-    "Exportar Excel (.xlsx) en lugar de CSV: la hoja 1 es la lista de corte (columnas de canto centradas), la hoja 2 trae herrajes, canto, el estimado de…",
-    "Patas regulables: el zócalo se compra, no se corta — ya no se dibuja ni sale en la lista de corte, solo en herrajes y en el plan de barras de 4 m.…",
-    "Nevera: un costado alto visto toma el material de costados vistos (los frentes por defecto). El respaldo ahora puede ser igual que los frentes, igual que la…",
-    "Editar módulo: la vista previa muestra las piezas pintadas a mano en el modelo.",
-    "Correderas de gaveta: los tres rieles de cada corredera quedan en un mismo eje en SketchUp 2027 (ya no escalonados). Reconstruya los módulos con gavetas."
+    "El Configurador muestra solo los ajustes de lo que el módulo tiene: sin ajustes de esquina, tubo, entrepaños o hueco para piernas si el módulo no los tiene,…",
+    "Pestaña Distribución: primero las columnas y filas; debajo, solo los ajustes que su distribución trae (entre filas, retiro de entrepaños, tubo, faldón). Los…",
+    "Panel es un módulo propio (ya no está en Cocina) con un formulario corto: nombre, orientación (acostado, de canto o de pie al costado), largo, ancho,…",
+    "Clic derecho en un grupo o componente que usted dibujó › CSPARTNERS PANEL PRO › Contar en lista de corte: sale con su medida real (el lado más delgado =…",
+    "Nuevo panel decorativo trasero (para islas y respaldos vistos): detrás de la caja, a todo el ancho, de la misma altura que los costados decorativos.",
+    "Pestaña Materiales: se quitaron los botones de mostrar/ocultar (use los de la vista previa, o la barra de herramientas y el menú Extensiones para el modelo)."
   ]
 }

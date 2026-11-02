@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.28';
-  var BUILD = '58fdaf9d03';
+  var VERSION = '0.3.29';
+  var BUILD = 'dbafdbb002';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -151,9 +151,10 @@
     prefs.opt = Object.assign({ kerf: 4.4, trim: 10, sheet_l: 2440, sheet_w: 1220, tape_extra: 10, tape_price: 0, currency: 'RD$', prices: {}, rotate: {} }, prefs.opt || {});
     prefs.book = prefs.book || {};        // my presets (same format as the plugin's presets file)
     prefs.finishes = prefs.finishes || {}; // finish sets: name → materials
+    if (window.PPFields) { window.PPFields.showAll = !!prefs.showAll; }   // "Show all settings"
   }
   // Switching account space: part names, optimizer, presets and finish sets come from that space.
-  function resetPrefs() { prefs = { units: prefs.units }; fixPrefs(); }
+  function resetPrefs() { prefs = { units: prefs.units, showAll: prefs.showAll }; fixPrefs(); }
   function savePrefs() {
     if (window.PPCloud && window.PPCloud.on) { window.PPCloud.prefsChanged(prefs); return; }
     if (!save(PREFS_KEY, prefs)) { toast(t('Could not save the site on this phone.')); }
@@ -958,7 +959,6 @@
   var TABS = [['layout', 'Layout', ['layout']], ['module', 'Module', ['module']],
               ['box', 'Box', [{ sec: 'box', until: DECO_TITLE }]],
               ['panels', 'Decorative panels', [{ sec: 'box', from: DECO_TITLE }, { sec: 'materials', from: ENDS_TITLE, until: CUT_TITLE }]],
-              ['base', 'Base', ['base']],
               ['fronts', 'Fronts', ['fronts', 'frame', 'pulls', 'motion']], ['drawers', 'Drawers', ['drawers']],
               ['materials', 'Materials', [{ sec: 'materials', until: ENDS_TITLE }, { sec: 'materials', from: CUT_TITLE }]]];
   function sectionDefs(spec) {
@@ -1087,22 +1087,30 @@
     } else if (E.res && E.res.warnings && E.res.warnings.length) {
       html += '<div class="warn">' + E.res.warnings.map(function (w) { return '<p>' + esc(w) + '</p>'; }).join('') + '</div>';
     }
-    // a loose panel has no box, fronts or drawers: only its own settings and materials
-    var tabs = p.panel ? TABS.filter(function (x) { return x[0] === 'module' || x[0] === 'materials'; }) : TABS;
+    // a loose panel has no box, fronts or drawers: only its own settings and materials; other tabs
+    // show only when something in them applies to this module (Layout and Materials always)
+    var tabs = p.panel ? TABS.filter(function (x) { return x[0] === 'module' || x[0] === 'materials'; })
+      : TABS.filter(function (x) { return x[0] === 'layout' || x[0] === 'module' || x[0] === 'materials' || tabFields(x, p) !== ''; });
     var tab = tabs.find(function (x) { return x[0] === editTab; }) || tabs[0];
     html += '<nav class="etabs" role="tablist">' + tabs.map(function (tb) {
       return '<button type="button" role="tab" data-tab="' + tb[0] + '" aria-selected="' + (tab[0] === tb[0]) + '">' + esc(t(tb[1])) + '</button>';
     }).join('') + '</nav>';
     html += '<div class="tabbody">';
     if (tab[0] === 'layout') { html += layoutHtml(p); }
-    var fields = '';
-    tab[2].forEach(function (sec) { sectionDefs(sec).forEach(function (d) { fields += fieldHtml(d, p); }); });
+    var fields = tabFields(tab, p);
     if (fields) { html += '<div class="box fields">' + fields + '</div>'; }
     html += '</div>';
     if (E.res) { html += '<p class="meta-line">' + E.res.parts.filter(function (x) { return x.cut; }).length + ' ' + esc(t('parts')) + '</p>'; }
     body.innerHTML = html;
     body.scrollTop = scrollY;
     wireEditBody(body);
+  }
+
+  // The settings of a tab as html; a group title with nothing under it is left out.
+  function tabFields(tab, p) {
+    var parts = [];
+    tab[2].forEach(function (sec) { sectionDefs(sec).forEach(function (d) { var h = fieldHtml(d, p); if (h) { parts.push([d[0] === '#', h]); } }); });
+    return parts.filter(function (x, i) { return !x[0] || (parts[i + 1] && !parts[i + 1][0]); }).map(function (x) { return x[1]; }).join('');
   }
 
   function setP(key, v) {
@@ -1550,7 +1558,10 @@
       '<div class="box fields"><h3 class="grp">' + esc(t('Language')) + '</h3>' +
         seg('lang', [['en', 'English'], ['es', 'Español']], lang) +
         '<h3 class="grp">' + esc(t('Units')) + '</h3>' + seg('units', [['mm', 'mm'], ['cm', 'cm']], prefs.units) +
-        '<p class="meta-line" style="margin-top:6px">' + esc(t('Files for the supplier (cut list, PDF, Excel) are always in mm.')) + '</p></div>' +
+        '<p class="meta-line" style="margin-top:6px">' + esc(t('Files for the supplier (cut list, PDF, Excel) are always in mm.')) + '</p>' +
+        '<h3 class="grp">' + esc(t('Configurator')) + '</h3>' +
+        '<div class="frow-f"><span class="flbl">' + esc(t('Show all settings')) + '</span><label class="switch"><input type="checkbox" id="showAll"' + (prefs.showAll ? ' checked' : '') + '><span></span></label></div>' +
+        '<p class="meta-line">' + esc(t('Off: each tab shows only the settings for what the module has (doors, drawers, shelves, a corner…). On: every setting, e.g. to set something up before adding it.')) + '</p></div>' +
       '<div class="box fields"><h3 class="grp">' + esc(t('Sheet optimizer')) + '</h3>' +
         '<p class="meta-line">' + esc(t('Defaults match the supplier’s Biesse beam saw (OptiPlanning, Sektor 450). Sizes in mm.')) + '</p>' +
         OPT_FIELDS.map(function (f) {
@@ -1595,6 +1606,7 @@
       };
     });
     $('#optCur').onchange = function () { o.currency = this.value.trim().slice(0, 8); savePrefs(); };
+    $('#showAll').onchange = function () { prefs.showAll = this.checked; F().showAll = prefs.showAll; savePrefs(); };
     if ($('#matsBtn')) { $('#matsBtn').onclick = function () { go('#/materials'); }; }
     if ($('#acctBtn')) { $('#acctBtn').onclick = function () { go('#/account'); }; }
     $('#updBtn').onclick = function () { checkUpdate(this); };

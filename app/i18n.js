@@ -18,7 +18,13 @@
     'Crown (strip on edge on top, up to the ceiling)': 'Corona (pieza de canto arriba, hasta el techo)',
     'Tap the modules of the run, then Next.': 'Toque los módulos del tramo y luego Siguiente.', 'Next': 'Siguiente',
     'Panels created': 'Paneles creados', 'selected': 'seleccionados',
-    'Inside': 'Interior', 'Auto: shares the space left — tap to fix this size': 'Auto: reparte el espacio que queda — toque para fijar esta medida',
+    'Back decorative panel': 'Panel decorativo trasero', 'Decorative back': 'Panel decorativo trasero',
+    'From your layout': 'Según su distribución', 'Base / toe kick': 'Base / zócalo', 'Configurator': 'Configurador', 'Show all settings': 'Mostrar todos los ajustes',
+    'Off: each tab shows only the settings for what the module has (doors, drawers, shelves, a corner…). On: every setting, e.g. to set something up before adding it.':
+      'Apagado: cada pestaña muestra solo los ajustes de lo que el módulo tiene (puertas, gavetas, entrepaños, una esquina…). Encendido: todos los ajustes, p. ej. para dejar algo listo antes de agregarlo.',
+    'Inside': 'Interior', 'Flat': 'Acostado', 'On edge': 'De canto', 'Standing sideways': 'De pie al costado', 'Orientation': 'Orientación',
+    'Length': 'Largo', 'Cut size': 'Medida de corte', 'place it where you like; it is in the cut list': 'colóquelo donde quiera; sale en la lista de corte',
+    'Panel — Loose panel (flat, on edge or standing)': 'Panel — Panel suelto (acostado, de canto o de pie)', 'Auto: shares the space left — tap to fix this size': 'Auto: reparte el espacio que queda — toque para fijar esta medida',
     'Fixed size — tap to make it auto': 'Medida fija — toque para hacerla auto',
     'Panels are not part of a run': 'Los paneles no forman parte de un tramo',
     // tabs, header, footer
