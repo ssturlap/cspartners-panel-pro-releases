@@ -183,8 +183,9 @@
     var r = Math.round(v * 100) / 100;
     return (o.currency || '') + ' ' + r.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
-  function priceOf(g, ctx) { var o = (ctx.settings && ctx.settings.opt) || {}; return ((o.prices || {})[g.key]) || 0; }
+  function priceOf(g, ctx) { if (g.cost) { return g.cost.sheet_price; } var o = (ctx.settings && ctx.settings.opt) || {}; return ((o.prices || {})[g.key]) || 0; }
   function groupCost(g, ctx) {
+    if (g.cost) { return { sheets: g.cost.sheets_cost, tape: g.cost.tape_cost }; } // whole sheets + whole tape rolls (core/costing.rb)
     var o = (ctx.settings && ctx.settings.opt) || {};
     return { sheets: g.sheets.length * priceOf(g, ctx), tape: g.tape_m * (o.tape_price || 0) };
   }

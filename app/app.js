@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.25';
-  var BUILD = 'b894b9cb6c';
+  var BUILD = '59b8649e2a';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -125,6 +125,8 @@
   };
   function matInfo(name) {
     if (!name) { return null; }
+    var lib = window.PPMaterials && window.PPMaterials.info(name);
+    if (lib) { return lib; }
     if (COLORS[name]) { return { color: COLORS[name], alpha: name === 'PanelPro Glass' ? 0.45 : 1 }; }
     var h = 7;
     for (var i = 0; i < name.length; i++) { h = (h * 31 + name.charCodeAt(i)) % 16777216; }
@@ -137,13 +139,22 @@
   var prefs = {};
   function loadPrefs() {
     prefs = load(PREFS_KEY, {}) || {};
+    fixPrefs();
+  }
+  // Fill in what a fresh space / older save lacks.
+  function fixPrefs() {
     prefs.units = prefs.units === 'cm' ? 'cm' : 'mm';
     prefs.names = prefs.names || {};
     prefs.opt = Object.assign({ kerf: 4.4, trim: 10, sheet_l: 2440, sheet_w: 1220, tape_extra: 10, tape_price: 0, currency: 'RD$', prices: {}, rotate: {} }, prefs.opt || {});
     prefs.book = prefs.book || {};        // my presets (same format as the plugin's presets file)
     prefs.finishes = prefs.finishes || {}; // finish sets: name → materials
   }
-  function savePrefs() { if (!save(PREFS_KEY, prefs)) { toast(t('Could not save the site on this phone.')); } }
+  // Switching account space: part names, optimizer, presets and finish sets come from that space.
+  function resetPrefs() { prefs = { units: prefs.units }; fixPrefs(); }
+  function savePrefs() {
+    if (window.PPCloud && window.PPCloud.on) { window.PPCloud.prefsChanged(prefs); return; }
+    if (!save(PREFS_KEY, prefs)) { toast(t('Could not save the site on this phone.')); }
+  }
 
   // ------------------------------------------------------------------ data
   var sites = [];
@@ -152,6 +163,7 @@
   var modThumbs = {};       // module id + updated → data URL
 
   function persist() {
+    if (window.PPCloud && window.PPCloud.on) { window.PPCloud.sitesChanged(sites); return; }
     if (!save(STORE, sites)) { toast(t('Could not save the site on this phone.')); }
   }
   function site(id) { return sites.find(function (s) { return s.id === id; }) || null; }
@@ -324,6 +336,7 @@
     var h = location.hash.replace(/^#\/?/, '');
     var p = h.split('/').map(decodeURIComponent);
     window.scrollTo(0, 0);
+    if (window.PPCloud && window.PPCloud.on && window.PPCloud.route(p)) { return; }
     if (p[0] === 'site' && site(p[1])) {
       var s = site(p[1]);
       if (p[2] === 'pick') { return renderPick(s); }
@@ -339,6 +352,7 @@
     }
     if (p[0] === 'newsite') { return renderNewSite(); }
     if (p[0] === 'settings') { return renderSettings(); }
+    if (p[0] === 'materials' && window.PPMaterials) { return window.PPMaterials.route(p); }
     renderSites();
   }
   function show(html) {
@@ -350,12 +364,13 @@
 
   // ------------------------------------------------------------------ screens: sites
   function renderSites() {
+    var cloud = window.PPCloud && window.PPCloud.on ? window.PPCloud : null;
     var list = sites.slice().sort(function (a, b) { return a.updated < b.updated ? 1 : -1; });
     show(
-      '<header class="top"><h1>' + esc(t('Sites')) + '</h1>' +
+      '<header class="top"><h1>' + esc(t('Sites')) + (cloud ? '<button type="button" class="space-chip" id="spaceBtn">' + esc(cloud.space().name) + ' ▾</button>' : '') + '</h1>' +
       '<button type="button" class="text-btn" id="langBtn" aria-label="' + esc(t('Language')) + '">' + (lang === 'es' ? 'EN' : 'ES') + '</button>' +
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
-      '<div class="page page-wide">' +
+      '<div class="page page-wide">' + (cloud ? cloud.invitesHtml() : '') +
       (list.length ? '<div class="list">' + list.map(function (s) {
         var n = s.modules.length;
         return '<button type="button" class="row-card" data-site="' + esc(s.id) + '"><span class="grow"><span class="t1">' + esc(s.name) + '</span>' +
@@ -370,11 +385,15 @@
     screen.querySelectorAll('[data-site]').forEach(function (b) { b.onclick = function () { go('#/site/' + encodeURIComponent(b.getAttribute('data-site'))); }; });
     $('#newSite').onclick = function () { go('#/newsite'); };
     $('#langBtn').onclick = function () { setLang(lang === 'es' ? 'en' : 'es'); route(); };
+    if (cloud) { $('#spaceBtn').onclick = cloud.spaceMenu; cloud.wireInvites(); }
     $('#moreBtn').onclick = function () {
-      menu(null, [
+      menu(cloud ? cloud.user().email : null, [
+        cloud ? { label: cloud.t('Account') + ' · ' + cloud.planLine(), run: function () { go('#/account'); } } : null,
+        cloud ? { label: cloud.t('Companies'), run: function () { go('#/companies'); } } : null,
         { label: t('Open a project file'), run: function () { pickFile(null); } },
+        { label: window.PPMaterials ? window.PPMaterials.t('Materials') : 'Materials', run: function () { go('#/materials'); } },
         { label: t('Settings'), run: function () { go('#/settings'); } }
-      ]);
+      ].filter(Boolean));
     };
   }
 
@@ -442,11 +461,12 @@
       menu(s.name, [
         { label: t('Share project file'), run: function () { shareSite(s); } },
         { label: t('Rename site'), run: function () { renderNewSite(s); } },
+        window.PPCloud && window.PPCloud.on && (window.PPCloud.hasCompanies() || window.PPCloud.space().kind === 'company') ? { label: window.PPCloud.t('Move to a company…'), run: function () { window.PPCloud.moveSite(s); } } : null,
         { label: t('Delete site'), danger: true, run: function () {
           if (!confirm(t('Delete this site and its modules?'))) { return; }
           sites = sites.filter(function (x) { return x !== s; }); persist(); toast(t('Deleted')); go('#/', true);
         } }
-      ]);
+      ].filter(Boolean));
     };
     // thumbnails one by one, so the list shows at once
     var imgs = Array.prototype.slice.call(screen.querySelectorAll('[data-thumb]'));
@@ -480,6 +500,8 @@
         }).join('') + '</div>';
       });
     }
+    var G = window.PPCloud && window.PPCloud.on ? window.PPCloud : null;
+    if (G) { html += '<h2 class="section-h">' + esc(G.t('Public gallery')) + '</h2><div class="cards" id="galCards"><p class="meta-line">…</p></div>'; }
     html += cats.map(function (c) {
       return '<h2 class="section-h">' + esc(t(c)) + '</h2><div class="cards">' + info.presets.filter(function (p) { return p.category === c; }).map(function (p) {
         var full = t(p.label), nm = full.indexOf(' — ') > 0 ? full.split(' — ').slice(1).join(' — ') : full;
@@ -490,6 +512,23 @@
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Pick a module')) + '</h1></header>' +
       '<div class="page page-wide">' + html + '</div>'
     );
+    if (G) {
+      (G.gallery.cached('modules') ? Promise.resolve(G.gallery.cached('modules')) : G.gallery.load('modules')).then(function (list) {
+        var el = $('#galCards'); if (!el) { return; }
+        el.innerHTML = list.length ? list.map(function (g) {
+          return '<div class="mcard gcard"><button type="button" class="gpick" data-gal="' + esc(g.id) + '"><img class="pic" alt="" src="' + esc(g.thumb || '') + '">' +
+            '<span class="nm">' + (g.official ? '<b class="badge">' + esc(G.t('Official')) + '</b> ' : '') + esc(g.name) + '</span>' +
+            '<span class="sz">' + esc(G.t('Shared by: ') + (g.author && g.author.name || '')) + '</span></button>' +
+            (G.gallery.admin('modules', g, function () { renderPick(s); }) ? '<button type="button" class="gmore" data-gmore="' + esc(g.id) + '" aria-label="⋯">⋯</button>' : '') + '</div>';
+        }).join('') : '<p class="meta-line">' + esc(G.t('Nothing shared yet.')) + '</p>';
+        el.querySelectorAll('[data-gal]').forEach(function (b) {
+          b.onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/new/' + encodeURIComponent('gal:' + b.getAttribute('data-gal'))); };
+        });
+        el.querySelectorAll('[data-gmore]').forEach(function (b) {
+          b.onclick = function () { var g = list.find(function (x) { return x.id === b.getAttribute('data-gmore'); }); G.gallery.admin('modules', g, function () { renderPick(s); })(); };
+        });
+      }, function () { var el = $('#galCards'); if (el) { el.innerHTML = ''; } });
+    }
     $('#back').onclick = function () { history.back(); };
     screen.querySelectorAll('[data-key]').forEach(function (b) {
       b.onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/new/' + encodeURIComponent(b.getAttribute('data-key'))); };
@@ -533,10 +572,15 @@
   function saveView() { save('panelpro.web.view', view); }
   function presetParams(key) {
     if (/^user:/.test(key)) { return Engine.call('preset_params', { book: prefs.book, key: key.slice(5) }); }
+    if (/^gal:/.test(key)) {
+      var g = (window.PPCloud.gallery.cached('modules') || []).find(function (x) { return x.id === key.slice(4); });
+      return Engine.call('normalize', { params: g ? JSON.parse(g.params) : {} });
+    }
     return Engine.call('preset', { key: key });
   }
   function presetTitle(key) {
     if (/^user:/.test(key)) { var b = prefs.book[key.slice(5)]; return b ? b.name : ''; }
+    if (/^gal:/.test(key)) { var g = (window.PPCloud.gallery.cached('modules') || []).find(function (x) { return x.id === key.slice(4); }); return g ? g.name : ''; }
     return presetLabel(key);
   }
 
@@ -634,6 +678,12 @@
       if (!name) { return; }
       prefs.finishes[name] = Engine.call('finish', { params: E.params }); savePrefs(); toast(t('Saved'));
     } });
+    if (mod && window.PPCloud && window.PPCloud.on) {
+      var G = window.PPCloud;
+      items.push(mod.gallery_id
+        ? { label: G.t('Remove from public gallery'), run: function () { G.gallery.unshareModule(mod); } }
+        : { label: G.t('Share to public gallery'), run: function () { G.gallery.shareModule(mod, presetTitle(mod.preset || ''), moduleThumb(mod)).catch(function (e) { toast(e.code || e.message); }); } });
+    }
     if (mod) {
       items.push({ label: t('Duplicate'), run: function () { duplicateModule(); } });
       items.push({ label: t('Delete module'), danger: true, run: function () {
@@ -775,10 +825,11 @@
       return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>';
     } else if (type === 'mat') {
       var same = SAME_MAT.indexOf(key) >= 0 ? p[key + '_same'] !== false : false;
-      ctl = '<input class="text-in" data-text="' + key + '" value="' + esc(p[key] || '') + '"' + (same ? ' disabled' : '') + '>' +
+      ctl = '<input class="text-in" list="ppMatList" autocomplete="off" data-text="' + key + '" value="' + esc(p[key] || '') + '"' + (same ? ' disabled' : '') + '>' +
         (SAME_MAT.indexOf(key) >= 0 ? '<label class="chk"><input type="checkbox" data-same="' + key + '"' + (same ? ' checked' : '') + '> ' +
           esc(t(key === 'mat_end' ? 'Same as fronts' : 'Same as carcass')) + '</label>' : '');
-      return '<div class="frow-f stack"><span class="flbl"><i class="swatch" style="background:' + esc((matInfo(p[key]) || {}).color || '#ddd') + '"></i>' + esc(label) + '</span>' + ctl + '</div>';
+      var sw = window.PPMaterials ? window.PPMaterials.swatchCss(p[key], (matInfo(p[key]) || {}).color) : 'background:' + ((matInfo(p[key]) || {}).color || '#ddd');
+      return '<div class="frow-f stack"><span class="flbl"><i class="swatch" style="' + esc(sw) + '"></i>' + esc(label) + '</span>' + ctl + '</div>';
     } else {
       ctl = '<input class="text-in" data-text="' + key + '" value="' + esc(p[key] == null ? '' : p[key]) + '" autocomplete="off">';
       return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>';
@@ -1100,10 +1151,27 @@
   function runOptimizer(s) {
     var d = projectData(s);
     if (!d.cutlist.rows.length) { return null; }
-    var res = Engine.call('optimize', { rows: d.cutlist.rows, opt: prefs.opt });
+    var M = window.PPMaterials;
+    var res = Engine.call('optimize', { rows: d.cutlist.rows, opt: prefs.opt, materials: M ? M.engineList() : [],
+                                        costs: M ? M.costDefaults(prefs.opt.prices) : { prices: prefs.opt.prices } });
     res.model = s.name; res.date = new Date().toISOString().slice(0, 16).replace('T', ' ');
     res.count = s.modules.length; res.scope = 'all';
     return res;
+  }
+  // Whole sheets × price and whole edge tape rolls × roll price (core/costing.rb).
+  function costLines(g, ctx) {
+    var c = g.cost, M = window.PPMaterials, R = window.PPReports;
+    if (!c) { return ''; }
+    var mt = M ? M.t : t, cur = function (v) { return R.money(v, ctx); };
+    var tape = c.rolls ? c.rolls + ' × ' + fmt(c.roll_m) + ' m ' + mt(c.rolls === 1 ? 'roll' : 'rolls') + ' × ' + cur(c.roll_price) + ' = ' + cur(c.tape_cost) +
+                         ' (' + mt('uses') + ' ' + fmt(c.tape_m) + ' m, ' + fmt(c.tape_left_m) + ' m ' + mt('left') + ')'
+                       : c.tape_m > 0 ? fmt(c.tape_m) + ' m · ' + mt('no roll length set') : '—';
+    return '<div class="costbox">' +
+      '<div><span>' + esc(t('Sheets')) + '</span><b>' + esc(c.sheets + ' × ' + cur(c.sheet_price) + ' = ' + cur(c.sheets_cost)) + '</b></div>' +
+      '<div><span>' + esc(t('Edge tape')) + '</span><b>' + esc(tape) + '</b></div>' +
+      '<div class="tot"><span>' + esc(t('Total')) + '</span><b>' + esc(cur(c.total)) + '</b></div>' +
+      (M ? '<button type="button" class="linkbtn" data-price="' + esc(g.key) + '" data-matedit="1">' + esc(M.t(c.listed ? 'Edit material' : 'Add to the material list')) + ' ›</button>' : '') +
+      '</div>';
   }
   function renderOpt(s, fresh) {
     show(
@@ -1113,8 +1181,9 @@
     );
     $('#back').onclick = function () { history.back(); };
     setTimeout(function () {
-      if (fresh || !lastOpt || lastOpt.site !== s.id || lastOpt.at !== s.updated) {
-        try { lastOpt = { site: s.id, at: s.updated, d: runOptimizer(s) }; } catch (e) { toast(e.message); return; }
+      var ms = window.PPMaterials ? window.PPMaterials.stamp() : 0;
+      if (fresh || !lastOpt || lastOpt.site !== s.id || lastOpt.at !== s.updated || lastOpt.ms !== ms) {
+        try { lastOpt = { site: s.id, at: s.updated, ms: ms, d: runOptimizer(s) }; } catch (e) { toast(e.message); return; }
       }
       drawOpt(s, lastOpt.d);
     }, 60);
@@ -1135,8 +1204,9 @@
       html += '<section class="box optgrp"><h3>' + esc(R.groupTitle(g)) + '</h3><p class="meta-line">' + esc(R.groupMeta(g, ctx)) + '</p>' +
         '<div class="frow-f"><span class="flbl">' + esc(t('Plain board (no grain): parts may be turned')) + '</span>' +
         '<label class="switch"><input type="checkbox" data-rot="' + esc(g.key) + '"' + (g.rotate ? ' checked' : '') + '><span></span></label></div>' +
-        '<div class="frow-f"><span class="flbl">' + esc(t('Price per sheet')) + (c.sheets || c.tape ? ' <small class="muted">= ' + esc(R.money(c.sheets + c.tape, ctx)) + '</small>' : '') + '</span>' +
+        '<div class="frow-f"><span class="flbl">' + esc(t('Price per sheet')) + '</span>' +
         '<button type="button" class="valbtn" data-price="' + esc(g.key) + '">' + esc((prefs.opt.currency || '') + ' ' + fmt(R.priceOf(g, ctx))) + '</button></div>' +
+        costLines(g, ctx) +
         (g.oversize.length ? '<div class="warn"><p>' + esc(t('Too big for this sheet:') + ' ' + g.oversize.map(function (o) { return (o.code ? o.code + ' ' : '') + o.part + ' ' + fmt(o.L) + ' × ' + fmt(o.W); }).join(', ')) + '</p></div>' : '') +
         '<div class="sheets">' + g.sheets.map(function (sh) {
           return '<figure class="sheet">' + R.sheetSvg(g, sh, false) + '<figcaption>' + esc(t('Sheet') + ' ' + sh.n + ' / ' + g.sheets.length + ' · ' + sh.pieces.length + ' ' + t('parts') + ' · ' + t('waste') + ' ' + sh.waste_pct + ' %') + '</figcaption></figure>';
@@ -1157,7 +1227,10 @@
     body.querySelectorAll('[data-price]').forEach(function (b) {
       b.onclick = function () {
         var k = b.getAttribute('data-price');
+        if (b.hasAttribute('data-matedit')) { var gg = d.groups.find(function (x) { return x.key === k; }); window.PPMaterials.openFor(gg.mat, gg.T); return; }
         openPad({ label: t('Price per sheet'), value: prefs.opt.prices[k] || 0, allowZero: true, unit: prefs.opt.currency || '$', done: function (v) {
+          var g = d.groups.find(function (x) { return x.key === k; });
+          if (window.PPMaterials && g) { window.PPMaterials.setPrice(g.mat, g.T, v); delete prefs.opt.prices[k]; savePrefs(); renderOpt(s, true); return; }
           if (v > 0) { prefs.opt.prices[k] = v; } else { delete prefs.opt.prices[k]; }
           savePrefs(); drawOpt(s, d);
         } });
@@ -1167,14 +1240,19 @@
 
   // ------------------------------------------------------------------ screens: settings
   var OPT_FIELDS = [['kerf', 'Saw blade kerf', 'len'], ['trim', 'Edge trim (each side)', 'len'], ['sheet_l', 'Default sheet length', 'len'],
-                    ['sheet_w', 'Default sheet width', 'len'], ['tape_extra', 'Edge tape allowance (%)', 'pct'], ['tape_price', 'Edge tape price per metre', 'money']];
+                    ['sheet_w', 'Default sheet width', 'len'], ['tape_extra', 'Edge tape allowance (%)', 'pct']];
   function renderSettings() {
+    var CL = window.PPCloud && window.PPCloud.on ? window.PPCloud : null;
     var o = prefs.opt, nm = prefs.names[lang] || {};
     var mine = Engine.call('presets_list', { book: prefs.book });
     var fins = Object.keys(prefs.finishes).sort();
     show(
-      '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Settings')) + '</h1></header>' +
+      '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Settings')) +
+        (CL ? '<span class="sub">' + esc(CL.space().name) + '</span>' : '') + '</h1></header>' +
       '<div class="page">' +
+      (CL ? '<div class="box fields"><h3 class="grp">' + esc(CL.t('Account')) + '</h3><div class="frow-f"><span class="flbl">' + esc(CL.user().email + ' · ' + CL.planLine()) + '</span>' +
+            '<button type="button" class="valbtn" id="acctBtn">›</button></div>' +
+            (CL.canEdit() ? '' : '<p class="warn-line">' + esc(CL.t('Only admins change company materials and settings.')) + '</p>') + '</div>' : '') +
       '<div class="box fields"><h3 class="grp">' + esc(t('Language')) + '</h3>' +
         seg('lang', [['en', 'English'], ['es', 'Español']], lang) +
         '<h3 class="grp">' + esc(t('Units')) + '</h3>' + seg('units', [['mm', 'mm'], ['cm', 'cm']], prefs.units) +
@@ -1185,7 +1263,8 @@
           var v = o[f[0]], txt = f[2] === 'pct' ? fmt(v) + ' %' : f[2] === 'money' ? (o.currency || '') + ' ' + fmt(v) : fmt(v) + ' mm';
           return '<div class="frow-f"><span class="flbl">' + esc(t(f[1])) + '</span><button type="button" class="valbtn" data-opt="' + f[0] + '">' + esc(txt) + '</button></div>';
         }).join('') +
-        '<div class="frow-f stack"><span class="flbl">' + esc(t('Currency')) + '</span><input class="text-in" id="optCur" value="' + esc(o.currency || '') + '" maxlength="8"></div></div>' +
+        '<div class="frow-f stack"><span class="flbl">' + esc(t('Currency')) + '</span><input class="text-in" id="optCur" value="' + esc(o.currency || '') + '" maxlength="8"></div>' +
+        (window.PPMaterials ? '<button type="button" class="btn small" id="matsBtn" style="width:100%;margin-top:8px">' + esc(window.PPMaterials.t('Material list')) + ' ›</button>' : '') + '</div>' +
       '<div class="box fields"><h3 class="grp">' + esc(t('My presets')) + '</h3>' +
         (mine.length ? mine.map(function (p) {
           return '<div class="frow-f"><span class="flbl">' + esc(p.label) + ' <small class="muted">' + esc(t(p.category)) + '</small></span>' +
@@ -1223,6 +1302,8 @@
       };
     });
     $('#optCur').onchange = function () { o.currency = this.value.trim().slice(0, 8); savePrefs(); };
+    if ($('#matsBtn')) { $('#matsBtn').onclick = function () { go('#/materials'); }; }
+    if ($('#acctBtn')) { $('#acctBtn').onclick = function () { go('#/account'); }; }
     screen.querySelectorAll('[data-pname]').forEach(function (inp) {
       inp.onchange = function () {
         var m = prefs.names[lang] = prefs.names[lang] || {};
@@ -1334,6 +1415,7 @@
     lang = l === 'es' ? 'es' : 'en';
     if (window.I18N) { window.I18N.lang = lang; }
     save(LANG_KEY, lang);
+    if (window.PPCloud) { window.PPCloud.langChanged(lang); }
   }
 
   // ------------------------------------------------------------------ start
@@ -1360,9 +1442,12 @@
       info.presets.forEach(function (p) {
         try { p.pp = Engine.call('preset', { key: p.key }); } catch (e) { p.pp = null; }
       });
-      $('#boot').hidden = true;
-      window.addEventListener('hashchange', route);
-      route();
+      return (window.PPMaterials ? window.PPMaterials.init() : Promise.resolve()).then(function () {
+        window.addEventListener('hashchange', route);
+        if (window.PPCloud && window.PPCloud.on) { window.PPCloud.start(); return; } // sign-in first, then the account's data
+        $('#boot').hidden = true;
+        route();
+      });
     }, function (err) {
       $('#boot').classList.add('error');
       $('#bootMsg').textContent = t('Could not start the module engine.');
@@ -1390,7 +1475,12 @@
     t: t, esc: esc, fmt: fmt, L: L, LU: LU, U: U, show: show, go: go, menu: menu, toast: toast, openPad: openPad,
     persist: function () { persist(); }, codesOf: codesOf, codeSort: codeSort, dimsOf: dimsOf, matInfo: matInfo,
     viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown,
-    loadPref: load, savePref: save,
+    loadPref: load, savePref: save, uid: uid, lang: function () { return lang; },
+    prefsOpt: function () { return prefs.opt; }, shareFile: shareFile, pickFile: pickFile,
+    sites: function () { return sites; }, prefs: function () { return prefs; }, resetPrefs: resetPrefs, fixPrefs: fixPrefs,
+    route: function () { route(); }, setLang: setLang, presetThumb: presetThumb, moduleThumb: function (m) { return moduleThumb(m); },
+    hideBoot: function () { $('#boot').hidden = true; },
+    showLoading: function (msg) { $('#boot').hidden = true; show('<div class="empty" style="margin-top:30vh"><h2>' + esc(msg) + '</h2></div>'); },
     normalize: function (params) { return Engine.call('normalize', { params: params }); },
     buildModule: function (m) {
       var k = m.id + '|' + m.updated + '|' + lang;
