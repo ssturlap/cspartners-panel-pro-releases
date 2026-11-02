@@ -719,6 +719,37 @@
     };
   }
 
+  // ---- the public gallery as its own page (desktop sidebar): modules; materials are a tab of Materials
+  function renderGalleryPage() {
+    A.show(header(t('Public gallery')) + '<div class="page page-wide">' +
+      '<div class="seg mat-tabs"><button type="button" class="on">' + esc(A.lang() === 'es' ? 'Módulos' : 'Modules') + '</button>' +
+      '<button type="button" id="galMats">' + esc(A.lang() === 'es' ? 'Materiales' : 'Materials') + '</button></div>' +
+      '<div class="cards" id="galGrid"><p class="meta-line">…</p></div></div>');
+    backBtn('#/');
+    $('#galMats').onclick = function () { A.go('#/materials/gallery'); };
+    loadGallery('modules').then(function (list) {
+      var el = $('#galGrid'); if (!el) { return; }
+      el.innerHTML = list.length ? list.map(function (g) {
+        return '<div class="mcard gcard"><button type="button" class="gpick" data-gal="' + esc(g.id) + '"><img class="pic" alt="" src="' + esc(g.thumb || '') + '">' +
+          '<span class="nm">' + (g.official ? '<b class="badge">' + esc(t('Official')) + '</b> ' : '') + esc(g.name) + '</span>' +
+          '<span class="sz">' + esc(t('Shared by: ') + (g.author && g.author.name || '')) + '</span></button>' +
+          (galleryAdmin('modules', g, renderGalleryPage) ? '<button type="button" class="gmore" data-gmore="' + esc(g.id) + '" aria-label="⋯">⋯</button>' : '') + '</div>';
+      }).join('') : '<p class="meta-line">' + esc(t('Nothing shared yet.')) + '</p>';
+      el.querySelectorAll('[data-gal]').forEach(function (b) {
+        b.onclick = function () {
+          var sites = A.sites().slice().sort(function (a, c) { return a.updated < c.updated ? 1 : -1; });
+          if (!sites.length) { A.toast(A.t('No sites yet')); return; }
+          A.menu(A.t('Add to site'), sites.slice(0, 12).map(function (st) {
+            return { label: st.name, run: function () { A.go('#/site/' + encodeURIComponent(st.id) + '/new/' + encodeURIComponent('gal:' + b.getAttribute('data-gal'))); } };
+          }));
+        };
+      });
+      el.querySelectorAll('[data-gmore]').forEach(function (b) {
+        b.onclick = function () { var g = list.find(function (x) { return x.id === b.getAttribute('data-gmore'); }); galleryAdmin('modules', g, renderGalleryPage)(); };
+      });
+    }, function (e) { var el = $('#galGrid'); if (el) { el.innerHTML = '<p class="warn-line">' + esc(e.code || e.message) + '</p>'; } });
+  }
+
   // ---- developer
   function renderDev() {
     if (!isDev()) { A.go('#/', true); return; }
@@ -790,6 +821,7 @@
     if (!canWeb()) { renderPlans(); return true; }
     if (!space || !started) { A.showLoading(t('Loading your data…')); return true; }
     if (p[0] === 'companies') { renderCompanies(); return true; }
+    if (p[0] === 'gallery') { renderGalleryPage(); return true; }
     if (p[0] === 'company' && p[1]) { renderCompany(p[1]); return true; }
     return false;
   }

@@ -449,7 +449,10 @@
     var c = vb.getCenter(new T.Vector3());
     var sphere = vb.getBoundingSphere(new T.Sphere());
     var d = keepDir ? persp.position.clone().sub(target).normalize() : dir.clone().normalize();
-    var dist = sphere.radius / Math.sin(T.MathUtils.degToRad(FOV) / 2) * 1.02;
+    // fit to the narrower of the two view angles: a tall, narrow view crops the sides otherwise
+    var asp = (host.clientWidth || 300) / (host.clientHeight || 200);
+    var half = Math.min(T.MathUtils.degToRad(FOV) / 2, Math.atan(Math.tan(T.MathUtils.degToRad(FOV) / 2) * asp));
+    var dist = sphere.radius / Math.sin(half) * 1.02;
     target.copy(c);
     persp.position.copy(c).addScaledVector(d, dist);
     var size = vb.getSize(new T.Vector3());

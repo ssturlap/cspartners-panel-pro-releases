@@ -1,17 +1,15 @@
 {
-  "version": "0.3.25",
-  "date": "2026-11-01",
-  "title": "Panel module: overpanels, end panels, fillers",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.25.rbz",
+  "version": "0.3.26",
+  "date": "2026-11-02",
+  "title": "3D preview fits narrow windows; PanelPro Web accounts",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.26.rbz",
   "notes": [
-    "New module “Kitchen — Panel”: one panel on its own, to place and stretch over several modules or across a gap. Kinds: top / overpanel (lies flat), end panel…",
-    "The phone app (PanelPro Web) now has the same settings as this Configurator, your presets (the same presets file, so Export / Import moves them between…",
-    "Behind the scenes: the settings list, the 2D view, the readouts and the cutting plan drawings are shared with the phone app; nothing changes in how they…"
+    "The 3D preview now fits the whole module when its window is tall and narrow (it used to cut off the sides).",
+    "PanelPro Web, the phone and computer app, now has Google sign-in: projects, materials and settings sync across your devices, with companies (shared projects…"
   ],
-  "title_es": "Módulo Panel: sobrepaneles, paneles terminales, rellenos",
+  "title_es": "La vista 3D cabe en ventanas angostas; cuentas en PanelPro Web",
   "notes_es": [
-    "Nuevo módulo «Cocina — Panel»: un panel suelto para colocar y estirar sobre varios módulos o a lo largo de un hueco. Tipos: sobrepanel (acostado), panel…",
-    "La app del teléfono (PanelPro Web) ya tiene los mismos ajustes que este configurador, tus presets (el mismo archivo de presets, así que Exportar / Importar…",
-    "Por dentro: la lista de ajustes, la vista 2D, los datos bajo los campos y los dibujos del plan de corte se comparten con la app del teléfono; aquí se ven…"
+    "La vista 3D ahora muestra el módulo completo cuando su ventana es alta y angosta (antes cortaba los lados).",
+    "PanelPro Web, la app para teléfono y computadora, ahora tiene inicio de sesión con Google: proyectos, materiales y ajustes se sincronizan entre sus…"
   ]
 }

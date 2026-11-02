@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.25';
-  var BUILD = '59b8649e2a';
+  var VERSION = '0.3.26';
+  var BUILD = 'af5dab0c7e';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -251,6 +251,7 @@
 
   var pad = { cb: null, expr: '' };
   function openPad(opts) {
+    if (desk()) { window.PPDesk.pad(opts); return; }
     pad.cb = opts.done;
     pad.unit = opts.unit || U();                       // '°', '%', '' (count) or the length unit
     pad.k = opts.unit ? 1 : uk();                      // typed value × k = mm
@@ -313,6 +314,7 @@
 
   // ------------------------------------------------------------------ menu sheet
   function menu(title, items) {
+    if (desk()) { window.PPDesk.menu(title, items); return; }
     var m = document.createElement('div');
     m.className = 'menu';
     m.innerHTML = '<div class="menu-sheet" role="menu">' + (title ? '<div class="menu-title">' + esc(title) + '</div>' : '') +
@@ -355,15 +357,75 @@
     if (p[0] === 'materials' && window.PPMaterials) { return window.PPMaterials.route(p); }
     renderSites();
   }
+  function desk() { return !!(window.PPDesk && window.PPDesk.on()); }
   function show(html) {
     screen = $('#screen');
-    screen.innerHTML = html;
+    if (desk()) { screen.innerHTML = window.PPDesk.wrap(html); window.PPDesk.after(screen); }
+    else { screen.innerHTML = html; }
     screen.hidden = false;
     document.documentElement.lang = lang;
   }
 
   // ------------------------------------------------------------------ screens: sites
+ // Desktop: the projects as a table you can search and sort.
+  var deskSort = load('panelpro.web.sort', { k: 'updated', d: -1 }), deskQuery = '';
+  function renderSitesDesk(cloud) {
+    var q = deskQuery.trim().toLowerCase();
+    var list = sites.filter(function (s) { return !q || [s.name, s.client, s.notes].join(' ').toLowerCase().indexOf(q) >= 0; });
+    var key = function (s) { return deskSort.k === 'modules' ? s.modules.length : String(s[deskSort.k] || '').toLowerCase(); };
+    list.sort(function (a, b) { var x = key(a), y = key(b); return (x < y ? -1 : x > y ? 1 : 0) * deskSort.d; });
+    var th = function (k, label, cls) {
+      return '<th class="' + (cls || '') + '"><button type="button" data-sort="' + k + '">' + esc(label) + (deskSort.k === k ? (deskSort.d > 0 ? ' ▲' : ' ▼') : '') + '</button></th>';
+    };
+    var DT = window.PPDesk.t;
+    show(
+      '<header class="top"><h1>' + esc(DT('Projects')) + (cloud ? '<span class="sub">' + esc(cloud.space().name) + '</span>' : '') + '</h1>' +
+      '<input class="dk-search" id="dkQ" type="search" placeholder="' + esc(DT('Search projects')) + '" value="' + esc(deskQuery) + '">' +
+      '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
+      '<div class="page page-wide">' + (cloud ? cloud.invitesHtml() : '') +
+      (sites.length ? '<table class="dk-table"><thead><tr><th class="th-pic"></th>' + th('name', DT('Name')) + th('client', DT('Client')) +
+          th('modules', DT('Modules'), 'n') + th('updated', DT('Updated'), 'n') + '</tr></thead><tbody>' +
+          (list.length ? list.map(function (s) {
+            return '<tr data-site="' + esc(s.id) + '" tabindex="0"><td class="td-pic"><img alt="" data-sthumb="' + esc(s.id) + '"></td>' +
+              '<td><b>' + esc(s.name) + '</b>' + (s.notes ? '<small>' + esc(s.notes) + '</small>' : '') + '</td><td>' + esc(s.client || '') + '</td>' +
+              '<td class="n">' + s.modules.length + '</td><td class="n">' + esc(new Date(s.updated).toLocaleDateString(lang)) + '</td></tr>';
+          }).join('') : '<tr><td colspan="5" class="muted">' + esc(DT('No projects match.')) + '</td></tr>') + '</tbody></table>'
+        : '<div class="empty"><h2>' + esc(t('No sites yet')) + '</h2><p>' + esc(t('Start one for the room you are measuring.')) + '</p></div>') +
+      '<p class="meta-line" style="margin-top:20px">PanelPro Web ' + esc(VERSION) + ' · ' + esc(t('Engine')) + ' ' + esc(Engine.version || '') + '</p>' +
+      '</div><div class="dock"><button type="button" class="btn primary" id="newSite">+ ' + esc(t('New site')) + '</button></div>'
+    );
+    if (cloud) { cloud.wireInvites(); }
+    screen.querySelectorAll('tr[data-site]').forEach(function (r) {
+      var open = function () { go('#/site/' + encodeURIComponent(r.getAttribute('data-site'))); };
+      r.onclick = open; r.onkeydown = function (e) { if (e.key === 'Enter') { open(); } };
+    });
+    screen.querySelectorAll('[data-sort]').forEach(function (b) {
+      b.onclick = function () {
+        var k = b.getAttribute('data-sort');
+        deskSort = { k: k, d: deskSort.k === k ? -deskSort.d : (k === 'updated' || k === 'modules' ? -1 : 1) };
+        save('panelpro.web.sort', deskSort); renderSitesDesk(cloud);
+      };
+    });
+    var qi = $('#dkQ');
+    qi.oninput = function () { deskQuery = qi.value; var pos = qi.selectionStart; renderSitesDesk(cloud); var n = $('#dkQ'); n.focus(); n.setSelectionRange(pos, pos); };
+    $('#newSite').onclick = function () { go('#/newsite'); };
+    $('#moreBtn').onclick = function () {
+      menu(null, [{ label: t('Open a project file'), run: function () { pickFile(null); } }]);
+    };
+    // a 3D picture of each project's first module, one by one
+    var imgs = Array.prototype.slice.call(screen.querySelectorAll('[data-sthumb]'));
+    (function next() {
+      var img = imgs.shift();
+      if (!img || !img.isConnected) { return; }
+      var st = site(img.getAttribute('data-sthumb')), m = st && st.modules.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); })[0];
+      var url = m && moduleThumb(m);
+      if (url) { img.src = url; } else { img.style.visibility = 'hidden'; }
+      setTimeout(next, 0);
+    })();
+  }
+
   function renderSites() {
+    if (desk()) { return renderSitesDesk(window.PPCloud && window.PPCloud.on ? window.PPCloud : null); }
     var cloud = window.PPCloud && window.PPCloud.on ? window.PPCloud : null;
     var list = sites.slice().sort(function (a, b) { return a.updated < b.updated ? 1 : -1; });
     show(
@@ -425,7 +487,55 @@
   }
 
   // ------------------------------------------------------------------ screens: one site
+  // Desktop project workspace: modules on the left, the 3D view in the middle, settings on the right.
+  function deskModsHtml(s, curId) {
+    var codes = codesOf(s), mods = s.modules.slice().sort(codeSort(codes)), DT = window.PPDesk.t;
+    return '<aside class="ws-mods"><div class="ws-head"><b title="' + esc(s.name) + '">' + esc(s.name) + '</b>' +
+      '<button type="button" class="icon-btn" id="projMore" aria-label="' + esc(DT('Project menu')) + '">⋯</button></div>' +
+      (s.client ? '<div class="ws-client">' + esc(s.client) + '</div>' : '') +
+      '<button type="button" class="btn small primary ws-add" id="wsAdd">+ ' + esc(DT('Add module')) + '</button>' +
+      '<div class="ws-list">' + mods.map(function (m) {
+        return '<button type="button" class="ws-mod' + (m.id === curId ? ' on' : '') + '" data-wsmod="' + esc(m.id) + '">' +
+          '<span class="code">' + esc(codes[m.id] || '?') + '</span><img alt="" data-wthumb="' + esc(m.id) + '">' +
+          '<span class="grow"><span class="t1">' + esc(m.params.name || presetLabel(m.params.type)) + '</span><span class="t2">' + dimsOf(m.params) + '</span></span></button>';
+      }).join('') + (curId === 'new' ? '<div class="ws-mod on new"><span class="code">+</span><span class="grow"><span class="t1">' + esc(t('New module')) + '</span></span></div>' : '') +
+      '</div></aside>';
+  }
+  function wireDeskMods(s) {
+    $('#wsAdd').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/pick'); };
+    $('#projMore').onclick = function () { siteMenu(s); };
+    screen.querySelectorAll('[data-wsmod]').forEach(function (b) {
+      b.onclick = function () {
+        if (E && E.dirty && (E.mod || E.presetKey) && !confirm(t('Discard your changes?'))) { return; }
+        E = null;
+        go('#/site/' + encodeURIComponent(s.id) + '/m/' + encodeURIComponent(b.getAttribute('data-wsmod')));
+      };
+    });
+    var imgs = Array.prototype.slice.call(screen.querySelectorAll('[data-wthumb]'));
+    (function next() {
+      var img = imgs.shift();
+      if (!img || !img.isConnected) { return; }
+      var m = s.modules.find(function (x) { return x.id === img.getAttribute('data-wthumb'); });
+      var url = m && moduleThumb(m);
+      if (url) { img.src = url; } else { img.style.visibility = 'hidden'; }
+      setTimeout(next, 0);
+    })();
+  }
+  function renderSiteDesk(s) {
+    var first = s.modules.slice().sort(codeSort(codesOf(s)))[0];
+    if (first) { go('#/site/' + encodeURIComponent(s.id) + '/m/' + encodeURIComponent(first.id), true); return; }
+    var DT = window.PPDesk.t;
+    show('<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(s.name) +
+      (s.client ? '<span class="sub">' + esc(s.client) + '</span>' : '') + '</h1></header>' +
+      '<div class="ws">' + deskModsHtml(s, null) + '<div class="ws-empty"><div class="empty"><h2>' + esc(DT('No modules yet')) + '</h2><p>' + esc(t('Add the first module for this site.')) + '</p>' +
+      '<button type="button" class="btn primary" id="wsAdd2">+ ' + esc(DT('Add module')) + '</button></div></div></div>');
+    $('#back').onclick = function () { go('#/'); };
+    wireDeskMods(s);
+    $('#wsAdd2').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/pick'); };
+  }
+
   function renderSite(s) {
+    if (desk()) { return renderSiteDesk(s); }
     var codes = codesOf(s);
     var mods = s.modules.slice().sort(codeSort(codes));
     show(
@@ -457,7 +567,11 @@
     screen.querySelectorAll('[data-mod]').forEach(function (b) {
       b.onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/m/' + encodeURIComponent(b.getAttribute('data-mod'))); };
     });
-    $('#moreBtn').onclick = function () {
+    $('#moreBtn').onclick = function () { siteMenu(s); };
+    // thumbnails one by one, so the list shows at once
+    siteThumbs(s);
+  }
+  function siteMenu(s) {
       menu(s.name, [
         { label: t('Share project file'), run: function () { shareSite(s); } },
         { label: t('Rename site'), run: function () { renderNewSite(s); } },
@@ -467,8 +581,8 @@
           sites = sites.filter(function (x) { return x !== s; }); persist(); toast(t('Deleted')); go('#/', true);
         } }
       ].filter(Boolean));
-    };
-    // thumbnails one by one, so the list shows at once
+  }
+  function siteThumbs(s) {
     var imgs = Array.prototype.slice.call(screen.querySelectorAll('[data-thumb]'));
     (function next() {
       var img = imgs.shift();
@@ -598,7 +712,7 @@
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button>' +
       '<h1>' + esc(title) + '</h1>' +
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
-      '<div class="edit-layout">' +
+      '<div class="edit-layout' + (desk() ? ' ws' : '') + '">' + (desk() ? deskModsHtml(s, mod ? mod.id : 'new') : '') +
       '<div class="view3d" id="v3d"><svg class="elev" id="elev" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<span class="view-hint" id="viewHint"></span>' +
       '<div class="view-tools"><button type="button" id="dimBtn">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
@@ -611,12 +725,18 @@
     );
     var host = $('#v3d');
     host.insertBefore(ensureViewer(), host.firstChild);
+    if (desk()) {
+      wireDeskMods(s);
+      // the 3D view's size is known only once the three panels are laid out: fit it then
+      requestAnimationFrame(function () { if (has3d && view.mode === '3d' && $('#v3d')) { P3D.resize(); P3D.reset('iso'); } });
+    }
     if (!has3d) { view.mode = '2d'; }
     else { P3D.setDims(dimsShown()); P3D.resize(); }
     setViewMode(view.mode, true);
     $('#back').onclick = function () {
       if (E.dirty && mod && !confirm(t('Discard your changes?'))) { return; }
-      E = null; history.back();
+      E = null;
+      if (desk()) { go(mod ? '#/' : '#/site/' + encodeURIComponent(s.id)); } else { history.back(); }
     };
     $('#dimBtn').onclick = function () { setViewMode(view.mode === '3d' ? '2d' : '3d'); };
     $('#fitBtn').onclick = function () { if (has3d && view.mode === '3d') { P3D.zoomExtents(); } };
@@ -1015,19 +1135,38 @@
     };
   }
 
+  // Desktop editor keys: Ctrl+S save, Ctrl+D duplicate, Delete removes the module.
+  document.addEventListener('keydown', function (e) {
+    if (!E || !desk() || !/\/(m|new)\//.test(location.hash)) { return; }
+    if (document.querySelector('.menu, .dpad-wrap, .docview')) { return; }
+    var typing = /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '');
+    var mod = e.ctrlKey || e.metaKey;
+    if (mod && e.key.toLowerCase() === 's') { e.preventDefault(); saveModule(); }
+    else if (mod && e.key.toLowerCase() === 'd' && E.mod) { e.preventDefault(); duplicateModule(); }
+    else if (!typing && (e.key === 'Delete') && E.mod) {
+      e.preventDefault();
+      if (!confirm(t('Delete this module?'))) { return; }
+      var s = E.site, m = E.mod;
+      s.modules = s.modules.filter(function (x) { return x !== m; }); touch(s); persist();
+      E = null; toast(t('Deleted')); go('#/site/' + encodeURIComponent(s.id), true);
+    }
+  });
   function saveModule() {
     var s = E.site;
     var nameIn = document.querySelector('[data-text="name"]');
     if (nameIn) { E.params.name = nameIn.value.trim(); }
+    var mid;
     if (E.mod) {
-      E.mod.params = clone(E.params); E.mod.updated = now();
+      E.mod.params = clone(E.params); E.mod.updated = now(); mid = E.mod.id;
       touch(s); persist(); toast(t('Saved'));
     } else {
-      s.modules.push({ id: uid(), order: s.next_order++, created: now(), updated: now(), params: clone(E.params), preset: E.presetKey || null });
+      mid = uid();
+      s.modules.push({ id: mid, order: s.next_order++, created: now(), updated: now(), params: clone(E.params), preset: E.presetKey || null });
       touch(s); persist(); toast(t('Added to the site'));
     }
     E = null;
-    go('#/site/' + encodeURIComponent(s.id), true);
+    // desktop: stay on the module (the list on the left shows the change)
+    go('#/site/' + encodeURIComponent(s.id) + (desk() ? '/m/' + encodeURIComponent(mid) : ''), true);
   }
   function duplicateModule() {
     var s = E.site;
@@ -1217,6 +1356,7 @@
     dock.className = 'dock';
     dock.innerHTML = '<button type="button" class="btn primary" id="optPrint">' + esc(t('Print / save PDF')) + '</button>';
     screen.appendChild(dock);
+    if (desk()) { window.PPDesk.fixDock(); }
     $('#optPrint').onclick = function () { showDoc(R.optReport(d, ctx), t('Cutting plan')); };
     body.querySelectorAll('[data-rot]').forEach(function (cb) {
       cb.onchange = function () {
@@ -1428,6 +1568,7 @@
     var th = load('panelpro.web.thumbs', null);
     if (th && th.v === BUILD) { presetThumbs = th.t || {}; }
     wirePad();
+    if (window.PPDesk) { window.PPDesk.init(); }
     $('#fileIn').onchange = function () {
       var f = this.files[0], h = fileHandler;
       fileHandler = null; this.value = '';
@@ -1475,7 +1616,7 @@
     t: t, esc: esc, fmt: fmt, L: L, LU: LU, U: U, show: show, go: go, menu: menu, toast: toast, openPad: openPad,
     persist: function () { persist(); }, codesOf: codesOf, codeSort: codeSort, dimsOf: dimsOf, matInfo: matInfo,
     viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown,
-    loadPref: load, savePref: save, uid: uid, lang: function () { return lang; },
+    loadPref: load, savePref: save, uid: uid, lang: function () { return lang; }, site: site, uk: uk,
     prefsOpt: function () { return prefs.opt; }, shareFile: shareFile, pickFile: pickFile,
     sites: function () { return sites; }, prefs: function () { return prefs; }, resetPrefs: resetPrefs, fixPrefs: fixPrefs,
     route: function () { route(); }, setLang: setLang, presetThumb: presetThumb, moduleThumb: function (m) { return moduleThumb(m); },

@@ -448,6 +448,7 @@
     cloudTape: function (tp) { data.tape = Object.assign({ roll_price: 0, roll_m: 0 }, tp); stamp++; },
     tape: function () { return data.tape; },
     route: function (p) {
+      if (p[1] === 'gallery' && cloud()) { return renderGallery(); }
       if (p[1]) { var e = byId(p[1]); if (e) { return renderEdit(e); } }
       return renderList();
     },
