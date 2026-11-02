@@ -1,13 +1,25 @@
 {
-  "version": "0.3.27",
+  "version": "0.3.28",
   "date": "2026-11-02",
-  "title": "Drawer slides fixed for SketchUp 2027",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.27.rbz",
+  "title": "Panels for a run, edge banding per side, Excel cut list",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.28.rbz",
   "notes": [
-    "SketchUp 2027 loads the slide models stood on end, so the rails stuck out above and below the cabinet. The plugin now turns each loaded rail the right way…"
+    "New toolbar button “Panels for selection”: select a run of modules (e.g. wall cabinets) and create an underpanel, an overpanel and/or a crown (a strip on…",
+    "Cut list: click L1, L2, W1 or W2 to switch the edge banding of a panel side on or off; “All” does the four sides of a panel, and the “All” on a module line…",
+    "Export Excel (.xlsx) instead of CSV: sheet 1 is the cut list (edge columns centred), sheet 2 has hardware, edge banding, the sheet estimate and warnings.",
+    "Adjustable legs: the toe kick is bought, not cut — it is no longer drawn or listed in the cut list, only in hardware and the 4 m bar plan. Rebuild modules…",
+    "Fridge enclosure: a visible tall side takes the visible-end material (fronts by default). The back can now be the same as the fronts, the same as the…",
+    "Edit module: the preview shows panels painted by hand in the model.",
+    "Drawer slides: the three rails of each slide now sit on one centre line in SketchUp 2027 (no more stepped rails). Rebuild drawer modules."
   ],
-  "title_es": "Correderas de gaveta corregidas para SketchUp 2027",
+  "title_es": "Paneles para un tramo, canto por lado, lista de corte en Excel",
   "notes_es": [
-    "SketchUp 2027 carga los modelos de corredera de pie, así que los rieles salían por encima y por debajo del mueble. Ahora el plugin gira cada riel a la…"
+    "Nuevo botón «Paneles para la selección»: seleccione un tramo de módulos (p. ej. muebles altos) y cree de una vez un panel inferior, un sobrepanel y/o una…",
+    "Lista de corte: haga clic en L1, L2, W1 o W2 para poner o quitar el canto de un lado de la pieza; «Todo» hace los cuatro lados de la pieza, y el «Todo» de…",
+    "Exportar Excel (.xlsx) en lugar de CSV: la hoja 1 es la lista de corte (columnas de canto centradas), la hoja 2 trae herrajes, canto, el estimado de…",
+    "Patas regulables: el zócalo se compra, no se corta — ya no se dibuja ni sale en la lista de corte, solo en herrajes y en el plan de barras de 4 m.…",
+    "Nevera: un costado alto visto toma el material de costados vistos (los frentes por defecto). El respaldo ahora puede ser igual que los frentes, igual que la…",
+    "Editar módulo: la vista previa muestra las piezas pintadas a mano en el modelo.",
+    "Correderas de gaveta: los tres rieles de cada corredera quedan en un mismo eje en SketchUp 2027 (ya no escalonados). Reconstruya los módulos con gavetas."
   ]
 }

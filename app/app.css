@@ -230,6 +230,15 @@ button { cursor: pointer; }
 .cut-tab .sz { white-space: nowrap; text-align: right; font-weight: 650; }
 .cut-tab .mat { display: block; color: var(--muted); font-size: 12.5px; }
 .edge { display: inline-block; font-size: 11.5px; color: var(--muted); margin-left: 4px; }
+.eb-tog { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+.eb { font: inherit; font-size: 11.5px; font-weight: 650; min-width: 30px; height: 24px; padding: 0 6px; border-radius: 6px;
+  border: 1px solid #d5dbde; background: #fff; color: var(--muted); cursor: pointer; }
+.eb.on { background: var(--ink, #1d2a30); border-color: var(--ink, #1d2a30); color: #fff; }
+.eb.all { margin-left: 4px; }
+@media (max-width: 520px) { .eb-tog { gap: 3px; } .eb { min-width: 26px; height: 23px; padding: 0 4px; font-size: 11px; } .eb.all { margin-left: 2px; } }
+.eb-tog.set .eb.on { box-shadow: inset 0 -2px 0 #f3c623; }
+.cut-mod h3 .eb.mod { margin-left: auto; font-weight: 600; }
+@media (hover: hover) { .eb:hover { border-color: var(--ink, #1d2a30); } }
 .totals { font-size: 14px; }
 .totals div { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-top: 1px solid #edf0f1; }
 .totals div:first-child { border-top: 0; }
@@ -261,6 +270,12 @@ button { cursor: pointer; }
 .csvg .cmod polygon { stroke: var(--stroke); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
 .csvg .cmod .hit { fill: transparent; }
 .csvg .cmod .selbox { fill: none; stroke: none; }
+.csvg .cmod.picked .selbox { stroke: var(--ink); stroke-width: 3; fill: rgba(243, 198, 35, .22); vector-effect: non-scaling-stroke; }
+.rp-sheet { position: fixed; inset: 0; z-index: 60; background: rgba(15, 22, 25, .45); display: flex; align-items: flex-end; justify-content: center; }
+.rp-box { background: var(--ground); width: 100%; max-width: 580px; max-height: 92vh; overflow: auto; padding: 16px 16px calc(16px + var(--safe-b, 0px));
+  border-radius: 16px 16px 0 0; box-shadow: 0 -8px 30px rgba(0,0,0,.2);
+  --accent: var(--ink); --panel: #fff; --soft: #f4f6f7; --warn: #8a4a00; }
+@media (min-width: 700px) { .rp-sheet { align-items: center; } .rp-box { border-radius: 16px; } }
 .csvg .cmod.on .selbox { stroke: var(--tape-deep); stroke-width: 3; stroke-dasharray: 8 6; vector-effect: non-scaling-stroke; }
 .csvg .chip rect { fill: var(--ink); }
 .csvg .chip text { fill: var(--tape); font-weight: 700; text-anchor: middle; font-family: system-ui, sans-serif; }

@@ -127,7 +127,7 @@
     panel: function (p, ctx) {
       if (!p.panel) { return ''; }
       var es = ctx.es, show = ctx.show, k = p.panel_kind;
-      var a = k === 'top' ? [p.width, p.depth] : k === 'side' ? [p.height, p.depth] : [p.width, p.height];
+      var a = k === 'top' || k === 'bottom' ? [p.width, p.depth] : k === 'side' ? [p.height, p.depth] : [p.width, p.height];
       return (es ? 'Panel ' : 'Panel ') + show(Math.max(a[0], a[1])) + ' × ' + show(Math.min(a[0], a[1])) + ' × ' + show(p.panel_t) + u(ctx) +
         (es ? ' — estírelo sobre los módulos o el hueco que cubre' : ' — stretch it over the modules or the gap it covers');
     }

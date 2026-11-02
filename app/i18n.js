@@ -2,6 +2,23 @@
 (function () {
   'use strict';
   var ES = {
+    // panels for a run (ui/runpanels.js)
+    'Under': 'Inferior', 'Above': 'Superior', 'Crown': 'Corona',
+    'Underpanel: lies flat under the run and hides the joints': 'Panel inferior: acostado bajo los módulos, tapa las uniones',
+    'Overpanel: lies flat on top of the run': 'Sobrepanel: acostado encima de los módulos',
+    'Crown: strip on edge on top of the run, up to the ceiling': 'Corona: pieza de canto encima de los módulos, hasta el techo',
+    'Cover the doors': 'Cubrir las puertas', 'Carcass only': 'Solo la caja', 'in front of the carcass': 'por delante de la caja',
+    'Side overhang': 'Vuelo lateral', 'Left': 'Izq.', 'Right': 'Der.', 'Ceiling height': 'Altura del techo', 'Strip height': 'Altura de la pieza',
+    'from the floor': 'desde el piso', 'fronts': 'frentes', 'Joints': 'Uniones', 'Best on seams': 'En las uniones de módulos',
+    'Cut in the middle': 'Cortar al centro', 'Choose seams': 'Elegir uniones', 'Usable board length': 'Largo útil del tablero',
+    'Panels for the selected run': 'Paneles para los módulos seleccionados', 'run': 'tramo', 'Create panels': 'Crear paneles',
+    'Panels for selection': 'Paneles para la selección', 'Panels for a run…': 'Paneles para un tramo…',
+    'Underpanel, overpanel or crown for the selected modules': 'Panel inferior, sobrepanel o corona para los módulos seleccionados',
+    'Underpanel (lies flat under wall cabinets)': 'Panel inferior (acostado bajo los muebles altos)',
+    'Crown (strip on edge on top, up to the ceiling)': 'Corona (pieza de canto arriba, hasta el techo)',
+    'Tap the modules of the run, then Next.': 'Toque los módulos del tramo y luego Siguiente.', 'Next': 'Siguiente',
+    'Panels created': 'Paneles creados', 'selected': 'seleccionados',
+    'Panels are not part of a run': 'Los paneles no forman parte de un tramo',
     // tabs, header, footer
     'Module': 'Módulo', 'Box': 'Caja', 'Base': 'Base', 'Layout': 'Distribución', 'Fronts': 'Frentes',
     'Drawers': 'Gavetas', 'Materials': 'Materiales', 'Cut list': 'Lista de corte', 'Settings': 'Ajustes',
@@ -64,7 +81,7 @@
     'Solid top board on carcass': 'Cubierta sobre la caja', 'Top board thickness': 'Espesor de la cubierta',
     'Top overhang — front': 'Vuelo de cubierta — frente', 'Top overhang — each side': 'Vuelo de cubierta — cada lado',
     'Top overhang — back': 'Vuelo de cubierta — atrás', 'Toe kick / base': 'Zócalo / base', 'Base type': 'Tipo de base',
-    'Adjustable legs + clip-on kick': 'Patas regulables + zócalo con clip', 'Notched sides (integral kick)': 'Costados con muesca (zócalo integrado)',
+    'Adjustable legs + clip-on kick': 'Patas regulables + zócalo con clip', 'Adjustable legs (toe kick bought, not cut)': 'Patas regulables (zócalo comprado, no se corta)', 'Notched sides (integral kick)': 'Costados con muesca (zócalo integrado)',
     'Separate plinth frame': 'Bastidor de zócalo separado', 'None (sits on floor / wall-hung)': 'Ninguna (sobre el piso / colgado)',
     'Toe kick height': 'Altura del zócalo', 'Toe kick setback (0 = flush plinth)': 'Retiro del zócalo (0 = a ras)',
     // layout
@@ -125,13 +142,17 @@
     'to check': 'para revisar', 'decor': 'decorado', 'file name not understood': 'nombre de archivo no reconocido', 'file names not understood': 'nombres de archivo no reconocidos',
     'Not in BRAND - Name - WxHmm - Tmm form: ': 'No sigue la forma MARCA - Nombre - AxLmm - Emm: ',
     // cut list
-    'Selected modules': 'Módulos seleccionados', 'Whole model': 'Todo el modelo', 'Export CSV': 'Exportar CSV',
+    'Selected modules': 'Módulos seleccionados', 'Whole model': 'Todo el modelo', 'Export Excel': 'Exportar Excel',
     'Pick a scope to build the cut list. Sizes are finished part sizes (edge banding not deducted).': 'Elija un alcance para la lista de corte. Medidas finales de pieza (sin descontar canto).',
     'No CSPARTNERS PANEL PRO modules in this model yet.': 'Aún no hay módulos CSPARTNERS PANEL PRO en este modelo.',
     'Select one or more modules first (or use Whole model).': 'Seleccione uno o más módulos (o use Todo el modelo).',
     'Code': 'Código', 'Panel': 'Pieza', 'Hardware': 'Herrajes', 'Item': 'Artículo', 'Edge banding': 'Canto', 'Material': 'Material',
     'Metres': 'Metros', 'Sheet estimate (+15% waste)': 'Estimado de tableros (+15% desperdicio)', 'Sheet (mm)': 'Tablero (mm)', 'Sheets': 'Tableros',
-    'module': 'módulo', 'modules': 'módulos', 'sizes in': 'medidas en', 'X = edge banded': 'X = con canto',
+    'module': 'módulo', 'modules': 'módulos', 'sizes in': 'medidas en', 'X = edge banded': 'X = con canto', 'click to switch': 'clic para cambiar', 'All': 'Todo',
+    'click to remove the edge banding': 'clic para quitar el canto', 'click to add edge banding': 'clic para poner canto',
+    'Remove edge banding from all four sides': 'Quitar el canto de los cuatro lados', 'Edge band all four sides': 'Canto en los cuatro lados',
+    'Remove edge banding from every panel of this module': 'Quitar el canto de todas las piezas de este módulo',
+    'Edge band every side of every panel of this module': 'Canto en todos los lados de todas las piezas de este módulo',
     // decorative side panels, same-as links
     'Decorative side panels': 'Paneles decorativos laterales', 'Left decorative panel': 'Panel decorativo izquierdo',
     'Right decorative panel': 'Panel decorativo derecho', 'Module width': 'Ancho del módulo',
@@ -246,7 +267,7 @@
     'Presets folder': 'Carpeta de presets', 'Default (on this computer)': 'Predeterminada (en esta computadora)', 'Use default': 'Usar predeterminada',
     'Choose a shared folder (e.g. Google Drive) so your team uses the same presets.': 'Elija una carpeta compartida (p. ej. Google Drive) para que el equipo use los mismos presets.',
     'Part names': 'Nombres de piezas', 'Reset all': 'Restablecer todo',
-    'Names used in the cut list, the CSV and the components in the model (new and rebuilt modules). Leave a box empty for the default.': 'Nombres usados en la lista de corte, el CSV y los componentes del modelo (módulos nuevos o reconstruidos). Deje vacío para usar el predeterminado.',
+    'Names used in the cut list, the Excel file and the components in the model (new and rebuilt modules). Leave a box empty for the default.': 'Nombres usados en la lista de corte, el archivo Excel y los componentes del modelo (módulos nuevos o reconstruidos). Deje vacío para usar el predeterminado.',
     'Settings saved.': 'Ajustes guardados.', 'Done': 'Listo',
     // misc toasts from Ruby
     'Module updated.': 'Módulo actualizado.', 'Select exactly one module to apply changes.': 'Seleccione exactamente un módulo para aplicar cambios.',

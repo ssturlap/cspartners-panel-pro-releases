@@ -52,6 +52,7 @@
         var v = cell, s = 0;
         if (typeof cell === 'object') { v = cell.v; s = cell.s || 0; }
         var ref = col(ci) + (ri + 1), st = s ? ' s="' + s + '"' : '';
+        if (v == null || v === '') { if (s) { x += '<c r="' + ref + '"' + st + '/>'; } return; } // empty but formatted
         if (typeof v === 'number' && isFinite(v)) { x += '<c r="' + ref + '"' + st + '><v>' + v + '</v></c>'; }
         else { x += '<c r="' + ref + '"' + st + ' t="inlineStr"><is><t xml:space="preserve">' + xmlEsc(v) + '</t></is></c>'; }
       });
@@ -64,11 +65,12 @@
     var t = meta.t, head = meta.head, cut = d.cutlist;
     var H = function (s) { return { v: s, s: 2 }; }, B = function (s) { return { v: s, s: 1 }; };
     // Sheet 1: the cut list as one plain table from A1 (ready to copy into the saw software)
-    var rows1 = [head.map(H)];
+    var rows1 = [head.map(function (s, i) { return { v: s, s: i >= 7 && i <= 10 ? 4 : 2 }; })]; // H–K centred
+    var C = function (on) { return { v: on ? 'X' : '', s: 3 }; };
     cut.rows.forEach(function (r) {
       var e = r.edges || {};
       rows1.push([r.code, r.module, r.part, r.qty, num(r.L), num(r.W), num(r.T),
-                  e.L1 ? 'X' : '', e.L2 ? 'X' : '', e.W1 ? 'X' : '', e.W2 ? 'X' : '', r.mat, r.note || '']);
+                  C(e.L1), C(e.L2), C(e.W1), C(e.W2), r.mat, r.note || '']);
     });
     // Sheet 2: site + totals
     var rows2 = [[B(meta.site)], [meta.client || ''], [meta.date + ' · PanelPro Web ' + meta.version], []];
@@ -116,9 +118,11 @@
       '<fill><patternFill patternType="solid"><fgColor rgb="FFF3C623"/><bgColor indexed="64"/></patternFill></fill></fills>' +
       '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>' +
       '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
-      '<cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+      '<cellXfs count="5"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
       '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>' +
-      '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs>' +
+      '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/>' +
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment horizontal="center"/></xf>' +
+      '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment horizontal="center"/></xf></cellXfs>' +
       '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>');
     zip.file('xl/worksheets/sheet1.xml', sheetXml(rows1, [7, 22, 26, 6, 16, 11, 13, 5, 5, 5, 5, 22, 50], 1));
     zip.file('xl/worksheets/sheet2.xml', sheetXml(rows2, [58, 12, 10, 14, 10], 0));

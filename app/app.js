@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.27';
-  var BUILD = '663d9e495c';
+  var VERSION = '0.3.28';
+  var BUILD = 'f3b020690b';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -318,6 +318,7 @@
   // ------------------------------------------------------------------ menu sheet
   // Each item can name an icon (item.icon); a ✓ at the start of a label becomes a check icon.
   var MENU_ICONS = {
+    runpanels: '<path d="M3 4h18M3 20h18"/><rect x="4" y="7" width="5" height="10"/><rect x="9.5" y="7" width="5" height="10"/><rect x="15" y="7" width="5" height="10"/>',
     user: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.5 3.6-5.5 7-5.5s6.2 2 7 5.5"/>',
     building: '<path d="M4 20V8l6-3v15M10 20V10h10v10M3 20h18M13 13h1M17 13h1M13 16h1M17 16h1"/>',
     file: '<path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7V5h6"/>',
@@ -1004,10 +1005,12 @@
       }).join('') + '</select>';
       return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>';
     } else if (type === 'mat') {
-      var same = SAME_MAT.indexOf(key) >= 0 ? p[key + '_same'] !== false : false;
-      ctl = '<input class="text-in" list="ppMatList" autocomplete="off" data-text="' + key + '" value="' + esc(p[key] || '') + '"' + (same ? ' disabled' : '') + '>' +
+      var front = key === 'mat_back' && p.mat_back_front === true;
+      var same = !front && (SAME_MAT.indexOf(key) >= 0 ? p[key + '_same'] !== false : false);
+      ctl = '<input class="text-in" list="ppMatList" autocomplete="off" data-text="' + key + '" value="' + esc(p[key] || '') + '"' + (same || front ? ' disabled' : '') + '>' +
         (SAME_MAT.indexOf(key) >= 0 ? '<label class="chk"><input type="checkbox" data-same="' + key + '"' + (same ? ' checked' : '') + '> ' +
-          esc(t(key === 'mat_end' ? 'Same as fronts' : 'Same as carcass')) + '</label>' : '');
+          esc(t(key === 'mat_end' ? 'Same as fronts' : 'Same as carcass')) + '</label>' : '') +
+        (key === 'mat_back' ? '<label class="chk"><input type="checkbox" data-backfront="1"' + (front ? ' checked' : '') + '> ' + esc(t('Same as fronts')) + '</label>' : '');
       var sw = window.PPMaterials ? window.PPMaterials.swatchCss(p[key], (matInfo(p[key]) || {}).color) : 'background:' + ((matInfo(p[key]) || {}).color || '#ddd');
       return '<div class="frow-f stack"><span class="flbl"><i class="swatch" style="' + esc(sw) + '"></i>' + esc(label) + '</span>' + ctl + '</div>';
     } else {
@@ -1184,11 +1187,16 @@
       } else if ((a = el.getAttribute('data-same'))) {
         p[a + '_same'] = el.checked;
         if (el.checked) { p[a] = a === 'mat_end' ? p.mat_front : p.mat_carcass; }
+        if (el.checked && a === 'mat_back') { delete p.mat_back_front; }
+        changed(false);
+      } else if (el.getAttribute('data-backfront')) {
+        if (el.checked) { p.mat_back_front = true; p.mat_back_same = false; p.mat_back = p.mat_front; } else { delete p.mat_back_front; }
         changed(false);
       } else if ((a = el.getAttribute('data-text'))) {
         p[a] = el.value.trim();
         if (a === 'mat_carcass') { SAME_MAT.forEach(function (k) { if (k !== 'mat_end' && p[k + '_same'] !== false) { p[k] = p.mat_carcass; } }); }
         if (a === 'mat_front' && p.mat_end_same !== false) { p.mat_end = p.mat_front; }
+        if (a === 'mat_front' && p.mat_back_front === true) { p.mat_back = p.mat_front; }
         if (a === 'name') { E.dirty = true; return; }
         changed(false);
       }
@@ -1217,6 +1225,8 @@
     if (nameIn) { E.params.name = nameIn.value.trim(); }
     var mid;
     if (E.mod) {
+      // edge banding is switched in the cut list: keep the module's own
+      if (E.mod.params && E.mod.params.edges) { E.params.edges = clone(E.mod.params.edges); } else { delete E.params.edges; }
       E.mod.params = clone(E.params); E.mod.updated = now(); mid = E.mod.id;
       touch(s); persist(); toast(t('Saved'));
     } else {
@@ -1242,6 +1252,8 @@
     if (JSON.stringify(r.codes_state) !== JSON.stringify(s.codes_state || null)) { s.codes_state = r.codes_state; persist(); }
     return r;
   }
+  var EB_SIDES = ['L1', 'L2', 'W1', 'W2'];
+  function fullEdges(r) { return EB_SIDES.every(function (k) { return r.edges && r.edges[k]; }); }
   function renderCut(s) {
     var d;
     try { d = projectData(s); } catch (e) { toast(e.message); go('#/site/' + encodeURIComponent(s.id), true); return; }
@@ -1250,12 +1262,21 @@
       if (!byCode[r.code]) { byCode[r.code] = { name: r.module, rows: [] }; order.push(r.code); }
       byCode[r.code].rows.push(r);
     });
+    var rowRefs = [], modRefs = [];
     var html = order.map(function (c) {
-      var g = byCode[c];
-      return '<section class="cut-mod"><h3><span class="code">' + esc(c) + '</span>' + esc(g.name) + '</h3><table class="cut-tab"><tbody>' +
+      var g = byCode[c], mi = modRefs.push(g) - 1, allOn = g.rows.every(fullEdges);
+      return '<section class="cut-mod"><h3><span class="code">' + esc(c) + '</span>' + esc(g.name) +
+        '<button type="button" class="eb all mod' + (allOn ? ' on' : '') + '" data-ebmod="' + mi + '" aria-pressed="' + allOn + '" title="' +
+        esc(t(allOn ? 'Remove edge banding from every panel of this module' : 'Edge band every side of every panel of this module')) + '">' +
+        esc(t('Edge banding')) + ': ' + esc(t('All')) + '</button></h3><table class="cut-tab"><tbody>' +
         g.rows.map(function (r) {
-          return '<tr><td class="q">' + r.qty + '×</td><td>' + esc(r.part) + (r.eb ? '<span class="edge">' + esc(r.eb) + '</span>' : '') +
-            '<span class="mat">' + esc(r.mat) + ' · ' + LU(r.T) + (r.note ? ' · ' + esc(r.note) : '') + '</span></td>' +
+          var ri = rowRefs.push(r) - 1, f = fullEdges(r);
+          return '<tr><td class="q">' + r.qty + '×</td><td>' + esc(r.part) +
+            '<span class="mat">' + esc(r.mat) + ' · ' + LU(r.T) + (r.note ? ' · ' + esc(r.note) : '') + '</span>' +
+            '<span class="eb-tog' + (r.eb_set ? ' set' : '') + '">' + EB_SIDES.map(function (k) {
+              var on = !!(r.edges && r.edges[k]);
+              return '<button type="button" class="eb' + (on ? ' on' : '') + '" data-eb="' + ri + '" data-side="' + k + '" aria-pressed="' + on + '">' + k + '</button>';
+            }).join('') + '<button type="button" class="eb all' + (f ? ' on' : '') + '" data-eb="' + ri + '" data-side="all" aria-pressed="' + f + '">' + esc(t('All')) + '</button></span></td>' +
             '<td class="sz">' + L(r.L) + ' × ' + L(r.W) + '</td></tr>';
         }).join('') + '</tbody></table></section>';
     }).join('');
@@ -1296,6 +1317,29 @@
                   kind === 'pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       }, function (e) { btn.disabled = false; toast(String(e && e.message || e)); });
     }
+    // edge banding per panel and side (stored on the module; the whole list follows)
+    function edgeSet(mid, pids, side, on) {
+      var m = s.modules.find(function (x) { return String(x.id) === String(mid); });
+      if (!m || !pids.length) { return; }
+      try { m.params = Engine.call('edge_set', { params: m.params, pids: pids, side: side, on: on }); } catch (e) { toast(e.message); return; }
+      m.updated = now(); touch(s); persist();
+      var y = window.scrollY, main = document.querySelector('.cut-main'), sy = main ? main.scrollTop : 0;
+      renderCut(s);
+      window.scrollTo(0, y); main = document.querySelector('.cut-main'); if (main) { main.scrollTop = sy; }
+    }
+    document.querySelectorAll('[data-eb]').forEach(function (b) {
+      b.onclick = function () {
+        var r = rowRefs[+b.dataset.eb], side = b.dataset.side;
+        edgeSet(r.mid, r.pids || [], side, side === 'all' ? !fullEdges(r) : !(r.edges && r.edges[side]));
+      };
+    });
+    document.querySelectorAll('[data-ebmod]').forEach(function (b) {
+      b.onclick = function () {
+        var g = modRefs[+b.dataset.ebmod], pids = [];
+        g.rows.forEach(function (r) { pids = pids.concat(r.pids || []); });
+        edgeSet(g.rows[0].mid, pids, 'all', !g.rows.every(fullEdges));
+      };
+    });
     $('#sharePdf').onclick = function () { make('pdf', this); };
     $('#shareXlsx').onclick = function () { make('xlsx', this); };
     $('#manualBtn').onclick = function () { makeManual(s); };

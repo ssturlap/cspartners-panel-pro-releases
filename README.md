@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.27** — Drawer slides fixed for SketchUp 2027  
-Download [cspartners_panel_pro_0.3.27.rbz](releases/cspartners_panel_pro_0.3.27.rbz) and install it in SketchUp:
+**Latest: 0.3.28** — Panels for a run, edge banding per side, Excel cut list  
+Download [cspartners_panel_pro_0.3.28.rbz](releases/cspartners_panel_pro_0.3.28.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.28 | [cspartners_panel_pro_0.3.28.rbz](releases/cspartners_panel_pro_0.3.28.rbz) |
 | 0.3.27 | [cspartners_panel_pro_0.3.27.rbz](releases/cspartners_panel_pro_0.3.27.rbz) |
 | 0.3.26 | [cspartners_panel_pro_0.3.26.rbz](releases/cspartners_panel_pro_0.3.26.rbz) |
 | 0.3.25 | [cspartners_panel_pro_0.3.25.rbz](releases/cspartners_panel_pro_0.3.25.rbz) |

@@ -31,7 +31,7 @@
       ['fridge_d', 'Fridge depth', 'len', FRIDGE],
       ['fridge_fit', 'Fit module to fridge', 'btn', FRIDGE],
       ['#', 'Panel', PANEL],
-      ['panel_kind', 'Kind of panel', 'sel', [['top', 'Top / overpanel (lies flat over modules)'], ['side', 'End panel (stands at the side)'], ['filler', 'Filler (closes a gap at the front)'], ['back', 'Back cover']], PANEL],
+      ['panel_kind', 'Kind of panel', 'sel', [['top', 'Top / overpanel (lies flat over modules)'], ['bottom', 'Underpanel (lies flat under wall cabinets)'], ['side', 'End panel (stands at the side)'], ['filler', 'Filler (closes a gap at the front)'], ['crown', 'Crown (strip on edge on top, up to the ceiling)'], ['back', 'Back cover']], PANEL],
       ['panel_info', '', 'info', PANEL],
       ['panel_t_same', 'Same as panel thickness', 'bool', PANEL],
       ['panel_t', 'Thickness', 'len', function (p) { return p.panel && !p.panel_t_same; }],
@@ -83,8 +83,7 @@
     ],
     base: [
       ['#', 'Toe kick / base'],
-      ['kick_type', 'Base type', 'sel', [['legs', 'Adjustable legs + clip-on kick'], ['integral', 'Notched sides (integral kick)'], ['plinth', 'Separate plinth frame'], ['none', 'None (sits on floor / wall-hung)']]],
-      ['kick_plastic', 'Plastic kick, stainless look (16 mm, 100 or 150 high, not in the cut list)', 'bool', function (p) { return p.kick_type === 'legs'; }],
+      ['kick_type', 'Base type', 'sel', [['legs', 'Adjustable legs (toe kick bought, not cut)'], ['integral', 'Notched sides (integral kick)'], ['plinth', 'Separate plinth frame'], ['none', 'None (sits on floor / wall-hung)']]],
       ['kick_h', 'Toe kick height', 'len', function (p) { return p.kick_type !== 'none'; }],
       ['kick_setback', 'Toe kick setback (0 = flush plinth)', 'len', function (p) { return p.kick_type !== 'none'; }]
     ],
@@ -207,7 +206,7 @@
       ['mat_frame', 'Face frame', 'mat'],
       ['mat_drawer', 'Drawer boxes', 'mat'],
       ['mat_top', 'Decorative top', 'mat'],
-      ['mat_kick', 'Toe kick / plinth', 'mat'],
+      ['mat_kick', 'Toe kick / plinth', 'mat', function (p) { return p.kick_type === 'integral' || p.kick_type === 'plinth'; }],
       ['mat_skin', 'Decorative side panels', 'mat'],
       ['#', 'Visible end panels'],
       ['end_l', 'Left side is visible', 'bool'],

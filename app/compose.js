@@ -116,9 +116,9 @@
       var g = R.frontPoly(p);
       if (g) { polys.push('<polygon points="' + g.map(function (q) { return q[0].toFixed(1) + ',' + (-q[1]).toFixed(1); }).join(' ') + '" fill="var(--' + p.role + ')"/>'); }
     });
-    var b = it.bb, sel = C.sel === it.m.id;
+    var b = it.bb, sel = C.sel === it.m.id, picked = C.pick && C.pick.indexOf(it.m.id) >= 0;
     var cx = (b.x0 + b.x1) / 2, chip = Math.min(Math.max(30 * (C.k || 1), 60), Math.max((b.x1 - b.x0) * 0.8, 60));   // ~30 px wide on screen
-    return '<g class="cmod' + (sel ? ' on' : '') + '" data-mid="' + A.esc(it.m.id) + '" transform="translate(' + it.m.pos.x + ' ' + (-it.m.pos.z) + ')">' +
+    return '<g class="cmod' + (sel && !C.pick ? ' on' : '') + (picked ? ' picked' : '') + '" data-mid="' + A.esc(it.m.id) + '" transform="translate(' + it.m.pos.x + ' ' + (-it.m.pos.z) + ')">' +
       '<rect class="hit" x="' + b.x0 + '" y="' + (-b.z1) + '" width="' + (b.x1 - b.x0) + '" height="' + (b.z1 - b.z0) + '"/>' +
       '<g class="parts">' + polys.join('') + '</g>' +
       '<rect class="selbox" x="' + b.x0 + '" y="' + (-b.z1) + '" width="' + (b.x1 - b.x0) + '" height="' + (b.z1 - b.z0) + '"/>' +
@@ -284,7 +284,7 @@
         setView({ x: pan.v.x - dx / r.width * pan.v.w, y: pan.v.y - dy / r.height * pan.v.h, w: pan.v.w, h: pan.v.h }, false);
         return;
       }
-      if (!drag) { return; }
+      if (!drag || C.pick) { return; }   // picking modules for a run: no moving
       var ddx = (e.clientX - drag.sx) * drag.k, dz = -(e.clientY - drag.sy) * drag.k;
       if (!drag.moved && Math.abs(e.clientX - drag.sx) + Math.abs(e.clientY - drag.sy) < 6) { return; }
       drag.moved = true;
@@ -306,6 +306,7 @@
       }
       if (!drag) { return; }
       var d = drag; drag = null;
+      if (C.pick) { togglePick(d.it); return; }
       C.sel = d.it.m.id;
       if (d.moved) { A.persist(); if (!C.view) { fitBox(); } }
       draw2d(); panel();
@@ -319,9 +320,66 @@
     }, { passive: false });
   }
 
+  // ------------------------------------------------------------------ panels for a run
+  // Pick the modules of a run (wall cabinets…), then the shared form (ui/runpanels.js) plans an
+  // underpanel / overpanel / crown with the shared engine; they are added as panel modules.
+  function depthOf() { return C.items.reduce(function (a, it) { return it.m.params.panel ? a : Math.max(a, Number(it.m.params.depth) || 0); }, 0); }
+  function startPick(first) { C.pick = first ? [first] : []; C.sel = null; draw2d(); panel(); }
+  function togglePick(it) {
+    if (it.m.params.panel) { A.toast(A.t('Panels are not part of a run')); return; }
+    var i = C.pick.indexOf(it.m.id);
+    if (i >= 0) { C.pick.splice(i, 1); } else { C.pick.push(it.m.id); }
+    draw2d(); panel();
+  }
+  function openRunPanels() {
+    var t = A.t, D = depthOf();
+    var mods = C.items.filter(function (it) { return C.pick.indexOf(it.m.id) >= 0; }).map(function (it) {
+      return { code: it.code, name: it.m.params.name || '', params: it.m.params, off: [it.m.pos.x, D - (Number(it.m.params.depth) || 0), it.m.pos.z] };
+    });
+    var run;
+    try { run = Engine.call('run_measure', { mods: mods, lang: A.lang() }); } catch (e) { A.toast(e.message); return; }
+    var opt = A.prefsOpt(), M = window.PPMaterials, list = M && M.engineList ? M.engineList() : [];
+    var sheet = document.createElement('div');
+    sheet.className = 'rp-sheet';
+    sheet.innerHTML = '<div class="rp-box"></div>';
+    document.body.appendChild(sheet);
+    function close() { sheet.remove(); }
+    sheet.addEventListener('click', function (e) { if (e.target === sheet) { close(); } });
+    function withBoard(opts) {
+      var lens = Object.keys(opts.pieces || {}).map(function (k) {
+        var name = (opts.pieces[k] && opts.pieces[k].mat) || run.mat_front, e = list.find(function (x) { return x.name === name; });
+        return e && e.sheet_l ? e.sheet_l : (opt.sheet_l || 2440);
+      });
+      return Object.assign({}, opts, { sheet_l: lens.length ? Math.min.apply(null, lens) : (opt.sheet_l || 2440), trim: opt.trim == null ? 10 : opt.trim });
+    }
+    window.PPRunPanels.render(sheet.firstChild, {
+      t: t, show: function (v) { return A.L(v); }, units: A.U(), run: run, lang: A.lang(),
+      parse: function (s) { var v = window.PP_CALC ? window.PP_CALC(s) : parseFloat(String(s).replace(',', '.')); return v == null || !isFinite(v) ? null : v * A.uk(); },
+      mats: list.map(function (x) { return x.name; }),
+      plan: function (opts, done) {
+        try { done(Engine.call('run_plan', { run: run, opts: withBoard(opts), lang: A.lang() })); }
+        catch (e) { done({ pieces: [], errors: [e.message], warnings: [], usable: 0, split: [] }); }
+      },
+      create: function (opts) {
+        var res;
+        try { res = Engine.call('run_plan', { run: run, opts: withBoard(opts), lang: A.lang() }); } catch (e) { A.toast(e.message); return; }
+        var s = C.s, now = new Date().toISOString();
+        res.pieces.forEach(function (pc) {
+          s.modules.push({ id: A.uid(), order: s.next_order++, created: now, updated: now, params: pc.params,
+                           pos: { x: pc.origin[0], z: pc.origin[2], wy: D - pc.origin[1] } });   // wy: front of the panel from the wall
+        });
+        s.updated = now; A.persist(); close();
+        C.pick = null; load(); fitBox(); redraw(false); panel();
+        A.toast(t('Panels created') + ': ' + res.pieces.length);
+      },
+      cancel: close
+    });
+  }
+
   // ------------------------------------------------------------------ 3D
   function shifted(it) {
     var p = it.m.pos, pre = it.m.id + ':', dy = C.depth - (Number(it.m.params.depth) || 0); // backs against the wall
+    if (p.wy != null && isFinite(p.wy)) { dy = C.depth - p.wy; }   // a run panel keeps its distance from the wall
     var d = { x: p.x, y: dy, z: p.z };
     var parts = (it.res ? it.res.parts : []).map(function (q) {
       var c = Object.assign({}, q);
@@ -344,7 +402,7 @@
   function draw3d(reset) {
     if (!A.has3d()) { return; }
     var parts = [], movers = [];
-    C.depth = C.items.reduce(function (a, it) { return Math.max(a, Number(it.m.params.depth) || 0); }, 0);
+    C.depth = depthOf();
     C.items.forEach(function (it) { var s = shifted(it); parts = parts.concat(s.parts); movers = movers.concat(s.movers); });
     P3D.update(parts, A.matInfo, movers);
     if (reset) { P3D.reset('iso'); }
@@ -355,6 +413,15 @@
     var box = document.getElementById('cpanel');
     if (!box) { return; }
     var t = A.t, esc = A.esc;
+    if (C.pick) {
+      box.innerHTML = '<p class="meta-line">' + esc(t('Tap the modules of the run, then Next.')) + '</p>' +
+        '<div class="crow"><b class="grow">' + C.pick.length + ' ' + esc(t('selected')) + '</b>' +
+        '<button type="button" class="btn small" id="cPickNo">' + esc(t('Cancel')) + '</button>' +
+        '<button type="button" class="btn small primary" id="cPickGo"' + (C.pick.length ? '' : ' disabled') + '>' + esc(t('Next')) + '</button></div>';
+      document.getElementById('cPickNo').onclick = function () { C.pick = null; draw2d(); panel(); };
+      document.getElementById('cPickGo').onclick = openRunPanels;
+      return;
+    }
     var it = C.items.find(function (x) { return x.m.id === C.sel; });
     if (!it) {
       box.innerHTML = '<p class="meta-line">' + esc(t(C.items.length ? 'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.' : 'Add modules to the site first.')) + '</p>';
@@ -366,11 +433,12 @@
       '<div class="crow"><span class="flbl">' + esc(t('From the left')) + '</span><button type="button" class="valbtn" data-cpos="x">' + esc(A.LU(w.x0)) + '</button></div>' +
       '<div class="crow"><span class="flbl">' + esc(t('Off the floor')) + '</span><button type="button" class="valbtn" data-cpos="z">' + esc(A.LU(w.z0)) + '</button></div>' +
       (it.m.params.panel ? '<div class="crow seg cturn">' + [['top', 'Flat (over a module)'], ['side', 'On edge (beside a module)'], ['filler', 'Upright (front / gap)']].map(function (o) {
-        var k = it.m.params.panel_kind === 'back' ? 'filler' : it.m.params.panel_kind;
+        var k = { back: 'filler', crown: 'filler', bottom: 'top' }[it.m.params.panel_kind] || it.m.params.panel_kind;
         return '<button type="button" data-turn="' + o[0] + '" aria-pressed="' + (k === o[0]) + '">' + esc(t(o[1])) + '</button>';
       }).join('') + '</div>' : '') +
       '<div class="crow"><button type="button" class="btn small" id="cEdit" style="flex:1">' + esc(t('Edit module')) + '</button>' +
-      '<button type="button" class="btn small" id="cFloor" style="flex:1">' + esc(t('Put on the floor')) + '</button></div>';
+      '<button type="button" class="btn small" id="cFloor" style="flex:1">' + esc(t('Put on the floor')) + '</button></div>' +
+      (it.m.params.panel ? '' : '<div class="crow"><button type="button" class="btn small" id="cRun" style="flex:1">' + esc(t('Panels for a run…')) + '</button></div>');
     box.querySelectorAll('[data-cpos]').forEach(function (b) {
       b.onclick = function () {
         var k = b.getAttribute('data-cpos');
@@ -384,16 +452,18 @@
       b.onclick = function () { turnPanel(it, b.getAttribute('data-turn')); };
     });
     document.getElementById('cEdit').onclick = function () { A.go('#/site/' + encodeURIComponent(C.s.id) + '/m/' + encodeURIComponent(it.m.id)); };
-    document.getElementById('cFloor').onclick = function () { it.m.pos.z = -it.bb.z0; A.persist(); fitBox(); redraw(false); panel(); };
+    document.getElementById('cFloor').onclick = function () { it.m.pos.z = -it.bb.z0; delete it.m.pos.wy; A.persist(); fitBox(); redraw(false); panel(); };
+    var rb = document.getElementById('cRun');
+    if (rb) { rb.onclick = function () { startPick(it.m.id); }; }
   }
 
   // Turn a loose panel: its two face sizes move to the new orientation (the length stays the
   // length), the thickness becomes the third size. The engine re-normalizes it.
   function turnPanel(it, kind) {
     var p = it.m.params, k = p.panel_kind;
-    var a = k === 'top' ? [p.width, p.depth] : k === 'side' ? [p.height, p.depth] : [p.width, p.height];
+    var a = k === 'top' || k === 'bottom' ? [p.width, p.depth] : k === 'side' ? [p.height, p.depth] : [p.width, p.height];
     var len = Math.max(a[0], a[1]), wid = Math.min(a[0], a[1]);
-    var q = Object.assign({}, p, { panel_kind: kind === 'filler' && k === 'back' ? 'back' : kind });
+    var q = Object.assign({}, p, { panel_kind: kind === 'filler' && (k === 'back' || k === 'crown') ? k : kind === 'top' && k === 'bottom' ? 'bottom' : kind });
     if (kind === 'top') { q.width = len; q.depth = wid; }
     else if (kind === 'side') { q.height = len; q.depth = wid; }
     else { q.width = len; q.height = wid; }
@@ -401,7 +471,7 @@
     it.m.params = A.normalize(q);
     it.m.updated = new Date().toISOString();
     it.res = A.buildModule(it.m); it.bb = bboxOf(it.res);
-    it.m.pos = { x: w0.x0 - it.bb.x0, z: w0.z0 - it.bb.z0 };   // keep its bottom-left corner where it was
+    it.m.pos = { x: w0.x0 - it.bb.x0, z: w0.z0 - it.bb.z0 };   // keep its bottom-left corner where it was (and back to the wall)
     A.persist(); fitBox(); redraw(false); panel();
   }
 
@@ -417,7 +487,7 @@
   function render(s) {
     A = window.PPApp;
     var t = A.t, esc = A.esc;
-    C = { s: s, items: [], sel: C && C.s === s ? C.sel : null, mode: A.has3d() ? A.loadPref('panelpro.web.cmode', '2d') : '2d' };
+    C = { s: s, items: [], sel: C && C.s === s ? C.sel : null, pick: null, mode: A.has3d() ? A.loadPref('panelpro.web.cmode', '2d') : '2d' };
     load();
     fitBox();
     A.show(
@@ -441,6 +511,7 @@
     document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('all'); A.setOpenBtn(this, o); };
     document.getElementById('cMore').onclick = function () {
       A.menu(t('Composition'), [
+        { label: t('Panels for a run…'), icon: 'runpanels', run: function () { startPick(null); } },
         { label: t('Arrange again side by side'), icon: 'layout', run: function () {
           C.items.forEach(function (it) { delete it.m.pos; }); autoPlace(C.items); A.persist(); fitBox(); redraw(true); panel();
         } }
