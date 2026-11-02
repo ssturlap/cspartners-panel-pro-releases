@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.26';
-  var BUILD = '0d15e07edf';
+  var BUILD = 'c6b7af5527';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -63,6 +63,9 @@
     'Loading the module engine…': 'Cargando el motor de módulos…',
     'The first time takes a moment. After that it opens offline.': 'La primera vez tarda un momento. Después abre sin conexión.',
     'Engine': 'Motor', 'New version ready': 'Nueva versión lista', 'Reload': 'Recargar',
+    'App version': 'Versión de la app', 'build': 'compilación', 'Check for updates': 'Buscar actualizaciones', 'Checking…': 'Buscando…',
+    'Updating to ': 'Actualizando a ', 'You have the latest version': 'Tiene la versión más reciente', 'Reload anyway': 'Recargar igual',
+    'No connection: try again when online': 'Sin conexión: intente de nuevo con internet',
     'Copy of': 'Copia de', 'Kneehole (open)': 'Hueco para piernas (abierto)', 'Shared': 'Compartido',
     'File saved': 'Archivo guardado', 'Could not save the site on this phone.': 'No se pudo guardar la obra en este teléfono.',
     'Height of this row': 'Alto de esta fila', 'Module': 'Módulo', 'Site': 'Obra', 'Cancel': 'Cancelar',
@@ -1396,6 +1399,30 @@
   // ------------------------------------------------------------------ screens: settings
   var OPT_FIELDS = [['kerf', 'Saw blade kerf', 'len'], ['trim', 'Edge trim (each side)', 'len'], ['sheet_l', 'Default sheet length', 'len'],
                     ['sheet_w', 'Default sheet width', 'len'], ['tape_extra', 'Edge tape allowance (%)', 'pct']];
+  // Settings › Check for updates: ask the server for the newest build; if there is one, let the
+  // offline cache pick it up and reload. "Reload anyway" refreshes the screens without asking.
+  function hardReload() {
+    var done = function () { location.reload(); };
+    var jobs = [];
+    if (window.caches) { jobs.push(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf('panelpro-app-') === 0; }).map(function (k) { return caches.delete(k); })); })); }
+    if (navigator.serviceWorker) { jobs.push(navigator.serviceWorker.getRegistration().then(function (r) { return r && r.update(); }).catch(function () {})); }
+    Promise.all(jobs).then(done, done);
+  }
+  function checkUpdate(btn) {
+    btn.disabled = true; btn.textContent = t('Checking…');
+    fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (v) {
+      btn.disabled = false; btn.textContent = t('Check for updates');
+      if (v.build && v.build !== BUILD) {
+        toast(t('Updating to ') + v.version + '…');
+        setTimeout(hardReload, 400);
+      } else {
+        toast(t('You have the latest version'), { label: t('Reload anyway'), run: hardReload });
+      }
+    }, function () {
+      btn.disabled = false; btn.textContent = t('Check for updates');
+      toast(t('No connection: try again when online'));
+    });
+  }
   function renderSettings() {
     var CL = window.PPCloud && window.PPCloud.on ? window.PPCloud : null;
     var o = prefs.opt, nm = prefs.names[lang] || {};
@@ -1408,6 +1435,9 @@
       (CL ? '<div class="box fields"><h3 class="grp">' + esc(CL.t('Account')) + '</h3><div class="frow-f"><span class="flbl">' + esc(CL.user().email + ' · ' + CL.planLine()) + '</span>' +
             '<button type="button" class="valbtn" id="acctBtn">›</button></div>' +
             (CL.canEdit() ? '' : '<p class="warn-line">' + esc(CL.t('Only admins change company materials and settings.')) + '</p>') + '</div>' : '') +
+      '<div class="box fields"><h3 class="grp">' + esc(t('App version')) + '</h3>' +
+        '<p class="app-ver"><b>PanelPro Web ' + esc(VERSION) + '</b> · ' + esc(t('build')) + ' ' + esc(BUILD) + ' · ' + esc(t('Engine')) + ' ' + esc(Engine.version || '') + '</p>' +
+        '<button type="button" class="btn small" id="updBtn" style="width:100%">' + esc(t('Check for updates')) + '</button></div>' +
       '<div class="box fields"><h3 class="grp">' + esc(t('Language')) + '</h3>' +
         seg('lang', [['en', 'English'], ['es', 'Español']], lang) +
         '<h3 class="grp">' + esc(t('Units')) + '</h3>' + seg('units', [['mm', 'mm'], ['cm', 'cm']], prefs.units) +
@@ -1437,7 +1467,6 @@
           var def = lang === 'es' ? pt.es : (pt.en_label || pt.en);
           return '<div class="frow-f stack"><span class="flbl">' + esc(def) + '</span><input class="text-in" data-pname="' + esc(pt.en) + '" value="' + esc(nm[pt.en] || '') + '" placeholder="' + esc(def) + '"></div>';
         }).join('') + '</div>' +
-      '<p class="meta-line" style="text-align:center">PanelPro Web ' + esc(VERSION) + '</p>' +
       '</div>'
     );
     $('#back').onclick = function () { history.back(); };
@@ -1459,6 +1488,7 @@
     $('#optCur').onchange = function () { o.currency = this.value.trim().slice(0, 8); savePrefs(); };
     if ($('#matsBtn')) { $('#matsBtn').onclick = function () { go('#/materials'); }; }
     if ($('#acctBtn')) { $('#acctBtn').onclick = function () { go('#/account'); }; }
+    $('#updBtn').onclick = function () { checkUpdate(this); };
     screen.querySelectorAll('[data-pname]').forEach(function (inp) {
       inp.onchange = function () {
         var m = prefs.names[lang] = prefs.names[lang] || {};
@@ -1631,7 +1661,7 @@
     t: t, esc: esc, fmt: fmt, L: L, LU: LU, U: U, show: show, go: go, menu: menu, toast: toast, openPad: openPad,
     persist: function () { persist(); }, codesOf: codesOf, codeSort: codeSort, dimsOf: dimsOf, matInfo: matInfo,
     viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown,
-    loadPref: load, savePref: save, uid: uid, vtBtn: vtBtn, setOpenBtn: setOpenBtn, lang: function () { return lang; }, site: site, uk: uk,
+    loadPref: load, savePref: save, uid: uid, version: VERSION, build: BUILD, vtBtn: vtBtn, setOpenBtn: setOpenBtn, lang: function () { return lang; }, site: site, uk: uk,
     prefsOpt: function () { return prefs.opt; }, shareFile: shareFile, pickFile: pickFile,
     sites: function () { return sites; }, prefs: function () { return prefs; }, resetPrefs: resetPrefs, fixPrefs: fixPrefs,
     route: function () { route(); }, setLang: setLang, presetThumb: presetThumb, moduleThumb: function (m) { return moduleThumb(m); },

@@ -66,6 +66,7 @@
         (u.photoURL ? '<img alt="" src="' + esc(u.photoURL) + '" referrerpolicy="no-referrer">' : '<i>' + esc((u.displayName || u.email || '?')[0]) + '</i>') +
         '<span><b>' + esc(u.displayName || u.email) + '</b><small>' + esc(C.planLine()) + '</small></span></a>';
     }
+    out += '<a class="dk-ver" href="#/settings" title="' + esc(A.t('Check for updates')) + '"' + (u ? '' : ' style="margin-top:auto"') + '>PanelPro Web ' + esc(A.version) + '</a>';
     return out;
   }
   function wrap(html) {
