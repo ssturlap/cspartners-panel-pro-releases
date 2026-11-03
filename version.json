@@ -1,13 +1,17 @@
 {
-  "version": "0.3.38",
+  "version": "0.3.39",
   "date": "2026-11-03",
-  "title": "Manual opens in your browser",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.38.rbz",
+  "title": "PanelPro material catalog",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.39.rbz",
   "notes": [
-    "Module manual and cutting report: no save dialog any more — they open straight in your browser; print them or save as PDF from there (“Print / save PDF…”)."
+    "The PanelPro catalog — 114 boards from EGGER, BERNECK, ARKOPA, CLEAF and ONESKIN with texture, normal map, sheet size and thicknesses (no prices) — is…",
+    "The same boards, with the same names, are in PanelPro Web (Materials › PanelPro catalog), so projects move between the apps with their materials.",
+    "PanelPro Web: modules use catalog boards by name (texture and sheet size) even before you add them to your list; material form with board type, notes,…"
   ],
-  "title_es": "El manual abre en su navegador",
+  "title_es": "Catálogo de materiales PanelPro",
   "notes_es": [
-    "Manual de módulos e informe de corte: ya no piden dónde guardar — abren directo en su navegador; imprímalos o guárdelos como PDF desde ahí (“Imprimir /…"
+    "El catálogo PanelPro — 114 tableros de EGGER, BERNECK, ARKOPA, CLEAF y ONESKIN con textura, mapa de relieve, tamaño de tablero y espesores (sin precios) —…",
+    "Los mismos tableros, con los mismos nombres, están en PanelPro Web (Materiales › Catálogo PanelPro), así los proyectos pasan entre las apps con sus materiales.",
+    "PanelPro Web: los módulos usan los tableros del catálogo por el nombre (textura y tamaño) aunque no estén en su lista; formulario de material con tipo de…"
   ]
 }

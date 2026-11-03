@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.38';
-  var BUILD = 'eef5543c8a';
+  var VERSION = '0.3.39';
+  var BUILD = '275bc45e85';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -754,7 +754,11 @@
       var g = (window.PPCloud.gallery.cached('modules') || []).find(function (x) { return x.id === key.slice(4); });
       return Engine.call('normalize', { params: g ? JSON.parse(g.params) : {} });
     }
-    return Engine.call('preset', { key: key });
+    var pp = Engine.call('preset', { key: key });
+    // the material list's default material starts every new module (its carcass; parts set "same" follow)
+    var dm = window.PPMaterials && window.PPMaterials.defaultMaterial && window.PPMaterials.defaultMaterial();
+    if (dm && !pp.panel) { pp.mat_carcass = dm; pp = Engine.call('normalize', { params: pp }); }
+    return pp;
   }
   function presetTitle(key) {
     if (/^user:/.test(key)) { var b = prefs.book[key.slice(5)]; return b ? b.name : ''; }
@@ -1553,6 +1557,7 @@
     return '<div class="costbox">' +
       '<div><span>' + esc(t('Sheets')) + '</span><b>' + esc(c.sheets + ' × ' + cur(c.sheet_price) + ' = ' + cur(c.sheets_cost)) + '</b></div>' +
       '<div><span>' + esc(t('Edge tape')) + '</span><b>' + esc(tape) + '</b></div>' +
+      (c.apply_cost ? '<div><span>' + esc(mt('Edge banding work')) + '</span><b>' + esc(fmt(c.tape_m) + ' m × ' + cur(c.apply_m) + ' = ' + cur(c.apply_cost) + ' (' + mt('in the edge tape total') + ')') + '</b></div>' : '') +
       '<div class="tot"><span>' + esc(t('Total')) + '</span><b>' + esc(cur(c.total)) + '</b></div>' +
       (M ? '<button type="button" class="linkbtn" data-price="' + esc(g.key) + '" data-matedit="1">' + esc(M.t(c.listed ? 'Edit material' : 'Add to the material list')) + ' ›</button>' : '') +
       '</div>';

@@ -32,7 +32,16 @@
     'Same name as another material': 'Mismo nombre que otro material', 'no price': 'sin precio', 'Edit material': 'Editar material',
     'roll': 'rollo', 'rolls': 'rollos', 'uses': 'usa', 'left': 'sobran', 'no roll length set': 'sin largo de rollo',
     'Add to the material list': 'Agregar a la lista de materiales',
-    'Used in modules by name. Change it here and in the modules together.': 'Los módulos lo usan por el nombre. Si lo cambia aquí, cámbielo también en los módulos.'
+    'Used in modules by name. Change it here and in the modules together.': 'Los módulos lo usan por el nombre. Si lo cambia aquí, cámbielo también en los módulos.',
+    'PanelPro catalog': 'Catálogo PanelPro', 'Search': 'Buscar', 'All': 'Todos', 'Other': 'Otro', 'Add': 'Agregar', 'In your list': 'En su lista',
+    'Add all shown': 'Agregar todos los mostrados', 'materials': 'materiales', 'Added to your list': 'Agregado a su lista', 'Added: ': 'Agregados: ',
+    'The boards of the PanelPro catalog (EGGER, BERNECK, ARKOPA, CLEAF, ONESKIN). Modules can use them by name even without adding them; add them to your list to set your prices.':
+      'Los tableros del catálogo PanelPro (EGGER, BERNECK, ARKOPA, CLEAF, ONESKIN). Los módulos los pueden usar por el nombre aunque no los agregue; agréguelos a su lista para poner sus precios.',
+    'Melamine / MDP': 'Melamina / MDP', 'MDF': 'MDF', 'Plywood / wood': 'Triplay / Madera', 'Board type': 'Tipo de tablero',
+    'Notes': 'Notas', 'Has grain': 'Tiene veta (grano)', 'Wood patterns: parts follow the grain of the sheet.': 'Materiales con patrón de madera: las piezas siguen la veta del tablero.',
+    'Default material': 'Material por defecto', 'New modules start with it (carcass).': 'Los módulos nuevos empiezan con él (caja).',
+    'Edge banding work per metre': 'Aplicación de canto por metro', 'Edge banding work': 'Aplicación de canto', 'in the edge tape total': 'incluido en el canto',
+    'Could not load the catalog.': 'No se pudo cargar el catálogo.', 'No match.': 'Sin resultados.'
   };
   function t(s) { return A.lang() === 'es' && ES[s] ? ES[s] : A.t(s); }
   var esc = A.esc, fmt = A.fmt;
@@ -93,6 +102,27 @@
     }).catch(function () {});
   }
 
+  // ------------------------------------------------------------------ PanelPro catalog (web/catalog, tools/catalog_build.py)
+  // Shared boards, no prices: textures and sheet sizes for any module that names them, and the
+  // starting point of everyone's own list.
+  var CAT = null, catByKey = {}, catP = null;
+  function loadCatalog() {
+    if (catP) { return catP; }
+    catP = fetch('catalog/materials.json').then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.json(); }).then(function (d) {
+      CAT = (d && d.materials) || [];
+      catByKey = {};
+      CAT.forEach(function (c) { catByKey[keyOf(c.material)] = c; });
+      stamp++; fillDatalist();
+      return CAT;
+    }, function (e) { catP = null; CAT = CAT || []; throw e; });
+    return catP;
+  }
+  function catFind(name) { return catByKey[keyOf(name)] || null; }
+  function catTex(c) {   // the image covers 1200 mm along the grain (as the plugin's library)
+    var px = c.tex_px || [1000, 1000];
+    return { w: 1200, h: Math.round(1200 * px[1] / px[0]) };
+  }
+
   // ------------------------------------------------------------------ lookups (used by the module screens)
   function keyOf(n) { return String(n || '').trim().toLowerCase().replace(/\s+/g, ' '); }
   function find(name) {
@@ -105,16 +135,25 @@
   // 3D colour / texture for a material name, or null when it isn't in the list.
   function info(name) {
     var e = find(name);
-    if (!e) { return null; }
+    if (!e) {
+      var c = catFind(name);
+      if (!c) { return null; }
+      var tx = catTex(c);
+      return c.tex ? { color: '#ffffff', alpha: 1, thumb: c.tex, tex_w: tx.w, tex_h: tx.h } : { color: c.color || '#d8d2c4', alpha: 1 };
+    }
     var url = TEX[e.id];
     if (url) { return { color: '#ffffff', alpha: 1, thumb: url, tex_w: e.tex_w || e.sheet_l || 2440, tex_h: e.tex_h || e.sheet_w || 1220 }; }
     return { color: e.color || '#d8d2c4', alpha: 1 };
   }
   // What the engine needs (no images).
   function engineList() {
-    return data.list.map(function (e) {
+    var out = data.list.map(function (e) {
       return { name: e.name, sheet_l: e.sheet_l || 0, sheet_w: e.sheet_w || 0, thick: e.thick || [] };
     });
+    (CAT || []).forEach(function (c) {   // catalog boards not in the list: their sheet size (no prices)
+      if (!find(c.material)) { out.push({ name: c.material, sheet_l: c.sheet_l, sheet_w: c.sheet_w, thick: c.thick.map(function (t) { return { t: t }; }) }); }
+    });
+    return out;
   }
   function costDefaults(prices) { return { roll_price: data.tape.roll_price || 0, roll_m: data.tape.roll_m || 0, prices: prices || {} }; }
   // Price per sheet typed on the cutting plan: kept in the list (adds the material / thickness).
@@ -145,12 +184,15 @@
   function fillDatalist() {
     var dl = document.getElementById('ppMatList');
     if (!dl) { dl = document.createElement('datalist'); dl.id = 'ppMatList'; document.body.appendChild(dl); }
-    dl.innerHTML = data.list.map(function (e) { return '<option value="' + esc(e.name) + '">' + esc(e.brand || '') + '</option>'; }).join('');
+    var opts = data.list.map(function (e) { return '<option value="' + esc(e.name) + '">' + esc(e.brand || '') + '</option>'; });
+    (CAT || []).forEach(function (c) { if (!find(c.material)) { opts.push('<option value="' + esc(c.material) + '">' + esc(t('PanelPro catalog')) + '</option>'); } });
+    dl.innerHTML = opts.join('');
   }
   // CSS background for a swatch (texture image or colour).
   function swatchCss(name, fallback) {
     var e = find(name);
     if (e && TEX[e.id]) { return 'background:#ccc url(' + TEX[e.id] + ') center/cover'; }
+    if (!e) { var c = catFind(name); if (c) { return c.tex ? 'background:#ccc url(' + c.tex + ') center/cover' : 'background:' + (c.color || fallback || '#ddd'); } }
     return 'background:' + ((e && e.color) || fallback || '#ddd');
   }
 
@@ -237,18 +279,79 @@
     if (!readOnly()) { return; }
     var page = document.querySelector('.page');
     page.insertAdjacentHTML('afterbegin', '<p class="warn-line">' + esc(cloud().t('Only admins change company materials and settings.')) + '</p>');
-    page.querySelectorAll('.valbtn, .xbtn, input, #mImg, #mImgDel, #mAddT, #mDel, #mShare').forEach(function (el) { el.disabled = true; });
+    page.querySelectorAll('.valbtn, .xbtn, input, textarea, select, #mImg, #mImgDel, #mAddT, #mDel, #mShare').forEach(function (el) { el.disabled = true; });
     var nm = document.getElementById('newMat'); if (nm) { nm.disabled = true; }
   }
   function tabs(on) {
-    if (!cloud()) { return ''; }
-    return '<div class="seg mat-tabs"><button type="button" data-mt="mine" class="' + (on === 'mine' ? 'on' : '') + '">' + esc(cloud().t('My list')) + '</button>' +
-      '<button type="button" data-mt="gal" class="' + (on === 'gal' ? 'on' : '') + '">' + esc(cloud().t('Public gallery')) + '</button></div>';
+    return '<div class="seg mat-tabs"><button type="button" data-mt="mine" class="' + (on === 'mine' ? 'on' : '') + '">' + esc(cloud() ? cloud().t('My list') : t('Material list')) + '</button>' +
+      '<button type="button" data-mt="cat" class="' + (on === 'cat' ? 'on' : '') + '">' + esc(t('PanelPro catalog')) + '</button>' +
+      (cloud() ? '<button type="button" data-mt="gal" class="' + (on === 'gal' ? 'on' : '') + '">' + esc(cloud().t('Public gallery')) + '</button>' : '') + '</div>';
   }
   function wireTabs() {
     document.querySelectorAll('[data-mt]').forEach(function (b) {
-      b.onclick = function () { if (b.getAttribute('data-mt') === 'gal') { renderGallery(); } else { renderList(); } };
+      b.onclick = function () { var k = b.getAttribute('data-mt'); A.go('#/materials' + (k === 'gal' ? '/gallery' : k === 'cat' ? '/catalog' : ''), true); };
     });
+  }
+
+  // ------------------------------------------------------------------ the PanelPro catalog screen
+  var catQ = { q: '', brand: '', type: '' };
+  function addFromCatalog(c) {
+    var e = addEntry(c.material), tx = catTex(c);
+    Object.assign(e, { brand: c.brand || '', type: c.type || 'melamine', color: c.color || e.color, sheet_l: c.sheet_l, sheet_w: c.sheet_w,
+                       tex_w: c.tex ? tx.w : 0, tex_h: c.tex ? tx.h : 0, grain: c.grain !== false, notes: c.notes || '', catalog: c.id,
+                       thick: c.thick.map(function (x) { return { t: Number(x), price: 0, roll_price: 0, roll_m: 0 }; }) });
+    return (c.tex ? texPut(e.id, c.tex) : Promise.resolve()).catch(function () {}).then(function () { return e; });
+  }
+  function catShown() {
+    var q = keyOf(catQ.q);
+    return (CAT || []).filter(function (c) {
+      if (catQ.brand && (c.brand || 'Other') !== catQ.brand) { return false; }
+      if (catQ.type && c.type !== catQ.type) { return false; }
+      return !q || keyOf(c.material + ' ' + (c.notes || '') + ' ' + t(TYPE_L[c.type] || '')).indexOf(q) >= 0;
+    });
+  }
+  var TYPE_L = { melamine: 'Melamine / MDP', mdf: 'MDF', plywood: 'Plywood / wood' };
+  function renderCatalog() {
+    A.show('<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(A.t('Back')) + '">‹</button><h1>' + esc(t('Materials')) + '</h1></header>' +
+      '<div class="page page-wide">' + tabs('cat') + '<p class="meta-line">' + esc(t('The boards of the PanelPro catalog (EGGER, BERNECK, ARKOPA, CLEAF, ONESKIN). Modules can use them by name even without adding them; add them to your list to set your prices.')) + '</p>' +
+      '<div class="box cat-filters"><input class="text-in" id="catQ" type="search" placeholder="' + esc(t('Search')) + '" value="' + esc(catQ.q) + '"><div id="catF"></div></div>' +
+      '<div class="cat-head"><span id="catN" class="meta-line"></span><button type="button" class="btn small" id="catAll">' + esc(t('Add all shown')) + '</button></div>' +
+      '<div class="cat-grid" id="catGrid"><p class="meta-line">…</p></div></div>');
+    document.getElementById('back').onclick = function () { history.back(); };
+    wireTabs();
+    loadCatalog().then(draw, function () { document.getElementById('catGrid').innerHTML = '<p class="warn-line">' + esc(t('Could not load the catalog.')) + '</p>'; });
+    var tmr = null;
+    document.getElementById('catQ').oninput = function () { var v = this.value; clearTimeout(tmr); tmr = setTimeout(function () { catQ.q = v; draw(); }, 200); };
+    function chips(key, list) {
+      return '<div class="seg cat-seg">' + [['', t('All')]].concat(list).map(function (o) {
+        return '<button type="button" data-cf="' + key + '" data-v="' + esc(o[0]) + '" class="' + (catQ[key] === o[0] ? 'on' : '') + '">' + esc(o[1]) + '</button>';
+      }).join('') + '</div>';
+    }
+    function draw() {
+      var brands = [];
+      CAT.forEach(function (c) { var b = c.brand || 'Other'; if (brands.indexOf(b) < 0) { brands.push(b); } });
+      document.getElementById('catF').innerHTML = chips('brand', brands.map(function (b) { return [b, b === 'Other' ? t('Other') : b]; })) +
+        chips('type', Object.keys(TYPE_L).filter(function (k) { return CAT.some(function (c) { return c.type === k; }); }).map(function (k) { return [k, t(TYPE_L[k])]; }));
+      document.querySelectorAll('[data-cf]').forEach(function (b) { b.onclick = function () { catQ[b.getAttribute('data-cf')] = b.getAttribute('data-v'); draw(); }; });
+      var list = catShown(), ro = readOnly();
+      document.getElementById('catN').textContent = list.length + ' ' + t('materials');
+      document.getElementById('catAll').disabled = ro || !list.some(function (c) { return !find(c.material); });
+      document.getElementById('catGrid').innerHTML = list.length ? list.map(function (c) {
+        var have = !!find(c.material);
+        return '<div class="cat-card"><i class="cat-img" style="' + esc(c.tex ? 'background:#ccc url(' + c.tex + ') center/cover' : 'background:' + c.color) + '"></i>' +
+          '<div class="cat-txt"><small>' + esc(c.brand || t('Other')) + '</small><b>' + esc(c.name) + '</b>' +
+          '<span>' + esc(len(c.sheet_l) + ' × ' + len(c.sheet_w) + ' · ' + c.thick.map(function (x) { return fmt(x) + ' mm'; }).join(', ')) + '</span>' +
+          '<span>' + esc(t(TYPE_L[c.type] || '')) + '</span></div>' +
+          (have ? '<span class="cat-have">✓ ' + esc(t('In your list')) + '</span>' : ro ? '' : '<button type="button" class="btn small" data-cadd="' + esc(c.id) + '">' + esc(t('Add')) + '</button>') + '</div>';
+      }).join('') : '<p class="meta-line">' + esc(t('No match.')) + '</p>';
+      document.querySelectorAll('[data-cadd]').forEach(function (b) {
+        b.onclick = function () { var c = CAT.find(function (x) { return x.id === b.getAttribute('data-cadd'); }); addFromCatalog(c).then(function () { saveList(); A.toast(t('Added to your list')); draw(); }); };
+      });
+      document.getElementById('catAll').onclick = function () {
+        var todo = catShown().filter(function (c) { return !find(c.material); });
+        Promise.all(todo.map(addFromCatalog)).then(function () { saveList(); A.toast(t('Added: ') + todo.length); draw(); });
+      };
+    }
   }
   function renderGallery() {
     var G = cloud();
@@ -297,6 +400,9 @@
           (dup ? '<p class="warn-line">' + esc(t('Same name as another material')) + '</p>' : '') +
           '<p class="meta-line">' + esc(t('Used in modules by name. Change it here and in the modules together.')) + '</p></div>' +
         '<div class="frow-f stack"><span class="flbl">' + esc(t('Brand')) + '</span><input class="text-in" id="mBrand" autocomplete="off" value="' + esc(e.brand || '') + '" placeholder="EGGER"></div>' +
+        '<div class="frow-f stack"><span class="flbl">' + esc(t('Board type')) + '</span><select class="sel" id="mType">' + Object.keys(TYPE_L).map(function (k) {
+          return '<option value="' + k + '"' + ((e.type || 'melamine') === k ? ' selected' : '') + '>' + esc(t(TYPE_L[k])) + '</option>';
+        }).join('') + '</select></div>' +
       '</div>' +
       '<div class="box fields"><h3 class="grp">' + esc(t('Texture')) + '</h3>' +
         '<div class="mat-tex" style="' + esc(swatchCss(e.name)) + '"></div>' +
@@ -318,9 +424,17 @@
               '<button type="button" class="xbtn" data-thdel="' + i + '" aria-label="' + esc(A.t('Delete')) + '">✕</button></div>' +
             '<div class="frow-f"><span class="flbl">' + esc(t('Price per sheet')) + '</span>' + vb('data-th', i + ':price', money(x.price)) + '</div>' +
             '<div class="frow-f"><span class="flbl">' + esc(t('Edge tape roll price')) + '</span>' + vb('data-th', i + ':roll_price', money(x.roll_price)) + '</div>' +
-            '<div class="frow-f"><span class="flbl">' + esc(t('Roll length')) + '</span>' + vb('data-th', i + ':roll_m', fmt(x.roll_m || 0) + ' m') + '</div></div>';
+            '<div class="frow-f"><span class="flbl">' + esc(t('Roll length')) + '</span>' + vb('data-th', i + ':roll_m', fmt(x.roll_m || 0) + ' m') + '</div>' +
+            '<div class="frow-f"><span class="flbl">' + esc(t('Edge banding work per metre')) + '</span>' + vb('data-th', i + ':apply_m', money(x.apply_m)) + '</div></div>';
         }).join('') +
         '<button type="button" class="btn small" id="mAddT" style="width:100%;margin-top:8px">' + esc(t('+ Thickness')) + '</button>' +
+      '</div>' +
+      '<div class="box fields">' +
+        '<div class="frow-f"><span class="flbl">' + esc(t('Has grain')) + '<small class="meta-line" style="display:block">' + esc(t('Wood patterns: parts follow the grain of the sheet.')) + '</small></span>' +
+          '<label class="switch"><input type="checkbox" id="mGrain"' + (e.grain !== false ? ' checked' : '') + '><span></span></label></div>' +
+        '<div class="frow-f"><span class="flbl">' + esc(t('Default material')) + '<small class="meta-line" style="display:block">' + esc(t('New modules start with it (carcass).')) + '</small></span>' +
+          '<label class="switch"><input type="checkbox" id="mDef"' + (e.default ? ' checked' : '') + '><span></span></label></div>' +
+        '<div class="frow-f stack"><span class="flbl">' + esc(t('Notes')) + '</span><textarea class="text-in" id="mNotes" rows="3">' + esc(e.notes || '') + '</textarea></div>' +
       '</div>' +
       (cloud() ? '<button type="button" class="btn small" id="mShare" style="width:100%;margin-top:8px">' + esc(cloud().t(e.gallery_id ? 'Remove from public gallery' : 'Share to public gallery')) + '</button>' +
                  '<p class="meta-line">' + esc(cloud().t('Prices stay private: only the texture, sheet size and thicknesses are shared.')) + '</p>' : '') +
@@ -331,6 +445,14 @@
     document.getElementById('back').onclick = function () { history.back(); };
     document.getElementById('mName').onchange = function () { e.name = this.value.trim(); touch(); renderEdit(e); };
     document.getElementById('mBrand').onchange = function () { e.brand = this.value.trim(); touch(); };
+    document.getElementById('mType').onchange = function () { e.type = this.value; touch(); };
+    document.getElementById('mNotes').onchange = function () { e.notes = this.value; touch(); };
+    document.getElementById('mGrain').onchange = function () { e.grain = this.checked; touch(); };
+    document.getElementById('mDef').onchange = function () {
+      var on = this.checked;
+      data.list.forEach(function (x) { if (x !== e && x.default) { x.default = false; x.updated = new Date().toISOString(); } });
+      e.default = on; touch();
+    };
     var col = document.getElementById('mColor');
     if (col) { col.oninput = function () { e.color = col.value; document.querySelector('.mat-tex').style.background = col.value; }; col.onchange = function () { touch(); }; }
     document.getElementById('mImg').onclick = function () {
@@ -403,6 +525,9 @@
   }
   // Same name → replaced; new names → added.
   function importList(text) {
+    loadCatalog().catch(function () {}).then(function () { importNow(text); });
+  }
+  function importNow(text) {
     var d;
     try { d = JSON.parse(text); } catch (err) { d = null; }
     if (!d || d[FORMAT] !== 1 || !Array.isArray(d.materials)) { A.toast(t('This file is not a PanelPro materials file.')); return; }
@@ -410,10 +535,13 @@
     d.materials.forEach(function (m) {
       if (!m || !m.name) { return; }
       var old = find(m.name), e = old || { id: A.uid() };
-      ['name', 'brand', 'color', 'sheet_l', 'sheet_w', 'tex_w', 'tex_h', 'thick', 'updated'].forEach(function (k) { if (m[k] != null) { e[k] = m[k]; } });
+      ['name', 'brand', 'color', 'sheet_l', 'sheet_w', 'tex_w', 'tex_h', 'thick', 'updated', 'type', 'notes', 'grain', 'default', 'catalog'].forEach(function (k) { if (m[k] != null) { e[k] = m[k]; } });
       e.thick = Array.isArray(e.thick) ? e.thick : [];
       if (!old) { data.list.push(e); }
-      if (typeof m.texture === 'string' && m.texture.indexOf('data:image/') === 0) { jobs.push(texPut(e.id, m.texture)); }
+      // a catalog material: its image comes from the catalog (sized like the catalog's)
+      var cm = m.catalog && (CAT || []).find(function (c) { return c.id === m.catalog; });
+      if (cm && !(e.tex_w > 0)) { var cx = catTex(cm); e.tex_w = cx.w; e.tex_h = cx.h; }
+      if (typeof m.texture === 'string' && (m.texture.indexOf('data:image/') === 0 || /^catalog\/tex\//.test(m.texture))) { jobs.push(texPut(e.id, m.texture)); }
       n++;
     });
     if (d.tape && !(data.tape.roll_m > 0)) { data.tape = d.tape; }
@@ -438,9 +566,11 @@
   }
   window.PPMaterials = {
     init: function () {
+      loadCatalog().catch(function () {});
       if (cloud()) { fillDatalist(); return Promise.resolve(); }
       loadList(); fillDatalist(); return texLoadAll();
     },
+    defaultMaterial: function () { var e = data.list.find(function (x) { return x.default; }); return e ? e.name : null; },
     localData: localData,
     cloudReset: function () { data = { list: [], tape: { roll_price: 0, roll_m: 0 } }; TEX = {}; stamp++; fillDatalist(); },
     cloudList: function (list) { data.list = list.sort(function (a, b) { return a.name.localeCompare(b.name); }); stamp++; fillDatalist(); },
@@ -449,6 +579,7 @@
     tape: function () { return data.tape; },
     route: function (p) {
       if (p[1] === 'gallery' && cloud()) { return renderGallery(); }
+      if (p[1] === 'catalog') { return renderCatalog(); }
       if (p[1]) { var e = byId(p[1]); if (e) { return renderEdit(e); } }
       return renderList();
     },

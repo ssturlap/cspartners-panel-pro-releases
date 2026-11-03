@@ -762,3 +762,20 @@ body.desk .compose { height: 100%; }
 .splitrow.on .chip[aria-pressed="true"] { background: var(--accent, #b4532a); border-color: var(--accent, #b4532a); color: #fff; }
 .splitrow .sel { flex: 1; min-width: 0; }
 .sepbox { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px dashed var(--accent, #b4532a); margin-top: 10px; }
+/* materials: PanelPro catalog */
+.cat-filters { display: flex; flex-direction: column; gap: 8px; padding: 12px; }
+.cat-seg { flex-wrap: wrap; gap: 6px; }
+.cat-seg button { min-height: 32px; padding: 0 12px; font-size: 13px; }
+.cat-seg button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.cat-head { display: flex; align-items: center; justify-content: space-between; margin: 10px 2px 8px; }
+.cat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (min-width: 640px) { .cat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .cat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1200px) { .cat-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.cat-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+.cat-img { display: block; aspect-ratio: 4 / 3; }
+.cat-txt { padding: 8px 10px 4px; display: flex; flex-direction: column; gap: 2px; font-size: 12.5px; color: var(--muted); }
+.cat-txt b { color: var(--ink); font-size: 14px; }
+.cat-txt small { text-transform: uppercase; letter-spacing: .4px; font-size: 10.5px; }
+.cat-card .btn, .cat-have { margin: 6px 10px 10px; }
+.cat-have { font-size: 12.5px; color: #2e7d32; font-weight: 600; }
