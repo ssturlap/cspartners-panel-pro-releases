@@ -32,10 +32,14 @@
     sideDoor: function (p) { return anyRow(p, function (r) { return frontOf(r) === 'door_pair' || (frontOf(r) === 'door' && (r.hinge || 'L') !== 'T' && r.hinge !== 'B'); }); },
     lift: function (p) { return anyRow(p, function (r) { return frontOf(r) === 'door' && r.hinge === 'T'; }); },
     flap: function (p) { return anyRow(p, function (r) { return frontOf(r) === 'door' && r.hinge === 'B'; }); },
-    drawer: function (p) { return anyRow(p, function (r) { return frontOf(r) === 'drawer'; }); },
+    drawer: function (p) { return anyRow(p, function (r) { return frontOf(r) === 'drawer' || (r.interior === 'inner_drawers' || r.interior === 'shoe_pullout'); }); },   // runners also for inner drawers / shoe pull-outs
     drawerFace: function (p) { return anyRow(p, function (r) { return frontOf(r) === 'drawer' || frontOf(r) === 'false_front'; }); },
     front: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'none' && frontOf(r) !== ''; }); },
     shelves: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'drawer' && r.interior === 'shelves' && (r.shelves || 0) > 0; }); },
+    inner: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'drawer' && ['inner_drawers', 'shoe_pullout', 'shoe_rack'].indexOf(r.interior) >= 0; }); },
+    innerDr: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'drawer' && r.interior === 'inner_drawers'; }); },
+    shoePo: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'drawer' && r.interior === 'shoe_pullout'; }); },
+    shoeRack: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'drawer' && r.interior === 'shoe_rack'; }); },
     split: function (p) {
       if (p.layout_mode === 'nooks') { var n = p.nooks; return !!(n && n.split === 'h' && (n.parts || []).slice(0, -1).some(function (q) { return q.box_split; })); }
       return (p.columns || []).some(function (c) { return (c.rows || []).slice(0, -1).some(function (r) { return r.split; }); });
@@ -155,6 +159,10 @@
       ['#', 'From your layout'],
       ['row_divider', 'Between rows', 'sel', [['none', 'Nothing (fronts only)'], ['fixed_shelf', 'Fixed shelf']], ctx(HAS.rows2)],
       ['shelf_setback', 'Adjustable shelf setback', 'len', ctx(HAS.shelves)],
+      ['#', 'Behind the doors', ctx(HAS.inner)],
+      ['inner_pull', 'Inner drawer pull', 'sel', [['finger', 'Finger cut-out'], ['low', 'Lower front (the gap is the pull)'], ['none', 'None']], ctx(HAS.innerDr)],
+      ['shoe_lip_h', 'Shoe pull-out lip height', 'len', ctx(HAS.shoePo)],
+      ['shoe_incline', 'Shoe rack incline', 'deg', ctx(HAS.shoeRack)],
       ['split_top', 'Top of the lower boxes (split module)', 'sel', [['stretchers', 'Stretchers'], ['full_panel', 'Full panel']], ctx(HAS.split)],
       ['rod_drop', 'Hanging rail below top', 'len', ctx(HAS.hang)],
       ['hangers', 'Clothes hangers (look only)', 'sel', [['normal', 'Normal'], ['half', 'A few'], ['full', 'Full rail'], ['off', 'None']], ctx(HAS.hang)],
@@ -261,6 +269,8 @@
       ['mat_front', 'Fronts', 'mat', function (p) { return FRONT(p) || p.end_l || p.end_r || p.end_top || p.end_bottom || p.end_back; }],
       ['mat_frame', 'Face frame', 'mat', function (p) { return F_.showAll || p.construction === 'face_frame'; }],
       ['mat_drawer', 'Drawer boxes', 'mat', DRAWER],
+      ['mat_inner_same', 'Inner drawer fronts and shoe shelves: same as carcass', 'bool', ctx(HAS.inner)],
+      ['mat_inner', 'Inner drawer fronts and shoe shelves', 'mat', ctx(HAS.inner, function (p) { return p.mat_inner_same === false; })],
       ['mat_top', 'Decorative top', 'mat', function (p) { return F_.showAll || !!p.add_top; }],
       ['mat_kick', 'Toe kick / plinth', 'mat', function (p) { return p.kick_type === 'integral' || p.kick_type === 'plinth'; }],
       ['mat_skin', 'Decorative side panels', 'mat', function (p) { return F_.showAll || SKINB(p); }],
@@ -282,10 +292,12 @@
     bxCustom: function (p) { return p.drawer_system === 'box_system' && p.bx_custom; }
   };
 
-  var FRONTS = [['door', 'Door'], ['door_pair', 'Door pair'], ['drawer', 'Drawer'], ['false_front', 'False front'], ['none', 'Open']];
+  var FRONTS = [['door', 'Door'], ['door_pair', 'Door pair'], ['drawer', 'Drawer'], ['false_front', 'False front'], ['none', 'Open'], ['same', '↑ Same door as above']];
   // rows saved as glass in 0.3.21–0.3.23 still show (glass is now a Front style)
   var OLD_FRONTS = [['glass_door', 'Glass door'], ['glass_door_pair', 'Glass door pair']];
-  var INTERIORS = [['none', '—'], ['shelves', 'Shelves'], ['hang', 'Hang rail']];
+  var INTERIORS = [['none', '—'], ['shelves', 'Shelves'], ['hang', 'Hang rail'], ['inner_drawers', 'Inner drawers'], ['shoe_pullout', 'Shoe pull-outs'], ['shoe_rack', 'Shoe rack (inclined)']];
+  // interiors whose count is the row's Qty, and the count they start with
+  var COUNTED = { shelves: 1, inner_drawers: 3, shoe_pullout: 2, shoe_rack: 3 };
   var HINGES = [['L', 'L'], ['R', 'R'], ['T', 'Top'], ['B', 'Bot']];
 
 
@@ -335,7 +347,7 @@
 
   window.PPFields = {
     SECTIONS: SECTIONS, NAMED_COND: NAMED_COND, cond: cond, YES: YES, SKIN: SKIN, DECO: DECO, FRIDGE: FRIDGE, PANEL: PANEL,
-    FRONTS: FRONTS, OLD_FRONTS: OLD_FRONTS, INTERIORS: INTERIORS, HINGES: HINGES,
+    FRONTS: FRONTS, OLD_FRONTS: OLD_FRONTS, INTERIORS: INTERIORS, HINGES: HINGES, COUNTED: COUNTED,
     PICKS: PICKS, MODE_KEYS: MODE_KEYS, tMult: tMult, BOXSYS: BOXSYS, applyBox: applyBox,
     innerExtra: innerExtra, skinT: skinT, HAS: HAS, ctx: ctx, cardSvg: cardSvg,
     // where a setting's show-condition sits: after the choices for 'sel' and 'cards'

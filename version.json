@@ -1,23 +1,21 @@
 {
-  "version": "0.3.35",
+  "version": "0.3.36",
   "date": "2026-11-03",
-  "title": "Split module: stacked boxes in one module",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.35.rbz",
+  "title": "Full-height doors with drawers and shoe shelves inside; cut list in its own window",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.36.rbz",
   "notes": [
-    "Distribution: tick “Split” on a row and the module is cut below it into separate boxes stacked on each other, each with its own sides, bottom and back.…",
-    "At each split the lower box’s top is stretchers (the box above sits on them, its bottom covers them — no double panel) or a full panel: set it for the whole…",
-    "Cut list, Excel and labels say which box each piece belongs to: “Side L (box 2)”.",
-    "“Separate into modules” turns each box into a module of its own, in the same place and with the same settings.",
-    "With several columns, a split needs every column’s rows to end at the same height (otherwise it is left out with a warning). Not for corner, face-frame,…",
-    "Selects with no saved value (e.g. Clothes hangers) now show their default instead of an empty box."
+    "Rows: new front “↑ Same door as above” joins a row to the door above — one tall door (or pair) over several rows, each row with its own inside. Hinges are…",
+    "New insides for a row (behind the doors): Inner drawers (3 mm behind the closed door; finger cut-out, lowered front as the pull, or none), Shoe pull-outs…",
+    "Inner drawers and pull-outs get a spacer panel on each hinged side so the slides clear the hinges (in the cut list). Their fronts and the shoe shelves are…",
+    "New preset “Closet — Tower with full doors”: door pair top to bottom over a hanging rail, shelves, 3 inner drawers and 2 shoe pull-outs.",
+    "The cut list and the sheet optimizer open in their own windows (toolbar, palette, menus or the ☰ Cut list button in the Configurator). They remember their…"
   ],
-  "title_es": "Dividir módulo: cajas apiladas en un módulo",
+  "title_es": "Puertas completas con gavetas y zapateras por dentro; lista de corte en su propia ventana",
   "notes_es": [
-    "Distribución: marque “Dividir” en una fila y el módulo se corta debajo de ella en cajas separadas apiladas, cada una con sus laterales, piso y respaldo.…",
-    "En cada división el techo de la caja de abajo es de travesaños (la caja de arriba se apoya en ellos y su piso los tapa — sin doble tablero) o un tablero…",
-    "La lista de corte, el Excel y los nombres dicen a qué caja pertenece cada pieza: “Lateral Izq. (caja 2)”.",
-    "“Separar en módulos” convierte cada caja en un módulo propio, en el mismo lugar y con los mismos ajustes.",
-    "Con varias columnas, una división necesita que las filas de todas las columnas terminen a la misma altura (si no, se omite con un aviso). No disponible en…",
-    "Las listas sin valor guardado (p. ej. Ganchos de ropa) ahora muestran su valor por defecto en vez de quedar vacías."
+    "Filas: nuevo frente “↑ Misma puerta que arriba” une una fila a la puerta de arriba — una puerta alta (o par) sobre varias filas, cada fila con su propio…",
+    "Nuevos interiores para una fila (detrás de las puertas): Gavetas interiores (3 mm detrás de la puerta cerrada; uñero, frente más bajo como tirador, o…",
+    "Las gavetas interiores y zapateras extraíbles llevan un suplemento en cada lado con bisagras para que las correderas pasen las bisagras (en la lista de…",
+    "Nuevo preset “Clóset — Torre con puertas completas”: par de puertas de arriba abajo sobre tubo de colgar, entrepaños, 3 gavetas interiores y 2 zapateras…",
+    "La lista de corte y el optimizador abren en sus propias ventanas (barra, paleta, menús o el botón ☰ Lista de corte del Configurador). Recuerdan su tamaño y…"
   ]
 }

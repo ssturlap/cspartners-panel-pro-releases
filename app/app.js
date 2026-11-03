@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.35';
-  var BUILD = '9801b41771';
+  var VERSION = '0.3.36';
+  var BUILD = '568235a5ff';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -743,7 +743,7 @@
     kick: [100, 150],
     elevation: [0, 1400, 1450, 1500]
   };
-  var FRONT_CHOICES = [['door', 'Door'], ['door_pair', 'Door pair'], ['drawer', 'Drawer'], ['false_front', 'False front'], ['none', 'Open']];
+  var FRONT_CHOICES = [['door', 'Door'], ['door_pair', 'Door pair'], ['drawer', 'Drawer'], ['false_front', 'False front'], ['none', 'Open'], ['same', 'Same door ↑']];
 
   // Preview options (remembered): 2D front view or 3D, and which moving parts are shown.
   var view = load('panelpro.web.view', { mode: '3d', vis: { doors: true, dfronts: true, dboxes: true } });
@@ -976,7 +976,8 @@
   var WEB_LABEL = { elevation: 'Off the floor' };               // plugin wording that means something else here
   var SAME_MAT = ['mat_back', 'mat_front', 'mat_frame', 'mat_drawer', 'mat_top', 'mat_kick', 'mat_skin', 'mat_end'];
   var HINGE_CH = [['L', 'Hinge left'], ['R', 'Hinge right'], ['T', 'Lift up'], ['B', 'Drop down']];
-  var INTERIOR_CH = [['none', 'Empty'], ['shelves', 'Shelves'], ['hang', 'Hang rail']];
+  var INTERIOR_CH = [['none', 'Empty'], ['shelves', 'Shelves'], ['hang', 'Hang rail'], ['inner_drawers', 'Inner drawers'], ['shoe_pullout', 'Shoe pull-outs'], ['shoe_rack', 'Shoe rack']];
+  var COUNT_L = { shelves: 'Shelves', inner_drawers: 'Drawers', shoe_pullout: 'Pull-outs', shoe_rack: 'Racks' };
   var editTab = load('panelpro.web.tab', 'layout');
 
   function F() { return window.PPFields; }
@@ -1075,7 +1076,7 @@
         // front = the category (one joined control); hinge and interior = its details, set apart below
         var details = (door ? '<div class="opt-l">' + esc(t('Hinge')) + '</div>' + seg('hinge:' + ci + ',' + ri, HINGE_CH, row.hinge || 'L', 'chip') : '') +
           (!drawer ? '<div class="opt-l">' + esc(t('Inside')) + '</div>' + seg('interior:' + ci + ',' + ri, INTERIOR_CH, row.interior || 'none', 'chip') : '') +
-          (!drawer && row.interior === 'shelves' ? '<div class="stepper"><span>' + esc(t('Shelves')) + '</span>' +
+          (!drawer && COUNT_L[row.interior] ? '<div class="stepper"><span>' + esc(t(COUNT_L[row.interior])) + '</span>' +
             '<button type="button" data-shelf="' + ci + ',' + ri + ',-1" aria-label="Fewer shelves">−</button><b>' + (row.shelves || 0) + '</b>' +
             '<button type="button" data-shelf="' + ci + ',' + ri + ',1" aria-label="More shelves">+</button></div>' : '');
         h += '<div class="frow"><div class="frow-head"><span class="rlbl">' + esc(t('Row')) + ' ' + (ri + 1) + '</span>' +
@@ -1258,7 +1259,7 @@
           var rr = p.columns[+mm[2]].rows[+mm[3]];
           if (mm[1] === 'front') { rr.front = v; }
           else if (mm[1] === 'hinge') { rr.hinge = v; }
-          else { rr.interior = v; if (v === 'shelves' && !rr.shelves) { rr.shelves = 1; } }
+          else { rr.interior = v; var c0 = F().COUNTED[v]; if (c0) { rr.shelves = c0; } }
           changed(false);
         }
       }
