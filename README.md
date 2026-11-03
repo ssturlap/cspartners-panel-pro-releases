@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.31** — Excel by material, edge banding defaults, drawer cross pieces  
-Download [cspartners_panel_pro_0.3.31.rbz](releases/cspartners_panel_pro_0.3.31.rbz) and install it in SketchUp:
+**Latest: 0.3.32** — Cut sizes in whole millimetres  
+Download [cspartners_panel_pro_0.3.32.rbz](releases/cspartners_panel_pro_0.3.32.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.32 | [cspartners_panel_pro_0.3.32.rbz](releases/cspartners_panel_pro_0.3.32.rbz) |
 | 0.3.31 | [cspartners_panel_pro_0.3.31.rbz](releases/cspartners_panel_pro_0.3.31.rbz) |
 | 0.3.30 | [cspartners_panel_pro_0.3.30.rbz](releases/cspartners_panel_pro_0.3.30.rbz) |
 | 0.3.29 | [cspartners_panel_pro_0.3.29.rbz](releases/cspartners_panel_pro_0.3.29.rbz) |

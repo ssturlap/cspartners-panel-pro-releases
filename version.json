@@ -1,21 +1,13 @@
 {
-  "version": "0.3.31",
+  "version": "0.3.32",
   "date": "2026-11-02",
-  "title": "Excel by material, edge banding defaults, drawer cross pieces",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.31.rbz",
+  "title": "Cut sizes in whole millimetres",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.32.rbz",
   "notes": [
-    "Excel cut list with four tabs: By module (as before), By material and By material and thickness — in these two, identical pieces (same name, size, material,…",
-    "Edge banding defaults: carcass sides and drawer sides one long and one short edge, applied (outside) backs all four edges, inside backs none, stretchers one…",
-    "Wooden drawer boxes: front and back are the same piece, “Drawer cross piece”, Qty 2 per drawer, the same height as the sides; the bottom is nested between…",
-    "Cut list, Excel and manual show the module name without the size.",
-    "Existing modules: Rebuild them to pick up the drawer and stretcher changes."
+    "Cut list, Excel, PDF and the sheet optimizer give every piece in whole millimetres (rounded to the nearest mm). The model keeps its exact sizes."
   ],
-  "title_es": "Excel por material, canto por defecto, traversales de gaveta",
+  "title_es": "Medidas de corte en milímetros enteros",
   "notes_es": [
-    "Lista de corte en Excel con cuatro pestañas: Por módulo (como antes), Por material y Por material y espesor — en estas dos, las piezas idénticas (mismo…",
-    "Canto por defecto: costados de la caja y laterales de gaveta un canto largo y uno corto, respaldo por fuera los cuatro cantos, respaldo por dentro ninguno,…",
-    "Cajas de gaveta de madera: contrafrente y trasera son la misma pieza, «Traversal de gaveta», Cant. 2 por gaveta, de la misma altura que los laterales; el…",
-    "La lista de corte, el Excel y el manual muestran el nombre del módulo sin la medida.",
-    "Módulos existentes: Reconstrúyalos para que tomen los cambios de gavetas y travesaños."
+    "La lista de corte, el Excel, el PDF y el optimizador dan cada pieza en milímetros enteros (redondeados al mm más cercano). El modelo conserva sus medidas…"
   ]
 }
