@@ -1,23 +1,21 @@
 {
-  "version": "0.3.30",
+  "version": "0.3.31",
   "date": "2026-11-02",
-  "title": "NOOKS, carcass construction cards, palette",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.30.rbz",
+  "title": "Excel by material, edge banding defaults, drawer cross pieces",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.31.rbz",
   "notes": [
-    "NOOKS (Layout tab): split the box into spaces as you like — tap a space in the drawing, split it side by side (partitions) or one above the other (fixed…",
-    "Box tab: the carcass construction is now four picture cards, with a new one — top full width (top over the sides, bottom between them). The back is two…",
-    "Back applied to the rear: down to the floor, a height of its own, and it may go past the module height.",
-    "Visible top, bottom and back (next to the visible sides): they take the visible-end material.",
-    "Quick sizes in one line (70 · 100 · 150 · box): typing your own number in the box is the custom choice.",
-    "New palette (toolbar button or Extensions menu): the buttons in a floating window, one per line with their names; it remembers its place and opens again…"
+    "Excel cut list with four tabs: By module (as before), By material and By material and thickness — in these two, identical pieces (same name, size, material,…",
+    "Edge banding defaults: carcass sides and drawer sides one long and one short edge, applied (outside) backs all four edges, inside backs none, stretchers one…",
+    "Wooden drawer boxes: front and back are the same piece, “Drawer cross piece”, Qty 2 per drawer, the same height as the sides; the bottom is nested between…",
+    "Cut list, Excel and manual show the module name without the size.",
+    "Existing modules: Rebuild them to pick up the drawer and stretcher changes."
   ],
-  "title_es": "NOOKS, tarjetas de construcción de la caja, paleta",
+  "title_es": "Excel por material, canto por defecto, traversales de gaveta",
   "notes_es": [
-    "NOOKS (pestaña Distribución): divida la caja en espacios como quiera — toque un espacio en el dibujo, divídalo lado a lado (divisiones) o uno sobre otro…",
-    "Pestaña Caja: la construcción de la caja son ahora cuatro tarjetas con dibujo, con una nueva — tapa superior a ancho completo (tapa sobre los laterales,…",
-    "Respaldo aplicado atrás: hasta el piso, altura propia, y puede pasar la altura del módulo.",
-    "Techo, piso y respaldo vistos (junto a los costados vistos): toman el material de piezas vistas.",
-    "Medidas rápidas en una línea (70 · 100 · 150 · casilla): escribir su propio número en la casilla es la opción personalizada.",
-    "Nueva paleta (botón de la barra o menú Extensiones): los botones en una ventana flotante, uno por línea con su nombre; recuerda su lugar y se abre de nuevo…"
+    "Lista de corte en Excel con cuatro pestañas: Por módulo (como antes), Por material y Por material y espesor — en estas dos, las piezas idénticas (mismo…",
+    "Canto por defecto: costados de la caja y laterales de gaveta un canto largo y uno corto, respaldo por fuera los cuatro cantos, respaldo por dentro ninguno,…",
+    "Cajas de gaveta de madera: contrafrente y trasera son la misma pieza, «Traversal de gaveta», Cant. 2 por gaveta, de la misma altura que los laterales; el…",
+    "La lista de corte, el Excel y el manual muestran el nombre del módulo sin la medida.",
+    "Módulos existentes: Reconstrúyalos para que tomen los cambios de gavetas y travesaños."
   ]
 }

@@ -32,6 +32,7 @@
     'Tap a space in the drawing to select it. ↔ adds partitions, ↕ adds fixed shelves; sizes are clear sizes between panels.':
       'Toque un espacio del dibujo para seleccionarlo. ↔ agrega divisiones, ↕ agrega entrepaños fijos; las medidas son libres entre tableros.',
     'Split the box into spaces as you like (nooks).': 'Divida la caja en espacios como quiera (nichos).',
+    'By module': 'Por módulo', 'By material': 'Por material', 'By material and thickness': 'Por material y espesor',
     'From your layout': 'Según su distribución', 'Base / toe kick': 'Base / zócalo', 'Configurator': 'Configurador', 'Show all settings': 'Mostrar todos los ajustes',
     'Off: each tab shows only the settings for what the module has (doors, drawers, shelves, a corner…). On: every setting, e.g. to set something up before adding it.':
       'Apagado: cada pestaña muestra solo los ajustes de lo que el módulo tiene (puertas, gavetas, entrepaños, una esquina…). Encendido: todos los ajustes, p. ej. para dejar algo listo antes de agregarlo.',

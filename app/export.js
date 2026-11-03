@@ -89,43 +89,64 @@
     var warn = (cut.warnings || []).concat((d.errors || []).map(function (e) { return e.code + ': ' + e.error; }));
     block(t('Warnings'), null, warn.map(function (w) { return [w]; }));
 
-    var zip = new JSZip();
+    // tabs 2 and 3: identical pieces combined (shared engine: Cutlist.grouped), a title row per group
+    function groupedRows(groups) {
+      var out = [rows1[0]], blank = function () { return { v: '', s: 5 }; };
+      (groups || []).forEach(function (g) {
+        out.push([{ v: g.title, s: 5 }].concat([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(blank)));
+        g.rows.forEach(function (r) {
+          var e = r.edges || {};
+          out.push([r.codes.join(', '), r.modules.join(', '), r.part, r.qty, num(r.L), num(r.W), num(r.T), C(e.L1), C(e.L2), C(e.W1), C(e.W2), r.mat, r.note || '']);
+        });
+        out.push([{ v: g.sub, s: 1 }]);
+        out.push([]);
+      });
+      return out;
+    }
+    var GW = [12, 30, 26, 6, 16, 11, 13, 5, 5, 5, 5, 22, 50];
+    var sheets = [
+      [t('By module'), rows1, [7, 22, 26, 6, 16, 11, 13, 5, 5, 5, 5, 22, 50], 1],
+      [t('By material'), groupedRows((cut.groups || {}).mat), GW, 1],
+      [t('By material and thickness'), groupedRows((cut.groups || {}).mat_t), GW, 1],
+      [t('Summary'), rows2, [58, 12, 10, 14, 10], 0]
+    ];
+    var zip = new JSZip(), CT = 'application/vnd.openxmlformats-officedocument.spreadsheetml';
     zip.file('[Content_Types].xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
       '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
       '<Default Extension="xml" ContentType="application/xml"/>' +
-      '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
-      '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
-      '<Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
-      '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+      '<Override PartName="/xl/workbook.xml" ContentType="' + CT + '.sheet.main+xml"/>' +
+      sheets.map(function (sh, i) { return '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="' + CT + '.worksheet+xml"/>'; }).join('') +
+      '<Override PartName="/xl/styles.xml" ContentType="' + CT + '.styles+xml"/>' +
       '</Types>');
     zip.file('_rels/.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
       '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>');
-    var name1 = xmlEsc(t('Cut list').slice(0, 31)), name2 = xmlEsc(t('Summary').slice(0, 31));
     zip.file('xl/workbook.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-      '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
-      '<sheets><sheet name="' + name1 + '" sheetId="1" r:id="rId1"/><sheet name="' + name2 + '" sheetId="2" r:id="rId2"/></sheets></workbook>');
+      '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' +
+      sheets.map(function (sh, i) { return '<sheet name="' + xmlEsc(String(sh[0]).slice(0, 31)) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>'; }).join('') +
+      '</sheets></workbook>');
     zip.file('xl/_rels/workbook.xml.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
-      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>' +
-      '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/>' +
-      '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>');
+      sheets.map(function (sh, i) { return '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>'; }).join('') +
+      '<Relationship Id="rId' + (sheets.length + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>');
     zip.file('xl/styles.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
       '<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts>' +
-      '<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>' +
-      '<fill><patternFill patternType="solid"><fgColor rgb="FFF3C623"/><bgColor indexed="64"/></patternFill></fill></fills>' +
-      '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>' +
+      '<fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>' +
+      '<fill><patternFill patternType="solid"><fgColor rgb="FFF3C623"/><bgColor indexed="64"/></patternFill></fill>' +
+      '<fill><patternFill patternType="solid"><fgColor rgb="FFE8ECEE"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+      '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>' +
+      '<border><left style="thin"><color rgb="FF7A756C"/></left><right style="thin"><color rgb="FF7A756C"/></right><top style="thin"><color rgb="FF7A756C"/></top><bottom style="thin"><color rgb="FF7A756C"/></bottom><diagonal/></border></borders>' +
       '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
-      '<cellXfs count="5"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+      '<cellXfs count="6"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
       '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>' +
-      '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/>' +
+      '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
       '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment horizontal="center"/></xf>' +
-      '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment horizontal="center"/></xf></cellXfs>' +
+      '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center"/></xf>' +
+      '<xf numFmtId="0" fontId="1" fillId="3" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs>' +
       '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>');
-    zip.file('xl/worksheets/sheet1.xml', sheetXml(rows1, [7, 22, 26, 6, 16, 11, 13, 5, 5, 5, 5, 22, 50], 1));
-    zip.file('xl/worksheets/sheet2.xml', sheetXml(rows2, [58, 12, 10, 14, 10], 0));
+    sheets.forEach(function (sh, i) { zip.file('xl/worksheets/sheet' + (i + 1) + '.xml', sheetXml(sh[1], sh[2], sh[3])); });
     return zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', compression: 'DEFLATE' });
   }
 
