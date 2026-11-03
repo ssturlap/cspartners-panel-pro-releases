@@ -1,17 +1,13 @@
 {
-  "version": "0.3.37",
+  "version": "0.3.38",
   "date": "2026-11-03",
-  "title": "Module manual: quantities and the composition",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.37.rbz",
+  "title": "Manual opens in your browser",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.38.rbz",
   "notes": [
-    "Identical modules (A, A1, A2…) share one page, “A … × 3”; the cover lists the quantity and the copies. Project hardware totals still count every module.",
-    "Installer pages before the module pages: the plan from above and a 3D view of the whole composition as placed in SketchUp, then one elevation per wall with…",
-    "PanelPro Web: projects arranged in Composition get the same plan and elevation pages."
+    "Module manual and cutting report: no save dialog any more — they open straight in your browser; print them or save as PDF from there (“Print / save PDF…”)."
   ],
-  "title_es": "Manual de módulos: cantidades y la composición",
+  "title_es": "El manual abre en su navegador",
   "notes_es": [
-    "Los módulos iguales (A, A1, A2…) comparten una página, “A … × 3”; la portada indica la cantidad y las copias. Los herrajes totales del proyecto siguen…",
-    "Páginas para el instalador antes de las de módulos: la planta vista desde arriba y una vista 3D de toda la composición tal como está en SketchUp, luego una…",
-    "PanelPro Web: los proyectos acomodados en Composición tienen las mismas páginas de planta y elevación."
+    "Manual de módulos e informe de corte: ya no piden dónde guardar — abren directo en su navegador; imprímalos o guárdelos como PDF desde ahí (“Imprimir /…"
   ]
 }
