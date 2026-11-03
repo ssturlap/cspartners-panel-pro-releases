@@ -255,7 +255,20 @@
   // parts: builder parts (already filtered for visibility); mats: name → info
   // movers: builder movers [{id, kind, pivot, axis, angle, travel}]; open state
   // (and any motion in progress) carries over when the module is rebuilt.
-  P3D.update = function (parts, mats, movers) {
+  // places (optional, the whole room): key → { x, y, z, rz (degrees) }; parts and movers with
+  // .grp = key are drawn in that module's own axes, moved and turned to its place.
+  function placeGroups(places, parent) {
+    var G = {};
+    Object.keys(places || {}).forEach(function (k) {
+      var q = places[k], g = new T.Group();
+      g.position.set(q.x || 0, q.y || 0, q.z || 0);
+      g.rotation.z = T.MathUtils.degToRad(q.rz || 0);
+      parent.add(g);
+      G[k] = g;
+    });
+    return G;
+  }
+  P3D.update = function (parts, mats, movers, places) {
     if (!renderer) { return; }
     function dispose(o) {
       o.children.slice().forEach(dispose);
@@ -263,12 +276,12 @@
     }
     root.children.slice().forEach(function (o) { root.remove(o); dispose(o); });
     bbox.makeEmpty();
-    var old = MOV;
+    var old = MOV, PG = placeGroups(places, root);
     MOV = {};
     (movers || []).forEach(function (d) {
       var g = new T.Group();
       g.userData.moverId = d.id;
-      root.add(g);
+      (PG[d.grp] || root).add(g);
       var o = old[d.id];
       MOV[d.id] = { data: d, group: g, f: o ? o.f : 0, anim: o ? o.anim : null };
       place(MOV[d.id]);
@@ -277,12 +290,13 @@
       var info = mats(p.mat);
       var m = material(p.mat || '', info);
       var g = p.shape === 'cyl' ? cylGeometry(p) : prismGeometry(p, m.userData.texmm);
-      var parent = p.mover && MOV[p.mover] ? MOV[p.mover].group : root;
+      var parent = p.mover && MOV[p.mover] ? MOV[p.mover].group : (PG[p.grp] || root);
       var mesh = new T.Mesh(g, m);
       parent.add(mesh);
       if (p.shape !== 'cyl') { parent.add(new T.LineSegments(new T.EdgesGeometry(g, 25), EDGE)); }
       g.computeBoundingBox();
-      bbox.union(g.boundingBox);
+      if (PG[p.grp]) { PG[p.grp].updateMatrixWorld(true); bbox.union(g.boundingBox.clone().applyMatrix4(PG[p.grp].matrixWorld)); }
+      else { bbox.union(g.boundingBox); }
     });
     buildDims();
     if (!hasView && !bbox.isEmpty()) { P3D.reset('iso'); hasView = true; }
@@ -431,10 +445,10 @@
     var dl = new T.DirectionalLight(0xffffff, 0.55);
     dl.position.set(-0.6, -1, 1.3);
     sc.add(dl);
-    var groups = {}, box = new T.Box3(), geos = [];
+    var groups = {}, box = new T.Box3(), geos = [], PG = placeGroups(opts.places, sc);
     (movers || []).forEach(function (d) {
       var g = new T.Group();
-      sc.add(g);
+      (PG[d.grp] || sc).add(g);
       place({ data: d, group: g, f: opts.open ? 1 : 0 });
       groups[d.id] = g;
     });
@@ -444,7 +458,7 @@
       var m = material(p.mat || '', info);
       var g = p.shape === 'cyl' ? cylGeometry(p) : prismGeometry(p, null);
       geos.push(g);
-      var parent = p.mover && groups[p.mover] ? groups[p.mover] : sc;
+      var parent = p.mover && groups[p.mover] ? groups[p.mover] : (PG[p.grp] || sc);
       parent.add(new T.Mesh(g, m));
       if (p.shape !== 'cyl') { var eg = new T.EdgesGeometry(g, 25); geos.push(eg); parent.add(new T.LineSegments(eg, EDGE)); }
     });

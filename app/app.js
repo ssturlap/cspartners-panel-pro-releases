@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.32';
-  var BUILD = '455727f08b';
+  var VERSION = '0.3.33';
+  var BUILD = 'afc5c2477d';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -1436,12 +1436,32 @@
     ov.querySelector('[data-print]').onclick = function () { try { fr.contentWindow.focus(); fr.contentWindow.print(); } catch (e) { toast(e.message); } };
   }
 
+  // A project placed in a room (from SketchUp): the walls and the plan for the installer pages.
+  function roomDoc(s) {
+    if (!s.modules.some(function (m) { return m.room; })) { return null; }
+    try {
+      var codes = codesOf(s), mods = {}, list = [], snap = { parts: [], movers: [], places: {} };
+      s.modules.forEach(function (m) {
+        if (!m.room) { return; }
+        var res = window.PPApp.buildModule(m);
+        if (!res) { return; }
+        var id = m.id, pre = id + ':';
+        mods[id] = { parts: res.parts, bb: res.bbox, code: codes[id] || '' };
+        list.push({ id: id, code: codes[id] || '', room: m.room, bbox: res.bbox });
+        snap.places[id] = { x: m.room.x, y: m.room.y, z: m.room.z, rz: m.room.rot };
+        res.parts.forEach(function (q) { var c = Object.assign({}, q, { grp: id }); if (q.mover) { c.mover = pre + q.mover; } snap.parts.push(c); });
+        (res.movers || []).forEach(function (mv) { snap.movers.push(Object.assign({}, mv, { id: pre + mv.id, grp: id })); });
+      });
+      return { layout: Engine.call('room', { mods: list, lang: lang }), mods: mods, snap: snap };
+    } catch (e) { return null; }
+  }
   function makeManual(s) {
     var d;
     try { d = projectData(s, true).manual_doc; } catch (e) { toast(e.message); return; }
     d.title = s.name + (s.client ? ' — ' + s.client : '');
     d.date = new Date().toISOString().slice(0, 10);
     d.scope = 'all';
+    d.room = roomDoc(s);
     var html;
     try { html = window.PPManual.build(d, { t: t, show: L, units: U(), esc: esc, mats: matInfo }); }
     catch (e) { toast(t('Could not make the manual: ') + e.message); return; }

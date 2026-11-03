@@ -89,7 +89,7 @@
     var warn = (cut.warnings || []).concat((d.errors || []).map(function (e) { return e.code + ': ' + e.error; }));
     block(t('Warnings'), null, warn.map(function (w) { return [w]; }));
 
-    // tabs 2 and 3: identical pieces combined (shared engine: Cutlist.grouped), a title row per group
+    // tabs 2 and 3: every piece on its own line in blocks by material (shared engine: Cutlist.grouped), a title row per block
     function groupedRows(groups) {
       var out = [rows1[0]], blank = function () { return { v: '', s: 5 }; };
       (groups || []).forEach(function (g) {

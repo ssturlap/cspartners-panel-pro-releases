@@ -167,6 +167,7 @@
     '.warn{color:#b4532a;font-size:7.6pt;margin-top:1.5mm}',
     '.foot{position:absolute;left:6mm;right:6mm;bottom:4mm;display:flex;justify-content:space-between;font-size:7pt;color:#8a8478}',
     '@media print{.foot{left:0;right:0;bottom:0}}',
+    '.room-plan{height:150mm}.room-3d{height:70mm;margin-top:2.5mm}.room-3d img{flex:1;min-height:0;width:100%;object-fit:contain}.room-wall{height:150mm}',
     '.cover{display:flex;flex-direction:column}.cover h1{font-size:28pt;margin:40mm 0 2mm}.cover .proj{font-size:16pt;color:#b4532a;margin-bottom:10mm}',
     'table{border-collapse:collapse;width:100%;font-size:8.5pt}th,td{text-align:left;padding:1.2mm 1.5mm;border-bottom:.4pt solid #e3dfd6}th{color:#6c665c;font-weight:600;font-size:7.5pt;text-transform:uppercase}',
     'td.n,th.n{text-align:right}',
@@ -178,7 +179,10 @@
   function build(d, ctx) {
     var t = ctx.t, esc = ctx.esc, u = ' ' + ctx.units;
     var mods = d.modules || [];
-    var pageNo = 0, total = 1 + mods.length + 1;
+    // installer pages (a project placed in a room, from SketchUp): the plan + one elevation per wall
+    var R = d.room && d.room.layout && d.room.layout.walls && d.room.layout.walls.length && window.PPRoom ? d.room : null;
+    var roomPages = R ? 1 + R.layout.walls.length : 0;
+    var pageNo = 0, total = 1 + roomPages + mods.length + 1;
     function foot() {
       pageNo += 1;
       return '<div class="foot"><span class="brand">CSPARTNERS <span>PANEL PRO</span></span><span>' + esc(d.title || '') + ' · ' + esc(d.date) +
@@ -195,9 +199,35 @@
       '<table><tr><th>' + t('Code') + '</th><th>' + t('Module') + '</th><th>' + t('Type') + '</th><th class="n">' + t('Size') + ' (W × H × D)</th><th class="n">' + t('Page') + '</th></tr>';
     mods.forEach(function (m, i) {
       h += '<tr><td><b>' + esc(m.code || '') + '</b></td><td>' + esc(m.name || '') + '</td><td>' + esc(m.label ? t(m.label) : '') +
-        '</td><td class="n">' + (m.error ? '—' : ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u) + '</td><td class="n">' + (i + 2) + '</td></tr>';
+        '</td><td class="n">' + (m.error ? '—' : ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u) + '</td><td class="n">' + (i + 2 + roomPages) + '</td></tr>';
     });
     h += '</table>' + foot() + '</section>';
+
+    // ---- installation: where everything goes
+    if (R) {
+      var L = R.layout, rctx = { t: t, show: ctx.show };
+      var snap = R.snap && window.P3D && window.P3D.snapshot ? window.P3D.snapshot(R.snap.parts, ctx.mats, R.snap.movers, { open: false, w: 1000, h: 620, places: R.snap.places }) : null;
+      h += '<section class="page"><div class="hd"><div><h1>' + esc(t('Room plan')) + '</h1><div class="sub">' + esc(t('Installation')) + ' · ' +
+        L.walls.length + ' ' + esc(t(L.walls.length === 1 ? 'wall' : 'walls')) + ' · ' + mods.length + ' ' + t('modules') + '</div></div></div>' +
+        '<div class="v room-plan"><h3>' + esc(t('Plan from above')) + '</h3>' + window.PPRoom.planSvg(L, rctx) + '</div>' +
+        (snap ? '<div class="v room-3d"><h3>3D</h3><img src="' + snap + '"></div>' : '') +
+        '<div class="hw">' + L.walls.map(function (w) {
+          return '<div><b>' + esc(w.name) + '</b> ' + w.mods.map(function (x) { return esc(x.code || ''); }).join(' · ') + ' — ' + ctx.show(w.length) + u + '</div>';
+        }).join('') + '</div>' + foot() + '</section>';
+      L.walls.forEach(function (w) {
+        var low = w.mods.filter(function (x) { return x.z < 900; }), high = w.mods.filter(function (x) { return x.z >= 900; });
+        var list = function (a) { return a.map(function (x) { return esc(x.code || ''); }).join(' · '); };
+        h += '<section class="page"><div class="hd"><div><h1><b>' + esc(w.name) + '</b>' + esc(t('Elevation')) + '</h1><div class="sub">' +
+          esc(t('Seen from the front, left to right')) + ' · ' + ctx.show(w.length) + u + '</div></div>' +
+          '<div class="facts">' + (low.length ? '<span>' + t('Floor') + '</span><b>' + list(low) + '</b>' : '') +
+          (high.length ? '<span>' + t('Wall cabinets') + '</span><b>' + list(high) + '</b>' : '') + '</div></div>' +
+          '<div class="v room-wall"><h3>' + esc(t('Elevation')) + '</h3>' + window.PPRoom.wallSvg(w, R.mods, rctx) + '</div>' +
+          '<table style="margin-top:3mm"><tr><th>' + t('Code') + '</th><th class="n">' + t('From the left') + '</th><th class="n">' + t('Off the floor') + '</th><th class="n">' + t('Width') + '</th></tr>' +
+          w.mods.slice().sort(function (a, b) { return a.x0 - b.x0 || a.z - b.z; }).map(function (x) {
+            return '<tr><td><b>' + esc(x.code || '') + '</b></td><td class="n">' + ctx.show(x.x0) + u + '</td><td class="n">' + ctx.show(x.z) + u + '</td><td class="n">' + ctx.show(x.x1 - x.x0) + u + '</td></tr>';
+          }).join('') + '</table>' + foot() + '</section>';
+      });
+    }
 
     // ---- one page per module
     mods.forEach(function (m) {

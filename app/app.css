@@ -748,3 +748,9 @@ body.desk .compose { height: 100%; }
 @media (max-width: 480px) { .cards { grid-template-columns: 1fr; gap: 6px; } .card { padding: 7px 10px; } }
 .seg.lmode { margin: 4px 0 6px; }
 #nkHost { padding: 10px; --nk-on: var(--ink); --nk-go: var(--tape); --nk-bg: #eef1f2; }
+/* composition: one tab per wall + the whole room (projects from SketchUp) */
+#ctabs:empty { display: none; }
+#ctabs { position: absolute; left: 0; right: 0; top: 0; z-index: 3; pointer-events: none; }
+.ctabs { flex-wrap: nowrap; overflow-x: auto; padding: 8px 10px; scrollbar-width: none; pointer-events: auto; }
+.ctabs button { box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.ctabs button { white-space: nowrap; flex: none; }

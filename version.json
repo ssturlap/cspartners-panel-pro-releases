@@ -1,13 +1,19 @@
 {
-  "version": "0.3.32",
-  "date": "2026-11-02",
-  "title": "Cut sizes in whole millimetres",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.32.rbz",
+  "version": "0.3.33",
+  "date": "2026-11-03",
+  "title": "Export to PanelPro Web with the room; every piece on its own line",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.33.rbz",
   "notes": [
-    "Cut list, Excel, PDF and the sheet optimizer give every piece in whole millimetres (rounded to the nearest mm). The model keeps its exact sizes."
+    "New menu item “Export project for PanelPro Web…”: saves every module of the model with its settings, code and exact place (position and rotation) as a…",
+    "PanelPro Web shows that project as a room: one tab per wall with its elevation (modules can be moved along the wall), and “Whole room” in 3D or as a plan…",
+    "The web module manual of such a project adds installer pages: the room plan with a 3D picture, and one elevation page per wall with each module’s distance…",
+    "Excel cut list: in the tabs By material and By material and thickness every piece stays on its own line, as in the module tab — identical pieces are no…"
   ],
-  "title_es": "Medidas de corte en milímetros enteros",
+  "title_es": "Exportar a PanelPro Web con el espacio; cada pieza en su propia línea",
   "notes_es": [
-    "La lista de corte, el Excel, el PDF y el optimizador dan cada pieza en milímetros enteros (redondeados al mm más cercano). El modelo conserva sus medidas…"
+    "Nuevo ítem del menú “Exportar proyecto para PanelPro Web…”: guarda cada módulo del modelo con sus ajustes, código y lugar exacto (posición y rotación) en un…",
+    "PanelPro Web muestra ese proyecto como un espacio: una pestaña por pared con su elevación (los módulos se pueden mover a lo largo de la pared) y “Espacio…",
+    "El manual de módulos web de ese proyecto agrega páginas para el instalador: la planta del espacio con una imagen 3D y una página de elevación por pared con…",
+    "Lista de corte en Excel: en las pestañas Por material y Por material y espesor cada pieza queda en su propia línea, como en la pestaña por módulo — las…"
   ]
 }
