@@ -755,3 +755,10 @@ body.desk .compose { height: 100%; }
 .ctabs { flex-wrap: nowrap; overflow-x: auto; padding: 8px 10px; scrollbar-width: none; pointer-events: auto; }
 .ctabs button { box-shadow: 0 1px 4px rgba(0,0,0,.12); }
 .ctabs button { white-space: nowrap; flex: none; }
+/* split module: "split below" under a row, and the separate-into-modules box */
+.splitrow { display: flex; align-items: center; gap: 8px; margin: 2px 0 8px; padding-top: 6px; }
+.splitrow .chip { font: inherit; font-size: 13px; min-height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid #dfe5e7; background: #f4f6f7; color: var(--ink); }
+.splitrow.on { border-top: 2px dashed var(--accent, #b4532a); }
+.splitrow.on .chip[aria-pressed="true"] { background: var(--accent, #b4532a); border-color: var(--accent, #b4532a); color: #fff; }
+.splitrow .sel { flex: 1; min-width: 0; }
+.sepbox { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px dashed var(--accent, #b4532a); margin-top: 10px; }

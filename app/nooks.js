@@ -146,6 +146,16 @@
         (lf.interior === 'shelves' ? '<span class="nk-step"><button type="button" data-nk="sh" data-d="-1">−</button><b>' + (lf.shelves || 0) +
           '</b><button type="button" data-nk="sh" data-d="1">+</button></span>' : '') + '</div>';
     }
+    // split module: the module is cut into separate boxes below a top-level space (one above the other)
+    var root = p.nooks, ri = sel.split('.')[1], rk = ri == null ? -1 : +ri;
+    if (root.split === 'h' && rk >= 0 && rk < root.parts.length - 1) {
+      var rn = root.parts[rk];
+      h += '<div class="nk-r"><span class="l">✂</span><button type="button" class="nk-b' + (rn.box_split ? ' go' : '') + '" data-nk="boxsplit">' +
+        esc(t('Split below')) + (rn.box_split ? ' ✓' : '') + '</button>' +
+        (rn.box_split ? '<select data-nk="boxtop">' + [['', 'As the module (Distribution)'], ['stretchers', 'Stretchers'], ['full_panel', 'Full panel']].map(function (o) {
+          return '<option value="' + o[0] + '"' + ((rn.split_top || '') === o[0] ? ' selected' : '') + '>' + esc(t(o[1])) + '</option>';
+        }).join('') + '</select>' : '') + '</div>';
+    }
     h += '<div class="nk-hint">' + esc(t('Tap a space in the drawing to select it. ↔ adds partitions, ↕ adds fixed shelves; sizes are clear sizes between panels.')) + '</div></div></div>';
     host.innerHTML = h;
 
@@ -153,9 +163,12 @@
     host.querySelectorAll('[data-path]').forEach(function (r) { r.addEventListener('click', function () { ctx.select(r.getAttribute('data-path')); }); });
     host.querySelectorAll('[data-nk]').forEach(function (b) {
       var a = b.getAttribute('data-nk');
-      var ev = a === 'size' ? 'change' : 'click';
+      var ev = a === 'size' || a === 'boxtop' ? 'change' : 'click';
       b.addEventListener(ev, function () {
         var node = nodeAt(p.nooks, sel), d = +b.getAttribute('data-d');
+        var rp = p.nooks.parts && p.nooks.parts[+sel.split('.')[1]];
+        if (a === 'boxsplit') { if (rp.box_split) { delete rp.box_split; delete rp.split_top; } else { rp.box_split = true; } done(p.nooks, sel); return; }
+        if (a === 'boxtop') { if (b.value) { rp.split_top = b.value; } else { delete rp.split_top; } done(p.nooks, sel); return; }
         if (a === 'split') { var r1 = split(p.nooks, sel, b.getAttribute('data-dir'), ctx.n || 2); done(r1.tree, r1.sel); }
         else if (a === 'merge') { var r2 = merge(p.nooks, sel); done(r2.tree, r2.sel); }
         else if (a === 'n') { ctx.n = Math.max(2, Math.min(6, (ctx.n || 2) + d)); host.querySelector('#nkN').textContent = ctx.n; if (ctx.setN) { ctx.setN(ctx.n); } }

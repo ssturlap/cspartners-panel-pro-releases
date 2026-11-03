@@ -36,6 +36,10 @@
     drawerFace: function (p) { return anyRow(p, function (r) { return frontOf(r) === 'drawer' || frontOf(r) === 'false_front'; }); },
     front: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'none' && frontOf(r) !== ''; }); },
     shelves: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'drawer' && r.interior === 'shelves' && (r.shelves || 0) > 0; }); },
+    split: function (p) {
+      if (p.layout_mode === 'nooks') { var n = p.nooks; return !!(n && n.split === 'h' && (n.parts || []).slice(0, -1).some(function (q) { return q.box_split; })); }
+      return (p.columns || []).some(function (c) { return (c.rows || []).slice(0, -1).some(function (r) { return r.split; }); });
+    },
     hang: function (p) { return anyRow(p, function (r) { return frontOf(r) !== 'drawer' && r.interior === 'hang'; }); },
     knee: function (p) { return p.layout_mode !== 'nooks' && (p.columns || []).some(function (c) { return c.kind === 'kneehole'; }); },
     rows2: function (p) { return p.layout_mode !== 'nooks' && (p.columns || []).some(function (c) { return c.kind !== 'kneehole' && (c.rows || []).length > 1; }); },
@@ -151,6 +155,7 @@
       ['#', 'From your layout'],
       ['row_divider', 'Between rows', 'sel', [['none', 'Nothing (fronts only)'], ['fixed_shelf', 'Fixed shelf']], ctx(HAS.rows2)],
       ['shelf_setback', 'Adjustable shelf setback', 'len', ctx(HAS.shelves)],
+      ['split_top', 'Top of the lower boxes (split module)', 'sel', [['stretchers', 'Stretchers'], ['full_panel', 'Full panel']], ctx(HAS.split)],
       ['rod_drop', 'Hanging rail below top', 'len', ctx(HAS.hang)],
       ['hangers', 'Clothes hangers (look only)', 'sel', [['normal', 'Normal'], ['half', 'A few'], ['full', 'Full rail'], ['off', 'None']], ctx(HAS.hang)],
       ['modesty_h', 'Kneehole modesty panel height', 'len', ctx(HAS.knee)],

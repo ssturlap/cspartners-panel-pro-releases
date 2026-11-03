@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.34';
-  var BUILD = '516d6dae75';
+  var VERSION = '0.3.35';
+  var BUILD = '9801b41771';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -379,6 +379,7 @@
   // ------------------------------------------------------------------ routing (#/…, phone back button works)
   var screen = null;
   function go(hash, replace) {
+    if (location.hash === hash) { route(); return; }   // same place (e.g. saved on desktop): draw it again
     if (replace) { location.replace(hash); } else { location.hash = hash; }
   }
   function route() {
@@ -1043,6 +1044,12 @@
   }
 
   var nkSel = null, nkN = 2;
+  // a split module (boxes stacked) can be broken into separate modules
+  function sepBoxHtml() {
+    var nb = (E.res && E.res.boxes || []).length;
+    return nb > 1 ? '<div class="box sepbox"><span>' + nb + ' ' + esc(t('boxes stacked in this module.')) + '</span>' +
+      '<button type="button" class="btn small" id="sepMods">' + esc(t('Separate into modules')) + '</button></div>' : '';
+  }
   function layoutHtml(p) {
     var lay = (E.res && E.res.layout) || [];
     var nk = p.layout_mode === 'nooks';
@@ -1050,7 +1057,7 @@
     var h = '<div class="seg lmode" data-lmode="1">' + [['cols', 'Columns and rows'], ['nooks', 'NOOKS']].map(function (o) {
       return '<button type="button" data-lm="' + o[0] + '" aria-pressed="' + ((o[0] === 'nooks') === nk) + '">' + esc(t(o[1])) + '</button>';
     }).join('') + '</div>';
-    if (nk) { return h + '<p class="meta-line">' + esc(t('Split the box into spaces as you like (nooks).')) + '</p><div id="nkHost" class="box"></div>'; }
+    if (nk) { return h + '<p class="meta-line">' + esc(t('Split the box into spaces as you like (nooks).')) + '</p><div id="nkHost" class="box"></div>' + sepBoxHtml(); }
     (p.columns || []).forEach(function (col, ci) {
       var LY = lay[ci] || {};
       h += '<div class="box colbox"><div class="col-head"><b>' + esc(t('Column')) + ' ' + (ci + 1) + '</b>' +
@@ -1079,10 +1086,18 @@
           '<div class="opt-l">' + esc(t('Front')) + '</div>' + seg('front:' + ci + ',' + ri, FRONT_CHOICES, front, '', 'seg-joined') +
           (details ? '<div class="row-details">' + details + '</div>' : '') +
           '</div>';
+        // split module: a separate box below this row
+        if (ri < col.rows.length - 1) {
+          h += '<div class="splitrow' + (row.split ? ' on' : '') + '"><button type="button" class="chip" data-split="' + ci + ',' + ri + '" aria-pressed="' + !!row.split + '">✂ ' + esc(t('Split below')) + '</button>' +
+            (row.split ? '<select class="sel" data-splittop="' + ci + ',' + ri + '">' + [['', 'As the module (Distribution)'], ['stretchers', 'Stretchers'], ['full_panel', 'Full panel']].map(function (o) {
+              return '<option value="' + o[0] + '"' + ((row.split_top || '') === o[0] ? ' selected' : '') + '>' + esc(t(o[1])) + '</option>';
+            }).join('') + '</select>' : '') + '</div>';
+        }
       });
       h += '<button type="button" class="btn small addbtn addrow" data-rowadd="' + ci + '">' + esc(t('+ Row')) + '</button></div>';
     });
     h += '<button type="button" class="btn small addbtn addcol" id="addCol">' + esc(t('+ Add column')) + '</button>';
+    h += sepBoxHtml();
     h += '<p class="meta-line">' + esc(t('Columns run left → right, rows top → bottom. Leave auto to share what’s left.')) + '</p>';
     return h;
   }
@@ -1219,6 +1234,12 @@
         openPad({ label: t('Height of this row'), value: rh0 || row.h, chips: CHIPS.row, auto: true, done: function (v) { row.h = v; changed(false); } });
         return;
       }
+      if ((a = b.getAttribute('data-split'))) {
+        var sx = a.split(',').map(Number), srow = p.columns[sx[0]].rows[sx[1]];
+        if (srow.split) { delete srow.split; delete srow.split_top; } else { srow.split = true; }
+        changed(false); return;
+      }
+      if (b.id === 'sepMods') { separateModule(); return; }
       if ((a = b.getAttribute('data-rowx'))) { var rx = a.split(',').map(Number); p.columns[rx[0]].rows.splice(rx[1], 1); changed(false); return; }
       if ((a = b.getAttribute('data-rowadd'))) {
         var c2 = p.columns[+a], last = c2.rows[c2.rows.length - 1];
@@ -1247,6 +1268,10 @@
       if ((a = el.getAttribute('data-bool'))) {
         p[a] = el.checked;
         if (a === 'skin_add') { p.skin_fit = el.checked ? 'add' : 'inside'; }
+        changed(false);
+      } else if ((a = el.getAttribute('data-splittop'))) {
+        var tx = a.split(',').map(Number), trow = p.columns[tx[0]].rows[tx[1]];
+        if (el.value) { trow.split_top = el.value; } else { delete trow.split_top; }
         changed(false);
       } else if ((a = el.getAttribute('data-sel'))) {
         p[a] = el.value; changed(false);
@@ -1303,6 +1328,25 @@
     E = null;
     // desktop: stay on the module (the list on the left shows the change)
     go('#/site/' + encodeURIComponent(s.id) + (desk() ? '/m/' + encodeURIComponent(mid) : ''), true);
+  }
+  // Split module → one module per box, in the box's place (composition / room), replacing it.
+  function separateModule() {
+    var s = E.site, mod = E.mod, src = clone(E.params), boxes;
+    if (mod && mod.params && mod.params.edges) { src.edges = clone(mod.params.edges); }
+    try { boxes = Engine.call('build', { params: src, lang: lang }).boxes || []; } catch (e) { toast(e.message); return; }
+    if (boxes.length < 2) { toast(t('This module has no splits.')); return; }
+    if (!confirm(t('Separate into modules') + ': ' + boxes.length + '?')) { return; }
+    var at = mod ? s.modules.indexOf(mod) : s.modules.length, made = [];
+    boxes.forEach(function (b) {
+      var m = { id: uid(), order: s.next_order++, created: now(), updated: now(), params: b.params };
+      if (mod && mod.pos) { m.pos = Object.assign({}, mod.pos, { z: (Number(mod.pos.z) || 0) + b.z }); }
+      if (mod && mod.room) { m.room = Object.assign({}, mod.room, { z: (Number(mod.room.z) || 0) + b.z }); }
+      made.push(m);
+    });
+    s.modules.splice.apply(s.modules, [at, mod ? 1 : 0].concat(made));
+    touch(s); persist(); toast(t('Separated into modules.'));
+    E = null;
+    go('#/site/' + encodeURIComponent(s.id) + (desk() ? '/m/' + encodeURIComponent(made[made.length - 1].id) : ''), true);
   }
   function duplicateModule() {
     var s = E.site;

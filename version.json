@@ -1,15 +1,23 @@
 {
-  "version": "0.3.34",
+  "version": "0.3.35",
   "date": "2026-11-03",
-  "title": "Clothes hangers on rails; move rows up and down",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.34.rbz",
+  "title": "Split module: stacked boxes in one module",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.35.rbz",
   "notes": [
-    "Hanging rails now carry clothes hangers, unevenly spaced and each turned a little, so the wardrobe looks natural. They are for the look only: on the…",
-    "Distribution: every row has ↑ and ↓ buttons to move it up or down its column with its front, hinge and interior — e.g. put the doors above the drawers. Also…"
+    "Distribution: tick “Split” on a row and the module is cut below it into separate boxes stacked on each other, each with its own sides, bottom and back.…",
+    "At each split the lower box’s top is stretchers (the box above sits on them, its bottom covers them — no double panel) or a full panel: set it for the whole…",
+    "Cut list, Excel and labels say which box each piece belongs to: “Side L (box 2)”.",
+    "“Separate into modules” turns each box into a module of its own, in the same place and with the same settings.",
+    "With several columns, a split needs every column’s rows to end at the same height (otherwise it is left out with a warning). Not for corner, face-frame,…",
+    "Selects with no saved value (e.g. Clothes hangers) now show their default instead of an empty box."
   ],
-  "title_es": "Ganchos de ropa en los tubos; mover filas arriba y abajo",
+  "title_es": "Dividir módulo: cajas apiladas en un módulo",
   "notes_es": [
-    "Los tubos de colgar ahora llevan ganchos de ropa, con separación irregular y cada uno un poco girado, para que el closet se vea natural. Son solo visuales:…",
-    "Distribución: cada fila tiene botones ↑ y ↓ para subirla o bajarla en su columna con su frente, bisagra e interior — por ejemplo, poner las puertas encima…"
+    "Distribución: marque “Dividir” en una fila y el módulo se corta debajo de ella en cajas separadas apiladas, cada una con sus laterales, piso y respaldo.…",
+    "En cada división el techo de la caja de abajo es de travesaños (la caja de arriba se apoya en ellos y su piso los tapa — sin doble tablero) o un tablero…",
+    "La lista de corte, el Excel y los nombres dicen a qué caja pertenece cada pieza: “Lateral Izq. (caja 2)”.",
+    "“Separar en módulos” convierte cada caja en un módulo propio, en el mismo lugar y con los mismos ajustes.",
+    "Con varias columnas, una división necesita que las filas de todas las columnas terminen a la misma altura (si no, se omite con un aviso). No disponible en…",
+    "Las listas sin valor guardado (p. ej. Ganchos de ropa) ahora muestran su valor por defecto en vez de quedar vacías."
   ]
 }
