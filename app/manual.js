@@ -168,6 +168,7 @@
     '.foot{position:absolute;left:6mm;right:6mm;bottom:4mm;display:flex;justify-content:space-between;font-size:7pt;color:#8a8478}',
     '@media print{.foot{left:0;right:0;bottom:0}}',
     '.room-plan{height:150mm}.room-3d{height:70mm;margin-top:2.5mm}.room-3d img{flex:1;min-height:0;width:100%;object-fit:contain}.room-wall{height:150mm}',
+    '.qx{color:#b4532a;margin-left:2mm;font-size:13pt}',
     '.cover{display:flex;flex-direction:column}.cover h1{font-size:28pt;margin:40mm 0 2mm}.cover .proj{font-size:16pt;color:#b4532a;margin-bottom:10mm}',
     'table{border-collapse:collapse;width:100%;font-size:8.5pt}th,td{text-align:left;padding:1.2mm 1.5mm;border-bottom:.4pt solid #e3dfd6}th{color:#6c665c;font-weight:600;font-size:7.5pt;text-transform:uppercase}',
     'td.n,th.n{text-align:right}',
@@ -178,8 +179,25 @@
 
   function build(d, ctx) {
     var t = ctx.t, esc = ctx.esc, u = ' ' + ctx.units;
-    var mods = d.modules || [];
+    var mods = d.modules || [], nAll = d.count || mods.reduce(function (a, m) { return a + (m.qty || 1); }, 0);
+    function qx(m) { return (m.qty || 1) > 1 ? ' <span class="qx">× ' + m.qty + '</span>' : ''; }
+    function qcodes(m) { return (m.qty || 1) > 1 && m.codes ? ' <small style="color:#6c665c">(' + m.codes.map(esc).join(', ') + ')</small>' : ''; }
     // installer pages (a project placed in a room, from SketchUp): the plan + one elevation per wall
+    // from the plugin: the placed modules (items) point at their code's page for the parts
+    if (d.room && d.room.items && !d.room.mods) {
+      var byCode = {}, RR = d.room;
+      mods.forEach(function (m) { byCode[m.code] = m; });
+      RR.mods = {}; RR.snap = { parts: [], movers: [], places: {} };
+      RR.items.forEach(function (it) {
+        var m = byCode[it.group] || byCode[it.code];
+        if (!m || !m.parts) { return; }
+        var pre = it.id + ':';
+        RR.mods[it.id] = { parts: m.parts, bb: m.bbox, code: it.code };
+        RR.snap.places[it.id] = { x: it.room.x, y: it.room.y, z: it.room.z, rz: it.room.rot };
+        m.parts.forEach(function (q) { var c = Object.assign({}, q, { grp: it.id }); if (q.mover) { c.mover = pre + q.mover; } RR.snap.parts.push(c); });
+        (m.movers || []).forEach(function (mv) { RR.snap.movers.push(Object.assign({}, mv, { id: pre + mv.id, grp: it.id })); });
+      });
+    }
     var R = d.room && d.room.layout && d.room.layout.walls && d.room.layout.walls.length && window.PPRoom ? d.room : null;
     var roomPages = R ? 1 + R.layout.walls.length : 0;
     var pageNo = 0, total = 1 + roomPages + mods.length + 1;
@@ -195,10 +213,10 @@
     h += '<section class="page cover"><div class="brand" style="font-size:12pt">CSPARTNERS <span>PANEL PRO</span></div>' +
       '<h1>' + esc(t('Module manual')) + '</h1><div class="proj">' + esc(d.title || t('Untitled project')) + '</div>' +
       '<div class="facts" style="text-align:left;grid-template-columns:auto 1fr;margin-bottom:8mm"><span>' + t('Date') + '</span><b>' + esc(d.date) + '</b>' +
-      '<span>' + t('Modules') + '</span><b>' + mods.length + '</b><span>' + t('Scope') + '</span><b>' + esc(d.scope === 'all' ? t('All modules') : t('Selected modules')) + '</b></div>' +
-      '<table><tr><th>' + t('Code') + '</th><th>' + t('Module') + '</th><th>' + t('Type') + '</th><th class="n">' + t('Size') + ' (W × H × D)</th><th class="n">' + t('Page') + '</th></tr>';
+      '<span>' + t('Modules') + '</span><b>' + nAll + (nAll !== mods.length ? ' (' + mods.length + ' ' + t('different') + ')' : '') + '</b><span>' + t('Scope') + '</span><b>' + esc(d.scope === 'all' ? t('All modules') : t('Selected modules')) + '</b></div>' +
+      '<table><tr><th>' + t('Code') + '</th><th class="n">' + t('Qty') + '</th><th>' + t('Module') + '</th><th>' + t('Type') + '</th><th class="n">' + t('Size') + ' (W × H × D)</th><th class="n">' + t('Page') + '</th></tr>';
     mods.forEach(function (m, i) {
-      h += '<tr><td><b>' + esc(m.code || '') + '</b></td><td>' + esc(m.name || '') + '</td><td>' + esc(m.label ? t(m.label) : '') +
+      h += '<tr><td><b>' + esc(m.code || '') + '</b></td><td class="n">' + (m.qty || 1) + '</td><td>' + esc(m.name || '') + qcodes(m) + '</td><td>' + esc(m.label ? t(m.label) : '') +
         '</td><td class="n">' + (m.error ? '—' : ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u) + '</td><td class="n">' + (i + 2 + roomPages) + '</td></tr>';
     });
     h += '</table>' + foot() + '</section>';
@@ -208,7 +226,7 @@
       var L = R.layout, rctx = { t: t, show: ctx.show };
       var snap = R.snap && window.P3D && window.P3D.snapshot ? window.P3D.snapshot(R.snap.parts, ctx.mats, R.snap.movers, { open: false, w: 1000, h: 620, places: R.snap.places }) : null;
       h += '<section class="page"><div class="hd"><div><h1>' + esc(t('Room plan')) + '</h1><div class="sub">' + esc(t('Installation')) + ' · ' +
-        L.walls.length + ' ' + esc(t(L.walls.length === 1 ? 'wall' : 'walls')) + ' · ' + mods.length + ' ' + t('modules') + '</div></div></div>' +
+        L.walls.length + ' ' + esc(t(L.walls.length === 1 ? 'wall' : 'walls')) + ' · ' + nAll + ' ' + t('modules') + '</div></div></div>' +
         '<div class="v room-plan"><h3>' + esc(t('Plan from above')) + '</h3>' + window.PPRoom.planSvg(L, rctx) + '</div>' +
         (snap ? '<div class="v room-3d"><h3>3D</h3><img src="' + snap + '"></div>' : '') +
         '<div class="hw">' + L.walls.map(function (w) {
@@ -232,7 +250,7 @@
     // ---- one page per module
     mods.forEach(function (m) {
       h += '<section class="page">';
-      h += '<div class="hd"><div><h1><b>' + esc(m.code || '') + '</b>' + esc(m.name || '') + '</h1><div class="sub">' + esc(m.label ? t(m.label) : '') +
+      h += '<div class="hd"><div><h1><b>' + esc(m.code || '') + '</b>' + esc(m.name || '') + qx(m) + '</h1><div class="sub">' + esc(m.label ? t(m.label) : '') +
         (m.error ? '' : ' · ' + ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u + ' · ' + t('panels') + ' ' + ctx.show(m.t) + u) + '</div></div>';
       if (m.error) {
         h += '</div><p class="warn">' + esc(m.error) + '</p>' + foot() + '</section>';
@@ -261,13 +279,14 @@
       var open = window.P3D && window.P3D.snapshot && (m.movers || []).length ? window.P3D.snapshot(all, ctx.mats, m.movers, { open: true, w: 900, h: 640 }) : null;
       h += '<div class="three"><div class="v"><h3>' + t('3D — closed') + '</h3>' + (closed ? '<img src="' + closed + '">' : '') + '</div>' +
         '<div class="v"><h3>' + t('3D — open') + '</h3>' + (open ? '<img src="' + open + '">' : '<p class="sub">' + t('No doors or drawers') + '</p>') + '</div></div>';
+      if ((m.qty || 1) > 1) { h += '<div class="warn" style="color:#6c665c">' + esc(t('Hardware for one module — build') + ' ' + m.qty + '.') + '</div>'; }
       h += '<div class="hw">' + (m.hardware_l || []).map(function (x) { return '<div><b>' + x[1] + '×</b> ' + esc(x[0]) + '</div>'; }).join('') + '</div>';
       if ((m.warnings || []).length) { h += '<div class="warn">⚠ ' + m.warnings.map(esc).join(' · ') + '</div>'; }
       h += foot() + '</section>';
     });
 
     // ---- project parts
-    h += '<section class="page"><div class="hd"><div><h1>' + t('Project parts') + '</h1><div class="sub">' + esc(d.title || '') + ' · ' + mods.length + ' ' + t('modules') + '</div></div></div>';
+    h += '<section class="page"><div class="hd"><div><h1>' + t('Project parts') + '</h1><div class="sub">' + esc(d.title || '') + ' · ' + nAll + ' ' + t('modules') + '</div></div></div>';
     h += '<h2>' + t('Hardware totals') + '</h2><table><tr><th class="n">' + t('Qty') + '</th><th>' + t('Item') + '</th></tr>';
     (d.totals || []).forEach(function (x) { h += '<tr><td class="n"><b>' + x[1] + '</b></td><td>' + esc(x[0]) + '</td></tr>'; });
     h += '</table>';

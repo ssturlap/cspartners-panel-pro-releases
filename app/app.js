@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.36';
-  var BUILD = '568235a5ff';
+  var VERSION = '0.3.37';
+  var BUILD = '2437953544';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1490,11 +1490,21 @@
 
   // A project placed in a room (from SketchUp): the walls and the plan for the installer pages.
   function roomDoc(s) {
-    if (!s.modules.some(function (m) { return m.room; })) { return null; }
+    var inRoom = s.modules.some(function (m) { return m.room; });
+    // arranged in Composición (one wall): their places there, backs against the wall
+    var placeOf = function (m) {
+      if (m.room) { return m.room; }
+      if (inRoom || !m.pos || !isFinite(m.pos.x)) { return null; }
+      var y = m.pos.wy != null && isFinite(m.pos.wy) ? -m.pos.wy : -(Number(m.params.depth) || 0);
+      return { x: m.pos.x, y: y, z: Number(m.pos.z) || 0, rot: 0 };
+    };
+    if (s.modules.filter(placeOf).length < 2) { return null; }
     try {
       var codes = codesOf(s), mods = {}, list = [], snap = { parts: [], movers: [], places: {} };
-      s.modules.forEach(function (m) {
-        if (!m.room) { return; }
+      s.modules.forEach(function (m0) {
+        var rm = placeOf(m0);
+        if (!rm) { return; }
+        var m = { id: m0.id, params: m0.params, updated: m0.updated, room: rm };
         var res = window.PPApp.buildModule(m);
         if (!res) { return; }
         var id = m.id, pre = id + ':';

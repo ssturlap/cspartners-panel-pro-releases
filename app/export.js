@@ -192,7 +192,7 @@
         text(t('Cut list'), M, y - 22, 22, Bd);
         y -= 46;
         text(meta.site, M, y, 14, Bd); y -= 18;
-        var sub = [meta.client, meta.date, (d.manual || []).length + ' ' + t('modules')].filter(Boolean).join('  ·  ');
+        var sub = [meta.client, meta.date, (d.manual || []).reduce(function (a, m) { return a + (m.qty || 1); }, 0) + ' ' + t('modules')].filter(Boolean).join('  ·  ');
         text(sub, M, y, 10, R, GREY); y -= 14;
         if (meta.notes) { wrap(meta.notes, R, 10, W - 2 * M).forEach(function (l) { text(l, M, y, 10, R, GREY); y -= 13; }); }
         y -= 10;

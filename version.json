@@ -1,21 +1,17 @@
 {
-  "version": "0.3.36",
+  "version": "0.3.37",
   "date": "2026-11-03",
-  "title": "Full-height doors with drawers and shoe shelves inside; cut list in its own window",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.36.rbz",
+  "title": "Module manual: quantities and the composition",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.37.rbz",
   "notes": [
-    "Rows: new front “↑ Same door as above” joins a row to the door above — one tall door (or pair) over several rows, each row with its own inside. Hinges are…",
-    "New insides for a row (behind the doors): Inner drawers (3 mm behind the closed door; finger cut-out, lowered front as the pull, or none), Shoe pull-outs…",
-    "Inner drawers and pull-outs get a spacer panel on each hinged side so the slides clear the hinges (in the cut list). Their fronts and the shoe shelves are…",
-    "New preset “Closet — Tower with full doors”: door pair top to bottom over a hanging rail, shelves, 3 inner drawers and 2 shoe pull-outs.",
-    "The cut list and the sheet optimizer open in their own windows (toolbar, palette, menus or the ☰ Cut list button in the Configurator). They remember their…"
+    "Identical modules (A, A1, A2…) share one page, “A … × 3”; the cover lists the quantity and the copies. Project hardware totals still count every module.",
+    "Installer pages before the module pages: the plan from above and a 3D view of the whole composition as placed in SketchUp, then one elevation per wall with…",
+    "PanelPro Web: projects arranged in Composition get the same plan and elevation pages."
   ],
-  "title_es": "Puertas completas con gavetas y zapateras por dentro; lista de corte en su propia ventana",
+  "title_es": "Manual de módulos: cantidades y la composición",
   "notes_es": [
-    "Filas: nuevo frente “↑ Misma puerta que arriba” une una fila a la puerta de arriba — una puerta alta (o par) sobre varias filas, cada fila con su propio…",
-    "Nuevos interiores para una fila (detrás de las puertas): Gavetas interiores (3 mm detrás de la puerta cerrada; uñero, frente más bajo como tirador, o…",
-    "Las gavetas interiores y zapateras extraíbles llevan un suplemento en cada lado con bisagras para que las correderas pasen las bisagras (en la lista de…",
-    "Nuevo preset “Clóset — Torre con puertas completas”: par de puertas de arriba abajo sobre tubo de colgar, entrepaños, 3 gavetas interiores y 2 zapateras…",
-    "La lista de corte y el optimizador abren en sus propias ventanas (barra, paleta, menús o el botón ☰ Lista de corte del Configurador). Recuerdan su tamaño y…"
+    "Los módulos iguales (A, A1, A2…) comparten una página, “A … × 3”; la portada indica la cantidad y las copias. Los herrajes totales del proyecto siguen…",
+    "Páginas para el instalador antes de las de módulos: la planta vista desde arriba y una vista 3D de toda la composición tal como está en SketchUp, luego una…",
+    "PanelPro Web: los proyectos acomodados en Composición tienen las mismas páginas de planta y elevación."
   ]
 }
