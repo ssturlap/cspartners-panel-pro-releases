@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.33';
-  var BUILD = 'afc5c2477d';
+  var VERSION = '0.3.34';
+  var BUILD = '516d6dae75';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -1073,7 +1073,9 @@
             '<button type="button" data-shelf="' + ci + ',' + ri + ',1" aria-label="More shelves">+</button></div>' : '');
         h += '<div class="frow"><div class="frow-head"><span class="rlbl">' + esc(t('Row')) + ' ' + (ri + 1) + '</span>' +
           sizeCtl('rowh', ci + ',' + ri, row.h, rh) + '<span class="grow"></span>' +
-          (col.rows.length > 1 ? '<button type="button" class="xbtn del" data-rowx="' + ci + ',' + ri + '" aria-label="Remove row">✕</button>' : '') + '</div>' +
+          (col.rows.length > 1 ? '<button type="button" class="xbtn" data-rowmv="' + ci + ',' + ri + ',-1" aria-label="' + esc(t('Move up')) + '"' + (ri === 0 ? ' disabled' : '') + '>↑</button>' +
+            '<button type="button" class="xbtn" data-rowmv="' + ci + ',' + ri + ',1" aria-label="' + esc(t('Move down')) + '"' + (ri === col.rows.length - 1 ? ' disabled' : '') + '>↓</button>' +
+            '<button type="button" class="xbtn del" data-rowx="' + ci + ',' + ri + '" aria-label="Remove row">✕</button>' : '') + '</div>' +
           '<div class="opt-l">' + esc(t('Front')) + '</div>' + seg('front:' + ci + ',' + ri, FRONT_CHOICES, front, '', 'seg-joined') +
           (details ? '<div class="row-details">' + details + '</div>' : '') +
           '</div>';
@@ -1202,6 +1204,11 @@
       if ((a = b.getAttribute('data-colmv'))) {
         var m = a.split(',').map(Number), to = m[0] + m[1];
         if (to >= 0 && to < p.columns.length) { p.columns.splice(to, 0, p.columns.splice(m[0], 1)[0]); changed(false); }
+        return;
+      }
+      if ((a = b.getAttribute('data-rowmv'))) {           // a row (with its front and inside) up or down the column
+        var rm = a.split(',').map(Number), rws = p.columns[rm[0]].rows, rto = rm[1] + rm[2];
+        if (rto >= 0 && rto < rws.length) { rws.splice(rto, 0, rws.splice(rm[1], 1)[0]); changed(false); }
         return;
       }
       if ((a = b.getAttribute('data-colx'))) { p.columns.splice(+a, 1); changed(false); return; }

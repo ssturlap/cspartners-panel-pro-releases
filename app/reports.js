@@ -28,6 +28,7 @@
   R.ORDER = ORDER;
 
   function frontPoly(p) {
+    if (p.deco) { return null; }     // clothes hangers: 3D only
     if (p.shape === 'cyl') {
       if (p.axis !== 'z') { return null; }
       var c = p.center;

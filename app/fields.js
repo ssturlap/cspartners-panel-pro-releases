@@ -152,6 +152,7 @@
       ['row_divider', 'Between rows', 'sel', [['none', 'Nothing (fronts only)'], ['fixed_shelf', 'Fixed shelf']], ctx(HAS.rows2)],
       ['shelf_setback', 'Adjustable shelf setback', 'len', ctx(HAS.shelves)],
       ['rod_drop', 'Hanging rail below top', 'len', ctx(HAS.hang)],
+      ['hangers', 'Clothes hangers (look only)', 'sel', [['normal', 'Normal'], ['half', 'A few'], ['full', 'Full rail'], ['off', 'None']], ctx(HAS.hang)],
       ['modesty_h', 'Kneehole modesty panel height', 'len', ctx(HAS.knee)],
       ['knee_sides', 'Kneehole sides to the floor', 'sel', [['end', 'End panel only'], ['all', 'End panel and pedestal sides']], ctx(HAS.knee)]
     ],

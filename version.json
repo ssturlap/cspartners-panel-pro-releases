@@ -1,19 +1,15 @@
 {
-  "version": "0.3.33",
+  "version": "0.3.34",
   "date": "2026-11-03",
-  "title": "Export to PanelPro Web with the room; every piece on its own line",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.33.rbz",
+  "title": "Clothes hangers on rails; move rows up and down",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.34.rbz",
   "notes": [
-    "New menu item “Export project for PanelPro Web…”: saves every module of the model with its settings, code and exact place (position and rotation) as a…",
-    "PanelPro Web shows that project as a room: one tab per wall with its elevation (modules can be moved along the wall), and “Whole room” in 3D or as a plan…",
-    "The web module manual of such a project adds installer pages: the room plan with a 3D picture, and one elevation page per wall with each module’s distance…",
-    "Excel cut list: in the tabs By material and By material and thickness every piece stays on its own line, as in the module tab — identical pieces are no…"
+    "Hanging rails now carry clothes hangers, unevenly spaced and each turned a little, so the wardrobe looks natural. They are for the look only: on the…",
+    "Distribution: every row has ↑ and ↓ buttons to move it up or down its column with its front, hinge and interior — e.g. put the doors above the drawers. Also…"
   ],
-  "title_es": "Exportar a PanelPro Web con el espacio; cada pieza en su propia línea",
+  "title_es": "Ganchos de ropa en los tubos; mover filas arriba y abajo",
   "notes_es": [
-    "Nuevo ítem del menú “Exportar proyecto para PanelPro Web…”: guarda cada módulo del modelo con sus ajustes, código y lugar exacto (posición y rotación) en un…",
-    "PanelPro Web muestra ese proyecto como un espacio: una pestaña por pared con su elevación (los módulos se pueden mover a lo largo de la pared) y “Espacio…",
-    "El manual de módulos web de ese proyecto agrega páginas para el instalador: la planta del espacio con una imagen 3D y una página de elevación por pared con…",
-    "Lista de corte en Excel: en las pestañas Por material y Por material y espesor cada pieza queda en su propia línea, como en la pestaña por módulo — las…"
+    "Los tubos de colgar ahora llevan ganchos de ropa, con separación irregular y cada uno un poco girado, para que el closet se vea natural. Son solo visuales:…",
+    "Distribución: cada fila tiene botones ↑ y ↓ para subirla o bajarla en su columna con su frente, bisagra e interior — por ejemplo, poner las puertas encima…"
   ]
 }

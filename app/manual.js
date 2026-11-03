@@ -55,7 +55,7 @@
   // so nearer panels hide what is behind them; panels facing the viewer get "W × H".
   function viewSVG(parts, key, ctx, opts) {
     var V = VIEWS[key], hi = IDX[V.h], vi = IDX[V.v], di = IDX[V.d];
-    var items = parts.map(function (p) { return { p: p, b: box(p) }; });
+    var items = parts.filter(function (p) { return !p.deco; }).map(function (p) { return { p: p, b: box(p) }; });   // hangers: 3D only
     if (!items.length) { return ''; }
     items.sort(function (a, b) {
       return V.s < 0 ? b.b.mn[di] - a.b.mn[di] : a.b.mx[di] - b.b.mx[di];

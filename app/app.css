@@ -175,6 +175,7 @@ button { cursor: pointer; }
 .hbtn { border: 1.5px solid var(--line); background: #fff; border-radius: 10px; height: 36px; padding: 0 10px; font-weight: 650; font-size: 14px; }
 .xbtn { border: 0; background: transparent; color: var(--muted); height: 36px; width: 36px; border-radius: 10px; font-size: 18px; }
 .xbtn:active { background: #eef1f2; }
+.xbtn:disabled { opacity: .3; }
 .addbtn { display: block; margin: 10px auto 2px; min-width: 150px; background: var(--tape); border-color: var(--tape-deep); color: var(--ink); font-weight: 700; }
 .addbtn:active { background: var(--tape-deep); }
 .xbtn.del { color: #c62828; }

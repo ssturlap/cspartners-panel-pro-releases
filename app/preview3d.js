@@ -153,6 +153,9 @@
     var g = new T.BufferGeometry();
     g.setAttribute('position', new T.Float32BufferAttribute(pos, 3));
     g.setAttribute('uv', new T.Float32BufferAttribute(uv, 2));
+    if (p.rz && p.rc) {              // a part turned about the vertical through rc (clothes hangers)
+      g.translate(-p.rc[0], -p.rc[1], 0); g.rotateZ(T.MathUtils.degToRad(p.rz)); g.translate(p.rc[0], p.rc[1], 0);
+    }
     g.computeVertexNormals();
     return g;
   }

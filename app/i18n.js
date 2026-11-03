@@ -108,11 +108,11 @@
     'Toe kick height': 'Altura del zócalo', 'Toe kick setback (0 = flush plinth)': 'Retiro del zócalo (0 = a ras)',
     // layout
     'Interior': 'Interior', 'Between rows': 'Entre filas', 'Nothing (fronts only)': 'Nada (solo frentes)', 'Fixed shelf': 'Entrepaño fijo',
-    'Adjustable shelf setback': 'Retiro de entrepaños', 'Hanging rail below top': 'Tubo de colgar bajo el techo',
+    'Adjustable shelf setback': 'Retiro de entrepaños', 'Hanging rail below top': 'Tubo de colgar bajo el techo', 'Clothes hangers (look only)': 'Ganchos de ropa (solo visual)', 'A few': 'Pocos', 'Full rail': 'Tubo lleno', 'Normal': 'Normal',
     'Kneehole modesty panel height': 'Altura del faldón', 'Kneehole sides to the floor': 'Costados del hueco hasta el piso',
     'End panel only': 'Solo el costado final', 'End panel and pedestal sides': 'Costado final y costados del pedestal',
     'Column ': 'Columna ', 'Cabinet section': 'Sección de mueble', 'Kneehole (open, no box)': 'Hueco para piernas (abierto)',
-    'Move left': 'Mover a la izquierda', 'Move right': 'Mover a la derecha', 'Remove column': 'Quitar columna', 'Remove row': 'Quitar fila',
+    'Move left': 'Mover a la izquierda', 'Move right': 'Mover a la derecha', 'Remove column': 'Quitar columna', 'Remove row': 'Quitar fila', 'Move up': 'Subir', 'Move down': 'Bajar',
     'Open kneehole — no bottom, back or fronts; adjacent partitions become pedestal sides.': 'Hueco abierto — sin piso, respaldo ni frentes; las divisiones vecinas pasan a ser costados de pedestal.',
     'Height': 'Alto', 'Hinge': 'Bisagra', 'Qty': 'Cant.', '+ row': '+ fila', '+ Add column': '+ Agregar columna',
     'Door': 'Puerta', 'Door pair': 'Par de puertas', 'Drawer': 'Gaveta', 'False front': 'Frente falso', 'Open': 'Abierto',
