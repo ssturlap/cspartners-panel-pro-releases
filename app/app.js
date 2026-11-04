@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.39';
-  var BUILD = '275bc45e85';
+  var BUILD = '39fb5a0b9b';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Choose…': 'Elegir…', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -1027,7 +1027,8 @@
     } else if (type === 'mat') {
       var front = key === 'mat_back' && p.mat_back_front === true;
       var same = !front && (SAME_MAT.indexOf(key) >= 0 ? p[key + '_same'] !== false : false);
-      ctl = '<input class="text-in" list="ppMatList" autocomplete="off" data-text="' + key + '" value="' + esc(p[key] || '') + '"' + (same || front ? ' disabled' : '') + '>' +
+      ctl = '<div class="matpick"><input class="text-in" autocomplete="off" data-text="' + key + '" value="' + esc(p[key] || '') + '"' + (same || front ? ' disabled' : '') + '>' +
+        '<button type="button" class="btn small" data-matpick="' + key + '"' + (same || front ? ' disabled' : '') + '>' + esc(t('Choose…')) + '</button></div>' +
         (SAME_MAT.indexOf(key) >= 0 ? '<label class="chk"><input type="checkbox" data-same="' + key + '"' + (same ? ' checked' : '') + '> ' +
           esc(t(key === 'mat_end' ? 'Same as fronts' : 'Same as carcass')) + '</label>' : '') +
         (key === 'mat_back' ? '<label class="chk"><input type="checkbox" data-backfront="1"' + (front ? ' checked' : '') + '> ' + esc(t('Same as fronts')) + '</label>' : '');
@@ -1169,6 +1170,14 @@
       var b = e.target.closest('button');
       if (!b || !body.contains(b)) { return; }
       var a;
+      if ((a = b.getAttribute('data-matpick')) && window.PPMaterials) {
+        var mk = a;
+        window.PPMaterials.pick(p[mk], function (name) {
+          var inp = body.querySelector('[data-text="' + mk + '"]');
+          if (inp) { inp.value = name; inp.dispatchEvent(new Event('change', { bubbles: true })); }   // same path as typing it
+        });
+        return;
+      }
       if ((a = b.getAttribute('data-tab'))) { editTab = a; save('panelpro.web.tab', a); renderEditBody(); $('#editBody').scrollTop = 0; return; }
       if ((a = b.getAttribute('data-lm'))) {
         if (a === 'nooks') { p.layout_mode = 'nooks'; if (!p.nooks && window.PPNooks) { p.nooks = window.PPNooks.fromColumns(p.columns); } } else { delete p.layout_mode; }

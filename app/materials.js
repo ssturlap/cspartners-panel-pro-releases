@@ -514,6 +514,49 @@
     };
   }
 
+  // ------------------------------------------------------------------ picker (module material boxes)
+  // Your list first, then the PanelPro catalog by brand; type to filter. done(name).
+  function pick(current, done) {
+    loadCatalog().catch(function () {}).then(function () {
+      var ov = document.createElement('div');
+      ov.className = 'menu mpick';
+      ov.innerHTML = '<div class="menu-sheet mpick-sheet"><div class="mpick-h"><input class="text-in" id="mpQ" type="search" placeholder="' + esc(t('Search')) + '">' +
+        '<button type="button" class="xbtn" data-mpx="1" aria-label="' + esc(A.t('Close')) + '">✕</button></div><div class="mpick-list" id="mpL"></div></div>';
+      document.body.appendChild(ov);
+      function row(name, brand, sub, css) {
+        return '<button type="button" class="mpick-row' + (keyOf(name) === keyOf(current) ? ' on' : '') + '" data-mp="' + esc(name) + '"><i style="' + esc(css) + '"></i>' +
+          '<span><b>' + esc(name) + '</b><small>' + esc(sub) + '</small></span></button>';
+      }
+      function draw() {
+        var q = keyOf(document.getElementById('mpQ').value), h = '';
+        var mine = data.list.filter(function (e) { return !q || keyOf(e.name + ' ' + (e.brand || '')).indexOf(q) >= 0; });
+        if (mine.length) {
+          h += '<div class="mpick-g">' + esc(cloud() ? cloud().t('My list') : t('Material list')) + '</div>' +
+            mine.map(function (e) { return row(e.name, e.brand, len(e.sheet_l) + ' × ' + len(e.sheet_w) + (thicksTxt(e) ? ' · ' + thicksTxt(e) : ''), swatchCss(e.name)); }).join('');
+        }
+        var groups = {};
+        (CAT || []).forEach(function (c) {
+          if (find(c.material) || (q && keyOf(c.material + ' ' + (c.notes || '')).indexOf(q) < 0)) { return; }
+          (groups[c.brand || t('Other')] = groups[c.brand || t('Other')] || []).push(c);
+        });
+        Object.keys(groups).forEach(function (b) {
+          h += '<div class="mpick-g">' + esc(t('PanelPro catalog') + ' · ' + b) + '</div>' + groups[b].map(function (c) {
+            return row(c.material, c.brand, len(c.sheet_l) + ' × ' + len(c.sheet_w) + ' · ' + c.thick.map(function (x) { return fmt(x) + ' mm'; }).join(', '), swatchCss(c.material));
+          }).join('');
+        });
+        document.getElementById('mpL').innerHTML = h || '<p class="meta-line" style="padding:12px">' + esc(t('No match.')) + '</p>';
+      }
+      ov.addEventListener('click', function (ev) {
+        var b = ev.target.closest('[data-mp]');
+        if (b) { ov.remove(); done(b.getAttribute('data-mp')); return; }
+        if (ev.target === ov || ev.target.closest('[data-mpx]')) { ov.remove(); }
+      });
+      document.getElementById('mpQ').oninput = draw;
+      draw();
+      if (!('ontouchstart' in window)) { document.getElementById('mpQ').focus(); }
+    });
+  }
+
   // ------------------------------------------------------------------ files
   function exportList() {
     var out = { panelpro_materials: 1, tape: data.tape, materials: data.list.map(function (e) {
@@ -583,7 +626,7 @@
       if (p[1]) { var e = byId(p[1]); if (e) { return renderEdit(e); } }
       return renderList();
     },
-    find: find, info: info, swatchCss: swatchCss, engineList: engineList, costDefaults: costDefaults, setPrice: setPrice,
+    pick: pick, find: find, info: info, swatchCss: swatchCss, engineList: engineList, costDefaults: costDefaults, setPrice: setPrice,
     stamp: function () { return stamp; },
     // open the list entry for a cut-list group (added if missing, with its thickness)
     openFor: function (name, T) {

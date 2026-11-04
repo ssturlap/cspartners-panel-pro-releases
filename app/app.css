@@ -779,3 +779,17 @@ body.desk .compose { height: 100%; }
 .cat-txt small { text-transform: uppercase; letter-spacing: .4px; font-size: 10.5px; }
 .cat-card .btn, .cat-have { margin: 6px 10px 10px; }
 .cat-have { font-size: 12.5px; color: #2e7d32; font-weight: 600; }
+/* material boxes: type a name or Choose… (your list + the PanelPro catalog) */
+.matpick { display: flex; gap: 8px; align-items: center; }
+.matpick .text-in { flex: 1; min-width: 0; }
+.mpick .mpick-sheet { max-height: 85vh; display: flex; flex-direction: column; padding: 10px; }
+.mpick-h { display: flex; gap: 8px; align-items: center; padding-bottom: 8px; }
+.mpick-h .text-in { flex: 1; }
+.mpick-list { overflow-y: auto; flex: 1; }
+.mpick-g { font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); padding: 12px 8px 4px; }
+.menu-sheet .mpick-row { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 6px 8px; font-size: 15px; }
+.mpick-row i { width: 44px; height: 44px; border-radius: 8px; flex: none; border: 1px solid var(--line); }
+.mpick-row span { display: flex; flex-direction: column; min-width: 0; }
+.mpick-row small { color: var(--muted); font-size: 12.5px; }
+.mpick-row.on { background: #fff6dc; }
+@media (min-width: 720px) { .mpick .mpick-sheet { max-width: 560px; height: 80vh; } }
