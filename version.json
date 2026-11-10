@@ -1,17 +1,13 @@
 {
-  "version": "0.3.39",
-  "date": "2026-11-03",
-  "title": "PanelPro material catalog",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.39.rbz",
+  "version": "0.3.40",
+  "date": "2026-11-10",
+  "title": "Fix: the plugin failed to load after the catalog download",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.40.rbz",
   "notes": [
-    "The PanelPro catalog — 114 boards from EGGER, BERNECK, ARKOPA, CLEAF and ONESKIN with texture, normal map, sheet size and thicknesses (no prices) — is…",
-    "The same boards, with the same names, are in PanelPro Web (Materials › PanelPro catalog), so projects move between the apps with their materials.",
-    "PanelPro Web: modules use catalog boards by name (texture and sheet size) even before you add them to your list; material form with board type, notes,…"
+    "After the PanelPro catalog had been downloaded once, SketchUp could no longer load the plugin (“Some Extensions Failed to Load”, SyntaxError in catalog.rb).…"
   ],
-  "title_es": "Catálogo de materiales PanelPro",
+  "title_es": "Arreglo: el plugin no cargaba después de descargar el catálogo",
   "notes_es": [
-    "El catálogo PanelPro — 114 tableros de EGGER, BERNECK, ARKOPA, CLEAF y ONESKIN con textura, mapa de relieve, tamaño de tablero y espesores (sin precios) —…",
-    "Los mismos tableros, con los mismos nombres, están en PanelPro Web (Materiales › Catálogo PanelPro), así los proyectos pasan entre las apps con sus materiales.",
-    "PanelPro Web: los módulos usan los tableros del catálogo por el nombre (textura y tamaño) aunque no estén en su lista; formulario de material con tipo de…"
+    "Después de descargar el catálogo PanelPro una vez, SketchUp ya no podía cargar el plugin (“Some Extensions Failed to Load”, SyntaxError en catalog.rb). El…"
   ]
 }
