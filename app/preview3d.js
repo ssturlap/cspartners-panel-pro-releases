@@ -298,7 +298,8 @@
       parent.add(mesh);
       if (p.shape !== 'cyl') { parent.add(new T.LineSegments(new T.EdgesGeometry(g, 25), EDGE)); }
       g.computeBoundingBox();
-      if (PG[p.grp]) { PG[p.grp].updateMatrixWorld(true); bbox.union(g.boundingBox.clone().applyMatrix4(PG[p.grp].matrixWorld)); }
+      if (p.deco === 'grain') { /* grain arrows sit just off the face: not part of the size */ }
+      else if (PG[p.grp]) { PG[p.grp].updateMatrixWorld(true); bbox.union(g.boundingBox.clone().applyMatrix4(PG[p.grp].matrixWorld)); }
       else { bbox.union(g.boundingBox); }
     });
     buildDims();

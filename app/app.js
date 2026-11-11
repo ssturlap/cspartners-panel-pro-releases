@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.40';
-  var BUILD = '18cac0431b';
+  var VERSION = '0.3.41';
+  var BUILD = 'fb062a7ad1';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Choose…': 'Elegir…', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -191,7 +191,10 @@
       return (+ma[2] || 0) - (+mb[2] || 0);
     };
   }
-  function dimsOf(p) { return L(p.width) + ' × ' + L(p.height) + ' × ' + L(p.depth) + ' ' + U(); }
+  function dimsOf(p) {
+    if (p.panel) { return panelDims(p).map(function (d) { return L(p[d[1]]); }).join(' × ') + ' ' + U(); }   // L × W × T
+    return L(p.width) + ' × ' + L(p.height) + ' × ' + L(p.depth) + ' ' + U();
+  }
   function presetLabel(key) {
     var p = info && info.presets.find(function (x) { return x.key === key; });
     return p ? t(p.label) : '';
@@ -1108,15 +1111,26 @@
     return h;
   }
 
+  // Loose panel sizes: [role, param, label]. The thickness is panel_t (and the size across it).
+  function panelDims(p) {
+    var k = p.panel_kind;
+    if (k === 'top' || k === 'bottom') { return [['len', 'width', 'Length ↔ grain'], ['wid', 'depth', 'Width'], ['thk', 'height', 'Thickness']]; }
+    if (k === 'side') { return [['len', 'height', 'Length ↔ grain'], ['wid', 'depth', 'Width'], ['thk', 'width', 'Thickness']]; }
+    return [['len', 'width', 'Length ↔ grain'], ['wid', 'height', 'Width'], ['thk', 'depth', 'Thickness']];
+  }
   function renderEditBody() {
     var body = $('#editBody');
     if (!body) { return; }
     var p = E.params;
     var scrollY = body.scrollTop;
-    var html = '<div class="measure">' + ['width', 'height', 'depth'].map(function (k) {
+    var html = '<div class="measure">' + (p.panel ? panelDims(p).map(function (d) {
+      // a loose panel: Length (the grain) × Width × Thickness, whichever way it stands
+      return '<button type="button" data-pdim="' + d[0] + '" class="' + (E.changed[d[1]] ? 'changed' : '') + '"><span class="lbl">' + esc(t(d[2])) + '</span>' +
+        '<span class="num">' + L(p[d[1]]) + '</span><span class="unit">' + U() + '</span></button>';
+    }) : ['width', 'height', 'depth'].map(function (k) {
       return '<button type="button" data-dim="' + k + '" class="' + (E.changed[k] ? 'changed' : '') + '"><span class="lbl">' + esc(t(k[0].toUpperCase() + k.slice(1))) + '</span>' +
         '<span class="num">' + L(p[k]) + '</span><span class="unit">' + U() + '</span></button>';
-    }).join('') + '</div>';
+    })).join('') + '</div>';
     if (E.error) {
       html += '<div class="warn err"><p><b>' + esc(t('This module cannot be built:')) + '</b></p><p>' + esc(E.error) + '</p></div>';
     } else if (E.res && E.res.warnings && E.res.warnings.length) {
@@ -1186,6 +1200,15 @@
       if (b.closest('#nkHost')) { return; }   // the NOOKS editor handles its own buttons
       var cg = b.closest('[data-cards]');
       if (cg) { p[cg.getAttribute('data-cards')] = b.getAttribute('data-v'); changed(false); return; }
+      if ((a = b.getAttribute('data-pdim'))) {
+        var pd = panelDims(p).find(function (d) { return d[0] === a; });
+        openPad({ label: t(pd[2]), value: p[pd[1]], done: function (v) {
+          E.params[pd[1]] = v; E.changed[pd[1]] = true;
+          if (a === 'thk') { E.params.panel_t = v; E.params.panel_t_same = false; }
+          changed(true);
+        } });
+        return;
+      }
       if ((a = b.getAttribute('data-dim'))) {
         openPad({ label: t(a[0].toUpperCase() + a.slice(1)), value: p[a], chips: CHIPS[a], done: function (v) { E.params[a] = v; E.changed[a] = true; changed(true); } });
         return;

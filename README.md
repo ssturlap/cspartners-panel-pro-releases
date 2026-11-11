@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.40** — Fix: the plugin failed to load after the catalog download  
-Download [cspartners_panel_pro_0.3.40.rbz](releases/cspartners_panel_pro_0.3.40.rbz) and install it in SketchUp:
+**Latest: 0.3.41** — Panels: Length (grain) × Width × Thickness  
+Download [cspartners_panel_pro_0.3.41.rbz](releases/cspartners_panel_pro_0.3.41.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.41 | [cspartners_panel_pro_0.3.41.rbz](releases/cspartners_panel_pro_0.3.41.rbz) |
 | 0.3.40 | [cspartners_panel_pro_0.3.40.rbz](releases/cspartners_panel_pro_0.3.40.rbz) |
 | 0.3.39 | [cspartners_panel_pro_0.3.39.rbz](releases/cspartners_panel_pro_0.3.39.rbz) |
 | 0.3.38 | [cspartners_panel_pro_0.3.38.rbz](releases/cspartners_panel_pro_0.3.38.rbz) |

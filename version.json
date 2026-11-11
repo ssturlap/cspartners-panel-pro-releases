@@ -1,13 +1,19 @@
 {
-  "version": "0.3.40",
-  "date": "2026-11-10",
-  "title": "Fix: the plugin failed to load after the catalog download",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.40.rbz",
+  "version": "0.3.41",
+  "date": "2026-11-11",
+  "title": "Panels: Length (grain) × Width × Thickness",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.41.rbz",
   "notes": [
-    "After the PanelPro catalog had been downloaded once, SketchUp could no longer load the plugin (“Some Extensions Failed to Load”, SyntaxError in catalog.rb).…"
+    "Loose panels: the grain always runs along the Length, and the cut list keeps it (L = Length, even when it is the shorter side); edge banding follows.",
+    "Grain arrows on the panel face in the previews (Configurator, PanelPro Web, manual 3D) — not in the SketchUp model, the drawings or the cut list.",
+    "PanelPro Web: a panel shows Length ↔ grain, Width and Thickness instead of Width / Height / Depth, also in the module list.",
+    "PanelPro Web: material boxes have a Choose… button with your list and the PanelPro catalog (search, swatches)."
   ],
-  "title_es": "Arreglo: el plugin no cargaba después de descargar el catálogo",
+  "title_es": "Paneles: Largo (veta) × Ancho × Espesor",
   "notes_es": [
-    "Después de descargar el catálogo PanelPro una vez, SketchUp ya no podía cargar el plugin (“Some Extensions Failed to Load”, SyntaxError en catalog.rb). El…"
+    "Paneles sueltos: la veta siempre va a lo largo del Largo, y la lista de corte la respeta (L = Largo, aunque sea el lado más corto); el canto la sigue.",
+    "Flechas de veta sobre la cara del panel en las vistas previas (Configurador, PanelPro Web, 3D del manual) — no en el modelo de SketchUp, los planos ni la…",
+    "PanelPro Web: un panel muestra Largo ↔ veta, Ancho y Espesor en vez de Ancho / Alto / Fondo, también en la lista de módulos.",
+    "PanelPro Web: las casillas de material tienen un botón Elegir… con su lista y el catálogo PanelPro (búsqueda y muestras)."
   ]
 }
