@@ -286,7 +286,8 @@
         });
         h += '<section class="page"><div class="sheethead"><div>' + brand + '<h2>' + escH(t('Sheet') + ' ' + s.n + ' / ' + g.sheets.length) + ' — ' + escH(groupTitle(g)) + '</h2></div>' +
           '<div class="chips"><span class="chip">' + mm(g.sheet[0]) + ' × ' + mm(g.sheet[1]) + ' mm</span><span class="chip"><b>' + s.pieces.length + '</b> ' + t('parts') +
-          '</span><span class="chip">' + t('waste') + ' <b>' + s.waste_pct + ' %</b></span><span class="chip">' + t('used') + ' ' + mm(s.used[0]) + ' × ' + mm(s.used[1]) + '</span></div></div>';
+          '</span><span class="chip">' + t('waste') + ' <b>' + s.waste_pct + ' %</b></span><span class="chip">' + t('used') + ' ' + mm(s.used[0]) + ' × ' + mm(s.used[1]) + '</span>' +
+          (s.offcut ? '<span class="chip">' + t('offcut') + ' <b>' + mm(s.offcut[0]) + ' × ' + mm(s.offcut[1]) + '</b></span>' : '') + '</div></div>';
         h += '<div class="body"><div class="draw">' + sheetSvg(g, s, true) +
           '<div class="legend"><span><span class="sw" style="background:#f6dfc9;border:1px solid #b5652e"></span>' + escH(t('Part')) + ' — ' + escH(t('code · name, L × W')) + '</span>' +
           '<span><svg class="sw" width="12" height="12" viewBox="0 0 12 12" style="border:1px solid #b9b2a6"><rect width="12" height="12" fill="#efe9de"/><path d="M-2 4 L4 -2 M-2 10 L10 -2 M2 14 L14 2 M8 14 L14 8" stroke="#cfc5b4" stroke-width="1.6"/></svg>' + escH(t('Offcut / waste')) + '</span>' +

@@ -1,19 +1,17 @@
 {
-  "version": "0.3.41",
-  "date": "2026-11-11",
-  "title": "Panels: Length (grain) × Width × Thickness",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.41.rbz",
+  "version": "0.3.42",
+  "date": "2026-11-12",
+  "title": "Sheet optimizer: one clean offcut, like OptiPlanning",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.42.rbz",
   "notes": [
-    "Loose panels: the grain always runs along the Length, and the cut list keeps it (L = Length, even when it is the shorter side); edge banding follows.",
-    "Grain arrows on the panel face in the previews (Configurator, PanelPro Web, manual 3D) — not in the SketchUp model, the drawings or the cut list.",
-    "PanelPro Web: a panel shows Length ↔ grain, Width and Thickness instead of Width / Height / Depth, also in the module list.",
-    "PanelPro Web: material boxes have a Choose… button with your list and the PanelPro catalog (search, swatches)."
+    "After finding the fewest sheets, the optimizer keeps looking for the layout that packs the last sheet tightest, so the waste is left as one big full-length…",
+    "Each sheet shows its biggest clean offcut (length × width) in the optimizer window, the printed sheets and PanelPro Web.",
+    "Tip: tick “Plain board (no grain): parts may be turned” for boards without grain — parts are then turned freely, as the saw shop does."
   ],
-  "title_es": "Paneles: Largo (veta) × Ancho × Espesor",
+  "title_es": "Optimizador de tableros: un solo sobrante limpio, como OptiPlanning",
   "notes_es": [
-    "Paneles sueltos: la veta siempre va a lo largo del Largo, y la lista de corte la respeta (L = Largo, aunque sea el lado más corto); el canto la sigue.",
-    "Flechas de veta sobre la cara del panel en las vistas previas (Configurador, PanelPro Web, 3D del manual) — no en el modelo de SketchUp, los planos ni la…",
-    "PanelPro Web: un panel muestra Largo ↔ veta, Ancho y Espesor en vez de Ancho / Alto / Fondo, también en la lista de módulos.",
-    "PanelPro Web: las casillas de material tienen un botón Elegir… con su lista y el catálogo PanelPro (búsqueda y muestras)."
+    "Después de encontrar el menor número de tableros, el optimizador sigue buscando la distribución que aprieta más el último tablero, así el desperdicio queda…",
+    "Cada tablero muestra su mayor sobrante limpio (largo × ancho) en la ventana del optimizador, las hojas impresas y PanelPro Web.",
+    "Consejo: marque “Tablero liso (sin veta): se pueden girar las piezas” en los tableros sin veta — las piezas se giran libremente, como hace el taller de corte."
   ]
 }

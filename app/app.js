@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.41';
-  var BUILD = 'fb062a7ad1';
+  var VERSION = '0.3.42';
+  var BUILD = '3801fa62aa';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1630,7 +1630,7 @@
         costLines(g, ctx) +
         (g.oversize.length ? '<div class="warn"><p>' + esc(t('Too big for this sheet:') + ' ' + g.oversize.map(function (o) { return (o.code ? o.code + ' ' : '') + o.part + ' ' + fmt(o.L) + ' × ' + fmt(o.W); }).join(', ')) + '</p></div>' : '') +
         '<div class="sheets">' + g.sheets.map(function (sh) {
-          return '<figure class="sheet">' + R.sheetSvg(g, sh, false) + '<figcaption>' + esc(t('Sheet') + ' ' + sh.n + ' / ' + g.sheets.length + ' · ' + sh.pieces.length + ' ' + t('parts') + ' · ' + t('waste') + ' ' + sh.waste_pct + ' %') + '</figcaption></figure>';
+          return '<figure class="sheet">' + R.sheetSvg(g, sh, false) + '<figcaption>' + esc(t('Sheet') + ' ' + sh.n + ' / ' + g.sheets.length + ' · ' + sh.pieces.length + ' ' + t('parts') + ' · ' + t('waste') + ' ' + sh.waste_pct + ' %' + (sh.offcut ? ' · ' + t('offcut') + ' ' + Math.round(sh.offcut[0]) + ' × ' + Math.round(sh.offcut[1]) : '')) + '</figcaption></figure>';
         }).join('') + '</div></section>';
     });
     body.innerHTML = html;
