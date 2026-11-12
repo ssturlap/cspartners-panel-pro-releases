@@ -1,17 +1,21 @@
 {
-  "version": "0.3.42",
+  "version": "0.3.43",
   "date": "2026-11-12",
-  "title": "Sheet optimizer: one clean offcut, like OptiPlanning",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.42.rbz",
+  "title": "Materials by picture; one panel in its own material",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.43.rbz",
   "notes": [
-    "After finding the fewest sheets, the optimizer keeps looking for the layout that packs the last sheet tightest, so the waste is left as one big full-length…",
-    "Each sheet shows its biggest clean offcut (length × width) in the optimizer window, the printed sheets and PanelPro Web.",
-    "Tip: tick “Plain board (no grain): parts may be turned” for boards without grain — parts are then turned freely, as the saw shop does."
+    "Material library: the strip beside the Configurator now has a Materials tab (new button next to the module library, and on the Materials tab) with your…",
+    "Right-click a panel in the 3D preview › Change material…: a window with the pictures, names and brands. Change all panels of that kind (e.g. all fronts) or…",
+    "PanelPro Web: press and hold a panel in the 3D view (right-click on a computer) for the same choice.",
+    "The catalog now has small pictures, so the lists open fast.",
+    "Fix: the board library list and the catalog line on the Materials tab were not filled in since 0.3.23."
   ],
-  "title_es": "Optimizador de tableros: un solo sobrante limpio, como OptiPlanning",
+  "title_es": "Materiales con imágenes; un panel con su propio material",
   "notes_es": [
-    "Después de encontrar el menor número de tableros, el optimizador sigue buscando la distribución que aprieta más el último tablero, así el desperdicio queda…",
-    "Cada tablero muestra su mayor sobrante limpio (largo × ancho) en la ventana del optimizador, las hojas impresas y PanelPro Web.",
-    "Consejo: marque “Tablero liso (sin veta): se pueden girar las piezas” en los tableros sin veta — las piezas se giran libremente, como hace el taller de corte."
+    "Biblioteca de materiales: la franja junto al Configurador tiene ahora una pestaña Materiales (botón nuevo junto a la biblioteca de módulos, y en la pestaña…",
+    "Clic derecho en un panel de la vista 3D › Cambiar material…: una ventana con las imágenes, nombres y marcas. Cambie todos los paneles de ese tipo (p. ej.…",
+    "PanelPro Web: mantenga presionado un panel en la vista 3D (clic derecho en una computadora) para la misma elección.",
+    "El catálogo tiene ahora imágenes pequeñas, así las listas abren rápido.",
+    "Corrección: la lista de la biblioteca de tableros y la línea del catálogo en la pestaña Materiales no se llenaban desde la 0.3.23."
   ]
 }

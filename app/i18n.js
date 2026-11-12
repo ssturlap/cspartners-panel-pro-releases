@@ -2,6 +2,15 @@
 (function () {
   'use strict';
   var ES = {
+    // materials by picture (strip + Change material…)
+    'Material library': 'Biblioteca de materiales', 'Apply to': 'Aplicar a', 'On': 'En', 'All brands': 'Todas las marcas',
+    'My library folder': 'Mi carpeta de biblioteca', 'OK': 'Aceptar', 'Search': 'Buscar', 'Now': 'Ahora',
+    'Click a material, choose where it goes, then Apply (or double-click).': 'Haga clic en un material, elija dónde va y luego Aplicar (o doble clic).',
+    'This module (Configurator)': 'Este módulo (Configurador)', 'Selected modules in the model': 'Módulos seleccionados en el modelo',
+    'Change material…': 'Cambiar material…', 'Change material': 'Cambiar material', 'This panel': 'Este panel',
+    'All panels of: ': 'Todos los paneles de: ', 'This panel only': 'Solo este panel', 'Back to the material of: ': 'Volver al material de: ',
+    'Material library — pictures': 'Biblioteca de materiales — imágenes',
+    'Material library: your boards, the PanelPro catalog and the model’s materials as pictures — click one to apply it': 'Biblioteca de materiales: sus tableros, el catálogo PanelPro y los materiales del modelo en imágenes — haga clic en uno para aplicarlo',
     // panels for a run (ui/runpanels.js)
     'Under': 'Inferior', 'Above': 'Superior', 'Crown': 'Corona',
     'Underpanel: lies flat under the run and hides the joints': 'Panel inferior: acostado bajo los módulos, tapa las uniones',
@@ -58,8 +67,8 @@
     'Open / close all doors in the preview': 'Abrir / cerrar todas las puertas en la vista previa',
     'Open / close all drawers in the preview': 'Abrir / cerrar todas las gavetas en la vista previa',
     'Open / close everything in the preview': 'Abrir / cerrar todo en la vista previa',
-    'Navigate like SketchUp:\n• Middle-drag: orbit\n• Shift + middle-drag: pan\n• Wheel: zoom toward cursor\n• Double-click middle: centre on point\n• O / H / Z: left-drag orbits / pans / zooms\n• Shift+Z: zoom extents · Esc: back to orbit\n• Left-drag orbits, Shift+left pans (trackpads)\n• Click a door or drawer: open / close it':
-      'Navegue como en SketchUp:\n• Arrastre con botón central: orbitar\n• Shift + botón central: desplazar\n• Rueda: zoom hacia el cursor\n• Doble clic central: centrar en el punto\n• O / H / Z: el botón izquierdo orbita / desplaza / hace zoom\n• Shift+Z: ver todo · Esc: volver a orbitar\n• Arrastre izquierdo orbita, Shift+izquierdo desplaza (trackpads)\n• Clic en una puerta o gaveta: abrirla / cerrarla',
+    'Navigate like SketchUp:\n• Middle-drag: orbit\n• Shift + middle-drag: pan\n• Wheel: zoom toward cursor\n• Double-click middle: centre on point\n• O / H / Z: left-drag orbits / pans / zooms\n• Shift+Z: zoom extents · Esc: back to orbit\n• Left-drag orbits, Shift+left pans (trackpads)\n• Click a door or drawer: open / close it\n• Right-click a panel: change its material':
+      'Navegue como en SketchUp:\n• Arrastre con botón central: orbitar\n• Shift + botón central: desplazar\n• Rueda: zoom hacia el cursor\n• Doble clic central: centrar en el punto\n• O / H / Z: el botón izquierdo orbita / desplaza / hace zoom\n• Shift+Z: ver todo · Esc: volver a orbitar\n• Arrastre izquierdo orbita, Shift+izquierdo desplaza (trackpads)\n• Clic en una puerta o gaveta: abrirla / cerrarla\n• Clic derecho en un panel: cambiar su material',
     'parts': 'piezas', 'Dimensions in mm': 'Medidas en mm', 'Dimensions in cm': 'Medidas en cm',
     // compact bar
     'Placing module': 'Colocando módulo', 'Placing: ': 'Colocando: ',

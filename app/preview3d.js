@@ -295,6 +295,7 @@
       var g = p.shape === 'cyl' ? cylGeometry(p) : prismGeometry(p, m.userData.texmm);
       var parent = p.mover && MOV[p.mover] ? MOV[p.mover].group : (PG[p.grp] || root);
       var mesh = new T.Mesh(g, m);
+      if (p.pid != null && p.shape !== 'cyl' && p.role !== 'hardware' && !p.deco) { mesh.userData.part = p; }
       parent.add(mesh);
       if (p.shape !== 'cyl') { parent.add(new T.LineSegments(new T.EdgesGeometry(g, 25), EDGE)); }
       g.computeBoundingBox();
@@ -579,6 +580,40 @@
     return out;
   }
 
+  // Panel under the cursor (its builder part: pid, name, role, mat, mkey…) or null.
+  function partAt(ev) {
+    var c = cam();
+    persp.lookAt(target);
+    if (useOrtho) { syncOrtho(); }
+    c.updateMatrixWorld();
+    root.updateMatrixWorld(true);
+    var rc = new T.Raycaster();
+    rc.setFromCamera(ndc(ev), c);
+    var hits = rc.intersectObjects(meshes(), false);
+    for (var i = 0; i < hits.length; i++) { if (hits[i].object.userData.part) { return hits[i].object.userData.part; } }
+    return null;
+  }
+  P3D.partAt = partAt;
+
+  // Outline the panel(s) with this pid (and group, in a composition); null clears.
+  var hlLines = [];
+  var HL = new T.LineBasicMaterial({ color: 0xff6a1a, depthTest: false, transparent: true });
+  P3D.highlight = function (pid, grp) {
+    hlLines.forEach(function (l) { if (l.parent) { l.parent.remove(l); } l.geometry.dispose(); });
+    hlLines = [];
+    if (pid != null) {
+      meshes().forEach(function (o) {
+        var p = o.userData.part;
+        if (!p || p.pid !== pid || (grp != null && p.grp !== grp)) { return; }
+        var l = new T.LineSegments(new T.EdgesGeometry(o.geometry, 1), HL);
+        l.renderOrder = 999;
+        o.add(l);
+        hlLines.push(l);
+      });
+    }
+    dirty = true;
+  };
+
   // Door / drawer under the cursor (or null).
   function moverAt(ev) {
     var c = cam();
@@ -613,7 +648,13 @@
     el.tabIndex = 0;
     el.addEventListener('mouseenter', function () { hover = true; });
     el.addEventListener('mouseleave', function () { hover = false; });
-    el.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    // right-click a panel: the app's panel menu (Change material…), if it has one
+    el.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+      if (!P3D.onPartMenu) { return; }
+      var p = partAt(e);
+      if (p) { P3D.onPartMenu(p, { x: e.clientX, y: e.clientY }); }
+    });
     el.addEventListener('mousedown', function (e) {
       if (e.button === 1) { e.preventDefault(); } // no autoscroll
       if (e.button !== 0 && e.button !== 1) { return; }
@@ -686,8 +727,8 @@
   // the module to the view. Mouse handling above is unchanged.
   function wireTouch(el) {
     el.style.touchAction = 'none';
-    var t = null; // { x, y, x0, y0, time, moved, dist, mx, my }
-    var lastTap = 0;
+    var t = null; // { x, y, x0, y0, time, moved, dist, mx, my, long }
+    var lastTap = 0, longT = null;
     function pt(touch) { return { clientX: touch.clientX, clientY: touch.clientY }; }
     function two(e) {
       var a = e.touches[0], b = e.touches[1];
@@ -696,9 +737,19 @@
     }
     el.addEventListener('touchstart', function (e) {
       e.preventDefault();
+      clearTimeout(longT);
       if (e.touches.length === 1) {
         var p = e.touches[0];
         t = { x: p.clientX, y: p.clientY, x0: p.clientX, y0: p.clientY, time: Date.now(), moved: false };
+        // press and hold a panel: the app's panel menu (Change material…)
+        if (P3D.onPartMenu) {
+          var at = pt(p), tt = t;
+          longT = setTimeout(function () {
+            if (t !== tt || t.moved) { return; }
+            var q = partAt(at);
+            if (q) { t.long = true; if (navigator.vibrate) { try { navigator.vibrate(15); } catch (er) { /* */ } } P3D.onPartMenu(q, { x: at.clientX, y: at.clientY }); }
+          }, 550);
+        }
       } else if (e.touches.length === 2) {
         var g = two(e);
         t = { pinch: true, dist: g.dist, mx: g.mx, my: g.my, moved: true };
@@ -731,6 +782,8 @@
         }
         return;
       }
+      clearTimeout(longT);
+      if (t.long) { t = null; return; }
       if (!t.moved && Date.now() - t.time < 400) {
         var now = Date.now();
         var m = moverAt(pt(e.changedTouches[0]));
@@ -744,7 +797,7 @@
       }
       t = null;
     }, { passive: false });
-    el.addEventListener('touchcancel', function () { t = null; });
+    el.addEventListener('touchcancel', function () { clearTimeout(longT); t = null; });
   }
 
   P3D.tool = function () { return leftTool; };

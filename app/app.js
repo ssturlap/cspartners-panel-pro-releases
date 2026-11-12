@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.42';
-  var BUILD = '3801fa62aa';
+  var VERSION = '0.3.43';
+  var BUILD = '9c6d814cb5';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -45,7 +45,7 @@
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
     'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
-    'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta',
+    'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta', 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material': 'Arrastre para girar · pellizque para zoom · toque una puerta · mantenga presionado un panel para su material', 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material': 'Arrastre para girar · rueda para zoom · clic en una puerta · clic derecho en un panel para su material',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
     'Share PDF': 'Compartir PDF', 'Share Excel': 'Compartir Excel', 'Save PDF': 'Guardar PDF', 'Save Excel': 'Guardar Excel', 'File saved to Downloads: ': 'Archivo guardado en Descargas: ', 'Could not save the file: ': 'No se pudo guardar el archivo: ', 'File ready': 'Archivo listo', 'Share': 'Compartir',
@@ -208,6 +208,7 @@
     viewer.className = 'view3d-host';
     viewer.style.cssText = 'position:absolute;inset:0';
     has3d = !!(window.P3D && window.P3D.ok && window.P3D.init(viewer));
+    if (has3d) { P3D.onPartMenu = function (p) { partMatMenu(p); }; }
     return viewer;
   }
   function snapshot(res, w, h) {
@@ -905,7 +906,7 @@
     host.classList.toggle('is2d', view.mode === '2d');
     $('#dimBtn').textContent = view.mode === '3d' ? '2D' : '3D';
     $('#dimBtn').hidden = !has3d;
-    $('#viewHint').textContent = view.mode === '2d' ? t('Front view') : t(finePointer() ? 'Drag to turn · scroll to zoom · click a door' : 'Drag to turn · pinch to zoom · tap a door');
+    $('#viewHint').textContent = view.mode === '2d' ? t('Front view') : t(finePointer() ? 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material' : 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material');
     if (view.mode === '3d') { P3D.resize(); }
     draw3d(!quiet || true);
   }
@@ -945,6 +946,37 @@
     rebuild();
     draw3d(reset3d);
     renderEditBody();
+  }
+
+  // Press and hold (or right-click) a panel in the 3D view: change its material, for every
+  // panel of its kind or this panel only (the engine decides: core Builder.change_mat).
+  function matGroupLabel(k) {
+    var row = ((F().SECTIONS || {}).materials || []).filter(function (x) { return x[0] === k; })[0];
+    return row ? t(row[1]) : k;
+  }
+  function partMatMenu(p) {
+    if (!E || !E.params || !$('#editBody') || !window.PPMaterials) { return; }
+    var panel = !!E.params.panel, key = panel ? 'panel_mat' : p.mkey;
+    function apply(scope, name) {
+      try {
+        E.params = Engine.call('change_mat', { params: E.params, pid: p.pid, mkey: key, mat: name || '', scope: scope });
+      } catch (er) { toast(er.message); return; }
+      changed(false);
+      if (name) { toast(t('Material: ') + name); }
+    }
+    function choose(scope) { window.PPMaterials.pick(p.mat, function (name) { apply(scope, name); }); }
+    var items = panel ? [{ label: t('Change material…'), icon: 'palette', run: function () { choose('group'); } }] : [
+      { label: t('All panels of: ') + matGroupLabel(key), icon: 'palette', run: function () { choose('group'); } },
+      { label: t('This panel only'), icon: 'palette', run: function () { choose('part'); } }
+    ];
+    if (p.mat_own) { items.push({ label: t('Back to the material of: ') + matGroupLabel(key), icon: 'refresh', run: function () { apply('reset'); } }); }
+    if (P3D.highlight) {
+      P3D.highlight(p.pid);
+      setTimeout(function () {
+        document.addEventListener('click', function off() { document.removeEventListener('click', off, true); setTimeout(function () { P3D.highlight(null); }, 400); }, true);
+      }, 0);
+    }
+    menu(t(p.name) + (p.mat ? ' · ' + p.mat : ''), items);
   }
 
   // A size in the layout: the number only, and an "auto" switch beside it (on = shares what is left).

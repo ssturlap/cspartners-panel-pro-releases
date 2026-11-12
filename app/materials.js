@@ -192,7 +192,7 @@
   function swatchCss(name, fallback) {
     var e = find(name);
     if (e && TEX[e.id]) { return 'background:#ccc url(' + TEX[e.id] + ') center/cover'; }
-    if (!e) { var c = catFind(name); if (c) { return c.tex ? 'background:#ccc url(' + c.tex + ') center/cover' : 'background:' + (c.color || fallback || '#ddd'); } }
+    if (!e) { var c = catFind(name); if (c) { return c.tex ? 'background:#ccc url(' + (c.thumb || c.tex) + ') center/cover' : 'background:' + (c.color || fallback || '#ddd'); } }
     return 'background:' + ((e && e.color) || fallback || '#ddd');
   }
 
@@ -338,7 +338,7 @@
       document.getElementById('catAll').disabled = ro || !list.some(function (c) { return !find(c.material); });
       document.getElementById('catGrid').innerHTML = list.length ? list.map(function (c) {
         var have = !!find(c.material);
-        return '<div class="cat-card"><i class="cat-img" style="' + esc(c.tex ? 'background:#ccc url(' + c.tex + ') center/cover' : 'background:' + c.color) + '"></i>' +
+        return '<div class="cat-card"><i class="cat-img" style="' + esc(c.tex ? 'background:#ccc url(' + (c.thumb || c.tex) + ') center/cover' : 'background:' + c.color) + '"></i>' +
           '<div class="cat-txt"><small>' + esc(c.brand || t('Other')) + '</small><b>' + esc(c.name) + '</b>' +
           '<span>' + esc(len(c.sheet_l) + ' × ' + len(c.sheet_w) + ' · ' + c.thick.map(function (x) { return fmt(x) + ' mm'; }).join(', ')) + '</span>' +
           '<span>' + esc(t(TYPE_L[c.type] || '')) + '</span></div>' +
