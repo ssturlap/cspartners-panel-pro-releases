@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.46';
-  var BUILD = 'a2ff61bb9a';
+  var BUILD = '312de745b5';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -708,6 +708,8 @@
   }
 
   // ------------------------------------------------------------------ screens: module picker
+  // The module picker: one accordion section per category (only one open at a time; the last one
+  // used opens again). Pictures are drawn only for the open section.
   function renderPick(s) {
     var cats = [];
     info.presets.forEach(function (p) { if (cats.indexOf(p.category) < 0) { cats.push(p.category); } });
@@ -716,58 +718,93 @@
       return '<button type="button" class="mcard" data-key="' + esc(key) + '"><img class="pic wait" alt="" data-pk="' + esc(key) + '">' +
         '<span class="nm">' + esc(nm) + '</span><span class="sz">' + esc(dims || '') + '</span></button>';
     }
+    function section(id, title, n, inner) {
+      return '<section class="acc" data-acc="' + esc(id) + '"><button type="button" class="acc-h" data-acch="' + esc(id) + '" aria-expanded="false">' +
+        '<span class="acc-t">' + esc(title) + '</span><small class="acc-n">' + n + '</small><i class="acc-i">›</i></button>' +
+        '<div class="acc-b"><div class="acc-in"><div class="cards">' + inner + '</div></div></div></section>';
+    }
     var html = '';
     if (mine.length) {
       var mc = [];
       mine.forEach(function (p) { if (mc.indexOf(p.category) < 0) { mc.push(p.category); } });
       mc.forEach(function (c) {
-        html += '<h2 class="section-h">' + esc(t('My presets') + ' — ' + t(c)) + '</h2><div class="cards">' + mine.filter(function (p) { return p.category === c; }).map(function (p) {
+        var list = mine.filter(function (p) { return p.category === c; });
+        html += section('mine:' + c, t('My presets') + ' — ' + t(c), list.length, list.map(function (p) {
           var pp = prefs.book[p.key] || {};
           return card('user:' + p.key, p.label, pp.width ? dimsOf(pp) : '');
-        }).join('') + '</div>';
+        }).join(''));
       });
     }
     var G = window.PPCloud && window.PPCloud.on ? window.PPCloud : null;
-    if (G) { html += '<h2 class="section-h">' + esc(G.t('Public gallery')) + '</h2><div class="cards" id="galCards"><p class="meta-line">…</p></div>'; }
+    if (G) { html += section('gallery', G.t('Public gallery'), '…', '<p class="meta-line">…</p>').replace('<div class="cards">', '<div class="cards" id="galCards">'); }
     html += cats.map(function (c) {
-      return '<h2 class="section-h">' + esc(t(c)) + '</h2><div class="cards">' + info.presets.filter(function (p) { return p.category === c; }).map(function (p) {
+      var list = info.presets.filter(function (p) { return p.category === c; });
+      return section('cat:' + c, t(c), list.length, list.map(function (p) {
         var full = t(p.label), nm = full.indexOf(' — ') > 0 ? full.split(' — ').slice(1).join(' — ') : full;
         return card(p.key, nm, p.pp ? dimsOf(p.pp) : '');
-      }).join('') + '</div>';
+      }).join(''));
     }).join('');
     show(
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Pick a module')) + '</h1></header>' +
-      '<div class="page page-wide">' + html + '</div>'
+      '<div class="page page-wide picker">' + html + '</div>'
     );
+    // pictures of the open section, one at a time (keeps the phone responsive)
+    var drawQ = [];
+    function drawPics(sec) {
+      drawQ = Array.prototype.slice.call(sec.querySelectorAll('img.wait[data-pk]'));
+      (function next() {
+        var img = drawQ.shift();
+        if (!img || !img.isConnected) { return; }
+        var url = presetThumb(img.getAttribute('data-pk'));
+        if (url) { img.src = url; img.classList.remove('wait'); }
+        setTimeout(next, 0);
+      })();
+    }
+    function openSec(id, scroll) {
+      screen.querySelectorAll('.acc').forEach(function (sec) {
+        var on = sec.getAttribute('data-acc') === id;
+        sec.classList.toggle('open', on);
+        sec.querySelector('.acc-h').setAttribute('aria-expanded', String(on));
+        if (on) {
+          drawPics(sec);
+          if (scroll) { setTimeout(function () { var r = sec.getBoundingClientRect(); window.scrollTo({ top: window.scrollY + r.top - 64, behavior: 'smooth' }); }, 280); }
+        }
+      });
+      save('panelpro.web.pickOpen', id || '');
+    }
+    screen.querySelectorAll('[data-acch]').forEach(function (h) {
+      h.onclick = function () {
+        if (h.disabled) { return; }
+        var id = h.getAttribute('data-acch');
+        openSec(h.parentNode.classList.contains('open') ? null : id, true);
+      };
+    });
+    var last = load('panelpro.web.pickOpen', '');
+    if (last && screen.querySelector('[data-acc="' + last.replace(/"/g, '\\"') + '"]')) { openSec(last, false); }
     if (G) {
       (G.gallery.cached('modules') ? Promise.resolve(G.gallery.cached('modules')) : G.gallery.load('modules')).then(function (list) {
         var el = $('#galCards'); if (!el) { return; }
-        el.innerHTML = list.length ? list.map(function (g) {
-          return '<div class="mcard gcard"><button type="button" class="gpick" data-gal="' + esc(g.id) + '"><img class="pic" alt="" src="' + esc(g.thumb || '') + '">' +
+        var sec = el.closest('.acc'), hd = sec.querySelector('.acc-h');
+        sec.querySelector('.acc-n').textContent = list.length ? String(list.length) : G.t('Nothing shared yet.');
+        if (!list.length) { hd.disabled = true; sec.classList.add('empty'); sec.classList.remove('open'); return; }
+        el.innerHTML = list.map(function (g) {
+          return '<div class="mcard gcard"><button type="button" class="gpick" data-gal="' + esc(g.id) + '"><img class="pic" alt="" loading="lazy" src="' + esc(g.thumb || '') + '">' +
             '<span class="nm">' + (g.official ? '<b class="badge">' + esc(G.t('Official')) + '</b> ' : '') + esc(g.name) + '</span>' +
             '<span class="sz">' + esc(G.t('Shared by: ') + (g.author && g.author.name || '')) + '</span></button>' +
             (G.gallery.admin('modules', g, function () { renderPick(s); }) ? '<button type="button" class="gmore" data-gmore="' + esc(g.id) + '" aria-label="⋯">⋯</button>' : '') + '</div>';
-        }).join('') : '<p class="meta-line">' + esc(G.t('Nothing shared yet.')) + '</p>';
+        }).join('');
         el.querySelectorAll('[data-gal]').forEach(function (b) {
           b.onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/new/' + encodeURIComponent('gal:' + b.getAttribute('data-gal'))); };
         });
         el.querySelectorAll('[data-gmore]').forEach(function (b) {
           b.onclick = function () { var g = list.find(function (x) { return x.id === b.getAttribute('data-gmore'); }); G.gallery.admin('modules', g, function () { renderPick(s); })(); };
         });
-      }, function () { var el = $('#galCards'); if (el) { el.innerHTML = ''; } });
+      }, function () { var el = $('#galCards'); if (el) { el.closest('.acc').remove(); } });
     }
     $('#back').onclick = function () { history.back(); };
     screen.querySelectorAll('[data-key]').forEach(function (b) {
       b.onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/new/' + encodeURIComponent(b.getAttribute('data-key'))); };
     });
-    var imgs = Array.prototype.slice.call(screen.querySelectorAll('[data-pk]'));
-    (function next() {
-      var img = imgs.shift();
-      if (!img || !img.isConnected) { return; }
-      var url = presetThumb(img.getAttribute('data-pk'));
-      if (url) { img.src = url; img.classList.remove('wait'); }
-      setTimeout(next, 0);
-    })();
   }
   function presetThumb(key) {
     if (presetThumbs[key]) { return presetThumbs[key]; }

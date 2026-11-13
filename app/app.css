@@ -902,3 +902,26 @@ body:not(.desk) .frow-f .flbl { font-size: 14px; }
 body:not(.desk) .frow-f.stack .flbl { font-size: 13px; }
 body:not(.desk) .box.fields select, body:not(.desk) .box.fields .sel { min-height: 40px; height: 40px; font-size: 14px; }
 body:not(.desk) .box.fields h3.grp { font-size: 15px; }
+
+/* module picker: accordion (one section open at a time) */
+.picker .acc { background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin: 0 0 8px; overflow: hidden; }
+.picker .acc-h { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 52px; padding: 0 14px; border: 0; background: none; font: inherit; text-align: left; color: var(--ink); cursor: pointer; }
+.picker .acc-t { flex: 1; min-width: 0; font-size: 16px; font-weight: 700; }
+.picker .acc-n { font-size: 12.5px; font-weight: 650; color: var(--muted); background: #eef1f2; border-radius: 10px; padding: 2px 8px; white-space: nowrap; }
+.picker .acc-i { font-style: normal; font-size: 22px; color: #9aa3a8; transition: transform .25s; }
+.picker .acc.open .acc-i { transform: rotate(90deg); }
+.picker .acc.open .acc-h { border-bottom: 1px solid #eceef0; }
+.picker .acc.empty .acc-h { cursor: default; min-height: 46px; }
+.picker .acc.empty .acc-t { color: var(--muted); font-weight: 600; }
+.picker .acc.empty .acc-n { background: none; font-weight: 500; }
+.picker .acc.empty .acc-i { display: none; }
+.picker .acc-b { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
+.picker .acc.open .acc-b { grid-template-rows: 1fr; }
+.picker .acc-in { overflow: hidden; min-height: 0; }
+.picker .acc .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 10px; margin: 0; }
+.picker .acc .mcard { margin: 0; padding: 6px 6px 8px; border-radius: 10px; min-width: 0; }
+.picker .acc .mcard .pic { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: contain; }
+.picker .acc .mcard .nm { font-size: 13.5px; line-height: 1.2; }
+.picker .acc .mcard .sz { font-size: 12px; }
+@media (min-width: 640px) { .picker .acc .cards { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .picker .acc-b, .picker .acc-i { transition: none; } }
