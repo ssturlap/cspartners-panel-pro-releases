@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.45';
-  var BUILD = '5f920226a4';
+  var VERSION = '0.3.46';
+  var BUILD = '77ddb754a4';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -215,12 +215,57 @@
     if (!window.P3D || !P3D.snapshot || !res) { return null; }
     return P3D.snapshot(res.parts || [], matInfo, res.movers || [], { w: w || 320, h: h || 240 });
   }
+  // The textures a build's parts use (for the module pictures).
+  function texOf(res) {
+    var u = {};
+    ((res && res.parts) || []).forEach(function (p) { var i = matInfo(p.mat); if (i && i.thumb) { u[i.thumb] = true; } });
+    return Object.keys(u);
+  }
+  // The module's picture, with its materials: first in the boards' colours, then — once the
+  // texture images are loaded — again with the textures (every picture of it on screen).
   function moduleThumb(m) {
-    var k = m.id + '|' + m.updated;
+    var k = m.id + '|' + m.updated + '|' + (window.PPMaterials && PPMaterials.stamp ? PPMaterials.stamp() : 0) + '|' + JSON.stringify([m.params.mat_carcass, m.params.mat_front, m.params.mat_parts]);
     if (modThumbs[k] !== undefined) { return modThumbs[k]; }
-    try { modThumbs[k] = snapshot(Engine.call('build', { params: m.params, lang: lang }), 288, 224); }
+    var res = null;
+    try { res = Engine.call('build', { params: m.params, lang: lang }); modThumbs[k] = snapshot(res, 288, 224); }
     catch (e) { modThumbs[k] = null; }
+    var urls = texOf(res);
+    if (window.P3D && P3D.loadTex && urls.some(function (u) { return !P3D.texReady(u); })) {
+      P3D.loadTex(urls, function () {
+        modThumbs[k] = snapshot(res, 288, 224);
+        setThumbImgs(m.id, modThumbs[k]);
+      });
+    }
     return modThumbs[k];
+  }
+  // the catalog arrived (or the material list changed): the pictures on screen again, with it
+  window.addEventListener('pp-materials', function () {
+    var seen = {};
+    document.querySelectorAll('[data-wthumb], [data-thumb]').forEach(function (img) {
+      var id = img.getAttribute('data-wthumb') || img.getAttribute('data-thumb');
+      if (seen[id]) { return; }
+      seen[id] = true;
+      var m = null;
+      sites.some(function (s) { m = s.modules.find(function (x) { return x.id === id; }) || null; return !!m; });
+      if (m) { setThumbImgs(id, moduleThumb(m)); }
+    });
+    liveThumb();
+  });
+  function setThumbImgs(id, url) {
+    if (!url) { return; }
+    document.querySelectorAll('[data-wthumb="' + id + '"], [data-thumb="' + id + '"]').forEach(function (img) { img.src = url; img.style.visibility = ''; });
+  }
+  // While a module is edited, its picture in the site's list follows the changes.
+  var liveThumbT = null;
+  function liveThumb() {
+    clearTimeout(liveThumbT);
+    liveThumbT = setTimeout(function () {
+      if (!E || !E.mod || !E.res) { return; }
+      var res = E.res, put = function () { setThumbImgs(E.mod.id, snapshot(res, 288, 224)); };
+      put();
+      var urls = texOf(res);
+      if (window.P3D && P3D.loadTex && urls.some(function (u) { return !P3D.texReady(u); })) { P3D.loadTex(urls, function () { if (E && E.res === res) { put(); } }); }
+    }, 500);
   }
 
   // ------------------------------------------------------------------ keypad
@@ -946,6 +991,7 @@
     rebuild();
     draw3d(reset3d);
     renderEditBody();
+    liveThumb();
   }
 
   // Press and hold (or right-click) a panel in the 3D view: change its material, for every

@@ -113,6 +113,7 @@
       catByKey = {};
       CAT.forEach(function (c) { catByKey[keyOf(c.material)] = c; });
       stamp++; fillDatalist();
+      try { window.dispatchEvent(new Event('pp-materials')); } catch (e) { /* old browsers */ }
       return CAT;
     }, function (e) { catP = null; CAT = CAT || []; throw e; });
     return catP;
@@ -139,10 +140,10 @@
       var c = catFind(name);
       if (!c) { return null; }
       var tx = catTex(c);
-      return c.tex ? { color: '#ffffff', alpha: 1, thumb: c.tex, tex_w: tx.w, tex_h: tx.h } : { color: c.color || '#d8d2c4', alpha: 1 };
+      return c.tex ? { color: '#ffffff', avg: c.color || '#d8d2c4', alpha: 1, thumb: c.tex, tex_w: tx.w, tex_h: tx.h } : { color: c.color || '#d8d2c4', alpha: 1 };
     }
     var url = TEX[e.id];
-    if (url) { return { color: '#ffffff', alpha: 1, thumb: url, tex_w: e.tex_w || e.sheet_l || 2440, tex_h: e.tex_h || e.sheet_w || 1220 }; }
+    if (url) { return { color: '#ffffff', avg: e.color || '#d8d2c4', alpha: 1, thumb: url, tex_w: e.tex_w || e.sheet_l || 2440, tex_h: e.tex_h || e.sheet_w || 1220 }; }
     return { color: e.color || '#d8d2c4', alpha: 1 };
   }
   // What the engine needs (no images).
@@ -626,6 +627,7 @@
       if (cloud()) { fillDatalist(); return Promise.resolve(); }
       loadList(); fillDatalist(); return texLoadAll();
     },
+    stamp: function () { return stamp; },
     defaultMaterial: function () { var e = data.list.find(function (x) { return x.default; }); return e ? e.name : null; },
     localData: localData,
     cloudReset: function () { data = { list: [], tape: { roll_price: 0, roll_m: 0 } }; TEX = {}; stamp++; fillDatalist(); },

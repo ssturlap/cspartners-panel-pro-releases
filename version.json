@@ -1,17 +1,15 @@
 {
-  "version": "0.3.45",
+  "version": "0.3.46",
   "date": "2026-11-12",
-  "title": "Reset materials, copy materials from another module",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.45.rbz",
+  "title": "Module pictures show their materials",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.46.rbz",
   "notes": [
-    "Materials tab: “Reset materials” (default materials, every row following the carcass again) and “Copy materials from…” — pick another module of the project…",
-    "Panels with a material of their own are listed under their row (e.g. “Door · BERNECK Carvalho Treviso ✕”); ✕ returns them to the row’s material.",
-    "Right-click / hold a panel that is the only one of its kind (e.g. the single door): the change goes to its row, so the Materials tab shows it."
+    "PanelPro Web: the small pictures in a project’s module list show each module’s real materials (textures), and the picture of the module you are editing…",
+    "Fix: catalog materials could show as white or as a random colour in those pictures."
   ],
-  "title_es": "Restablecer materiales, copiar materiales de otro módulo",
+  "title_es": "Las imágenes de los módulos muestran sus materiales",
   "notes_es": [
-    "Pestaña Materiales: “Restablecer materiales” (materiales por defecto, todas las filas siguen la caja otra vez) y “Copiar materiales de…” — elija otro módulo…",
-    "Los paneles con material propio aparecen bajo su fila (p. ej. “Puerta · BERNECK Carvalho Treviso ✕”); ✕ los devuelve al material de la fila.",
-    "Clic derecho / mantener presionado un panel que es el único de su tipo (p. ej. la única puerta): el cambio va a su fila, así la pestaña Materiales lo muestra."
+    "PanelPro Web: las imágenes pequeñas de la lista de módulos de un proyecto muestran los materiales reales de cada módulo (texturas), y la imagen del módulo…",
+    "Corrección: los materiales del catálogo podían verse blancos o de un color al azar en esas imágenes."
   ]
 }

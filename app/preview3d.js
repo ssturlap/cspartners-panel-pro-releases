@@ -434,6 +434,39 @@
   // Draw a module on a hidden canvas and return it as a JPEG data URL (module manual).
   // opts: { open: true → doors / drawers at their open position, w, h, dir: [x, y, z] }
   var snapR = null;
+  function texReady(url) {
+    var t = texCache[url];
+    return !!(t && t.image && (t.image.complete === undefined || t.image.complete) && (t.image.naturalWidth || t.image.width));
+  }
+  // Load these texture images (for stills), then call done (once, also when some fail).
+  P3D.loadTex = function (urls, done) {
+    var left = 0, fired = false;
+    function one() { left--; if (left <= 0 && !fired) { fired = true; done(); } }
+    (urls || []).forEach(function (u) {
+      if (!u || texReady(u)) { return; }
+      left++;
+      var tex = texCache[u];
+      if (tex && tex.image) { tex.image.addEventListener('load', one); tex.image.addEventListener('error', one); return; }
+      tex = new T.TextureLoader().load(u, function () { dirty = true; one(); }, undefined, one);
+      tex.wrapS = tex.wrapT = T.RepeatWrapping;
+      texCache[u] = tex;
+    });
+    if (!left) { fired = true; done(); }
+  };
+  P3D.texReady = texReady;
+  // stills have their own textured materials (a texture of their own on the still renderer)
+  var snapMats = {};
+  function snapMaterial(info) {
+    var key = info.thumb + '|' + info.tex_w + '|' + info.tex_h;
+    if (snapMats[key]) { return snapMats[key]; }
+    var tex = new T.Texture(texCache[info.thumb].image);
+    tex.wrapS = tex.wrapT = T.RepeatWrapping;
+    tex.needsUpdate = true;
+    var m = new T.MeshLambertMaterial({ color: 0xffffff, map: tex, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+    m.userData.texmm = [info.tex_w, info.tex_h || info.tex_w];
+    snapMats[key] = m;
+    return m;
+  }
   P3D.snapshot = function (parts, mats, movers, opts) {
     opts = opts || {};
     var w = opts.w || 900, h = opts.h || 700;
@@ -459,9 +492,11 @@
     });
     parts.forEach(function (p) {
       var info = mats(p.mat);
-      if (info && info.thumb) { info = { color: info.color, alpha: info.alpha }; } // no texture loading for stills
-      var m = material(p.mat || '', info);
-      var g = p.shape === 'cyl' ? cylGeometry(p) : prismGeometry(p, null);
+      // stills: the texture when it is already loaded (P3D.loadTex), else the board's own colour
+      var tx = info && info.thumb && texReady(info.thumb);
+      if (info && info.thumb && !tx) { info = { color: info.avg || info.color, alpha: info.alpha }; }
+      var m = tx ? snapMaterial(info) : material(p.mat || '', info);
+      var g = p.shape === 'cyl' ? cylGeometry(p) : prismGeometry(p, tx ? m.userData.texmm : null);
       geos.push(g);
       var parent = p.mover && groups[p.mover] ? groups[p.mover] : (PG[p.grp] || sc);
       parent.add(new T.Mesh(g, m));
