@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.43** — Materials by picture; one panel in its own material  
-Download [cspartners_panel_pro_0.3.43.rbz](releases/cspartners_panel_pro_0.3.43.rbz) and install it in SketchUp:
+**Latest: 0.3.44** — Material rows with texture tiles; “Same as…” in the picker  
+Download [cspartners_panel_pro_0.3.44.rbz](releases/cspartners_panel_pro_0.3.44.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.44 | [cspartners_panel_pro_0.3.44.rbz](releases/cspartners_panel_pro_0.3.44.rbz) |
 | 0.3.43 | [cspartners_panel_pro_0.3.43.rbz](releases/cspartners_panel_pro_0.3.43.rbz) |
 | 0.3.42 | [cspartners_panel_pro_0.3.42.rbz](releases/cspartners_panel_pro_0.3.42.rbz) |
 | 0.3.41 | [cspartners_panel_pro_0.3.41.rbz](releases/cspartners_panel_pro_0.3.41.rbz) |

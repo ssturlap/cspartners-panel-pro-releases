@@ -283,7 +283,7 @@
     var nm = document.getElementById('newMat'); if (nm) { nm.disabled = true; }
   }
   function tabs(on) {
-    return '<div class="seg mat-tabs"><button type="button" data-mt="mine" class="' + (on === 'mine' ? 'on' : '') + '">' + esc(cloud() ? cloud().t('My list') : t('Material list')) + '</button>' +
+    return '<div class="mat-tabs" role="tablist"><button type="button" data-mt="mine" class="' + (on === 'mine' ? 'on' : '') + '">' + esc(cloud() ? cloud().t('My list') : t('Material list')) + '</button>' +
       '<button type="button" data-mt="cat" class="' + (on === 'cat' ? 'on' : '') + '">' + esc(t('PanelPro catalog')) + '</button>' +
       (cloud() ? '<button type="button" data-mt="gal" class="' + (on === 'gal' ? 'on' : '') + '">' + esc(cloud().t('Public gallery')) + '</button>' : '') + '</div>';
   }
@@ -356,19 +356,21 @@
   function renderGallery() {
     var G = cloud();
     A.show('<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(A.t('Back')) + '">‹</button><h1>' + esc(t('Materials')) + '</h1></header>' +
-      '<div class="page page-wide">' + tabs('gal') + '<p class="meta-line">' + esc(G.t('Prices stay private: only the texture, sheet size and thicknesses are shared.')) + '</p><div class="list" id="galList"><p class="meta-line">…</p></div></div>');
+      '<div class="page page-wide">' + tabs('gal') + '<p class="meta-line">' + esc(G.t('Prices stay private: only the texture, sheet size and thicknesses are shared.')) + '</p><div class="cat-grid" id="galList"><p class="meta-line">…</p></div></div>');
     document.getElementById('back').onclick = function () { history.back(); };
     wireTabs();
     G.gallery.load('materials').then(function (list) {
       var el = document.getElementById('galList'); if (!el) { return; }
       el.innerHTML = list.length ? list.map(function (g) {
         var have = !!find(g.name);
-        return '<div class="row-card"><i class="mat-thumb" style="' + esc(g.texture ? 'background:#ccc url(' + g.texture + ') center/cover' : 'background:' + (g.color || '#ddd')) + '"></i>' +
-          '<span class="grow"><span class="t1">' + (g.official ? '<b class="badge">' + esc(G.t('Official')) + '</b> ' : '') + esc(g.name) + (g.brand ? ' <small class="muted">' + esc(g.brand) + '</small>' : '') + '</span>' +
-          '<span class="t2">' + esc(len(g.sheet_l) + ' × ' + len(g.sheet_w) + ' · ' + (g.thick || []).map(function (x) { return fmt(x.t) + ' mm'; }).join(', ')) + '</span>' +
-          '<span class="t2">' + esc(G.t('Shared by: ') + (g.author && g.author.name || '')) + '</span></span>' +
-          (readOnly() || have ? '' : '<button type="button" class="btn small" data-gadd="' + esc(g.id) + '">' + esc(G.t('Add to my list')) + '</button>') +
-          (G.gallery.admin('materials', g, renderGallery) ? '<button type="button" class="xbtn" data-gm="' + esc(g.id) + '">⋯</button>' : '') + '</div>';
+        // the same picture card as the catalog
+        return '<div class="cat-card"><i class="cat-img" style="' + esc(g.texture ? 'background:#ccc url(' + g.texture + ') center/cover' : 'background:' + (g.color || '#ddd')) + '"></i>' +
+          (G.gallery.admin('materials', g, renderGallery) ? '<button type="button" class="xbtn cat-more" data-gm="' + esc(g.id) + '" aria-label="⋯">⋯</button>' : '') +
+          '<span class="cat-txt">' + (g.official || g.brand ? '<small>' + (g.official ? '<b class="badge">' + esc(G.t('Official')) + '</b> ' : '') + esc(g.brand || '') + '</small>' : '') +
+          '<b>' + esc(g.name) + '</b>' +
+          '<span>' + esc(len(g.sheet_l) + ' × ' + len(g.sheet_w) + ' · ' + (g.thick || []).map(function (x) { return fmt(x.t) + ' mm'; }).join(', ')) + '</span>' +
+          '<span>' + esc(G.t('Shared by: ') + (g.author && g.author.name || '')) + '</span></span>' +
+          (have ? '<span class="cat-have">✓ ' + esc(t('In your list')) + '</span>' : readOnly() ? '' : '<button type="button" class="btn small" data-gadd="' + esc(g.id) + '">' + esc(G.t('Add to my list')) + '</button>') + '</div>';
       }).join('') : '<p class="meta-line">' + esc(G.t('Nothing shared yet.')) + '</p>';
       el.querySelectorAll('[data-gadd]').forEach(function (b) {
         b.onclick = function () {
@@ -516,7 +518,10 @@
 
   // ------------------------------------------------------------------ picker (module material boxes)
   // Your list first, then the PanelPro catalog by brand; type to filter. done(name).
-  function pick(current, done) {
+  // opts.links: [{ id, label, mat, on }] — "Same as carcass / fronts", shown first as cards with
+  // the texture they follow; picking one calls done(null, id)
+  function pick(current, done, opts) {
+    opts = opts || {};
     loadCatalog().catch(function () {}).then(function () {
       var ov = document.createElement('div');
       ov.className = 'menu mpick';
@@ -529,6 +534,12 @@
       }
       function draw() {
         var q = keyOf(document.getElementById('mpQ').value), h = '';
+        if ((opts.links || []).length && !q) {
+          h += '<div class="mpick-g">' + esc(t('Follow another material')) + '</div>' + opts.links.map(function (l) {
+            return '<button type="button" class="mpick-row mpick-link' + (l.on ? ' on' : '') + '" data-mplink="' + esc(l.id) + '"><i style="' + esc(swatchCss(l.mat)) + '"><em>🔗</em></i>' +
+              '<span><b>' + esc(l.label) + '</b><small>' + esc(l.mat || '') + '</small></span></button>';
+          }).join('');
+        }
         var mine = data.list.filter(function (e) { return !q || keyOf(e.name + ' ' + (e.brand || '')).indexOf(q) >= 0; });
         if (mine.length) {
           h += '<div class="mpick-g">' + esc(cloud() ? cloud().t('My list') : t('Material list')) + '</div>' +
@@ -547,6 +558,8 @@
         document.getElementById('mpL').innerHTML = h || '<p class="meta-line" style="padding:12px">' + esc(t('No match.')) + '</p>';
       }
       ov.addEventListener('click', function (ev) {
+        var lk = ev.target.closest('[data-mplink]');
+        if (lk) { ov.remove(); done(null, lk.getAttribute('data-mplink')); return; }
         var b = ev.target.closest('[data-mp]');
         if (b) { ov.remove(); done(b.getAttribute('data-mp')); return; }
         if (ev.target === ov || ev.target.closest('[data-mpx]')) { ov.remove(); }

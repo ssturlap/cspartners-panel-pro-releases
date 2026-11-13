@@ -269,8 +269,7 @@
       ['mat_front', 'Fronts', 'mat', function (p) { return FRONT(p) || p.end_l || p.end_r || p.end_top || p.end_bottom || p.end_back; }],
       ['mat_frame', 'Face frame', 'mat', function (p) { return F_.showAll || p.construction === 'face_frame'; }],
       ['mat_drawer', 'Drawer boxes', 'mat', DRAWER],
-      ['mat_inner_same', 'Inner drawer fronts and shoe shelves: same as carcass', 'bool', ctx(HAS.inner)],
-      ['mat_inner', 'Inner drawer fronts and shoe shelves', 'mat', ctx(HAS.inner, function (p) { return p.mat_inner_same === false; })],
+      ['mat_inner', 'Inner drawer fronts and shoe shelves', 'mat', ctx(HAS.inner)],
       ['mat_top', 'Decorative top', 'mat', function (p) { return F_.showAll || !!p.add_top; }],
       ['mat_kick', 'Toe kick / plinth', 'mat', function (p) { return p.kick_type === 'integral' || p.kick_type === 'plinth'; }],
       ['mat_skin', 'Decorative side panels', 'mat', function (p) { return F_.showAll || SKINB(p); }],
@@ -345,7 +344,42 @@
   }
   function skinT(p) { return p.skin_t_same !== false ? p.t : p.skin_t; }
 
+  // ---- material rows that can follow another material ("Same as carcass / fronts"): offered
+  // as the first cards of the material picker (both apps). Stored as before: <key>_same,
+  // mat_back_front, mat_end_same (same as fronts), mat_inner_same.
+  var MAT_LINKS = {
+    mat_back: ['carcass', 'front'], mat_front: ['carcass'], mat_frame: ['carcass'], mat_drawer: ['carcass'], mat_top: ['carcass'],
+    mat_kick: ['carcass'], mat_skin: ['carcass'], mat_end: ['front'], mat_inner: ['carcass']
+  };
+  var LINK_KEY = { carcass: 'mat_carcass', front: 'mat_front' };
+  var LINK_LABEL = { carcass: 'Same as carcass', front: 'Same as fronts' };
+  // what this row follows now: 'carcass', 'front' or null (its own material)
+  function matLink(p, key) {
+    if (!MAT_LINKS[key] || p.panel) { return null; }
+    if (key === 'mat_back' && p.mat_back_front === true) { return 'front'; }
+    if (key === 'mat_end') { return p.mat_end_same !== false ? 'front' : null; }
+    return p[key + '_same'] !== false ? 'carcass' : null;
+  }
+  // link the row (link = 'carcass' | 'front') or give it its own material (link null, name)
+  function setMatLink(p, key, link, name) {
+    if (key === 'mat_back') { delete p.mat_back_front; }
+    if (link === 'front' && key === 'mat_back') { p.mat_back_front = true; p.mat_back_same = false; }
+    else if (key === 'mat_end') { p.mat_end_same = link === 'front'; }
+    else if (MAT_LINKS[key]) { p[key + '_same'] = link === 'carcass'; }
+    p[key] = link ? p[LINK_KEY[link]] : name;
+    followMats(p);
+  }
+  // rows that follow the carcass / fronts take their material again
+  function followMats(p) {
+    if (matLink(p, 'mat_front')) { p.mat_front = p.mat_carcass; }
+    Object.keys(MAT_LINKS).forEach(function (k) {
+      var l = k === 'mat_front' ? null : matLink(p, k);
+      if (l) { p[k] = p[LINK_KEY[l]]; }
+    });
+  }
+
   window.PPFields = {
+    MAT_LINKS: MAT_LINKS, LINK_KEY: LINK_KEY, LINK_LABEL: LINK_LABEL, matLink: matLink, setMatLink: setMatLink, followMats: followMats,
     SECTIONS: SECTIONS, NAMED_COND: NAMED_COND, cond: cond, YES: YES, SKIN: SKIN, DECO: DECO, FRIDGE: FRIDGE, PANEL: PANEL,
     FRONTS: FRONTS, OLD_FRONTS: OLD_FRONTS, INTERIORS: INTERIORS, HINGES: HINGES, COUNTED: COUNTED,
     PICKS: PICKS, MODE_KEYS: MODE_KEYS, tMult: tMult, BOXSYS: BOXSYS, applyBox: applyBox,

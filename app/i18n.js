@@ -3,7 +3,7 @@
   'use strict';
   var ES = {
     // materials by picture (strip + Change material…)
-    'Material library': 'Biblioteca de materiales', 'Apply to': 'Aplicar a', 'On': 'En', 'All brands': 'Todas las marcas',
+    'Follow another material': 'Seguir otro material', 'Material library': 'Biblioteca de materiales', 'Apply to': 'Aplicar a', 'On': 'En', 'All brands': 'Todas las marcas',
     'My library folder': 'Mi carpeta de biblioteca', 'OK': 'Aceptar', 'Search': 'Buscar', 'Now': 'Ahora',
     'Click a material, choose where it goes, then Apply (or double-click).': 'Haga clic en un material, elija dónde va y luego Aplicar (o doble clic).',
     'This module (Configurator)': 'Este módulo (Configurador)', 'Selected modules in the model': 'Módulos seleccionados en el modelo',

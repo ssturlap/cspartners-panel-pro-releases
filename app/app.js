@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.43';
-  var BUILD = '9c6d814cb5';
+  var VERSION = '0.3.44';
+  var BUILD = '8740b0e8e7';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -964,7 +964,17 @@
       changed(false);
       if (name) { toast(t('Material: ') + name); }
     }
-    function choose(scope) { window.PPMaterials.pick(p.mat, function (name) { apply(scope, name); }); }
+    function choose(scope) {
+      // "All panels of…" can also follow the carcass / fronts (as the material rows do)
+      var cur = F().matLink(E.params, key);
+      var links = scope === 'group' && !panel ? (F().MAT_LINKS[key] || []).map(function (l) {
+        return { id: l, label: t(F().LINK_LABEL[l]), mat: E.params[F().LINK_KEY[l]], on: cur === l };
+      }) : [];
+      window.PPMaterials.pick(p.mat, function (name, ln) {
+        if (ln) { F().setMatLink(E.params, key, ln); changed(false); return; }
+        apply(scope, name);
+      }, { links: links });
+    }
     var items = panel ? [{ label: t('Change material…'), icon: 'palette', run: function () { choose('group'); } }] : [
       { label: t('All panels of: ') + matGroupLabel(key), icon: 'palette', run: function () { choose('group'); } },
       { label: t('This panel only'), icon: 'palette', run: function () { choose('part'); } }
@@ -1013,7 +1023,6 @@
   }
   var SKIP = { width: 1, height: 1, depth: 1 };                 // in the measurement bar above
   var WEB_LABEL = { elevation: 'Off the floor' };               // plugin wording that means something else here
-  var SAME_MAT = ['mat_back', 'mat_front', 'mat_frame', 'mat_drawer', 'mat_top', 'mat_kick', 'mat_skin', 'mat_end'];
   var HINGE_CH = [['L', 'Hinge left'], ['R', 'Hinge right'], ['T', 'Lift up'], ['B', 'Drop down']];
   var INTERIOR_CH = [['none', 'Empty'], ['shelves', 'Shelves'], ['hang', 'Hang rail'], ['inner_drawers', 'Inner drawers'], ['shoe_pullout', 'Shoe pull-outs'], ['shoe_rack', 'Shoe rack']];
   var COUNT_L = { shelves: 'Shelves', inner_drawers: 'Drawers', shoe_pullout: 'Pull-outs', shoe_rack: 'Racks' };
@@ -1060,15 +1069,14 @@
       }).join('') + '</select>';
       return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>';
     } else if (type === 'mat') {
-      var front = key === 'mat_back' && p.mat_back_front === true;
-      var same = !front && (SAME_MAT.indexOf(key) >= 0 ? p[key + '_same'] !== false : false);
-      ctl = '<div class="matpick"><input class="text-in" autocomplete="off" data-text="' + key + '" value="' + esc(p[key] || '') + '"' + (same || front ? ' disabled' : '') + '>' +
-        '<button type="button" class="btn small" data-matpick="' + key + '"' + (same || front ? ' disabled' : '') + '>' + esc(t('Choose…')) + '</button></div>' +
-        (SAME_MAT.indexOf(key) >= 0 ? '<label class="chk"><input type="checkbox" data-same="' + key + '"' + (same ? ' checked' : '') + '> ' +
-          esc(t(key === 'mat_end' ? 'Same as fronts' : 'Same as carcass')) + '</label>' : '') +
-        (key === 'mat_back' ? '<label class="chk"><input type="checkbox" data-backfront="1"' + (front ? ' checked' : '') + '> ' + esc(t('Same as fronts')) + '</label>' : '');
+      // texture tile (tap: the picker, with "Same as carcass / fronts" as its first cards) beside
+      // the name and the material box; a row that follows another material says so
+      var link = F().matLink(p, key);
       var sw = window.PPMaterials ? window.PPMaterials.swatchCss(p[key], (matInfo(p[key]) || {}).color) : 'background:' + ((matInfo(p[key]) || {}).color || '#ddd');
-      return '<div class="frow-f stack"><span class="flbl"><i class="swatch" style="' + esc(sw) + '"></i>' + esc(label) + '</span>' + ctl + '</div>';
+      var box = link ? '<button type="button" class="matlinked" data-matpick="' + key + '"><b>🔗 ' + esc(t(F().LINK_LABEL[link])) + '</b><small>' + esc(p[key] || '') + '</small></button>' :
+        '<input class="text-in" autocomplete="off" data-text="' + key + '" value="' + esc(p[key] || '') + '">';
+      return '<div class="matrow"><button type="button" class="mattile' + (link ? ' linked' : '') + '" data-matpick="' + key + '" style="' + esc(sw) + '" aria-label="' + esc(t('Choose…')) + '"></button>' +
+        '<div class="matcol"><span class="flbl">' + esc(label) + '</span>' + box + '</div></div>';
     } else {
       ctl = '<input class="text-in" data-text="' + key + '" value="' + esc(p[key] == null ? '' : p[key]) + '" autocomplete="off">';
       return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>';
@@ -1217,11 +1225,14 @@
       if (!b || !body.contains(b)) { return; }
       var a;
       if ((a = b.getAttribute('data-matpick')) && window.PPMaterials) {
-        var mk = a;
-        window.PPMaterials.pick(p[mk], function (name) {
-          var inp = body.querySelector('[data-text="' + mk + '"]');
-          if (inp) { inp.value = name; inp.dispatchEvent(new Event('change', { bubbles: true })); }   // same path as typing it
+        var mk = a, cur = F().matLink(p, mk);
+        var links = (p.panel ? [] : F().MAT_LINKS[mk] || []).map(function (l) {
+          return { id: l, label: t(F().LINK_LABEL[l]), mat: p[F().LINK_KEY[l]], on: cur === l };
         });
+        window.PPMaterials.pick(cur ? null : p[mk], function (name, ln) {
+          F().setMatLink(p, mk, ln || null, name);
+          changed(false);
+        }, { links: links });
         return;
       }
       if ((a = b.getAttribute('data-tab'))) { editTab = a; save('panelpro.web.tab', a); renderEditBody(); $('#editBody').scrollTop = 0; return; }
@@ -1344,19 +1355,9 @@
         changed(false);
       } else if ((a = el.getAttribute('data-sel'))) {
         p[a] = el.value; changed(false);
-      } else if ((a = el.getAttribute('data-same'))) {
-        p[a + '_same'] = el.checked;
-        if (el.checked) { p[a] = a === 'mat_end' ? p.mat_front : p.mat_carcass; }
-        if (el.checked && a === 'mat_back') { delete p.mat_back_front; }
-        changed(false);
-      } else if (el.getAttribute('data-backfront')) {
-        if (el.checked) { p.mat_back_front = true; p.mat_back_same = false; p.mat_back = p.mat_front; } else { delete p.mat_back_front; }
-        changed(false);
       } else if ((a = el.getAttribute('data-text'))) {
         p[a] = el.value.trim();
-        if (a === 'mat_carcass') { SAME_MAT.forEach(function (k) { if (k !== 'mat_end' && p[k + '_same'] !== false) { p[k] = p.mat_carcass; } }); }
-        if (a === 'mat_front' && p.mat_end_same !== false) { p.mat_end = p.mat_front; }
-        if (a === 'mat_front' && p.mat_back_front === true) { p.mat_back = p.mat_front; }
+        if (/^mat_/.test(a)) { F().followMats(p); }
         if (a === 'name') { E.dirty = true; return; }
         changed(false);
       }

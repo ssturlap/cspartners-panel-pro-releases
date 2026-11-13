@@ -793,3 +793,30 @@ body.desk .compose { height: 100%; }
 .mpick-row small { color: var(--muted); font-size: 12.5px; }
 .mpick-row.on { background: #fff6dc; }
 @media (min-width: 720px) { .mpick .mpick-sheet { max-width: 560px; height: 80vh; } }
+
+/* material rows: texture tile (tap = picker) beside the name and the box */
+.matrow { display: flex; gap: 12px; align-items: stretch; padding: 8px 0; }
+.mattile { position: relative; flex: none; width: 66px; min-height: 66px; border-radius: 10px; border: 0; padding: 0; cursor: pointer;
+  background-size: cover !important; background-position: center !important; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.15); }
+.mattile::after { content: '▾'; position: absolute; right: -4px; bottom: -4px; width: 18px; height: 18px; border-radius: 50%; background: var(--ink, #1d2a30);
+  color: #fff; font-size: 10px; line-height: 18px; text-align: center; box-shadow: 0 0 0 2px var(--card, #fff); }
+.mattile.linked::after { content: '🔗'; background: #fff; font-size: 10px; }
+.matcol { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+.matcol .flbl { margin: 0; }
+.matlinked { text-align: left; border: 1px dashed var(--line); border-radius: 10px; background: transparent; padding: 8px 12px; cursor: pointer; color: inherit; font: inherit; }
+.matlinked b { display: block; font-weight: 600; }
+.matlinked small { display: block; color: var(--muted); }
+.mpick-link i { position: relative; }
+.mpick-link i em { position: absolute; right: -5px; bottom: -5px; font-style: normal; font-size: 11px; background: #fff; border-radius: 50%; width: 18px; height: 18px; line-height: 18px; text-align: center; box-shadow: 0 0 0 1px var(--line); }
+.mpick-h #mpQ { flex: 1 1 auto; width: 100%; min-width: 0; height: 44px; padding: 0 12px; box-sizing: border-box; }
+.mpick .mpick-h { display: flex; width: 100%; box-sizing: border-box; }
+/* Materials screen: My list · PanelPro catalog · Public gallery as compact tabs (not three long buttons) */
+.mat-tabs { display: flex; gap: 22px; margin: 2px 0 14px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.mat-tabs::-webkit-scrollbar { display: none; }
+.mat-tabs button { flex: none; min-height: 0; height: 40px; padding: 0 2px; border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none;
+  font: inherit; font-weight: 600; color: var(--muted); margin-bottom: -1px; white-space: nowrap; }
+.mat-tabs button:hover { color: var(--ink); }
+.mat-tabs button.on { background: none; color: var(--ink); border-color: transparent; border-bottom-color: var(--tape-deep); }
+.cat-card { position: relative; }
+.cat-card .cat-more { position: absolute; top: 6px; right: 6px; background: rgba(255,255,255,.9); border-radius: 50%; }
+.mpick-h .xbtn { flex: none; width: 44px; }
