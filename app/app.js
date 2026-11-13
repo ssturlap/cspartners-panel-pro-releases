@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.46';
-  var BUILD = '77ddb754a4';
+  var BUILD = 'a2ff61bb9a';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta', 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material': 'Arrastre para girar · pellizque para zoom · toque una puerta · mantenga presionado un panel para su material', 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material': 'Arrastre para girar · rueda para zoom · clic en una puerta · clic derecho en un panel para su material',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -820,7 +820,9 @@
       var params;
       try { params = mod ? Engine.call('normalize', { params: mod.params }) : presetParams(presetKey); }
       catch (e) { go('#/site/' + encodeURIComponent(s.id), true); return; }
-      E = { site: s, mod: mod, presetKey: mod ? mod.preset || null : presetKey, params: params, dirty: !mod, changed: {} };
+      // a new module goes step by step through the tabs (Save & next); an edited one saves in place
+      E = { site: s, mod: mod, presetKey: mod ? mod.preset || null : presetKey, params: params, dirty: !mod, changed: {}, wizard: !mod };
+      if (!mod) { editTab = 'layout'; }
     }
     rebuild();
     var p = E.params;
@@ -831,12 +833,12 @@
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
       '<div class="edit-layout' + (desk() ? ' ws' : '') + '">' + (desk() ? deskModsHtml(s, mod ? mod.id : 'new') : '') +
       '<div class="view3d" id="v3d"><svg class="elev" id="elev" preserveAspectRatio="xMidYMid meet"></svg>' +
-      '<span class="view-hint" id="viewHint"></span>' +
+      '<span class="view-hint" id="viewHint"></span><div class="dimchips" id="dimChips"></div>' +
       '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" title="2D / 3D">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
       vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View')) +
       vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
       '<div class="edit-side"><div class="page" id="editBody"></div>' +
-      '<div class="dock"><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save changes') : t('Add to site')) + '</button></div></div>' +
+      '<div class="dock"><span class="steps" id="steps"></span><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save') : t('Add to site')) + '</button></div></div>' +
       '</div>'
     );
     var host = $('#v3d');
@@ -850,7 +852,8 @@
     else { P3D.setDimUnits(uk(), U()); P3D.setDims(dimsShown()); P3D.resize(); }
     setViewMode(view.mode, true);
     $('#back').onclick = function () {
-      if (E.dirty && mod && !confirm(t('Discard your changes?'))) { return; }
+      if (E.dirty && E.mod && !confirm(t('Discard your changes?'))) { return; }
+      if (E.mod && !mod) { var sid = s.id; E = null; go('#/site/' + encodeURIComponent(sid), true); return; }   // a new module, saved step by step
       E = null;
       if (desk()) { go(mod ? '#/' : '#/site/' + encodeURIComponent(s.id)); } else { history.back(); }
     };
@@ -951,7 +954,9 @@
     host.classList.toggle('is2d', view.mode === '2d');
     $('#dimBtn').textContent = view.mode === '3d' ? '2D' : '3D';
     $('#dimBtn').hidden = !has3d;
-    $('#viewHint').textContent = view.mode === '2d' ? t('Front view') : t(finePointer() ? 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material' : 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material');
+    var vh = $('#viewHint');
+    vh.classList.remove('gone'); clearTimeout(hintT); hintT = setTimeout(function () { vh.classList.add('gone'); }, 4000);
+    vh.textContent = view.mode === '2d' ? t('Front view') : t(finePointer() ? 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material' : 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material');
     if (view.mode === '3d') { P3D.resize(); }
     draw3d(!quiet || true);
   }
@@ -1048,7 +1053,8 @@
   }
   function seg(id, choices, value, extraCls, segCls) {
     return '<div class="seg' + (segCls ? ' ' + segCls : '') + '" data-seg="' + id + '">' + choices.map(function (c) {
-      return '<button type="button" class="' + (extraCls || '') + '" data-v="' + esc(c[0]) + '" aria-pressed="' + (String(value) === String(c[0])) + '">' + esc(t(c[1])) + '</button>';
+      return '<button type="button" class="' + (extraCls || '') + '" data-v="' + esc(c[0]) + '" aria-pressed="' + (String(value) === String(c[0])) + '">' +
+        (extraCls === 'tile' ? '<i class="fi fi-' + esc(c[0]) + '"></i>' : '') + '<span>' + esc(t(c[1])) + '</span></button>';
     }).join('') + '</div>';
   }
 
@@ -1122,8 +1128,8 @@
       // the name and the material box; a row that follows another material says so
       var link = F().matLink(p, key);
       var sw = window.PPMaterials ? window.PPMaterials.swatchCss(p[key], (matInfo(p[key]) || {}).color) : 'background:' + ((matInfo(p[key]) || {}).color || '#ddd');
-      var box = link ? '<button type="button" class="matlinked" data-matpick="' + key + '"><b>🔗 ' + esc(t(F().LINK_LABEL[link])) + '</b><small>' + esc(p[key] || '') + '</small></button>' :
-        '<input class="text-in" autocomplete="off" data-text="' + key + '" value="' + esc(p[key] || '') + '">';
+      // one list row: tile · name · its material (or what it follows) · › — tap: the picker
+      var box = '<small class="matval">' + (link ? '🔗 ' + esc(t(F().LINK_LABEL[link])) : esc(p[key] || '—')) + '</small>';
       // panels of this kind with a material of their own (right-click / hold › This panel only)
       var seen = {}, own = ((E && E.res && E.res.parts) || []).filter(function (x) {
         if (!x.mat_own || x.mkey !== key || seen[x.pid]) { return false; }
@@ -1137,8 +1143,8 @@
       // first row: Reset materials · Copy materials from… (another module of this site)
       var tools = key === 'mat_carcass' || (p.panel && key === 'panel_mat') ? '<div class="mattools"><button type="button" class="btn small ghost" data-matreset="1">↺ ' + esc(t('Reset materials')) + '</button>' +
         '<button type="button" class="btn small ghost" data-matcopy="1">⧉ ' + esc(t('Copy materials from…')) + '</button></div>' : '';
-      return tools + '<div class="matrow"><button type="button" class="mattile' + (link ? ' linked' : '') + '" data-matpick="' + key + '" style="' + esc(sw) + '" aria-label="' + esc(t('Choose…')) + '"></button>' +
-        '<div class="matcol"><span class="flbl">' + esc(label) + '</span>' + box + owns + '</div></div>';
+      return tools + '<div class="matrow"><button type="button" class="matbtn" data-matpick="' + key + '"><span class="mattile' + (link ? ' linked' : '') + '" style="' + esc(sw) + '"></span>' +
+        '<span class="matcol"><span class="flbl">' + esc(label) + '</span>' + box + '</span><span class="chev">›</span></button>' + owns + '</div>';
     } else {
       ctl = '<input class="text-in" data-text="' + key + '" value="' + esc(p[key] == null ? '' : p[key]) + '" autocomplete="off">';
       return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>';
@@ -1165,7 +1171,7 @@
     var lay = (E.res && E.res.layout) || [];
     var nk = p.layout_mode === 'nooks';
     // layout mode: columns and rows, or NOOKS (ui/nooks.js draws its editor into #nkHost after render)
-    var h = '<div class="seg lmode" data-lmode="1">' + [['cols', 'Columns and rows'], ['nooks', 'NOOKS']].map(function (o) {
+    var h = '<div class="seg seg-sw lmode" data-lmode="1">' + [['cols', 'Columns and rows'], ['nooks', 'NOOKS']].map(function (o) {
       return '<button type="button" data-lm="' + o[0] + '" aria-pressed="' + ((o[0] === 'nooks') === nk) + '">' + esc(t(o[1])) + '</button>';
     }).join('') + '</div>';
     if (nk) { return h + '<p class="meta-line">' + esc(t('Split the box into spaces as you like (nooks).')) + '</p><div id="nkHost" class="box"></div>' + sepBoxHtml(); }
@@ -1176,7 +1182,7 @@
         '<span class="grow"></span>' +
         (p.columns.length > 1 ? '<button type="button" class="xbtn" data-colmv="' + ci + ',-1" aria-label="Move left">←</button><button type="button" class="xbtn" data-colmv="' + ci + ',1" aria-label="Move right">→</button>' +
           '<button type="button" class="xbtn del" data-colx="' + ci + '" aria-label="Remove column">✕</button>' : '') + '</div>' +
-        '<div class="seg" style="margin:6px 0 4px">' + [['normal', 'Cabinet section'], ['kneehole', 'Kneehole (open, no box)']].map(function (o) {
+        '<div class="seg seg-sw colkind">' + [['normal', 'Cabinet section'], ['kneehole', 'Leg space']].map(function (o) {
           return '<button type="button" data-colkind="' + ci + '" data-v="' + o[0] + '" aria-pressed="' + (col.kind === o[0]) + '">' + esc(t(o[1])) + '</button>';
         }).join('') + '</div>';
       if (col.kind === 'kneehole') { h += '<p class="meta-line">' + esc(t('Open kneehole — no bottom, back or fronts; adjacent partitions become pedestal sides.')) + '</p></div>'; return; }
@@ -1184,8 +1190,8 @@
         var front = row.front.replace(/^glass_/, ''), door = front === 'door', drawer = front === 'drawer';
         var rh = (LY.rows || [])[ri];
         // front = the category (one joined control); hinge and interior = its details, set apart below
-        var details = (door ? '<div class="opt-l">' + esc(t('Hinge')) + '</div>' + seg('hinge:' + ci + ',' + ri, HINGE_CH, row.hinge || 'L', 'chip') : '') +
-          (!drawer ? '<div class="opt-l">' + esc(t('Inside')) + '</div>' + seg('interior:' + ci + ',' + ri, INTERIOR_CH, row.interior || 'none', 'chip') : '') +
+        var details = (door ? '<div class="opt-l">' + esc(t('Hinge')) + '</div>' + seg('hinge:' + ci + ',' + ri, HINGE_CH, row.hinge || 'L', 'chip', 'seg-grid g4') : '') +
+          (!drawer ? '<div class="opt-l">' + esc(t('Inside')) + '</div>' + seg('interior:' + ci + ',' + ri, INTERIOR_CH, row.interior || 'none', 'chip', 'seg-grid g3') : '') +
           (!drawer && COUNT_L[row.interior] ? '<div class="stepper"><span>' + esc(t(COUNT_L[row.interior])) + '</span>' +
             '<button type="button" data-shelf="' + ci + ',' + ri + ',-1" aria-label="Fewer shelves">−</button><b>' + (row.shelves || 0) + '</b>' +
             '<button type="button" data-shelf="' + ci + ',' + ri + ',1" aria-label="More shelves">+</button></div>' : '');
@@ -1194,7 +1200,7 @@
           (col.rows.length > 1 ? '<button type="button" class="xbtn" data-rowmv="' + ci + ',' + ri + ',-1" aria-label="' + esc(t('Move up')) + '"' + (ri === 0 ? ' disabled' : '') + '>↑</button>' +
             '<button type="button" class="xbtn" data-rowmv="' + ci + ',' + ri + ',1" aria-label="' + esc(t('Move down')) + '"' + (ri === col.rows.length - 1 ? ' disabled' : '') + '>↓</button>' +
             '<button type="button" class="xbtn del" data-rowx="' + ci + ',' + ri + '" aria-label="Remove row">✕</button>' : '') + '</div>' +
-          '<div class="opt-l">' + esc(t('Front')) + '</div>' + seg('front:' + ci + ',' + ri, FRONT_CHOICES, front, '', 'seg-joined') +
+          '<div class="opt-l">' + esc(t('Front')) + '</div>' + seg('front:' + ci + ',' + ri, FRONT_CHOICES, front, 'tile', 'seg-tiles') +
           (details ? '<div class="row-details">' + details + '</div>' : '') +
           '</div>';
         // split module: a separate box below this row
@@ -1219,6 +1225,24 @@
     if (k === 'top' || k === 'bottom') { return [['len', 'width', 'Length ↔ grain'], ['wid', 'depth', 'Width'], ['thk', 'height', 'Thickness']]; }
     if (k === 'side') { return [['len', 'height', 'Length ↔ grain'], ['wid', 'depth', 'Width'], ['thk', 'width', 'Thickness']]; }
     return [['len', 'width', 'Length ↔ grain'], ['wid', 'height', 'Width'], ['thk', 'depth', 'Thickness']];
+  }
+  var hintT = null;
+  // The sizes as chips on the 3D view (phone): tap one = its keypad (the size box below, hidden)
+  function fillDimChips(p) {
+    var host = $('#dimChips');
+    if (!host) { return; }
+    var list = p.panel ? panelDims(p).map(function (d) { return ['pdim', d[0], d[1], d[0] === 'len' ? 'L' : d[0] === 'wid' ? t('W') : t('T')]; })
+      : [['dim', 'width', 'width', t('W')], ['dim', 'height', 'height', t('H')], ['dim', 'depth', 'depth', t('D')]];
+    host.innerHTML = list.map(function (d) {
+      return '<button type="button" data-chip="' + d[0] + ':' + d[1] + '"' + (E.changed[d[2]] ? ' class="changed"' : '') + '><small>' + esc(d[3]) + '</small>' + L(p[d[2]]) + '</button>';
+    }).join('');
+    host.onclick = function (e) {
+      var b = e.target.closest('[data-chip]');
+      if (!b) { return; }
+      var a = b.getAttribute('data-chip').split(':');
+      var tgt = document.querySelector('#editBody [data-' + a[0] + '="' + a[1] + '"]');
+      if (tgt) { tgt.click(); }
+    };
   }
   function renderEditBody() {
     var body = $('#editBody');
@@ -1254,6 +1278,12 @@
     if (E.res) { html += '<p class="meta-line">' + E.res.parts.filter(function (x) { return x.cut; }).length + ' ' + esc(t('parts')) + '</p>'; }
     body.innerHTML = html;
     body.scrollTop = scrollY;
+    E.tabs = tabs.map(function (x) { return x[0]; });
+    E.tab = tab[0];
+    var nav = body.querySelector('.etabs'), on = nav && nav.querySelector('[aria-selected="true"]');
+    if (on) { nav.scrollLeft = Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2); }
+    fillDimChips(p);
+    dockState();
     wireEditBody(body);
     var nh = document.getElementById('nkHost');
     if (nh && window.PPNooks) {
@@ -1461,24 +1491,72 @@
       E = null; toast(t('Deleted')); go('#/site/' + encodeURIComponent(s.id), true);
     }
   });
-  function saveModule() {
+  // The dock: new module → "Save & next: <tab> ›" (last: "Save & finish ✓") and "Step n of N";
+  // editing → "Save" (stays on the tab).
+  function dockState() {
+    var b = $('#saveMod'), st = $('#steps');
+    if (!b || !E) { return; }
+    if (E.wizard && E.tabs && E.tabs.length) {
+      var i = Math.max(0, E.tabs.indexOf(E.tab)), next = E.tabs[i + 1];
+      var lbl = next ? (TABS.find(function (x) { return x[0] === next; }) || [0, next])[1] : null;
+      b.textContent = next ? t('Save & next: ') + t(lbl) + ' ›' : t('Save & finish') + ' ✓';
+      if (st) { st.textContent = t('Step ') + (i + 1) + t(' of ') + E.tabs.length; st.hidden = false; }
+    } else {
+      b.textContent = t('Save');
+      if (st) { st.hidden = true; }
+    }
+  }
+  // Put the module in the site (new) or update it; returns its id.
+  function storeModule() {
     var s = E.site;
     var nameIn = document.querySelector('[data-text="name"]');
     if (nameIn) { E.params.name = nameIn.value.trim(); }
-    var mid;
     if (E.mod) {
-      // edge banding is switched in the cut list: keep the module's own
       if (E.mod.params && E.mod.params.edges) { E.params.edges = clone(E.mod.params.edges); } else { delete E.params.edges; }
-      E.mod.params = clone(E.params); E.mod.updated = now(); mid = E.mod.id;
-      touch(s); persist(); toast(t('Saved'));
+      E.mod.params = clone(E.params); E.mod.updated = now();
     } else {
-      mid = uid();
-      s.modules.push({ id: mid, order: s.next_order++, created: now(), updated: now(), params: clone(E.params), preset: E.presetKey || null });
-      touch(s); persist(); toast(t('Added to the site'));
+      E.mod = { id: uid(), order: s.next_order++, created: now(), updated: now(), params: clone(E.params), preset: E.presetKey || null };
+      s.modules.push(E.mod);
+      // the address follows (without leaving the editor)
+      try { history.replaceState(null, '', '#/site/' + encodeURIComponent(s.id) + '/m/' + encodeURIComponent(E.mod.id)); } catch (e) { /* */ }
     }
-    E = null;
-    // desktop: stay on the module (the list on the left shows the change)
-    go('#/site/' + encodeURIComponent(s.id) + (desk() ? '/m/' + encodeURIComponent(mid) : ''), true);
+    touch(s); persist();
+    E.dirty = false;
+    E.changed = {};
+    if (desk()) {
+      var side = screen.querySelector('.ws-mods');
+      if (side) {
+        var tmp = document.createElement('div');
+        tmp.innerHTML = deskModsHtml(s, E.mod.id);
+        side.parentNode.replaceChild(tmp.firstChild, side);
+        wireDeskMods(s);
+      }
+    }
+    return E.mod.id;
+  }
+  function saveModule() {
+    if (E.wizard) {
+      var i = E.tabs ? E.tabs.indexOf(E.tab) : -1, next = E.tabs && E.tabs[i + 1];
+      var first = !E.mod;
+      storeModule();
+      if (next) {
+        toast(first ? t('Added to the site') : t('Saved'));
+        editTab = next; save('panelpro.web.tab', next);
+        renderEditBody();
+        $('#editBody').scrollTop = 0;
+        return;
+      }
+      E.wizard = false;
+      toast(t('Saved'));
+      var s0 = E.site, id0 = E.mod.id;
+      E = null;
+      go('#/site/' + encodeURIComponent(s0.id) + (desk() ? '/m/' + encodeURIComponent(id0) : ''), true);
+      return;
+    }
+    // editing: save, stay on this tab
+    storeModule();
+    toast(t('Saved'));
+    renderEditBody();
   }
   // Split module → one module per box, in the box's place (composition / room), replacing it.
   function separateModule() {

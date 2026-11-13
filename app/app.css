@@ -826,3 +826,79 @@ body.desk .compose { height: 100%; }
 .ownmat span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ownmat em { font-style: normal; color: var(--muted); }
 .mattools { display: flex; gap: 8px; flex-wrap: wrap; margin: 2px 0 6px; } .mattools .btn { flex: 0 0 auto; }
+
+/* ===== editor, tidied (13 Nov 2026): one line of sliding tabs, small switches, tiles, compact cards ===== */
+/* 3D view: small tools stacked on the right; the hint fades; sizes as chips (phone) */
+.view-tools { flex-direction: column; top: 8px; bottom: auto; gap: 5px; }
+.view-tools button { height: 34px; min-width: 34px; width: 34px; padding: 0; border-radius: 9px; font-size: 12px; }
+.view-tools button svg { width: 18px; height: 18px; }
+.view-hint { transition: opacity .6s; max-width: calc(100% - 64px); }
+.view-hint.gone { opacity: 0; pointer-events: none; }
+.dimchips { position: absolute; left: 8px; bottom: 8px; display: flex; gap: 6px; z-index: 2; }
+.dimchips button { height: 32px; padding: 0 9px; border: 0; border-radius: 8px; background: rgba(29,42,48,.9); color: #fff; font: inherit; font-size: 14px; font-weight: 650; }
+.dimchips button small { font-size: 11px; font-weight: 600; opacity: .7; margin-right: 4px; }
+.dimchips button.changed { background: var(--tape); color: var(--tape-ink); }
+body:not(.desk) .measure { display: none; }
+body.desk .dimchips { display: none; }
+/* tabs: one line that slides sideways, underline on the chosen one */
+.etabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 18px; margin: 4px -14px 8px; padding: 0 14px; border-bottom: 1px solid var(--line);
+  background: var(--card); position: sticky; top: 0; z-index: 3; scroll-behavior: smooth;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 24px), transparent); }
+.etabs button { flex: none; height: 42px; padding: 0 1px; border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none; font-size: 14.5px; font-weight: 600; color: var(--muted); }
+.etabs button[aria-selected="true"] { background: none; color: var(--ink); border-color: transparent; border-bottom-color: var(--tape-deep); }
+/* small two/three-way switches (layout mode, column type) */
+.seg.seg-sw { display: inline-flex; flex-wrap: nowrap; gap: 0; padding: 3px; border-radius: 10px; background: #e3e7ea; margin: 2px 0 8px; max-width: 100%; }
+.seg.seg-sw button { min-height: 32px; height: auto; padding: 4px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink-2); font-size: 13.5px; font-weight: 600; flex: 1 1 auto; }
+.seg.seg-sw button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.14); }
+.seg.seg-sw.colkind { display: flex; }
+/* even grids (hinge, inside) */
+.seg.seg-grid { display: grid; gap: 6px; }
+.seg.seg-grid.g4 { grid-template-columns: repeat(4, 1fr); }
+.seg.seg-grid.g3 { grid-template-columns: repeat(3, 1fr); }
+.row-details .seg.seg-grid button.chip { min-height: 34px; padding: 3px 4px; font-size: 12.5px; line-height: 1.15; border-radius: 8px; }
+/* front type: tiles with a small drawing */
+.seg.seg-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.seg.seg-tiles button.tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 64px; padding: 6px 4px;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink-2); font-size: 12.5px; font-weight: 600; line-height: 1.15; text-align: center; }
+.seg.seg-tiles button.tile[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.fi { display: block; width: 20px; height: 26px; border: 2px solid currentColor; border-radius: 3px; position: relative; opacity: .8; }
+.fi-door_pair::after { content: ''; position: absolute; left: 50%; top: -2px; bottom: -2px; border-left: 2px solid currentColor; }
+.fi-door::after { content: ''; position: absolute; right: 3px; top: 40%; height: 6px; border-left: 2px solid currentColor; }
+.fi-drawer { height: 12px; margin: 7px 0; }
+.fi-drawer::after { content: ''; position: absolute; left: 30%; right: 30%; top: 3px; border-top: 2px solid currentColor; }
+.fi-false_front { border-style: dashed; }
+.fi-none { border-color: transparent; background: currentColor; opacity: .18; }
+.fi-same::after { content: '↑'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+/* column / row cards */
+.colbox { padding: 0 0 8px; overflow: hidden; }
+.col-head { padding: 8px 12px; border-bottom: 1px solid #eceef0; font-size: 14px; }
+.colbox > .seg, .colbox > .frow, .colbox > .meta-line, .colbox > .splitrow, .colbox > .addrow { margin-left: 12px; margin-right: 12px; }
+.colbox > .seg.seg-sw { margin-top: 8px; width: calc(100% - 24px); }
+.frow-head { font-size: 13.5px; }
+.opt-l { margin: 8px 0 5px; }
+/* materials: one list of rows (tile · name · material · ›) */
+.matrow { display: block; padding: 0; border-top: 1px solid #eceef0; }
+.matrow:first-of-type, .mattools + .matrow { border-top: 0; }
+.matbtn { display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px 2px; border: 0; background: none; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.matbtn .mattile { width: 46px; min-height: 0; height: 46px; border-radius: 9px; }
+.matbtn .mattile::after { display: none; }
+.matbtn .mattile.linked::after { display: block; content: '🔗'; right: -5px; bottom: -5px; width: 18px; height: 18px; line-height: 18px; background: #fff; }
+.matbtn .matcol { gap: 2px; }
+.matbtn .flbl { font-size: 14px; font-weight: 650; color: var(--ink); }
+.matbtn .matval { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.matbtn .chev { color: #9aa3a8; font-size: 20px; }
+.matrow .ownmats { margin: 0 0 8px 58px; }
+.mattools { margin: 0 0 4px; }
+/* the dock: step counter (new module) + the button */
+.dock .steps { align-self: center; font-size: 12.5px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.dock .steps[hidden] { display: none; }
+body:not(.desk) .view3d .p3d-note { bottom: 46px !important; }
+.colbox > .addrow, .addbtn.addcol { display: inline-flex; width: auto; min-height: 34px; height: 34px; padding: 0 14px; border-radius: 9px; background: var(--card); border: 1px dashed #b9c2c7; color: var(--ink-2); font-weight: 600; font-size: 13.5px; box-shadow: none; margin-top: 8px; }
+.addbtn.addcol { margin: 2px 0 8px; }
+body.desk .etabs { flex-wrap: nowrap; }
+/* settings rows: one size for labels and values */
+body:not(.desk) .frow-f { min-height: 44px; gap: 10px; }
+body:not(.desk) .frow-f .flbl { font-size: 14px; }
+body:not(.desk) .frow-f.stack .flbl { font-size: 13px; }
+body:not(.desk) .box.fields select, body:not(.desk) .box.fields .sel { min-height: 40px; height: 40px; font-size: 14px; }
+body:not(.desk) .box.fields h3.grp { font-size: 15px; }
