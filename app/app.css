@@ -820,3 +820,9 @@ body.desk .compose { height: 100%; }
 .cat-card { position: relative; }
 .cat-card .cat-more { position: absolute; top: 6px; right: 6px; background: rgba(255,255,255,.9); border-radius: 50%; }
 .mpick-h .xbtn { flex: none; width: 44px; }
+.ownmats { display: flex; flex-direction: column; gap: 4px; }
+.ownmat { display: flex; align-items: center; gap: 8px; text-align: left; border: 1px solid var(--line); border-radius: 8px; background: var(--card); padding: 4px 8px; font: inherit; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+.ownmat i { width: 22px; height: 22px; border-radius: 4px; flex: none; background-size: cover !important; }
+.ownmat span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ownmat em { font-style: normal; color: var(--muted); }
+.mattools { display: flex; gap: 8px; flex-wrap: wrap; margin: 2px 0 6px; } .mattools .btn { flex: 0 0 auto; }

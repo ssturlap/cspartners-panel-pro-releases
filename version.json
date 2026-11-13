@@ -1,21 +1,17 @@
 {
-  "version": "0.3.44",
+  "version": "0.3.45",
   "date": "2026-11-12",
-  "title": "Material rows with texture tiles; “Same as…” in the picker",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.44.rbz",
+  "title": "Reset materials, copy materials from another module",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.45.rbz",
   "notes": [
-    "Materials tab (plugin and PanelPro Web): each row shows a big texture tile beside the panel name. Click the tile to pick by picture; the Choose… button is gone.",
-    "The “Same as carcass” and “Same as fronts” ticks are now the first cards of the picker, shown with the texture they follow. A row that follows another…",
-    "Inner drawer fronts and shoe shelves use the same row (no separate switch).",
-    "Right-click / hold a panel › All panels of…: the picker offers “Same as carcass / fronts” too.",
-    "PanelPro Web: the Materials screen has compact tabs (My list · PanelPro catalog · Public gallery) instead of three long buttons, and the public gallery…"
+    "Materials tab: “Reset materials” (default materials, every row following the carcass again) and “Copy materials from…” — pick another module of the project…",
+    "Panels with a material of their own are listed under their row (e.g. “Door · BERNECK Carvalho Treviso ✕”); ✕ returns them to the row’s material.",
+    "Right-click / hold a panel that is the only one of its kind (e.g. the single door): the change goes to its row, so the Materials tab shows it."
   ],
-  "title_es": "Filas de material con mosaico de textura; “Igual que…” en el selector",
+  "title_es": "Restablecer materiales, copiar materiales de otro módulo",
   "notes_es": [
-    "Pestaña Materiales (plugin y PanelPro Web): cada fila muestra un mosaico grande de la textura junto al nombre del panel. Haga clic en el mosaico para elegir…",
-    "Las casillas “Igual que la caja” e “Igual que los frentes” son ahora las primeras tarjetas del selector, con la textura que siguen. Una fila que sigue otro…",
-    "Los frentes de gavetas interiores y repisas de zapatos usan la misma fila (sin interruptor aparte).",
-    "Clic derecho / mantener presionado un panel › Todos los paneles de…: el selector ofrece también “Igual que la caja / los frentes”.",
-    "PanelPro Web: la pantalla Materiales tiene pestañas compactas (Mi lista · Catálogo PanelPro · Galería pública) en vez de tres botones largos, y la galería…"
+    "Pestaña Materiales: “Restablecer materiales” (materiales por defecto, todas las filas siguen la caja otra vez) y “Copiar materiales de…” — elija otro módulo…",
+    "Los paneles con material propio aparecen bajo su fila (p. ej. “Puerta · BERNECK Carvalho Treviso ✕”); ✕ los devuelve al material de la fila.",
+    "Clic derecho / mantener presionado un panel que es el único de su tipo (p. ej. la única puerta): el cambio va a su fila, así la pestaña Materiales lo muestra."
   ]
 }

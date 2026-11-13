@@ -3,6 +3,7 @@
   'use strict';
   var ES = {
     // materials by picture (strip + Change material…)
+    'Reset materials': 'Restablecer materiales', '↺ Reset materials': '↺ Restablecer materiales', '⧉ Copy materials from…': '⧉ Copiar materiales de…', 'Copy materials from…': 'Copiar materiales de…', 'No modules in the model yet.': 'Todavía no hay módulos en el modelo.', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.',
     'Follow another material': 'Seguir otro material', 'Material library': 'Biblioteca de materiales', 'Apply to': 'Aplicar a', 'On': 'En', 'All brands': 'Todas las marcas',
     'My library folder': 'Mi carpeta de biblioteca', 'OK': 'Aceptar', 'Search': 'Buscar', 'Now': 'Ahora',
     'Click a material, choose where it goes, then Apply (or double-click).': 'Haga clic en un material, elija dónde va y luego Aplicar (o doble clic).',

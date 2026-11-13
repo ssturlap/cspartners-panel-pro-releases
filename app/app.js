@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.44';
-  var BUILD = '8740b0e8e7';
+  var VERSION = '0.3.45';
+  var BUILD = '5f920226a4';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta', 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material': 'Arrastre para girar · pellizque para zoom · toque una puerta · mantenga presionado un panel para su material', 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material': 'Arrastre para girar · rueda para zoom · clic en una puerta · clic derecho en un panel para su material',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -975,7 +975,10 @@
         apply(scope, name);
       }, { links: links });
     }
-    var items = panel ? [{ label: t('Change material…'), icon: 'palette', run: function () { choose('group'); } }] : [
+    var kin = {};
+    ((E.res && E.res.parts) || []).forEach(function (x) { if (x.mkey === p.mkey) { kin[x.pid] = true; } });
+    var only = Object.keys(kin).length <= 1 && !p.mat_own;   // the only panel of its kind: just change its row
+    var items = panel || only ? [{ label: t('Change material…') + (panel ? '' : ' (' + matGroupLabel(key) + ')'), icon: 'palette', run: function () { choose('group'); } }] : [
       { label: t('All panels of: ') + matGroupLabel(key), icon: 'palette', run: function () { choose('group'); } },
       { label: t('This panel only'), icon: 'palette', run: function () { choose('part'); } }
     ];
@@ -1075,8 +1078,21 @@
       var sw = window.PPMaterials ? window.PPMaterials.swatchCss(p[key], (matInfo(p[key]) || {}).color) : 'background:' + ((matInfo(p[key]) || {}).color || '#ddd');
       var box = link ? '<button type="button" class="matlinked" data-matpick="' + key + '"><b>🔗 ' + esc(t(F().LINK_LABEL[link])) + '</b><small>' + esc(p[key] || '') + '</small></button>' :
         '<input class="text-in" autocomplete="off" data-text="' + key + '" value="' + esc(p[key] || '') + '">';
-      return '<div class="matrow"><button type="button" class="mattile' + (link ? ' linked' : '') + '" data-matpick="' + key + '" style="' + esc(sw) + '" aria-label="' + esc(t('Choose…')) + '"></button>' +
-        '<div class="matcol"><span class="flbl">' + esc(label) + '</span>' + box + '</div></div>';
+      // panels of this kind with a material of their own (right-click / hold › This panel only)
+      var seen = {}, own = ((E && E.res && E.res.parts) || []).filter(function (x) {
+        if (!x.mat_own || x.mkey !== key || seen[x.pid]) { return false; }
+        seen[x.pid] = true; return true;
+      });
+      var owns = own.length ? '<div class="ownmats">' + own.map(function (x) {
+        var c = window.PPMaterials ? window.PPMaterials.swatchCss(x.mat, (matInfo(x.mat) || {}).color) : 'background:#ddd';
+        return '<button type="button" class="ownmat" data-ownreset="' + esc(x.pid) + '" title="' + esc(t('Back to the material of: ') + label) + '"><i style="' + esc(c) + '"></i>' +
+          '<span><b>' + esc(t(x.name)) + '</b> ' + esc(x.mat) + '</span><em>✕</em></button>';
+      }).join('') + '</div>' : '';
+      // first row: Reset materials · Copy materials from… (another module of this site)
+      var tools = key === 'mat_carcass' || (p.panel && key === 'panel_mat') ? '<div class="mattools"><button type="button" class="btn small ghost" data-matreset="1">↺ ' + esc(t('Reset materials')) + '</button>' +
+        '<button type="button" class="btn small ghost" data-matcopy="1">⧉ ' + esc(t('Copy materials from…')) + '</button></div>' : '';
+      return tools + '<div class="matrow"><button type="button" class="mattile' + (link ? ' linked' : '') + '" data-matpick="' + key + '" style="' + esc(sw) + '" aria-label="' + esc(t('Choose…')) + '"></button>' +
+        '<div class="matcol"><span class="flbl">' + esc(label) + '</span>' + box + owns + '</div></div>';
     } else {
       ctl = '<input class="text-in" data-text="' + key + '" value="' + esc(p[key] == null ? '' : p[key]) + '" autocomplete="off">';
       return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>';
@@ -1224,6 +1240,25 @@
       var b = e.target.closest('button');
       if (!b || !body.contains(b)) { return; }
       var a;
+      if (b.getAttribute('data-matreset')) {
+        E.params = Engine.call('reset_materials', { params: p });
+        changed(false); toast(t('Materials reset.')); return;
+      }
+      if (b.getAttribute('data-matcopy')) {
+        var cs = codesOf(E.site), others = E.site.modules.filter(function (m) { return !E.mod || m.id !== E.mod.id; });
+        if (!others.length) { toast(t('No other module in this site yet.')); return; }
+        menu(t('Copy materials from…'), others.map(function (m) {
+          return { label: (cs[m.id] ? cs[m.id] + ' · ' : '') + (m.params.name || presetLabel(m.params.type)) + ' — ' + (m.params.mat_front || m.params.mat_carcass || ''), icon: 'palette', run: function () {
+            E.params = Engine.call('copy_materials', { params: E.params, source: m.params });
+            changed(false); toast(t('Materials copied.'));
+          } };
+        }));
+        return;
+      }
+      if ((a = b.getAttribute('data-ownreset'))) {
+        E.params = Engine.call('change_mat', { params: p, pid: a, mkey: '', mat: '', scope: 'reset' });
+        changed(false); return;
+      }
       if ((a = b.getAttribute('data-matpick')) && window.PPMaterials) {
         var mk = a, cur = F().matLink(p, mk);
         var links = (p.panel ? [] : F().MAT_LINKS[mk] || []).map(function (l) {
