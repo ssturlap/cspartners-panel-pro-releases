@@ -938,3 +938,22 @@ body:not(.desk) .box.fields h3.grp { font-size: 15px; }
 body.desk .dk-table .pstats { margin: 0; flex-wrap: nowrap; }
 body.desk .dk-table .pst { min-width: 70px; }
 body.desk .dk-table .dupbtn { height: 32px; padding: 0 10px; font-size: 13px; white-space: nowrap; }
+/* project list, tidier: one even row of four boxes on every card, no wrapping */
+.pstats { display: grid; grid-template-columns: 1fr 1fr 1fr 1.6fr; gap: 6px; flex-wrap: nowrap; margin-top: 10px; }
+.pst { min-width: 0; padding: 6px 8px; border-radius: 8px; }
+.pst small { font-size: 9.5px; letter-spacing: .4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pst b { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.site-card .t1 { font-size: 16.5px; font-weight: 700; }
+.site-card .t2 { font-size: 13px; }
+.site-card { padding: 12px 10px 12px 14px; }
+.site-card .dupbtn { width: 34px; height: 34px; font-size: 15px; margin-top: -2px; }
+body.desk .dk-table .pstats { display: grid; grid-template-columns: 64px 64px 64px 120px; }
+.pstats { grid-template-columns: auto auto auto minmax(0, 1fr); }
+.pst { padding: 6px 9px; }
+.pst small { letter-spacing: .2px; }
+body.desk .dk-table .pstats { grid-template-columns: auto auto auto 120px; }
+body.desk .dk-table .td-name b { display: block; font-size: 14.5px; }
+body.desk .dk-table .td-name small.cli { display: block; font-size: 13px; color: var(--muted); margin-top: 1px; }
+.site-card { flex-wrap: wrap; }
+.site-card > .pstats { flex: 0 0 100%; }
+body.desk .dk-table th.th-plain { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); text-align: left; }

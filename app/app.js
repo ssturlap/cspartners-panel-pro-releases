@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.46';
-  var BUILD = '7318071c5c';
+  var BUILD = '2a53ffc6a2';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -525,7 +525,8 @@
     save('panelpro.web.siteStats', siteStatsCache);
     return st;
   }
-  function money(v) { return window.PPReports ? PPReports.money(v, { es: lang === 'es', settings: { opt: prefs.opt } }) : (prefs.opt.currency || '') + ' ' + Math.round(v); }
+  // the estimate in whole money (RD$ 30,750): it is an estimate, cents add nothing
+  function money(v) { return ((prefs.opt && prefs.opt.currency) || '') + ' ' + Math.round(v).toLocaleString('en-US'); }
   function statsHtml(s) {
     var st = siteStats(s), v = function (x) { return st ? String(x) : '…'; };
     var cell = function (label, val, cls) { return '<span class="pst' + (cls ? ' ' + cls : '') + '"><small>' + esc(label) + '</small><b>' + esc(val) + '</b></span>'; };
@@ -576,14 +577,14 @@
       '<input class="dk-search" id="dkQ" type="search" placeholder="' + esc(DT('Search projects')) + '" value="' + esc(deskQuery) + '">' +
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
       '<div class="page page-wide">' + (cloud ? cloud.invitesHtml() : '') +
-      (sites.length ? '<table class="dk-table"><thead><tr><th class="th-pic"></th>' + th('name', DT('Name')) + th('client', DT('Client')) +
-          '<th colspan="1">' + esc(t('Totals')) + '</th>' + th('updated', DT('Updated'), 'n') + '<th></th></tr></thead><tbody>' +
+      (sites.length ? '<table class="dk-table"><thead><tr><th class="th-pic"></th>' + th('name', DT('Name') + ' · ' + DT('Client')) +
+          '<th class="th-plain">' + esc(t('Totals')) + '</th>' + th('updated', DT('Updated'), 'n') + '<th></th></tr></thead><tbody>' +
           (list.length ? list.map(function (s) {
             return '<tr data-site="' + esc(s.id) + '" tabindex="0"><td class="td-pic"><img alt="" data-sthumb="' + esc(s.id) + '"></td>' +
-              '<td><b>' + esc(s.name) + '</b>' + (s.notes ? '<small>' + esc(s.notes) + '</small>' : '') + '</td><td>' + esc(s.client || '') + '</td>' +
+              '<td class="td-name"><b>' + esc(s.name) + '</b>' + (s.client ? '<small class="cli">' + esc(s.client) + '</small>' : '') + '</td>' +
               '<td>' + statsHtml(s) + '</td><td class="n">' + esc(new Date(s.updated).toLocaleDateString(lang)) + '</td>' +
               '<td class="n"><button type="button" class="btn small ghost dupbtn" data-dup="' + esc(s.id) + '">⧉ ' + esc(t('Duplicate')) + '</button></td></tr>';
-          }).join('') : '<tr><td colspan="6" class="muted">' + esc(DT('No projects match.')) + '</td></tr>') + '</tbody></table>'
+          }).join('') : '<tr><td colspan="5" class="muted">' + esc(DT('No projects match.')) + '</td></tr>') + '</tbody></table>'
         : '<div class="empty"><h2>' + esc(t('No sites yet')) + '</h2><p>' + esc(t('Start one for the room you are measuring.')) + '</p></div>') +
       '<p class="meta-line" style="margin-top:20px">PanelPro Web ' + esc(VERSION) + ' · ' + esc(t('Engine')) + ' ' + esc(Engine.version || '') + '</p>' +
       '</div><div class="dock"><button type="button" class="btn primary" id="newSite">+ ' + esc(t('New site')) + '</button></div>'
@@ -633,8 +634,8 @@
       (list.length ? '<div class="list">' + list.map(function (s) {
         var n = s.modules.length;
         return '<div class="row-card site-card" data-site="' + esc(s.id) + '" role="button" tabindex="0"><span class="grow"><span class="t1">' + esc(s.name) + '</span>' +
-          '<span class="t2">' + esc([s.client, new Date(s.updated).toLocaleDateString(lang)].filter(Boolean).join(' · ')) + '</span>' + statsHtml(s) + '</span>' +
-          '<button type="button" class="icon-btn dupbtn" data-dup="' + esc(s.id) + '" aria-label="' + esc(t('Duplicate')) + '" title="' + esc(t('Duplicate')) + '">⧉</button></div>';
+          '<span class="t2">' + esc([s.client, new Date(s.updated).toLocaleDateString(lang)].filter(Boolean).join(' · ')) + '</span></span>' +
+          '<button type="button" class="icon-btn dupbtn" data-dup="' + esc(s.id) + '" aria-label="' + esc(t('Duplicate')) + '" title="' + esc(t('Duplicate')) + '">⧉</button>' + statsHtml(s) + '</div>';
       }).join('') + '</div>'
         : '<div class="empty"><h2>' + esc(t('No sites yet')) + '</h2><p>' + esc(t('Start one for the room you are measuring.')) + '</p></div>') +
       '<p class="meta-line" style="margin-top:28px;text-align:center">PanelPro Web ' + esc(VERSION) + ' · ' + esc(t('Engine')) + ' ' + esc(Engine.version || '') + '</p>' +
