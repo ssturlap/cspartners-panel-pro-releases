@@ -4,7 +4,7 @@
  * y = depth (front y = 0 → back), z = up. The viewer stands at −y.
  *
  * Navigation follows SketchUp:
- *   middle-drag orbit · Shift + middle-drag pan · wheel zoom toward cursor ·
+ *   middle-drag orbit (always around the centre of the module or composition) · Shift + middle-drag pan · wheel zoom toward that centre ·
  *   double-click middle = centre on point · O / H / Z pick the left-drag tool ·
  *   Shift+Z zoom extents · Esc back to orbit. Left-drag orbits by default
  *   (trackpads); Shift + left-drag pans.
@@ -541,8 +541,9 @@
   function fit(dir, keepDir) {
     if (bbox.isEmpty()) { return; }
     var vb = viewBox();
-    var c = vb.getCenter(new T.Vector3());
+    var c = centre();                      // turn around the model's centre (not the dimension lines')
     var sphere = vb.getBoundingSphere(new T.Sphere());
+    sphere.radius += sphere.center.distanceTo(c);
     var d = keepDir ? persp.position.clone().sub(target).normalize() : dir.clone().normalize();
     // fit to the narrower of the two view angles: a tall, narrow view crops the sides otherwise
     var asp = (host.clientWidth || 300) / (host.clientHeight || 200);
@@ -583,8 +584,12 @@
     useOrtho = false;
   }
 
+  // The orbit point: the centre of everything drawn (one module, or the whole composition), with
+  // doors and drawers closed. Zoom goes towards it; after a pan the next turn swings back to it.
+  function centre() { return bbox.isEmpty() ? target.clone() : bbox.getCenter(new T.Vector3()); }
   function orbit(dx, dy) {
     toPerspective();
+    target.copy(centre());
     var off = persp.position.clone().sub(target);
     off.applyAxisAngle(new T.Vector3(0, 0, 1), -dx * 0.008);
     var right = new T.Vector3().crossVectors(off, new T.Vector3(0, 0, 1)).normalize();
@@ -684,16 +689,13 @@
     return null;
   }
 
-  function zoom(factor, ev) {
-    var p = ev ? pointAt(ev) : target.clone();
+  function zoom(factor) {
+    // towards the orbit point (the view's centre), never towards the cursor: the point stays put
     if (useOrtho) {
       orthoHalf = Math.max(5, orthoHalf * factor);
-      var shift = target.clone().sub(p).multiplyScalar(factor - 1);
-      target.add(shift); persp.position.add(shift);
     } else {
-      var np = p.clone().add(persp.position.clone().sub(p).multiplyScalar(factor));
-      var nt = p.clone().add(target.clone().sub(p).multiplyScalar(factor));
-      if (np.distanceTo(nt) > 5) { persp.position.copy(np); target.copy(nt); }
+      var np = target.clone().add(persp.position.clone().sub(target).multiplyScalar(factor));
+      if (np.distanceTo(target) > 5) { persp.position.copy(np); }
     }
     dirty = true;
   }

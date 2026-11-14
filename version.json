@@ -1,13 +1,15 @@
 {
-  "version": "0.3.54",
+  "version": "0.3.55",
   "date": "2026-11-14",
-  "title": "Beds: a height too low no longer breaks the preview",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.54.rbz",
+  "title": "3D view turns around the centre",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.55.rbz",
   "notes": [
-    "An overall height lower than the mattress, the deck and the nailers allow is raised to the lowest bed that can be built (388 mm with a 30 cm mattress and 18…"
+    "The 3D view (Configurator preview and PanelPro Web) always turns around the centre of the module — or of the whole composition — with doors and drawers closed.",
+    "Zooming goes towards that centre instead of the cursor, so the turning point never drifts; after a pan, the next turn swings back to the centre."
   ],
-  "title_es": "Camas: una altura demasiado baja ya no quita la vista previa",
+  "title_es": "La vista 3D gira alrededor del centro",
   "notes_es": [
-    "Una altura total más baja de lo que permiten el colchón, la base y los listones se sube a la cama más baja que se puede construir (388 mm con colchón de 30…"
+    "La vista 3D (vista previa del Configurador y PanelPro Web) siempre gira alrededor del centro del módulo — o de toda la composición — con puertas y gavetas…",
+    "El zoom va hacia ese centro en vez de hacia el cursor, así el punto de giro no se mueve; después de desplazar la vista, el siguiente giro vuelve al centro."
   ]
 }

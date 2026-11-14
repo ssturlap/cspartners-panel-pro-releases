@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.54** — Beds: a height too low no longer breaks the preview  
-Download [cspartners_panel_pro_0.3.54.rbz](releases/cspartners_panel_pro_0.3.54.rbz) and install it in SketchUp:
+**Latest: 0.3.55** — 3D view turns around the centre  
+Download [cspartners_panel_pro_0.3.55.rbz](releases/cspartners_panel_pro_0.3.55.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.55 | [cspartners_panel_pro_0.3.55.rbz](releases/cspartners_panel_pro_0.3.55.rbz) |
 | 0.3.54 | [cspartners_panel_pro_0.3.54.rbz](releases/cspartners_panel_pro_0.3.54.rbz) |
 | 0.3.53 | [cspartners_panel_pro_0.3.53.rbz](releases/cspartners_panel_pro_0.3.53.rbz) |
 | 0.3.52 | [cspartners_panel_pro_0.3.52.rbz](releases/cspartners_panel_pro_0.3.52.rbz) |
