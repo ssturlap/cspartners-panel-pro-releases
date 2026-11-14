@@ -1,15 +1,21 @@
 {
-  "version": "0.3.46",
-  "date": "2026-11-12",
-  "title": "Module pictures show their materials",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.46.rbz",
+  "version": "0.3.47",
+  "date": "2026-11-14",
+  "title": "PanelPro Web: start page, accessories catalog, tidier screens",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.47.rbz",
   "notes": [
-    "PanelPro Web: the small pictures in a project’s module list show each module’s real materials (textures), and the picture of the module you are editing…",
-    "Fix: catalog materials could show as white or as a random colour in those pictures."
+    "New start page (Inicio): your most used materials, modules and accessories, quick buttons to add a material, open the module catalog or add an accessory,…",
+    "New Accessories section: list the hinges, slides, pulls, legs and rails you buy, with brand, type, size, colour, price and photo. Link each one to what the…",
+    "Project list shows modules, pieces, sheets and an estimated cost for each project, and has Duplicate (a fully independent copy).",
+    "Module editor on phones: sliding tabs, size chips on the 3D view, small switches, front tiles; new modules go step by step (Save & next); the module picker…",
+    "New home page for PanelPro with the plugin download."
   ],
-  "title_es": "Las imágenes de los módulos muestran sus materiales",
+  "title_es": "PanelPro Web: página de inicio, catálogo de accesorios, pantallas más ordenadas",
   "notes_es": [
-    "PanelPro Web: las imágenes pequeñas de la lista de módulos de un proyecto muestran los materiales reales de cada módulo (texturas), y la imagen del módulo…",
-    "Corrección: los materiales del catálogo podían verse blancos o de un color al azar en esas imágenes."
+    "Nueva página de inicio: sus materiales, módulos y accesorios más usados, botones rápidos para agregar un material, ver el catálogo de módulos o agregar un…",
+    "Nueva sección Accesorios: anote las bisagras, correderas, jaladeras, patas y tubos que compra, con marca, tipo, medida, color, precio y foto. Vincule cada…",
+    "La lista de proyectos muestra módulos, piezas, tableros y un costo estimado de cada proyecto, y tiene Duplicar (una copia totalmente independiente).",
+    "Editor de módulos en el teléfono: pestañas deslizables, medidas sobre la vista 3D, interruptores pequeños, frentes en mosaico; los módulos nuevos van paso a…",
+    "Nueva página de presentación de PanelPro con la descarga del plugin."
   ]
 }
