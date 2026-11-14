@@ -1018,4 +1018,5 @@ body.desk .edit-layout, body.desk .compose { max-width: 2000px; margin: 0 auto; 
 .side-bar[hidden] { display: none; }
 .side-bar button { border: 0; background: none; padding: 6px 12px; border-radius: 7px; font: 600 13px/1 inherit; color: var(--ink-2); cursor: pointer; }
 .side-bar button[aria-pressed="true"] { background: var(--ink); color: #fff; }
-@media (max-width: 860px) { .view3d.is2d .side-bar { bottom: 52px; } .side-bar button { padding: 6px 10px; } }
+/* phone, 2D: the drawing has its own dimension lines, so no size chips; the side bar sits at the very bottom, under the drawing */
+@media (max-width: 860px) { .view3d.is2d .dimchips { display: none; } .view3d.is2d .side-bar { bottom: 8px; } .side-bar button { padding: 6px 10px; } }
