@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.58';
-  var BUILD = '0fd54578bf';
+  var BUILD = 'ab378cf004';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -485,6 +485,7 @@
   var VT_ICONS = {
     sizes: '<path d="M3.5 15.5 15.5 3.5l5 5-12 12z"/><path d="M7.5 11.5l2 2M10.5 8.5l2 2M13.5 5.5l2 2"/>',
     diag: '<rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><path d="M13 17h8M17 13v8"/>',
+    doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 11h7M9 14h7M9 17h5"/>',
     view: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
     open: '<rect x="4" y="3.5" width="10" height="17" rx="1"/><path d="M14 4.5l6 2v13l-6-1.5M11 12h.01"/>',
     fit: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'
@@ -1304,7 +1305,7 @@
       '<span class="view-hint" id="viewHint"></span><div class="dimchips" id="dimChips"></div>' +
       '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" title="2D / 3D">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
       vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View')) +
-      vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
+      vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
       '<div class="edit-side"><div class="page" id="editBody"></div>' +
       '<div class="dock"><span class="steps" id="steps"></span><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save') : t('Add to site')) + '</button></div></div>' +
       '</div>'
@@ -1328,6 +1329,7 @@
     $('#dimBtn').onclick = function () { setViewMode(view.mode === '3d' ? '2d' : '3d'); };
     $('#fitBtn').onclick = function () { if (has3d && view.mode === '3d') { P3D.zoomExtents(); } };
     wireDiag();
+    $('#manualV').onclick = function () { makeManual(s, { id: mod ? mod.id : '__new', params: E.params }); };
     $('#dimsBtn').onclick = function () {
       var on = !dimsShown();
       save('panelpro.web.dims', on);
@@ -2214,9 +2216,16 @@
     document.body.appendChild(ov);
     var fr = ov.querySelector('iframe');
     fr.srcdoc = html.replace(/<div class="np">[\s\S]*?<\/div>/, '');
-    var close = function () { ov.remove(); document.removeEventListener('keydown', key, true); if (onClose) { onClose(); } };
+    var close = function () {
+      if (!ov.isConnected) { return; }
+      ov.remove(); document.removeEventListener('keydown', key, true); window.removeEventListener('hashchange', away);
+      if (onClose) { onClose(); }
+    };
     var key = function (e) { if (e.key === 'Escape') { e.preventDefault(); close(); } };
+    // going to another screen (sidebar, back) closes it, without running onClose's own navigation
+    var away = function () { onClose = null; close(); };
     document.addEventListener('keydown', key, true);
+    setTimeout(function () { window.addEventListener('hashchange', away); }, 0);
     ov.querySelector('[data-close]').onclick = close;
     ov.onclick = function (e) { if (e.target === ov) { close(); } };
     ov.querySelector('[data-print]').onclick = function () { try { fr.contentWindow.focus(); fr.contentWindow.print(); } catch (e) { toast(e.message); } };
@@ -2257,6 +2266,7 @@
     try {
       if (one) {
         var mods = s.modules.map(function (m) { return m.id === one.id ? Object.assign({}, m, { params: one.params }) : m; });
+        if (!s.modules.some(function (m) { return m.id === one.id; })) { mods.push({ id: one.id, order: 9999, params: one.params }); }   // not added yet
         var full = Engine.call('project', { modules: mods, codes_state: s.codes_state || null, lang: lang, names: prefs.names, opt: prefs.opt, with_parts: true });
         code = (full.codes || {})[one.id] || '';
         d = full.manual_doc;
