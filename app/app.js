@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.50';
-  var BUILD = '043ee5f9dc';
+  var BUILD = 'cb021f78b9';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1408,6 +1408,17 @@
     draw3d(!quiet || true);
   }
 
+  // a bed: floor clearance and side-rail height, the frame, and the height with the mattress
+  function bedHeights(r) {
+    var b = r && r.bed;
+    if (!b) { return null; }
+    var out = [];
+    if (b.clear > 0) { out.push([0, b.clear, 1]); }
+    out.push([b.clear, b.top, 1]);
+    out.push([0, b.top, 2]);
+    if (E.params && E.params.bed_mattress && view.vis.hardware !== false) { out.push([0, E.params.height, 3]); }
+    return out;
+  }
   function rebuild() {
     try {
       var r = Engine.call('build', { params: E.params, lang: lang });
@@ -1435,6 +1446,7 @@
       return;
     }
     P3D.setSoft(E.params ? E.params.soft_close : true);
+    P3D.setHeights(bedHeights(r));
     P3D.update(parts, matInfo, r.movers);
     if (reset || firstDraw) { P3D.reset('iso'); firstDraw = false; }
   }

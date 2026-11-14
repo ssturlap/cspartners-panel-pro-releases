@@ -312,6 +312,9 @@
   // Width, height and depth of everything drawn (doors, top, legs included; doors closed), as
   // dimension lines beside the module with the size in mm. Off unless the app turns it on.
   var dimsOn = false, dimsGroup = null, dimsKey = '';
+  // extra height lines [[z0, z1, column]] beside the overall height (set before update)
+  var extraH = [];
+  P3D.setHeights = function (list) { extraH = Array.isArray(list) ? list : []; };
   // Dimension labels are plain numbers; one note in the corner names the unit.
   var dimUnit = { k: 1, name: 'mm' }, noteEl = null;
   function dimNote() {
@@ -379,8 +382,9 @@
     dimsGroup = new T.Group();
     function seg(a, b) { pts.push(a.x, a.y, a.z, b.x, b.y, b.z); }
     // a → b measured, drawn moved out along o (unit vector)
-    function dim(a, b, o, value) {
-      var o1 = o.clone().multiplyScalar(off), gap = o.clone().multiplyScalar(off * 0.15), over = o.clone().multiplyScalar(off * 1.12);
+    function dim(a, b, o, value, col) {
+      var f = 1 + ((col || 1) - 1) * 1.6;   // further out for each extra column
+      var o1 = o.clone().multiplyScalar(off * f), gap = o.clone().multiplyScalar(off * 0.15), over = o.clone().multiplyScalar(off * (f + 0.12));
       var A = a.clone().add(o1), B = b.clone().add(o1);
       seg(a.clone().add(gap), a.clone().add(over));
       seg(b.clone().add(gap), b.clone().add(over));
@@ -401,7 +405,14 @@
     var sx = k[0], sy = k[1];
     var xs = sx < 0 ? mn.x : mx.x, ys = sy < 0 ? mn.y : mx.y, yf = sy < 0 ? mx.y : mn.y;
     dim(V(mn.x, ys, mn.z), V(mx.x, ys, mn.z), V(0, sy, 0), size.x);   // width
-    dim(V(xs, yf, mn.z), V(xs, yf, mx.z), V(sx, 0, 0), size.z);       // height
+    // extra heights (a bed: clearance, side rails, frame, with the mattress), in columns, then the overall
+    var cols = 0, same = false;
+    extraH.forEach(function (h) {
+      cols = Math.max(cols, h[2] || 1);
+      if (Math.abs(h[0] - mn.z) < 0.5 && Math.abs(h[1] - mx.z) < 0.5) { same = true; }
+      if (h[1] - h[0] > 0.5) { dim(V(xs, yf, h[0]), V(xs, yf, h[1]), V(sx, 0, 0), h[1] - h[0], h[2] || 1); }
+    });
+    if (!same) { dim(V(xs, yf, mn.z), V(xs, yf, mx.z), V(sx, 0, 0), size.z, cols + 1); }       // height
     dim(V(xs, mn.y, mn.z), V(xs, mx.y, mn.z), V(sx, 0, 0), size.y);   // depth
     dimsKey = k.join(',');
     var g = new T.BufferGeometry();
