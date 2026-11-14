@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.47';
-  var BUILD = '45511c5c36';
+  var VERSION = '0.3.48';
+  var BUILD = 'fcbadfe95f';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -123,7 +123,7 @@
   var COLORS = {
     'PanelPro Carcass': '#ece8de', 'PanelPro Back': '#cdc6b8', 'PanelPro Fronts': '#96a8ba', 'PanelPro Face Frame': '#b08458',
     'PanelPro Drawer Box': '#dec496', 'PanelPro Top': '#7d6854', 'PanelPro Kick': '#464646', 'PanelPro Glass': '#8c643e',
-    'PanelPro Black Aluminium': '#202022', 'PanelPro Kick Stainless': '#c4c6c8', 'PanelPro Metal': '#969ba0',
+    'PanelPro Black Aluminium': '#202022', 'PanelPro Kick Stainless': '#c4c6c8', 'PanelPro Metal': '#969ba0', 'PanelPro Mattress': '#ece8e0',
     'PanelPro Pull Black': '#232325', 'PanelPro Pull Stainless': '#c0c2c4', 'PanelPro Pull Aluminium': '#aab0b8', 'PanelPro Pull Gold': '#c4a052'
   };
   function matInfo(name) {
@@ -1381,7 +1381,7 @@
     menu(title, items);
   }
 
-  var CATS = ['Kitchen', 'Closet', 'Bath', 'Furniture', 'Other'];
+  var CATS = ['Kitchen', 'Closet', 'Bath', 'Furniture', 'Bed', 'Other'];
   function savePresetFlow() {
     var name = (prompt(t('Preset name'), E.params.name || '') || '').trim();
     if (!name) { return; }
@@ -1675,10 +1675,14 @@
   }
   var hintT = null;
   // The sizes as chips on the 3D view (phone): tap one = its keypad (the size box below, hidden)
+  // a bed is sized by its mattress (W × L) and its overall height (floor → top of the mattress)
+  function dimKeys(p) { return p.bed ? ['bed_mw', 'bed_ml', 'height'] : ['width', 'height', 'depth']; }
+  function dimLabel(k) { return t({ bed_mw: 'Mattress width', bed_ml: 'Mattress length', height: E.params && E.params.bed ? 'Overall height' : 'Height' }[k] || (k[0].toUpperCase() + k.slice(1))); }
   function fillDimChips(p) {
     var host = $('#dimChips');
     if (!host) { return; }
     var list = p.panel ? panelDims(p).map(function (d) { return ['pdim', d[0], d[1], d[0] === 'len' ? 'L' : d[0] === 'wid' ? t('W') : t('T')]; })
+      : p.bed ? [['dim', 'bed_mw', 'bed_mw', t('Mattress W')], ['dim', 'bed_ml', 'bed_ml', t('Mattress L')], ['dim', 'height', 'height', t('H')]]
       : [['dim', 'width', 'width', t('W')], ['dim', 'height', 'height', t('H')], ['dim', 'depth', 'depth', t('D')]];
     host.innerHTML = list.map(function (d) {
       return '<button type="button" data-chip="' + d[0] + ':' + d[1] + '"' + (E.changed[d[2]] ? ' class="changed"' : '') + '><small>' + esc(d[3]) + '</small>' + L(p[d[2]]) + '</button>';
@@ -1700,8 +1704,8 @@
       // a loose panel: Length (the grain) × Width × Thickness, whichever way it stands
       return '<button type="button" data-pdim="' + d[0] + '" class="' + (E.changed[d[1]] ? 'changed' : '') + '"><span class="lbl">' + esc(t(d[2])) + '</span>' +
         '<span class="num">' + L(p[d[1]]) + '</span><span class="unit">' + U() + '</span></button>';
-    }) : ['width', 'height', 'depth'].map(function (k) {
-      return '<button type="button" data-dim="' + k + '" class="' + (E.changed[k] ? 'changed' : '') + '"><span class="lbl">' + esc(t(k[0].toUpperCase() + k.slice(1))) + '</span>' +
+    }) : dimKeys(p).map(function (k) {
+      return '<button type="button" data-dim="' + k + '" class="' + (E.changed[k] ? 'changed' : '') + '"><span class="lbl">' + esc(dimLabel(k)) + '</span>' +
         '<span class="num">' + L(p[k]) + '</span><span class="unit">' + U() + '</span></button>';
     })).join('') + '</div>';
     if (E.error) {
@@ -1711,7 +1715,7 @@
     }
     // a loose panel has no box, fronts or drawers: only its own settings and materials; other tabs
     // show only when something in them applies to this module (Layout and Materials always)
-    var tabs = p.panel ? TABS.filter(function (x) { return x[0] === 'module' || x[0] === 'materials'; })
+    var tabs = p.panel || p.bed ? TABS.filter(function (x) { return x[0] === 'module' || x[0] === 'materials'; })
       : TABS.filter(function (x) { return x[0] === 'layout' || x[0] === 'module' || x[0] === 'materials' || tabFields(x, p) !== ''; });
     var tab = tabs.find(function (x) { return x[0] === editTab; }) || tabs[0];
     html += '<nav class="etabs" role="tablist">' + tabs.map(function (tb) {
@@ -1811,7 +1815,14 @@
         return;
       }
       if ((a = b.getAttribute('data-dim'))) {
-        openPad({ label: t(a[0].toUpperCase() + a.slice(1)), value: p[a], chips: CHIPS[a], done: function (v) { E.params[a] = v; E.changed[a] = true; changed(true); } });
+        openPad({ label: dimLabel(a), value: p[a], chips: p.bed ? undefined : CHIPS[a], done: function (v) {
+          E.params[a] = v; E.changed[a] = true;
+          if (E.params.bed) {
+            if (a === 'height') { E.params.bed_height = v; }
+            if (a === 'bed_mw' || a === 'bed_ml') { E.params.bed_size = 'custom'; }
+          }
+          changed(true);
+        } });
         return;
       }
       if ((a = b.getAttribute('data-len'))) {

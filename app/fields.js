@@ -11,6 +11,8 @@
   var SKINB = function (p) { return !!(p.skin_l || p.skin_r || p.skin_b); };   // side or back decorative panels
   var FRIDGE = function (p) { return !!p.fridge; };
   var PANEL = function (p) { return !!p.panel; };
+  var BED = function (p) { return !!p.bed; };
+  var NOTBED = function (p) { return !p.bed; };
 
   // ---- what the module actually has (from its layout). A setting tied to one of these shows only
   // when the module has that thing — unless "Show all settings" is on (PPFields.showAll).
@@ -48,7 +50,7 @@
     knee: function (p) { return p.layout_mode !== 'nooks' && (p.columns || []).some(function (c) { return c.kind === 'kneehole'; }); },
     rows2: function (p) { return p.layout_mode !== 'nooks' && (p.columns || []).some(function (c) { return c.kind !== 'kneehole' && (c.rows || []).length > 1; }); },
     corner: function (p) { return !!p.corner && p.corner !== 'none'; },
-    box: function (p) { return !p.panel; }
+    box: function (p) { return !p.panel && !p.bed; }
   };
   var F_ = { showAll: false };
   // ctx(has, extra): shows when the module has it (or Show all), and the extra rule holds
@@ -62,11 +64,38 @@
   var SECTIONS = {
     module: [
       ['name', 'Name', 'text'],
-      ['width', 'Width', 'len'],
-      ['inner_w', 'Inner width (between the sides)', 'len'],
-      ['height', 'Height (carcass)', 'len'],
-      ['depth', 'Depth (box, without fronts)', 'len'],
-      ['elevation', 'Insert height above pick point', 'len'],
+      ['width', 'Width', 'len', NOTBED],
+      ['inner_w', 'Inner width (between the sides)', 'len', NOTBED],
+      ['height', 'Height (carcass)', 'len', NOTBED],
+      ['depth', 'Depth (box, without fronts)', 'len', NOTBED],
+      ['elevation', 'Insert height above pick point', 'len', NOTBED],
+      // ---- beds: the size comes from the mattress; the height is floor → top of the mattress
+      ['#', 'Bed', BED],
+      ['bed_style', 'Style', 'cards', [
+        ['simple', 'Simple frame', 'Skirts between L legs at the corners', 'M3 8h34v12H3z|M0 16h40v12H0zM0 28h5v17H0zM35 28h5v17h-5z'],
+        ['floating', 'Floating frame', 'On a base set back on 3 sides, no legs', 'M3 14h34v12H3z|M0 22h40v12H0zM7 34h26v11H7z'],
+        ['japanese', 'Japanese style', 'Low, wide ledge on 3 sides', 'M8 22h24v12H8z|M0 31h40v6H0zM8 37h24v8H8z']], BED],
+      ['bed_size', 'Mattress size', 'sel', [['twin', 'Twin — 965 × 1905 mm (38 × 75 in)'], ['full', 'Full — 1372 × 1905 mm (54 × 75 in)'], ['queen', 'Queen — 1524 × 2032 mm (60 × 80 in)'], ['king', 'King — 1930 × 2032 mm (76 × 80 in)'], ['custom', 'Custom size']], BED],
+      ['bed_mw', 'Mattress width', 'len', function (p) { return p.bed && p.bed_size === 'custom'; }],
+      ['bed_ml', 'Mattress length', 'len', function (p) { return p.bed && p.bed_size === 'custom'; }],
+      ['bed_height', 'Overall height (floor to top of mattress)', 'len', BED],
+      ['bed_clear', 'Floor clearance', 'len', BED],
+      ['bed_info', '', 'info', BED],
+      ['bed_leg_w', 'Leg width (each side of the L)', 'len', function (p) { return p.bed && p.bed_style === 'simple'; }],
+      ['bed_setback', 'Base set-back (sides and foot)', 'len', function (p) { return p.bed && p.bed_style === 'floating'; }],
+      ['bed_ledge_w', 'Ledge width (mattress edge to outside)', 'len', function (p) { return p.bed && p.bed_style === 'japanese'; }],
+      ['#', 'Mattress', BED],
+      ['bed_mattress', 'Show the mattress (picture only, not cut)', 'bool', BED],
+      ['bed_mt', 'Mattress thickness', 'len', BED],
+      ['bed_inset', 'Mattress sits into the frame', 'len', BED],
+      ['bed_gap', 'Gap around the mattress', 'len', BED],
+      ['bed_support', 'Mattress support', 'sel', [['slats', 'Slats'], ['solid', 'Solid board']], BED],
+      ['bed_slat_w', 'Slat width', 'len', function (p) { return p.bed && p.bed_support !== 'solid'; }],
+      ['bed_slat_gap', 'Largest gap between slats', 'len', function (p) { return p.bed && p.bed_support !== 'solid'; }],
+      ['#', 'Headboard', BED],
+      ['bed_hb', 'Headboard (screwed to the head band)', 'bool', BED],
+      ['bed_hb_h', 'Headboard height above the mattress', 'len', function (p) { return p.bed && p.bed_hb; }],
+      ['bed_hb_t', 'Headboard thickness', 'len', function (p) { return p.bed && p.bed_hb; }],
       ['#', 'Corner module', CORNER],
       ['corner', 'Blind corner', 'sel', [['none', 'No (regular module)'], ['left', 'Blind on the left'], ['right', 'Blind on the right']], CORNER],
       ['corner_info', '', 'info', ctx(HAS.corner, function (p) { return p.corner && p.corner !== 'none'; })],
@@ -265,20 +294,20 @@
     materials: [
       ['#', 'Materials'],
       ['mat_carcass', 'Carcass, shelves', 'mat'],
-      ['mat_back', 'Back', 'mat'],
-      ['mat_front', 'Fronts', 'mat', function (p) { return FRONT(p) || p.end_l || p.end_r || p.end_top || p.end_bottom || p.end_back; }],
+      ['mat_back', 'Back', 'mat', NOTBED],
+      ['mat_front', 'Fronts', 'mat', function (p) { return p.bed || FRONT(p) || p.end_l || p.end_r || p.end_top || p.end_bottom || p.end_back; }],
       ['mat_frame', 'Face frame', 'mat', function (p) { return F_.showAll || p.construction === 'face_frame'; }],
       ['mat_drawer', 'Drawer boxes', 'mat', DRAWER],
       ['mat_inner', 'Inner drawer fronts and shoe shelves', 'mat', ctx(HAS.inner)],
       ['mat_top', 'Decorative top', 'mat', function (p) { return F_.showAll || !!p.add_top; }],
-      ['mat_kick', 'Toe kick / plinth', 'mat', function (p) { return p.kick_type === 'integral' || p.kick_type === 'plinth'; }],
+      ['mat_kick', 'Toe kick / plinth', 'mat', function (p) { return p.kick_type === 'integral' || p.kick_type === 'plinth' || (p.bed && p.bed_style === 'floating'); }],
       ['mat_skin', 'Decorative side panels', 'mat', function (p) { return F_.showAll || SKINB(p); }],
-      ['#', 'Visible end panels'],
-      ['end_l', 'Left side is visible', 'bool'],
-      ['end_r', 'Right side is visible', 'bool'],
-      ['end_top', 'Top is visible', 'bool', function (p) { return F_.showAll || !p.panel; }],
-      ['end_bottom', 'Bottom is visible', 'bool', function (p) { return F_.showAll || !p.panel; }],
-      ['end_back', 'Back is visible', 'bool', function (p) { return F_.showAll || !p.panel; }],
+      ['#', 'Visible end panels', NOTBED],
+      ['end_l', 'Left side is visible', 'bool', NOTBED],
+      ['end_r', 'Right side is visible', 'bool', NOTBED],
+      ['end_top', 'Top is visible', 'bool', function (p) { return !p.bed && (F_.showAll || !p.panel); }],
+      ['end_bottom', 'Bottom is visible', 'bool', function (p) { return !p.bed && (F_.showAll || !p.panel); }],
+      ['end_back', 'Back is visible', 'bool', function (p) { return !p.bed && (F_.showAll || !p.panel); }],
       ['mat_end', 'Visible end panels', 'mat', function (p) { return p.end_l || p.end_r || p.end_top || p.end_bottom || p.end_back; }],
       ['#', 'Cut list'],
       ['grain_rule', 'Length (L) in the cut list', 'sel', [['longest', 'Longest side (box parts; fronts keep grain)'], ['design', 'Designed grain direction']]]

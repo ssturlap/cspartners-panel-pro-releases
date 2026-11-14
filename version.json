@@ -1,21 +1,21 @@
 {
-  "version": "0.3.47",
+  "version": "0.3.48",
   "date": "2026-11-14",
-  "title": "PanelPro Web: start page, accessories catalog, tidier screens",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.47.rbz",
+  "title": "Beds: simple, floating and Japanese style",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.48.rbz",
   "notes": [
-    "New start page (Inicio): your most used materials, modules and accessories, quick buttons to add a material, open the module catalog or add an accessory,…",
-    "New Accessories section: list the hinges, slides, pulls, legs and rails you buy, with brand, type, size, colour, price and photo. Link each one to what the…",
-    "Project list shows modules, pieces, sheets and an estimated cost for each project, and has Duplicate (a fully independent copy).",
-    "Module editor on phones: sliding tabs, size chips on the 3D view, small switches, front tiles; new modules go step by step (Save & next); the module picker…",
-    "New home page for PanelPro with the plugin download."
+    "New module kind, Bed (catalog › Bed), in the plugin and PanelPro Web: Simple frame (skirts between L legs at the corners), Floating frame (on a base set…",
+    "Mattress size Twin, Full, Queen or King (US sizes) or a custom size; the bed’s width and length follow it.",
+    "Overall height is measured to the top of the mattress; the mattress sits 2 in (50.8 mm) down into the frame so it cannot slide out. Change the overall…",
+    "The mattress (30 cm) is drawn as a picture only — never in the cut list — and can be switched off.",
+    "Slats on ledgers (or a solid board), with a centre rail for Full, Queen and King. Optional headboard screwed to the head band."
   ],
-  "title_es": "PanelPro Web: página de inicio, catálogo de accesorios, pantallas más ordenadas",
+  "title_es": "Camas: sencilla, flotante y estilo japonés",
   "notes_es": [
-    "Nueva página de inicio: sus materiales, módulos y accesorios más usados, botones rápidos para agregar un material, ver el catálogo de módulos o agregar un…",
-    "Nueva sección Accesorios: anote las bisagras, correderas, jaladeras, patas y tubos que compra, con marca, tipo, medida, color, precio y foto. Vincule cada…",
-    "La lista de proyectos muestra módulos, piezas, tableros y un costo estimado de cada proyecto, y tiene Duplicar (una copia totalmente independiente).",
-    "Editor de módulos en el teléfono: pestañas deslizables, medidas sobre la vista 3D, interruptores pequeños, frentes en mosaico; los módulos nuevos van paso a…",
-    "Nueva página de presentación de PanelPro con la descarga del plugin."
+    "Nuevo tipo de módulo, Cama (catálogo › Cama), en el plugin y en PanelPro Web: Marco sencillo (faldones entre patas en L en las esquinas), Marco flotante…",
+    "Tamaño de colchón Twin, Full, Queen o King (medidas de EE. UU.) o a la orden; el ancho y el largo de la cama lo siguen.",
+    "La altura total se mide hasta arriba del colchón; el colchón entra 2 in (50.8 mm) en el marco para que no se deslice. Cambie la altura total o la separación…",
+    "El colchón (30 cm) se dibuja solo como imagen — nunca en la lista de corte — y se puede apagar.",
+    "Tablillas sobre listones (o un tablero completo), con larguero central para Full, Queen y King. Cabecera opcional atornillada a la banda de cabecera."
   ]
 }
