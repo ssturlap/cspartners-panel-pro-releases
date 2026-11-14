@@ -1,17 +1,15 @@
 {
-  "version": "0.3.58",
+  "version": "0.3.59",
   "date": "2026-11-14",
-  "title": "Bed heights in the manual; tidier wide screens",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.58.rbz",
+  "title": "2D view: every side, drawn like the manual",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.59.rbz",
   "notes": [
-    "Module manual, beds: the front, side and back views show the floor clearance, side rail height, frame height and height with the mattress (inner rail height…",
-    "PanelPro Web on a wide monitor: lists and reports stop at 1440 px and the editor at 2000 px, centred.",
-    "PanelPro Web cut list on a computer: Module manual sits in the title bar and the Optimize sheets button is gone (the sidebar has the Cutting plan)."
+    "The 2D preview (Configurator and PanelPro Web) has a bar at the bottom to pick the side — Front, Right, Back, Left or Top — and draws it like the module…",
+    "PanelPro Web: the manual opens in a window over the app, with Project manual in the project’s menu and sidebar, Manual for this module in the editor’s menu,…"
   ],
-  "title_es": "Alturas de la cama en el manual; pantallas anchas más ordenadas",
+  "title_es": "Vista 2D: todos los lados, dibujados como el manual",
   "notes_es": [
-    "Manual de módulos, camas: las vistas frontal, laterales y trasera muestran la separación del piso, la altura de los largueros, la del marco y la altura con…",
-    "PanelPro Web en un monitor ancho: las listas y reportes llegan hasta 1440 px y el editor hasta 2000 px, centrados.",
-    "Lista de corte de PanelPro Web en computadora: Manual de módulos va en la barra de título y ya no está el botón Optimizar tableros (la barra lateral tiene…"
+    "La vista previa 2D (Configurador y PanelPro Web) tiene una barra abajo para elegir el lado — Frente, Derecha, Atrás, Izquierda o Arriba — y lo dibuja como…",
+    "PanelPro Web: el manual se abre en una ventana sobre la app, con Manual del proyecto en el menú y la barra lateral del proyecto, Manual de este módulo en el…"
   ]
 }

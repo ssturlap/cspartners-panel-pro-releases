@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.58';
-  var BUILD = 'ab378cf004';
+  var VERSION = '0.3.59';
+  var BUILD = '1435bcef85';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1303,6 +1303,7 @@
       '<div class="edit-layout' + (desk() ? ' ws' : '') + '">' + (desk() ? deskModsHtml(s, mod ? mod.id : 'new') : '') +
       '<div class="view3d" id="v3d"><svg class="elev" id="elev" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<span class="view-hint" id="viewHint"></span><div class="dimchips" id="dimChips"></div>' +
+      '<div class="side-bar" id="sideBar" role="tablist">' + SIDES.map(function (k) { return '<button type="button" data-side="' + k + '">' + esc(sideLabel(k)) + '</button>'; }).join('') + '</div>' +
       '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" title="2D / 3D">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
       vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View')) +
       vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
@@ -1419,6 +1420,10 @@
     }));
   }
 
+  // 2D view: which side (front / right / back / left / top), drawn like the module manual
+  var SIDES = ['front', 'right', 'back', 'left', 'top'];
+  var SIDE_L = { front: ['Front', 'Frente'], right: ['Right', 'Derecha'], back: ['Back', 'Atrás'], left: ['Left', 'Izquierda'], top: ['Top', 'Arriba'] };
+  function sideLabel(k) { return SIDE_L[k][lang === 'es' ? 1 : 0]; }
   function setViewMode(mode, quiet) {
     view.mode = has3d ? mode : '2d'; saveView();
     var host = $('#v3d');
@@ -1428,7 +1433,15 @@
     $('#dimBtn').hidden = !has3d;
     var vh = $('#viewHint');
     vh.classList.remove('gone'); clearTimeout(hintT); hintT = setTimeout(function () { vh.classList.add('gone'); }, 4000);
-    vh.textContent = view.mode === '2d' ? t('Front view') : t(finePointer() ? 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material' : 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material');
+    var sb = $('#sideBar');
+    if (sb) {
+      sb.hidden = view.mode !== '2d';
+      sb.querySelectorAll('[data-side]').forEach(function (b) {
+        b.setAttribute('aria-pressed', String((view.side || 'front') === b.getAttribute('data-side')));
+        b.onclick = function () { view.side = b.getAttribute('data-side'); saveView(); setViewMode('2d', true); };
+      });
+    }
+    vh.textContent = view.mode === '2d' ? sideLabel(view.side || 'front') : t(finePointer() ? 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material' : 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material');
     if (view.mode === '3d') { P3D.resize(); }
     draw3d(!quiet || true);
   }
@@ -1466,7 +1479,9 @@
     var b = $('#openAll');
     if (b) { setOpenBtn(b, false); b.hidden = view.mode !== '3d' || !(r.movers && r.movers.length); }
     if (view.mode === '2d' || !has3d) {
-      var e = window.PPReports.elevation(parts.length ? parts : [{ shape: 'prism', axis: 'y', pos: 0, thk: 1, pts: [[0, 0], [1, 0], [1, 1], [0, 1]], role: 'carcass' }]);
+      var e = (window.PPManual && window.PPManual.sideView && parts.length ?
+        window.PPManual.sideView(parts, view.side || 'front', { t: t, show: L, esc: esc }, { params: E.params, bed: r.bed }) : null) ||
+        window.PPReports.elevation(parts.length ? parts : [{ shape: 'prism', axis: 'y', pos: 0, thk: 1, pts: [[0, 0], [1, 0], [1, 1], [0, 1]], role: 'carcass' }]);
       var svg = $('#elev');
       if (svg) { svg.setAttribute('viewBox', e.viewBox); svg.innerHTML = e.html; }
       return;

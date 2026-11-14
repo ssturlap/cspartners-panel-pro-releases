@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.58** — Bed heights in the manual; tidier wide screens  
-Download [cspartners_panel_pro_0.3.58.rbz](releases/cspartners_panel_pro_0.3.58.rbz) and install it in SketchUp:
+**Latest: 0.3.59** — 2D view: every side, drawn like the manual  
+Download [cspartners_panel_pro_0.3.59.rbz](releases/cspartners_panel_pro_0.3.59.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.59 | [cspartners_panel_pro_0.3.59.rbz](releases/cspartners_panel_pro_0.3.59.rbz) |
 | 0.3.58 | [cspartners_panel_pro_0.3.58.rbz](releases/cspartners_panel_pro_0.3.58.rbz) |
 | 0.3.57 | [cspartners_panel_pro_0.3.57.rbz](releases/cspartners_panel_pro_0.3.57.rbz) |
 | 0.3.56 | [cspartners_panel_pro_0.3.56.rbz](releases/cspartners_panel_pro_0.3.56.rbz) |

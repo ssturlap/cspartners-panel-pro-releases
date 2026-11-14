@@ -1011,3 +1011,11 @@ body.desk .page.page-wide { max-width: 1440px; margin: 0 auto; }
 body.desk .page:not(.page-wide) { margin: 0 auto; }
 body.desk .edit-layout, body.desk .compose { max-width: 2000px; margin: 0 auto; width: 100%; }
 @media (min-width: 2001px) { body.desk .edit-layout, body.desk .compose { border-left: 1px solid var(--line); border-right: 1px solid var(--line); } }
+
+/* 2D view: pick the side, centred at the bottom of the preview */
+.side-bar { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 3; display: flex; gap: 2px; padding: 3px;
+  background: rgba(255,255,255,.95); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+.side-bar[hidden] { display: none; }
+.side-bar button { border: 0; background: none; padding: 6px 12px; border-radius: 7px; font: 600 13px/1 inherit; color: var(--ink-2); cursor: pointer; }
+.side-bar button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+@media (max-width: 860px) { .view3d.is2d .side-bar { bottom: 52px; } .side-bar button { padding: 6px 10px; } }

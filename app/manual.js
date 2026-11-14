@@ -392,5 +392,16 @@
     return h;
   }
 
-  window.PPManual = { build: build, viewSVG: viewSVG };
+  // The editors' 2D view: one side (front / right / back / left / top) drawn like the manual, with
+  // panel sizes and dimension lines. info: { params, bed } → { viewBox, html } (or null if nothing to draw)
+  function sideView(parts, side, ctx, info) {
+    var p = (info && info.params) || {};
+    var opts = { kick: p.kick_type && p.kick_type !== 'none' ? Number(p.kick_h) || 0 : 0, height: Number(p.height) || 0,
+                 bed: (info && info.bed) || null, mattress: (parts || []).some(function (q) { return q.name === 'Mattress'; }) };
+    var svg = viewSVG(parts || [], VIEWS[side] ? side : 'front', ctx, opts);
+    if (!svg) { return null; }
+    var vb = /viewBox="([^"]+)"/.exec(svg);
+    return { viewBox: vb ? vb[1] : '0 0 100 100', html: svg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '') };
+  }
+  window.PPManual = { build: build, viewSVG: viewSVG, sideView: sideView, SIDES: ['front', 'right', 'back', 'left', 'top'] };
 })();

@@ -59,7 +59,7 @@
     'set it up, then Place new': 'configúrelo y luego Colocar nuevo', 'select one module to edit it': 'seleccione un módulo para editarlo',
     'What’s new in this version': 'Novedades de esta versión', 'Settings and part names': 'Ajustes y nombres de piezas',
     // preview
-    'Doors': 'Puertas', 'Boxes': 'Cajas', 'Diagnostic': 'Diagnóstico', 'Diagnostic view: a flat colour for each kind of panel': 'Vista de diagnóstico: un color plano por tipo de pieza', 'Front': 'Frente', 'Iso': 'Iso',
+    'Doors': 'Puertas', 'Boxes': 'Cajas', 'Diagnostic': 'Diagnóstico', 'Right side': 'Derecha', 'Left side': 'Izquierda', 'Back side': 'Atrás', 'Top view': 'Arriba', 'Diagnostic view: a flat colour for each kind of panel': 'Vista de diagnóstico: un color plano por tipo de pieza', 'Front': 'Frente', 'Iso': 'Iso',
     'Show / hide doors': 'Mostrar / ocultar puertas', 'Show / hide drawer fronts': 'Mostrar / ocultar frentes de gaveta',
     'Show / hide drawer boxes': 'Mostrar / ocultar cajas de gaveta', 'Front view (flat, straight on)': 'Vista frontal (plana)',
     '3D perspective from front-left': 'Perspectiva 3D desde el frente izquierdo',
