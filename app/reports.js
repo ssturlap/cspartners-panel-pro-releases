@@ -127,9 +127,9 @@
     // Bed: outside size, deck and frame top (all from the overall height and the mattress).
     bed: function (p, ctx) {
       if (!p.bed) { return ''; }
-      var es = ctx.es, show = ctx.show, deck = p.height - p.bed_mt, top = deck + p.bed_inset;
+      var es = ctx.es, show = ctx.show, deck = p.height - p.bed_mt, top = deck - p.t + p.bed_inset;
       return (es ? 'Cama ' : 'Bed ') + show(p.width) + ' × ' + show(p.depth) + u(ctx) + (es ? ' (ancho × largo)' : ' (W × L)') + ' · ' +
-        (es ? 'colchón apoya a ' : 'mattress rests at ') + show(deck) + ' · ' + (es ? 'borde del marco a ' : 'frame top at ') + show(top) + u(ctx) +
+        (es ? 'colchón apoya a ' : 'mattress rests at ') + show(deck) + ' · ' + (es ? 'borde del marco a ' : 'frame top at ') + show(top) + u(ctx) + ' · ' + (es ? 'el colchón entra ' : 'mattress sits ') + show(top - deck) + (es ? ' en el marco' : ' into the frame') +
         (p.bed_style === 'japanese' ? ' · ' + (es ? 'repisa de ' : 'ledge ') + show(top - p.bed_clear) + (es ? ' de grueso' : ' thick') : '');
     },
     // Loose panel: the cut size.

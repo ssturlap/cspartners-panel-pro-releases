@@ -87,7 +87,7 @@
       ['#', 'Mattress', BED],
       ['bed_mattress', 'Show the mattress (picture only, not cut)', 'bool', BED],
       ['bed_mt', 'Mattress thickness', 'len', BED],
-      ['bed_inset', 'Mattress sits into the frame', 'len', BED],
+      ['bed_inset', 'Inner frame below the top edge (mattress sits this − the deck)', 'len', BED],
       ['bed_gap', 'Gap around the mattress', 'len', BED],
       ['bed_support', 'Mattress support', 'sel', [['slats', 'Slats'], ['solid', 'Solid board']], BED],
       ['bed_slat_w', 'Slat width', 'len', function (p) { return p.bed && p.bed_support !== 'solid'; }],
