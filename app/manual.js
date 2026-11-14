@@ -179,7 +179,24 @@
 
   // A Japanese bed's foot-left corner in plan: the notched foot ledge support (cut by hand), the
   // side support butting its ear (biscuit), the inner bands and the red skirt under the supports.
+  // 38 mm Japanese bed: the ledge bands butt (foot full width), the heavy rails under them.
+  function bedButtSVG(n, ctx, t) {
+    var T = n.t, L = n.ledge, O = n.ear, run = L * 1.3, deep = L * 1.3, W = L + run, H = L + deep;
+    var pad = Math.max(40, L * 0.4), fs = Math.max(12, L * 0.13), o = [];
+    function txt(x, y, s, a) { o.push('<text x="' + fmtN(x) + '" y="' + fmtN(y) + '" font-size="' + fmtN(fs) + '" text-anchor="' + (a || 'middle') + '" fill="#1d2a30">' + s + '</text>'); }
+    function line(d, dash) { o.push('<path d="' + d + '" stroke="' + (dash ? '#c0392b' : '#1d2a30') + '" stroke-width="' + fmtN(fs * 0.1) + '" fill="none"' + (dash ? ' stroke-dasharray="' + fmtN(fs * 0.5) + ' ' + fmtN(fs * 0.3) + '"' : '') + '/>'); }
+    o.push('<rect x="0" y="0" width="' + fmtN(W) + '" height="' + fmtN(L) + '" fill="#e6c9ef" stroke="#3b3b3b" stroke-width="' + fmtN(fs * 0.12) + '"/>');
+    o.push('<rect x="0" y="' + fmtN(L) + '" width="' + fmtN(L) + '" height="' + fmtN(deep) + '" fill="#efd9f4" stroke="#3b3b3b" stroke-width="' + fmtN(fs * 0.12) + '"/>');
+    line('M' + fmtN(O) + ' ' + fmtN(H) + 'V' + fmtN(O) + 'H' + fmtN(W) + 'M' + fmtN(L) + ' ' + fmtN(H) + 'V' + fmtN(L) + 'H' + fmtN(W), true);
+    txt(L + run / 2, L / 2, t('Foot ledge band'));
+    txt(L / 2, L + deep / 2, t('Side ledge band'));
+    line('M' + fmtN(-fs * 0.6) + ' 0V' + fmtN(L)); txt(-fs, L / 2, ctx.show(L), 'end');
+    line('M0 ' + fmtN(-fs * 0.8) + 'H' + fmtN(O)); txt(O / 2, -fs * 1.1, t('overhang') + ' ' + ctx.show(O));
+    line('M' + fmtN(O) + ' ' + fmtN(H + fs * 0.6) + 'H' + fmtN(L)); txt((O + L) / 2, H + fs * 1.8, ctx.show(T));
+    return '<svg viewBox="' + fmtN(-pad * 1.6) + ' ' + fmtN(-pad) + ' ' + fmtN(W + pad * 3) + ' ' + fmtN(H + pad * 1.8) + '" style="width:100%;max-height:230px" xmlns="http://www.w3.org/2000/svg">' + o.join('') + '</svg>';
+  }
   function bedNotchSVG(n, ctx, t) {
+    if (n.kind === 'butt') { return bedButtSVG(n, ctx, t); }
     var T = n.t, L = n.ledge, E = n.ear, run = Math.min(n.mid / 2, L * 0.9), deep = L * 0.95;
     var W = E + T + run, H = L + deep, pad = Math.max(40, L * 0.4), fs = Math.max(12, L * 0.13);
     var Y = function (y) { return y; };   // y down = towards the head
@@ -310,6 +327,10 @@
         '<div class="v"><h3>' + t('Back view') + '</h3>' + viewSVG(all, 'back', ctx, hv) + '</div></div>';
       // a Japanese bed: its ledge corner plan takes the place of the "open" picture (nothing opens)
       var bedNotchBox = function (nb) {
+        if (nb.kind === 'butt') {
+          return '<div class="v"><h3>' + t('Ledge corner — plan (foot, left; the right one mirrored)') + '</h3>' + bedNotchSVG(nb, ctx, t) +
+            '<p class="sub">' + esc(t('Ledge bands butt at the corner (screws): the foot one full width, the side ones against it.')) + '</p></div>';
+        }
         return '<div class="v"><h3>' + t('Ledge corner — plan (foot, left; the right one mirrored)') + '</h3>' + bedNotchSVG(nb, ctx, t) +
           '<p class="sub">' + esc(t('Cut the foot ledge support as a plain board; the installer cuts the notch by hand:') + ' ' + ctx.show(nb.t) + ' × ' + ctx.show(nb.mid) + u + ', ' +
           t('ears') + ' ' + ctx.show(nb.ear) + u + '. ' + t('Side supports') + ' ' + ctx.show(nb.side) + u + ' ' + t('wide, butting the ears with a biscuit.')) + '</p></div>';

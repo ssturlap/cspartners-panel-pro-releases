@@ -1,21 +1,17 @@
 {
-  "version": "0.3.52",
+  "version": "0.3.53",
   "date": "2026-11-14",
-  "title": "Japanese bed: built the way the shop builds it (18 mm)",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.52.rbz",
+  "title": "Japanese bed: 38 mm construction",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.53.rbz",
   "notes": [
-    "Inner bands on the floor (foot and head ones full width over the sides), red skirt outside them 1 thickness shorter, ledge supports lying on the skirt…",
-    "The foot ledge support runs the full width and keeps an ear at each end; the notch is cut by hand (noted in the cut list) and the side supports butt the…",
-    "Double nailers on the long sides, 50 mm under the top; the centre beam stands on the floor, level with the nailers on top.",
-    "Floor clearance (the red skirt’s height) follows the overall height.",
-    "The module manual shows the ledge corner in plan with the notch, ear and support sizes."
+    "Japanese beds have a Construction choice: 18 mm (inner bands, ledge supports, notched corner) or 38 mm.",
+    "38 mm: single heavy rails on the floor (the foot one full width over the sides, none at the head), the top ledge bands lying on them with the foot one full…",
+    "Rail, ledge and centre beam thickness can be set (38 mm); nailers and slats keep the panel thickness. The manual shows the butt corner in plan."
   ],
-  "title_es": "Cama japonesa: construida como la hace el taller (18 mm)",
+  "title_es": "Cama japonesa: construcción en 38 mm",
   "notes_es": [
-    "Bandas interiores sobre el piso (las de pies y cabecera a todo el ancho, tapando las laterales), faldón rojo por fuera 1 grueso más bajo, soportes de repisa…",
-    "El soporte de repisa de pies va a todo el ancho y deja una oreja en cada extremo; el rebaje se hace a mano (anotado en la lista de corte) y los soportes…",
-    "Listones de apoyo dobles en los lados largos, 50 mm bajo la parte de arriba; la viga central se apoya en el piso, a nivel de los listones arriba.",
-    "La separación del piso (la altura del faldón rojo) sigue la altura total.",
-    "El manual del módulo muestra la esquina de la repisa en planta con el rebaje, las orejas y los anchos de los soportes."
+    "Las camas japonesas tienen una opción de Construcción: 18 mm (bandas interiores, soportes de repisa, esquina con rebaje) o 38 mm.",
+    "38 mm: largueros gruesos sencillos sobre el piso (el de pies a todo el ancho tapando los laterales, ninguno en la cabecera), las repisas acostadas encima…",
+    "Se puede ajustar el grueso de largueros, repisa y viga central (38 mm); los listones y las tablillas mantienen el grueso del tablero. El manual muestra la…"
   ]
 }

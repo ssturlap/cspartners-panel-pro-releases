@@ -83,6 +83,8 @@
       ['bed_info', '', 'info', BED],
       ['bed_leg_w', 'Leg width (each side of the L)', 'len', function (p) { return p.bed && p.bed_style === 'simple'; }],
       ['bed_setback', 'Base set-back (sides and foot)', 'len', function (p) { return p.bed && p.bed_style === 'floating'; }],
+      ['bed_jp_build', 'Construction', 'sel', [['18', '18 mm — inner bands, ledge supports, notched corner'], ['38', '38 mm — single rails and ledge']], function (p) { return p.bed && p.bed_style === 'japanese'; }],
+      ['bed_heavy_t', 'Rail, ledge and centre beam thickness', 'len', function (p) { return p.bed && p.bed_style === 'japanese' && p.bed_jp_build === '38'; }],
       ['bed_ledge_w', 'Ledge width (from the inner band’s inner face)', 'len', function (p) { return p.bed && p.bed_style === 'japanese'; }],
       ['#', 'Mattress', BED],
       ['bed_mattress', 'Show the mattress (picture only, not cut)', 'bool', BED],
