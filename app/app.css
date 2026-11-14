@@ -1000,3 +1000,8 @@ body.desk .dk-table th.th-plain { font-size: 11px; font-weight: 700; letter-spac
 .mat-groupbar .meta-line { margin: 0; }
 .mat-grp { display: flex; align-items: center; gap: 8px; margin: 18px 2px 8px; font-size: 15px; font-weight: 700; color: var(--ink); }
 .mat-grp small { font-size: 12px; font-weight: 600; color: var(--muted); background: #e9edef; border-radius: 10px; padding: 1px 8px; }
+/* very wide monitors: lists and reports stop at 1440 px, the editor and composition at 2000 px, centred */
+body.desk .page.page-wide { max-width: 1440px; margin: 0 auto; }
+body.desk .page:not(.page-wide) { margin: 0 auto; }
+body.desk .edit-layout, body.desk .compose { max-width: 2000px; margin: 0 auto; width: 100%; }
+@media (min-width: 2001px) { body.desk .edit-layout, body.desk .compose { border-left: 1px solid var(--line); border-right: 1px solid var(--line); } }

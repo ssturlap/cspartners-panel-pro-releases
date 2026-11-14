@@ -132,7 +132,23 @@
     // heights: with a toe kick / legs, a chain (kick + carcass) next to the drawing and the
     // overall height further out; without, just the overall height
     var kick = opts && opts.kick > 0 && V.v === 'z' ? opts.kick : 0, extra = 0;
-    if (kick && opts.height > kick && opts.height <= -Y0 + 0.5) {
+    var bed = opts && opts.bed && V.v === 'z' ? opts.bed : null;
+    if (bed) {
+      // a bed: floor clearance + side rail (chain), the frame, with the mattress, then the overall
+      var top = opts.inside && bed.style !== 'japanese' ? bed.support : bed.top;
+      var cols = [[[0, bed.clear], [bed.clear, top]], [[0, bed.top]]];
+      if (opts.mattress) { cols.push([[0, bed.height]]); }
+      var same = false;
+      cols.forEach(function (col, i) {
+        col.forEach(function (sp) {
+          if (sp[1] - sp[0] < 0.5) { return; }
+          if (Math.abs(-sp[0] - Y1) < 0.5 && Math.abs(-sp[1] - Y0) < 0.5) { same = true; }
+          out.push(vdim(-sp[1], -sp[0], X0 - g * (1 + i * 1.8), ctx.show(sp[1] - sp[0])));
+        });
+      });
+      if (!same) { out.push(vdim(Y0, Y1, X0 - g * (1 + cols.length * 1.8), ctx.show(H))); cols.push(0); }
+      extra = g * 1.8 * (cols.length - 1);
+    } else if (kick && opts.height > kick && opts.height <= -Y0 + 0.5) {
       out.push(vdim(-kick, -0, X0 - g, ctx.show(kick)));
       out.push(vdim(-opts.height, -kick, X0 - g, ctx.show(opts.height - kick)));
       if (-Y0 > opts.height + 0.5) { out.push(vdim(Y0, -opts.height, X0 - g, ctx.show(-Y0 - opts.height))); }
@@ -316,11 +332,12 @@
         '<span>' + t('Carcass') + '</span><b>' + esc(m.mat_carcass || '') + '</b>' +
         '<span>' + t('Fronts') + '</span><b>' + esc(m.mat_front || '') + '</b></div></div>';
       var all = m.parts || [];
-      var hv = { kick: m.kick || 0, height: m.height };
+      var hv = { kick: m.kick || 0, height: m.height, bed: m.bed || null, mattress: (m.parts || []).some(function (p) { return p.name === 'Mattress'; }) };
+      var hvIn = Object.assign({}, hv, { inside: true });
       var inside = all.filter(function (p) { return !p.mover && p.role !== 'front'; });
       h += '<div class="views">' +
         '<div class="v"><h3>' + t('Front view') + '</h3>' + viewSVG(all, 'front', ctx, hv) + '</div>' +
-        '<div class="v"><h3>' + t('Front view — without doors and fronts') + '</h3>' + viewSVG(inside, 'front', ctx, hv) + '</div>' +
+        '<div class="v"><h3>' + t('Front view — without doors and fronts') + '</h3>' + viewSVG(inside, 'front', ctx, hvIn) + '</div>' +
         '<div class="v"><h3>' + t('Top view') + '</h3>' + viewSVG(all, 'top', ctx) + '</div>' +
         '<div class="v"><h3>' + t('Left view') + '</h3>' + viewSVG(all, 'left', ctx, hv) + '</div>' +
         '<div class="v"><h3>' + t('Right view') + '</h3>' + viewSVG(all, 'right', ctx, hv) + '</div>' +
@@ -335,10 +352,16 @@
           '<p class="sub">' + esc(t('Cut the foot ledge support as a plain board; the installer cuts the notch by hand:') + ' ' + ctx.show(nb.t) + ' × ' + ctx.show(nb.mid) + u + ', ' +
           t('ears') + ' ' + ctx.show(nb.ear) + u + '. ' + t('Side supports') + ' ' + ctx.show(nb.side) + u + ' ' + t('wide, butting the ears with a biscuit.')) + '</p></div>';
       };
+      // a bed (nothing opens): a section across the middle, with its heights
+      var bedSectionBox = function () {
+        var ym = (m.depth || 0) / 2;
+        var cut = all.filter(function (p) { var b = box(p); return b.mn[1] <= ym && b.mx[1] >= ym; });
+        return '<div class="v"><h3>' + t('Section across the middle') + '</h3>' + viewSVG(cut, 'front', ctx, hv) + '</div>';
+      };
       var closed = window.P3D && window.P3D.snapshot ? window.P3D.snapshot(all, ctx.mats, m.movers, { open: false, w: 900, h: 640 }) : null;
       var open = window.P3D && window.P3D.snapshot && (m.movers || []).length ? window.P3D.snapshot(all, ctx.mats, m.movers, { open: true, w: 900, h: 640 }) : null;
       h += '<div class="three"><div class="v"><h3>' + t('3D — closed') + '</h3>' + (closed ? '<img src="' + closed + '">' : '') + '</div>' +
-        (m.bed && m.bed.notch ? bedNotchBox(m.bed.notch) :
+        (m.bed && m.bed.notch ? bedNotchBox(m.bed.notch) : m.bed ? bedSectionBox() :
         '<div class="v"><h3>' + t('3D — open') + '</h3>' + (open ? '<img src="' + open + '">' : '<p class="sub">' + t('No doors or drawers') + '</p>') + '</div>') + '</div>';
       if ((m.qty || 1) > 1) { h += '<div class="warn" style="color:#6c665c">' + esc(t('Hardware for one module — build') + ' ' + m.qty + '.') + '</div>'; }
       h += '<div class="hw">' + (m.hardware_l || []).map(function (x) { return '<div><b>' + x[1] + '×</b> ' + esc(x[0]) + '</div>'; }).join('') + '</div>';

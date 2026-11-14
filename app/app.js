@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.57';
-  var BUILD = '5b01064f48';
+  var VERSION = '0.3.58';
+  var BUILD = '3eb504007d';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -2116,8 +2116,9 @@
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button>' +
       '<h1>' + esc(t('Cut list')) + '<span class="sub">' + esc(s.name) + '</span></h1></header>' +
       '<div class="page page-wide">' +
-      '<div class="actions-row"><button type="button" class="btn small" id="manualBtn">' + esc(t('Module manual')) + '</button>' +
-      '<button type="button" class="btn small" id="optBtn">' + esc(t('Optimize sheets')) + '</button></div>' +
+      // desktop: the sidebar has the cutting plan, and the manual goes in the title bar
+      (desk() ? '' : '<div class="actions-row"><button type="button" class="btn small" id="manualBtn">' + esc(t('Module manual')) + '</button>' +
+      '<button type="button" class="btn small" id="optBtn">' + esc(t('Optimize sheets')) + '</button></div>') +
       (warns.length ? '<div class="warn">' + warns.map(function (w) { return '<p>' + esc(w) + '</p>'; }).join('') + '</div>' : '') +
       '<div class="cut-layout"><div class="cut-main">' + html + '</div><aside class="cut-side">' +
       (cut.hardware.length ? '<h2 class="section-h">' + esc(t('Hardware')) + '</h2><div class="box totals">' +
@@ -2128,7 +2129,8 @@
       (cut.sheets.length ? '<h2 class="section-h">' + esc(t('Sheets (estimate incl. 15% waste)')) + '</h2><div class="box totals">' +
         cut.sheets.map(function (x) { return '<div><span>' + esc(x.mat) + ' · ' + fmt(x.T) + ' mm · ' + esc(x.size) + '</span><b>' + x.sheets + '</b></div>'; }).join('') + '</div>' : '') +
       '</aside></div></div>' +
-      '<div class="dock"><button type="button" class="btn primary" id="sharePdf">' + esc(t(finePointer() || desk() ? 'Save PDF' : 'Share PDF')) + '</button>' +
+      '<div class="dock">' + (desk() ? '<button type="button" class="btn ghost" id="manualBtn">' + esc(t('Module manual')) + '</button>' : '') +
+      '<button type="button" class="btn primary" id="sharePdf">' + esc(t(finePointer() || desk() ? 'Save PDF' : 'Share PDF')) + '</button>' +
       '<button type="button" class="btn primary" id="shareXlsx">' + esc(t(finePointer() || desk() ? 'Save Excel' : 'Share Excel')) + '</button></div>'
     );
     $('#back').onclick = function () { history.back(); };
@@ -2171,7 +2173,7 @@
     $('#sharePdf').onclick = function () { make('pdf', this); };
     $('#shareXlsx').onclick = function () { make('xlsx', this); };
     $('#manualBtn').onclick = function () { makeManual(s); };
-    $('#optBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/opt'); };
+    if ($('#optBtn')) { $('#optBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/opt'); }; }
   }
 
   // The PDF / Excel libraries load only when first used (they are in the offline cache either way).

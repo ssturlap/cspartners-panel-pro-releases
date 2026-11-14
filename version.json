@@ -1,13 +1,17 @@
 {
-  "version": "0.3.57",
+  "version": "0.3.58",
   "date": "2026-11-14",
-  "title": "Diagnostic view",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.57.rbz",
+  "title": "Bed heights in the manual; tidier wide screens",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.58.rbz",
   "notes": [
-    "A Diagnostic button on the 3D preview (Configurator and PanelPro Web, also in Composition) paints each kind of panel one flat colour — decorative / fronts,…"
+    "Module manual, beds: the front, side and back views show the floor clearance, side rail height, frame height and height with the mattress (inner rail height…",
+    "PanelPro Web on a wide monitor: lists and reports stop at 1440 px and the editor at 2000 px, centred.",
+    "PanelPro Web cut list on a computer: Module manual sits in the title bar and the Optimize sheets button is gone (the sidebar has the Cutting plan)."
   ],
-  "title_es": "Vista de diagnóstico",
+  "title_es": "Alturas de la cama en el manual; pantallas anchas más ordenadas",
   "notes_es": [
-    "Un botón Diagnóstico en la vista 3D (Configurador y PanelPro Web, también en Composición) pinta cada tipo de pieza de un color plano — decorativos /…"
+    "Manual de módulos, camas: las vistas frontal, laterales y trasera muestran la separación del piso, la altura de los largueros, la del marco y la altura con…",
+    "PanelPro Web en un monitor ancho: las listas y reportes llegan hasta 1440 px y el editor hasta 2000 px, centrados.",
+    "Lista de corte de PanelPro Web en computadora: Manual de módulos va en la barra de título y ya no está el botón Optimizar tableros (la barra lateral tiene…"
   ]
 }
