@@ -619,7 +619,7 @@
       '<div class="compose"><div class="cview view3d" id="cview"><div id="ctabs">' + tabsHtml() + '</div><svg id="csvg" class="csvg" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<div class="dim-note" id="cNote">' + esc(t('Dimensions in ' + A.U())) + '</div>' +
       '<div class="view-tools"><button type="button" id="cMode" class="vt vt-txt" title="2D / 3D">3D</button>' + A.vtBtn('cOpen', 'open', t('Open all'), ' aria-pressed="false"') +
-      A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
+      A.diagBtn() + A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
       '<div class="cpanel" id="cpanel"></div></div>'
     );
     var host = document.getElementById('cview');
@@ -631,6 +631,7 @@
     };
     document.getElementById('cFit').onclick = function () { if (C.mode === '2d') { fitBox(); draw2d(); } else { P3D.zoomExtents(); } };
     document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('all'); A.setOpenBtn(this, o); };
+    A.wireDiag();
     document.getElementById('cMore').onclick = function () {
       if (isAll()) { A.toast(t('Open a wall first.')); return; }
       var list = [{ label: t('Panels for a run…'), icon: 'runpanels', run: function () { startPick(null); } }];

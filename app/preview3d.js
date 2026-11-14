@@ -116,6 +116,65 @@
     return m;
   }
 
+  // ------------------------------------------------------------------ diagnostic view
+  // Flat colours by kind of part (no textures), to see how the pieces sit against each other.
+  // Hardware and the mattress keep their own look. [key, colour, legend label]
+  var diagOn = false, lastUpdate = null, legendEl = null;
+  var DIAG = {
+    deco: ['#e53935', 'Decorative / fronts'], ledge: ['#00bcd4', 'Top ledge'], support: ['#d63bd6', 'Ledge supports'],
+    inner: ['#f4e04d', 'Inner rails / bands'], nailer: ['#2ecc40', 'Nailers'], beam: ['#8c8c8c', 'Centre beam'],
+    leg: ['#3044ff', 'Legs'], cleg: ['#ff66d9', 'Centre legs'], deck: ['#e3c99b', 'Slats / deck / cross beams'],
+    base: ['#555b60', 'Base / toe kick'], head: ['#ff8c1a', 'Headboard'], side: ['#ffcc33', 'Sides / partitions'],
+    hz: ['#4da6ff', 'Bottom / top / stretchers'], back: ['#b0b0b0', 'Back'], shelf: ['#7ed6a5', 'Shelves'],
+    drawer: ['#ffb74d', 'Drawer boxes'], frame: ['#8d6e63', 'Face frame'], top: ['#00bcd4', 'Decorative top']
+  };
+  function diagKey(p) {
+    var n = String(p.name || '');
+    if (p.role === 'hardware' || p.shape === 'cyl' || p.deco) { return null; }
+    if (n === 'Headboard') { return 'head'; }
+    if (n === 'Ledge') { return 'ledge'; }
+    if (n === 'Ledge support') { return 'support'; }
+    if (n === 'Side rail' || n === 'End rail') { return 'inner'; }
+    if (n === 'Nailer' || n === 'Centre nailer') { return 'nailer'; }
+    if (n === 'Centre beam') { return 'beam'; }
+    if (n === 'Leg') { return 'leg'; }
+    if (n === 'Centre leg') { return 'cleg'; }
+    if (/^(Slat|Deck|Cross beam|Bearer)$/.test(n)) { return 'deck'; }
+    if (n === 'Top (solid)') { return 'top'; }
+    if (p.role === 'base' || /^Base /.test(n)) { return 'base'; }
+    if (p.role === 'front' || p.role === 'skin' || n === 'Skirt' || n === 'Head band') { return 'deco'; }
+    if (p.role === 'back') { return 'back'; }
+    if (p.role === 'drawer') { return 'drawer'; }
+    if (p.role === 'frame') { return 'frame'; }
+    if (p.role === 'shelf' || /shelf/i.test(n)) { return 'shelf'; }
+    if (/^(Bottom|Top|Front stretcher|Rear stretcher|Plinth rail)$/.test(n)) { return 'hz'; }
+    return 'side';
+  }
+  function diagClass(p) { var k = diagKey(p); return k ? [k, DIAG[k][0], DIAG[k][1]] : null; }
+  function diagLegend(used) {
+    if (!host) { return; }
+    if (!legendEl) {
+      legendEl = document.createElement('div');
+      legendEl.className = 'p3d-legend';
+      legendEl.style.cssText = 'position:absolute;left:8px;top:8px;z-index:2;font:600 11px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;' +
+        'color:#26343a;background:rgba(255,255,255,.9);padding:6px 9px;border-radius:8px;pointer-events:none;max-width:60%;';
+      if (getComputedStyle(host).position === 'static') { host.style.position = 'relative'; }
+      host.appendChild(legendEl);
+    }
+    var keys = Object.keys(DIAG).filter(function (k) { return used && used[k]; });
+    var tr = function (x) { return window.I18N && window.I18N.t ? window.I18N.t(x) : x; };
+    legendEl.innerHTML = keys.map(function (k) {
+      return '<div style="display:flex;align-items:center;gap:6px"><i style="width:11px;height:11px;border-radius:2px;border:1px solid rgba(0,0,0,.35);background:' + DIAG[k][0] + '"></i>' + tr(DIAG[k][1]) + '</div>';
+    }).join('');
+    legendEl.style.display = diagOn && keys.length ? '' : 'none';
+  }
+  // Diagnostic view on / off (redraws with the last parts)
+  P3D.setDiag = function (on) {
+    diagOn = !!on;
+    if (renderer && lastUpdate) { P3D.update.apply(null, lastUpdate); } else if (legendEl) { legendEl.style.display = 'none'; }
+  };
+  P3D.diagOn = function () { return diagOn; };
+
   // ------------------------------------------------------------------ geometry
   function to3(axis, w, u, v) {
     if (axis === 'x') { return [w, u, v]; }
@@ -273,6 +332,7 @@
   }
   P3D.update = function (parts, mats, movers, places) {
     if (!renderer) { return; }
+    lastUpdate = [parts, mats, movers, places];
     function dispose(o) {
       o.children.slice().forEach(dispose);
       if (o.geometry) { o.geometry.dispose(); }
@@ -289,9 +349,12 @@
       MOV[d.id] = { data: d, group: g, f: o ? o.f : 0, anim: o ? o.anim : null };
       place(MOV[d.id]);
     });
+    var used = {};
     parts.forEach(function (p) {
-      var info = mats(p.mat);
-      var m = material(p.mat || '', info);
+      var dc = diagOn ? diagClass(p) : null;
+      if (dc) { used[dc[0]] = dc; }
+      var info = dc ? { color: dc[1], alpha: 1 } : mats(p.mat);
+      var m = material(dc ? '__diag:' + dc[0] : (p.mat || ''), info);
       var g = p.shape === 'cyl' ? cylGeometry(p) : prismGeometry(p, m.userData.texmm);
       var parent = p.mover && MOV[p.mover] ? MOV[p.mover].group : (PG[p.grp] || root);
       var mesh = new T.Mesh(g, m);
@@ -304,6 +367,7 @@
       else { bbox.union(g.boundingBox); }
     });
     buildDims();
+    diagLegend(used);
     if (!hasView && !bbox.isEmpty()) { P3D.reset('iso'); hasView = true; }
     dirty = true;
   };

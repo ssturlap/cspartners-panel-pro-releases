@@ -1,13 +1,13 @@
 {
-  "version": "0.3.56",
+  "version": "0.3.57",
   "date": "2026-11-14",
-  "title": "Japanese bed 38 mm: 38 mm nailers",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.56.rbz",
+  "title": "Diagnostic view",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.57.rbz",
   "notes": [
-    "On the 38 mm Japanese bed the side and centre nailers are cut from the same 38 mm board as the rails and ledge."
+    "A Diagnostic button on the 3D preview (Configurator and PanelPro Web, also in Composition) paints each kind of panel one flat colour — decorative / fronts,…"
   ],
-  "title_es": "Cama japonesa 38 mm: listones de 38 mm",
+  "title_es": "Vista de diagnóstico",
   "notes_es": [
-    "En la cama japonesa de 38 mm los listones de apoyo laterales y centrales se cortan del mismo tablero de 38 mm que los largueros y la repisa."
+    "Un botón Diagnóstico en la vista 3D (Configurador y PanelPro Web, también en Composición) pinta cada tipo de pieza de un color plano — decorativos /…"
   ]
 }
