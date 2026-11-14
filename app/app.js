@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.47';
-  var BUILD = 'f509dd85b8';
+  var BUILD = '834762795b';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -591,8 +591,10 @@
       Object.keys((st && st.mats) || {}).forEach(function (k) { mats[k] = (mats[k] || 0) + st.mats[k]; (matSites[k] = matSites[k] || {})[s.id] = 1; });
       Object.keys((st && st.hw) || {}).forEach(function (k) { var v = st.hw[k]; if (!Array.isArray(v)) { return; } hw[k] = (hw[k] || 0) + v[1]; hwName[k] = v[0]; });
     });
+    // a hinge always comes with its mounting plate: leave the plate out of "most used"
+    var hwMain = {}; Object.keys(hw).forEach(function (k) { if (!/^Hinge mounting plate/.test(k)) { hwMain[k] = hw[k]; } });
     var top = function (o, n) { return Object.keys(o).sort(function (a, b) { return o[b] - o[a]; }).slice(0, n).map(function (k) { return [k, o[k]]; }); };
-    return { mats: top(mats, 3), mods: top(mods, 3), hw: top(hw, 3), hwAll: top(hw, 999), hwName: hwName, matSites: matSites, pending: pending };
+    return { mats: top(mats, 3), mods: top(mods, 3), hw: top(hwMain, 3), hwAll: top(hw, 999), hwName: hwName, matSites: matSites, pending: pending };
   }
   var HW_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M5.5 18.5l2.1-2.1M16.4 7.6l2.1-2.1"/></svg>';
   function dashCards() {
