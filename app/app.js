@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.46';
-  var BUILD = '312de745b5';
+  var BUILD = '7318071c5c';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Pieces': 'Piezas', 'Modules': 'Módulos', 'Estimated': 'Estimado', 'Totals': 'Totales', 'copy': 'copia', 'Project duplicated.': 'Proyecto duplicado.', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta', 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material': 'Arrastre para girar · pellizque para zoom · toque una puerta · mantenga presionado un panel para su material', 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material': 'Arrastre para girar · rueda para zoom · clic en una puerta · clic derecho en un panel para su material',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -250,6 +250,22 @@
       if (m) { setThumbImgs(id, moduleThumb(m)); }
     });
     liveThumb();
+    // project pictures (first module) in the project list
+    document.querySelectorAll('[data-sthumb]').forEach(function (img) {
+      var st = site(img.getAttribute('data-sthumb')), m = st && st.modules.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); })[0];
+      var url = m && moduleThumb(m);
+      if (url) { img.src = url; }
+    });
+    // the project numbers, again with the catalog's sheet sizes
+    if (document.querySelector('[data-pstats]')) {
+      sites.forEach(function (s) {
+        var el = document.querySelector('[data-pstats="' + s.id + '"]');
+        if (el && !siteStats(s)) { var tmp = document.createElement('span'); tmp.innerHTML = statsHtml(s); el.parentNode.replaceChild(tmp.firstChild, el); }
+      });
+      fillStats();
+    }
+    // and the module being edited, in its real materials
+    if (E && E.res && $('#editBody')) { try { draw3d(false); } catch (e) { /* not drawn yet */ } }
   });
   function setThumbImgs(id, url) {
     if (!url) { return; }
@@ -480,6 +496,70 @@
   }
 
   // ------------------------------------------------------------------ screens: sites
+  // Each project's numbers for the list: modules, pieces, sheets and an estimated cost (whole
+  // sheets × price + edge tape rolls, from the cutting plan). Worked out one project at a time
+  // after the list shows, and kept until the project, the material prices or the cut settings change.
+  var siteStatsCache = load('panelpro.web.siteStats', {});
+  function statKey(s) {
+    var ms = window.PPMaterials && PPMaterials.stamp ? PPMaterials.stamp() : 0;
+    return s.updated + '|' + ms + '|' + JSON.stringify(prefs.opt || {}).length;
+  }
+  function siteStats(s) {
+    var c = siteStatsCache[s.id];
+    return c && c.k === statKey(s) ? c : null;
+  }
+  function computeStats(s) {
+    var st = { k: statKey(s), modules: s.modules.length, pieces: 0, sheets: 0, cost: 0 };
+    if (s.modules.length) {
+      var d = projectData(s);
+      st.pieces = d.cutlist.rows.reduce(function (a, r) { return a + (r.qty || 1); }, 0);
+      if (d.cutlist.rows.length) {
+        var M = window.PPMaterials, R = window.PPReports;
+        var o = Engine.call('optimize', { rows: d.cutlist.rows, opt: prefs.opt, materials: M ? M.engineList() : [],
+                                          costs: M ? M.costDefaults(prefs.opt.prices) : { prices: prefs.opt.prices } });
+        st.sheets = o.sheets;
+        st.cost = R.totalCost(o, { t: t, show: L, units: U(), es: lang === 'es', settings: { opt: prefs.opt } }) || 0;
+      }
+    }
+    siteStatsCache[s.id] = st;
+    save('panelpro.web.siteStats', siteStatsCache);
+    return st;
+  }
+  function money(v) { return window.PPReports ? PPReports.money(v, { es: lang === 'es', settings: { opt: prefs.opt } }) : (prefs.opt.currency || '') + ' ' + Math.round(v); }
+  function statsHtml(s) {
+    var st = siteStats(s), v = function (x) { return st ? String(x) : '…'; };
+    var cell = function (label, val, cls) { return '<span class="pst' + (cls ? ' ' + cls : '') + '"><small>' + esc(label) + '</small><b>' + esc(val) + '</b></span>'; };
+    return '<span class="pstats" data-pstats="' + esc(s.id) + '">' +
+      cell(t('Modules'), s.modules.length) + cell(t('Pieces'), v(st && st.pieces)) + cell(t('Sheets'), v(st && st.sheets)) +
+      cell(t('Estimated'), st ? (st.cost ? money(st.cost) : '—') : '…', 'money') + '</span>';
+  }
+  // after the list shows: the missing numbers, one project at a time (the phone stays responsive)
+  function fillStats() {
+    // the catalog first: its boards' sheet sizes change the sheet count
+    if (window.PPMaterials && PPMaterials.ready && !fillStats.ok) { PPMaterials.ready().then(function () { fillStats.ok = true; fillStats(); }); return; }
+    var todo = sites.filter(function (s) { return !siteStats(s) && document.querySelector('[data-pstats="' + s.id + '"]'); });
+    (function next() {
+      var s = todo.shift();
+      if (!s) { return; }
+      var el = document.querySelector('[data-pstats="' + s.id + '"]');
+      if (!el) { return; }
+      try { computeStats(s); } catch (e) { siteStatsCache[s.id] = { k: statKey(s), modules: s.modules.length, pieces: 0, sheets: 0, cost: 0 }; }
+      var tmp = document.createElement('span'); tmp.innerHTML = statsHtml(s);
+      el.parentNode.replaceChild(tmp.firstChild, el);
+      setTimeout(next, 30);
+    })();
+  }
+  // "Duplicate": a copy of the project with new ids (same modules, codes and notes)
+  function duplicateSite(s) {
+    var c = clone(s);
+    c.id = uid(); c.name = s.name + ' (' + t('copy') + ')'; c.created = now(); c.updated = now();
+    c.modules.forEach(function (m) { m.id = uid(); });
+    delete c.cloud; delete c.remote; delete c.shared;
+    sites.push(c); persist();
+    toast(t('Project duplicated.'));
+    route();
+  }
+
  // Desktop: the projects as a table you can search and sort.
   var deskSort = load('panelpro.web.sort', { k: 'updated', d: -1 }), deskQuery = '';
   function renderSitesDesk(cloud) {
@@ -497,12 +577,13 @@
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
       '<div class="page page-wide">' + (cloud ? cloud.invitesHtml() : '') +
       (sites.length ? '<table class="dk-table"><thead><tr><th class="th-pic"></th>' + th('name', DT('Name')) + th('client', DT('Client')) +
-          th('modules', DT('Modules'), 'n') + th('updated', DT('Updated'), 'n') + '</tr></thead><tbody>' +
+          '<th colspan="1">' + esc(t('Totals')) + '</th>' + th('updated', DT('Updated'), 'n') + '<th></th></tr></thead><tbody>' +
           (list.length ? list.map(function (s) {
             return '<tr data-site="' + esc(s.id) + '" tabindex="0"><td class="td-pic"><img alt="" data-sthumb="' + esc(s.id) + '"></td>' +
               '<td><b>' + esc(s.name) + '</b>' + (s.notes ? '<small>' + esc(s.notes) + '</small>' : '') + '</td><td>' + esc(s.client || '') + '</td>' +
-              '<td class="n">' + s.modules.length + '</td><td class="n">' + esc(new Date(s.updated).toLocaleDateString(lang)) + '</td></tr>';
-          }).join('') : '<tr><td colspan="5" class="muted">' + esc(DT('No projects match.')) + '</td></tr>') + '</tbody></table>'
+              '<td>' + statsHtml(s) + '</td><td class="n">' + esc(new Date(s.updated).toLocaleDateString(lang)) + '</td>' +
+              '<td class="n"><button type="button" class="btn small ghost dupbtn" data-dup="' + esc(s.id) + '">⧉ ' + esc(t('Duplicate')) + '</button></td></tr>';
+          }).join('') : '<tr><td colspan="6" class="muted">' + esc(DT('No projects match.')) + '</td></tr>') + '</tbody></table>'
         : '<div class="empty"><h2>' + esc(t('No sites yet')) + '</h2><p>' + esc(t('Start one for the room you are measuring.')) + '</p></div>') +
       '<p class="meta-line" style="margin-top:20px">PanelPro Web ' + esc(VERSION) + ' · ' + esc(t('Engine')) + ' ' + esc(Engine.version || '') + '</p>' +
       '</div><div class="dock"><button type="button" class="btn primary" id="newSite">+ ' + esc(t('New site')) + '</button></div>'
@@ -510,8 +591,11 @@
     if (cloud) { cloud.wireInvites(); }
     screen.querySelectorAll('tr[data-site]').forEach(function (r) {
       var open = function () { go('#/site/' + encodeURIComponent(r.getAttribute('data-site'))); };
-      r.onclick = open; r.onkeydown = function (e) { if (e.key === 'Enter') { open(); } };
+      r.onclick = function (e) { if (e.target.closest('[data-dup]')) { return; } open(); };
+      r.onkeydown = function (e) { if (e.key === 'Enter') { open(); } };
     });
+    screen.querySelectorAll('[data-dup]').forEach(function (b) { b.onclick = function () { duplicateSite(site(b.getAttribute('data-dup'))); }; });
+    setTimeout(fillStats, 200);
     screen.querySelectorAll('[data-sort]').forEach(function (b) {
       b.onclick = function () {
         var k = b.getAttribute('data-sort');
@@ -548,16 +632,23 @@
       '<div class="page page-wide">' + (cloud ? cloud.invitesHtml() : '') +
       (list.length ? '<div class="list">' + list.map(function (s) {
         var n = s.modules.length;
-        return '<button type="button" class="row-card" data-site="' + esc(s.id) + '"><span class="grow"><span class="t1">' + esc(s.name) + '</span>' +
-          '<span class="t2">' + esc([s.client, n + ' ' + t(n === 1 ? 'module' : 'modules'), new Date(s.updated).toLocaleDateString(lang)].filter(Boolean).join(' · ')) + '</span></span>' +
-          '<span class="chev" aria-hidden="true">›</span></button>';
+        return '<div class="row-card site-card" data-site="' + esc(s.id) + '" role="button" tabindex="0"><span class="grow"><span class="t1">' + esc(s.name) + '</span>' +
+          '<span class="t2">' + esc([s.client, new Date(s.updated).toLocaleDateString(lang)].filter(Boolean).join(' · ')) + '</span>' + statsHtml(s) + '</span>' +
+          '<button type="button" class="icon-btn dupbtn" data-dup="' + esc(s.id) + '" aria-label="' + esc(t('Duplicate')) + '" title="' + esc(t('Duplicate')) + '">⧉</button></div>';
       }).join('') + '</div>'
         : '<div class="empty"><h2>' + esc(t('No sites yet')) + '</h2><p>' + esc(t('Start one for the room you are measuring.')) + '</p></div>') +
       '<p class="meta-line" style="margin-top:28px;text-align:center">PanelPro Web ' + esc(VERSION) + ' · ' + esc(t('Engine')) + ' ' + esc(Engine.version || '') + '</p>' +
       '</div>' +
       '<div class="dock"><button type="button" class="btn primary" id="newSite">' + esc(t('New site')) + '</button></div>'
     );
-    screen.querySelectorAll('[data-site]').forEach(function (b) { b.onclick = function () { go('#/site/' + encodeURIComponent(b.getAttribute('data-site'))); }; });
+    screen.querySelectorAll('[data-site]').forEach(function (b) {
+      b.onclick = function (e) {
+        var d = e.target.closest('[data-dup]');
+        if (d) { duplicateSite(site(d.getAttribute('data-dup'))); return; }
+        go('#/site/' + encodeURIComponent(b.getAttribute('data-site')));
+      };
+    });
+    setTimeout(fillStats, 200);
     $('#newSite').onclick = function () { go('#/newsite'); };
     $('#langBtn').onclick = function () { setLang(lang === 'es' ? 'en' : 'es'); route(); };
     if (cloud) { $('#spaceBtn').onclick = cloud.spaceMenu; cloud.wireInvites(); }

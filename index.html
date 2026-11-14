@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PanelPro — muebles en tablero, del módulo al corte</title>
+<meta name="description" content="PanelPro: diseña módulos de cocina, closets y muebles en el teléfono o en SketchUp, con lista de corte, optimizador de tableros, catálogo de materiales y manual de armado.">
+<meta name="theme-color" content="#1d2a30">
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root { --ink: #1d2a30; --ink2: #3b4a50; --muted: #66747a; --line: #dde2e5; --ground: #f4f2ee; --card: #fff; --tape: #f3c623; --tape-deep: #d9a900; --wood: #a8774a; --wood-soft: #f3e8dc; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: var(--ink); background: var(--ground); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 22px; border-radius: 12px; font-weight: 700; font-size: 16px; text-decoration: none; border: 1.5px solid transparent; transition: transform .15s, box-shadow .15s, background .15s; white-space: nowrap; }
+.btn:hover { transform: translateY(-1px); }
+.btn.primary { background: var(--tape); color: #231d00; box-shadow: 0 6px 18px rgba(217,169,0,.35); }
+.btn.primary:hover { background: #f7d03c; }
+.btn.ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
+.btn.dark { background: var(--ink); color: #fff; }
+.btn.small { height: 38px; padding: 0 14px; font-size: 14px; border-radius: 10px; }
+/* header */
+header.top { position: sticky; top: 0; z-index: 10; background: rgba(244,242,238,.88); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(29,42,48,.06); }
+header.top .wrap { display: flex; align-items: center; gap: 18px; height: 66px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand img { width: 36px; height: 36px; border-radius: 9px; }
+.brand b { font-size: 19px; font-weight: 800; letter-spacing: -.2px; }
+.brand small { display: block; font-size: 10px; letter-spacing: 1.6px; color: var(--muted); font-weight: 600; text-transform: uppercase; margin-top: -2px; }
+nav.links { display: flex; gap: 22px; margin-left: 26px; font-weight: 600; font-size: 14.5px; color: var(--ink2); }
+nav.links a { text-decoration: none; }
+nav.links a:hover { color: var(--ink); }
+.top .right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.lang { border: 0; background: none; font: inherit; font-weight: 700; font-size: 13px; color: var(--muted); cursor: pointer; padding: 6px; }
+.signin { font-weight: 600; font-size: 14.5px; text-decoration: none; padding: 0 8px; }
+/* hero */
+.hero { padding: 64px 0 40px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: -40% -10% auto; height: 620px; background: radial-gradient(closest-side, rgba(243,198,35,.22), transparent 70%); pointer-events: none; }
+.mark { width: 92px; height: 92px; margin: 0 auto 22px; border-radius: 24px; box-shadow: 0 18px 40px rgba(29,42,48,.25); position: relative; }
+.word { font-family: 'Bricolage Grotesque', Inter, sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 6px; margin-bottom: 18px; position: relative; }
+.word span { color: var(--tape-deep); }
+.pill { display: inline-block; position: relative; padding: 6px 14px; border-radius: 99px; background: var(--wood-soft); border: 1px solid #e6d3bd; color: #8a5a2b; font-weight: 700; font-size: 13.5px; margin-bottom: 18px; }
+h1 { font-family: 'Bricolage Grotesque', Inter, sans-serif; font-weight: 800; font-size: clamp(36px, 6vw, 64px); line-height: 1.04; letter-spacing: -1.5px; margin: 0 auto 18px; max-width: 900px; position: relative; }
+h1 em { font-style: normal; color: var(--wood); }
+h1 u { text-decoration: none; background: linear-gradient(transparent 62%, var(--tape) 62% 92%, transparent 92%); }
+.lead { font-size: clamp(16px, 2vw, 19px); color: var(--ink2); max-width: 720px; margin: 0 auto 30px; position: relative; }
+.ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+.trial { margin-top: 12px; font-size: 13.5px; color: var(--muted); position: relative; }
+/* product shot */
+.shot { position: relative; margin: 52px auto 0; max-width: 1080px; }
+.browser { background: #fff; border-radius: 14px; box-shadow: 0 30px 70px rgba(29,42,48,.22), 0 0 0 1px rgba(29,42,48,.08); overflow: hidden; }
+.browser .bar { height: 32px; background: #e9ecee; display: flex; align-items: center; gap: 6px; padding: 0 12px; }
+.browser .bar i { width: 10px; height: 10px; border-radius: 50%; background: #c9cfd3; }
+.browser .bar span { margin-left: 14px; flex: 1; max-width: 380px; height: 18px; border-radius: 6px; background: #fff; font-size: 11px; color: var(--muted); display: flex; align-items: center; padding-left: 10px; }
+.phone { position: absolute; right: -24px; bottom: -36px; width: 17%; min-width: 150px; border-radius: 26px; border: 7px solid #111a1e; box-shadow: 0 24px 50px rgba(29,42,48,.35); overflow: hidden; background: #111a1e; }
+/* steps strip */
+.strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 96px auto 0; max-width: 900px; border-top: 1px solid var(--line); padding-top: 34px; }
+.strip div { text-align: center; padding: 0 22px; }
+.strip div + div { border-left: 1px solid var(--line); }
+.strip svg { width: 34px; height: 34px; color: var(--wood); margin-bottom: 8px; }
+.strip b { display: block; letter-spacing: 1.5px; font-size: 15px; }
+.strip p { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
+/* sections */
+section.block { padding: 90px 0 0; }
+.kicker { font-weight: 800; font-size: 12.5px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--wood); margin-bottom: 10px; }
+h2 { font-family: 'Bricolage Grotesque', Inter, sans-serif; font-weight: 800; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; letter-spacing: -.8px; margin: 0 0 14px; }
+.sub { color: var(--ink2); font-size: 17px; max-width: 640px; margin: 0; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 34px; }
+.app { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 10px; }
+.app .tag { align-self: flex-start; font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; background: var(--ink); color: var(--tape); }
+.app h3 { margin: 4px 0 0; font-size: 22px; }
+.app ul { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; color: var(--ink2); }
+.app li { padding-left: 26px; position: relative; }
+.app li::before { content: ''; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 5px; background: var(--tape); box-shadow: inset 0 0 0 4px #fff7d6; }
+.engine { margin-top: 18px; background: var(--ink); color: #e9edef; border-radius: 18px; padding: 22px 26px; display: flex; gap: 18px; align-items: center; }
+.engine b { color: var(--tape); }
+.engine svg { flex: none; width: 40px; height: 40px; color: var(--tape); }
+/* feature grid */
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 34px; }
+.feat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+.feat .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--wood-soft); color: var(--wood); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+.feat .ic svg { width: 22px; height: 22px; }
+.feat h4 { margin: 0 0 6px; font-size: 16px; }
+.feat p { margin: 0; font-size: 14px; color: var(--muted); }
+/* showcase */
+.show { display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center; margin-top: 90px; }
+.show.rev { grid-template-columns: 1fr 1.15fr; }
+.show.rev .pic { order: 2; }
+.show .pic { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 18px 44px rgba(29,42,48,.16), 0 0 0 1px rgba(29,42,48,.06); }
+.show ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; color: var(--ink2); }
+.show li b { color: var(--ink); }
+.nums { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.nums div { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.nums b { display: block; font-size: 22px; font-family: 'Bricolage Grotesque', Inter, sans-serif; }
+.nums span { font-size: 12.5px; color: var(--muted); }
+/* plans */
+.plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 34px; }
+.plan { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.plan.best { border: 2px solid var(--ink); box-shadow: 0 18px 40px rgba(29,42,48,.14); position: relative; }
+.plan.best::before { content: attr(data-badge); position: absolute; top: -12px; left: 22px; background: var(--tape); color: #231d00; font-weight: 800; font-size: 12px; padding: 3px 10px; border-radius: 8px; }
+.plan h3 { margin: 0; font-size: 20px; }
+.plan .for { color: var(--muted); font-size: 14px; margin: 0; }
+.plan ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; font-size: 14.5px; color: var(--ink2); flex: 1; }
+.plan li::before { content: '✓  '; color: var(--wood); font-weight: 800; }
+.plan li.no { color: #a4adb1; }
+.plan li.no::before { content: '—  '; color: #c3c9cc; }
+/* final cta + footer */
+.final { margin: 100px 0 0; background: var(--ink); color: #fff; border-radius: 26px; padding: 54px 30px; text-align: center; position: relative; overflow: hidden; }
+.final::after { content: ''; position: absolute; right: -60px; top: -60px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(closest-side, rgba(243,198,35,.35), transparent); }
+.final h2 { color: #fff; }
+.final p { color: #c8d0d3; margin: 0 auto 26px; max-width: 560px; }
+.final .btn.ghost { border-color: #fff; color: #fff; }
+footer { padding: 40px 0 50px; color: var(--muted); font-size: 13.5px; }
+footer .wrap { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+footer a { text-decoration: none; font-weight: 600; }
+/* responsive */
+@media (max-width: 960px) {
+  nav.links { display: none; }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .show, .show.rev { grid-template-columns: 1fr; gap: 24px; }
+  .show.rev .pic { order: 0; }
+  .plans { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) { .brand small { display: none; } }
+@media (max-width: 640px) {
+  .signin { display: none; }
+  .two { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: 1fr; }
+  .strip { grid-template-columns: 1fr; gap: 22px; }
+  .strip div + div { border-left: 0; border-top: 1px solid var(--line); padding-top: 22px; }
+  .phone { right: -6px; bottom: -30px; width: 34%; border-width: 5px; border-radius: 18px; }
+  .engine { flex-direction: column; text-align: center; }
+  .top .right .btn { padding: 0 12px; }
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#"><img src="img/logo.png" alt=""><span><b>PanelPro</b><small>A CSPARTNERS division</small></span></a>
+  <nav class="links">
+    <a href="#apps" data-es="Apps" data-en="Apps">Apps</a>
+    <a href="#funciones" data-es="Funciones" data-en="Features">Funciones</a>
+    <a href="#planes" data-es="Planes" data-en="Plans">Planes</a>
+  </nav>
+  <div class="right">
+    <button class="lang" id="lang" type="button">EN</button>
+    <a class="signin" href="app/" data-es="Iniciar sesión" data-en="Sign in">Iniciar sesión</a>
+    <a class="btn primary small" href="app/" data-es="Crear cuenta ›" data-en="Create account ›">Crear cuenta ›</a>
+  </div>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <img class="mark" src="img/logo.png" alt="PanelPro">
+  <div class="word">PANEL<span>PRO</span></div>
+  <div class="pill" data-es="Diseña inteligente. Corta mejor. Construye perfecto." data-en="Design smart. Cut better. Build right.">Diseña inteligente. Corta mejor. Construye perfecto.</div>
+  <h1 data-es="Del módulo al corte: <em>muebles en tablero</em> con <u>precisión</u>" data-en="From module to cut: <em>panel furniture</em> built with <u>precision</u>">Del módulo al corte: <em>muebles en tablero</em> con <u>precisión</u></h1>
+  <p class="lead" data-es="Mide en la obra con el teléfono, termina el diseño en SketchUp y envía al taller una lista de corte lista para la sierra. Cocinas, closets y muebles, con vista 3D, optimizador de tableros y manual de armado." data-en="Measure on site with your phone, finish the design in SketchUp and send the shop a cut list ready for the saw. Kitchens, closets and furniture, with 3D view, sheet optimizer and assembly manual.">Mide en la obra con el teléfono, termina el diseño en SketchUp y envía al taller una lista de corte lista para la sierra. Cocinas, closets y muebles, con vista 3D, optimizador de tableros y manual de armado.</p>
+  <div class="ctas">
+    <a class="btn primary" href="app/" data-es="Comenzar gratis ›" data-en="Start free ›">Comenzar gratis ›</a>
+    <a class="btn ghost" id="rbz" href="#apps" data-es="Plugin para SketchUp" data-en="SketchUp plugin">Plugin para SketchUp</a>
+  </div>
+  <div class="trial" data-es="7 días de prueba · Inicia sesión con Google · Español e inglés" data-en="7-day trial · Sign in with Google · English and Spanish">7 días de prueba · Inicia sesión con Google · Español e inglés</div>
+  <div class="shot">
+    <div class="browser"><div class="bar"><i></i><i></i><i></i><span>panelpro · app</span></div><img src="img/desktop.jpg" alt="PanelPro Web: closet en 3D con frentes de madera" width="1800" height="1075"></div>
+    <div class="phone"><img src="img/phone.jpg" alt="PanelPro en el teléfono" width="640" height="1302"></div>
+  </div>
+  <div class="strip">
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><b data-es="DISEÑA" data-en="DESIGN">DISEÑA</b><p data-es="Módulos paramétricos en 3D, en el teléfono o en SketchUp." data-en="Parametric modules in 3D, on your phone or in SketchUp.">Módulos paramétricos en 3D, en el teléfono o en SketchUp.</p></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></svg><b data-es="OPTIMIZA" data-en="OPTIMIZE">OPTIMIZA</b><p data-es="Aprovecha cada tablero, con un solo sobrante limpio." data-en="Use every sheet, with one clean offcut.">Aprovecha cada tablero, con un solo sobrante limpio.</p></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3M9 10h6M9 14h6M9 18h3"/></svg><b data-es="LISTA DE CORTE" data-en="CUT LIST">LISTA DE CORTE</b><p data-es="Medidas finales con canto, listas para el taller." data-en="Finished sizes with edge tape, ready for the shop.">Medidas finales con canto, listas para el taller.</p></div>
+  </div>
+</div></section>
+
+<section class="block" id="apps"><div class="wrap">
+  <div class="kicker" data-es="Dos apps, un motor" data-en="Two apps, one engine">Dos apps, un motor</div>
+  <h2 data-es="En la obra y en la oficina" data-en="On site and at the office">En la obra y en la oficina</h2>
+  <p class="sub" data-es="El mismo generador de módulos corre en el teléfono y dentro de SketchUp: lo que diseñas en un lado sale idéntico en el otro." data-en="The same module generator runs on your phone and inside SketchUp: what you design on one side comes out identical on the other.">El mismo generador de módulos corre en el teléfono y dentro de SketchUp: lo que diseñas en un lado sale idéntico en el otro.</p>
+  <div class="two">
+    <div class="app"><span class="tag">PanelPro Web</span><h3 data-es="Tu taller en el bolsillo" data-en="Your shop in your pocket">Tu taller en el bolsillo</h3>
+      <ul>
+        <li data-es="Toma medidas, elige un módulo y ajústalo paso a paso" data-en="Take measurements, pick a module and adjust it step by step">Toma medidas, elige un módulo y ajústalo paso a paso</li>
+        <li data-es="Composición por pared con planta y alzados acotados" data-en="Composition per wall with dimensioned plan and elevations">Composición por pared con planta y alzados acotados</li>
+        <li data-es="Funciona sin señal; se sincroniza cuando vuelve" data-en="Works offline; syncs when you are back online">Funciona sin señal; se sincroniza cuando vuelve</li>
+        <li data-es="Comparte el proyecto por WhatsApp o con tu empresa" data-en="Share the project by WhatsApp or with your company">Comparte el proyecto por WhatsApp o con tu empresa</li>
+      </ul>
+      <a class="btn dark small" href="app/" style="align-self:flex-start;margin-top:8px" data-es="Abrir PanelPro Web ›" data-en="Open PanelPro Web ›">Abrir PanelPro Web ›</a></div>
+    <div class="app"><span class="tag" data-es="Plugin para SketchUp" data-en="SketchUp plugin">Plugin para SketchUp</span><h3 data-es="Diseña el espacio completo" data-en="Design the whole space">Diseña el espacio completo</h3>
+      <ul>
+        <li data-es="Cada panel es un componente, con su veta y su canto" data-en="Every panel is a component, with its grain and edge tape">Cada panel es un componente, con su veta y su canto</li>
+        <li data-es="Biblioteca de módulos y materiales en imágenes" data-en="Module and material libraries as pictures">Biblioteca de módulos y materiales en imágenes</li>
+        <li data-es="Paneles que cubren varios módulos, nichos y doble piel" data-en="Panels across modules, nooks and double skin">Paneles que cubren varios módulos, nichos y doble piel</li>
+        <li data-es="Se actualiza solo con cada nueva versión" data-en="Updates itself with every new version">Se actualiza solo con cada nueva versión</li>
+      </ul>
+      <a class="btn dark small" id="rbz2" href="#" style="align-self:flex-start;margin-top:8px" data-es="Descargar plugin (.rbz) ›" data-en="Download plugin (.rbz) ›">Descargar plugin (.rbz) ›</a></div>
+  </div>
+  <div class="engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/><circle cx="12" cy="12" r="4"/></svg>
+    <div data-es="<b>Reglas de carpintero, no de dibujante:</b> el ancho, alto y fondo son la caja; los cambios de espesor van hacia adentro; puertas, frentes y tapa decorativa quedan por fuera. Todo el mueble usa el mismo tablero hasta que tú lo cambies." data-en="<b>A cabinetmaker’s rules, not a draughtsman’s:</b> width, height and depth are the carcass; thickness changes go inward; doors, fronts and the decorative top sit outside. The whole unit uses one board until you change it."><b>Reglas de carpintero, no de dibujante:</b> el ancho, alto y fondo son la caja; los cambios de espesor van hacia adentro; puertas, frentes y tapa decorativa quedan por fuera. Todo el mueble usa el mismo tablero hasta que tú lo cambies.</div></div>
+</div></section>
+
+<section class="block" id="funciones"><div class="wrap">
+  <div class="kicker" data-es="Funciones" data-en="Features">Funciones</div>
+  <h2 data-es="Todo el flujo, de la medida a la sierra" data-en="The whole flow, from measurement to saw">Todo el flujo, de la medida a la sierra</h2>
+  <div class="grid">
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M12 3v18M4 12h16"/></svg></div><h4 data-es="Módulos paramétricos" data-en="Parametric modules">Módulos paramétricos</h4><p data-es="Cocina, closets, muebles y baño: columnas, filas, puertas, gavetas, zapateras y tubos." data-en="Kitchen, closets, furniture and bath: columns, rows, doors, drawers, shoe racks and rails.">Cocina, closets, muebles y baño: columnas, filas, puertas, gavetas, zapateras y tubos.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div><h4 data-es="Vista 3D interactiva" data-en="Interactive 3D view">Vista 3D interactiva</h4><p data-es="Gira, abre puertas y gavetas, y ve cada panel con su textura real." data-en="Turn it, open doors and drawers, and see every panel in its real texture.">Gira, abre puertas y gavetas, y ve cada panel con su textura real.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></div><h4 data-es="Lista de corte" data-en="Cut list">Lista de corte</h4><p data-es="Medidas finales con canto, una línea por pieza, en Excel para tu proveedor." data-en="Finished sizes with edge tape, one line per piece, in Excel for your supplier.">Medidas finales con canto, una línea por pieza, en Excel para tu proveedor.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 10h18M10 10v10M15 4v6"/></svg></div><h4 data-es="Optimizador de tableros" data-en="Sheet optimizer">Optimizador de tableros</h4><p data-es="Corte largo para sierra de viga, como OptiPlanning, con el sobrante en una sola pieza." data-en="Long-cut strips for beam saws, like OptiPlanning, with the waste in one piece.">Corte largo para sierra de viga, como OptiPlanning, con el sobrante en una sola pieza.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></div><h4 data-es="Catálogo de materiales" data-en="Material catalog">Catálogo de materiales</h4><p data-es="Más de 100 decorados de EGGER, BERNECK, CLEAF, ARKOPA y más, con su textura." data-en="Over 100 decors from EGGER, BERNECK, CLEAF, ARKOPA and more, with their texture.">Más de 100 decorados de EGGER, BERNECK, CLEAF, ARKOPA y más, con su textura.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5M8 13h8M8 17h5"/></svg></div><h4 data-es="Manual de módulos" data-en="Module manual">Manual de módulos</h4><p data-es="Planos, vista frontal e isométrica de cada módulo y de la composición, en PDF." data-en="Drawings, front and isometric views of each module and the composition, as PDF.">Planos, vista frontal e isométrica de cada módulo y de la composición, en PDF.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1.2 1.3-2 3-2s3 .8 3 2-1.3 1.8-3 2.3-3 1-3 2.2 1.3 2 3 2 3-.8 3-2"/></svg></div><h4 data-es="Costo de materiales" data-en="Material cost">Costo de materiales</h4><p data-es="Tableros completos y rollos de canto con tus precios, en RD$ o US$." data-en="Whole sheets and edge-tape rolls at your prices, in RD$ or US$.">Tableros completos y rollos de canto con tus precios, en RD$ o US$.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M14 15.5c.9-.6 1.9-1 3-1 2.8 0 4 2 4 4.5"/></svg></div><h4 data-es="Equipo y galería" data-en="Team and gallery">Equipo y galería</h4><p data-es="Tu empresa comparte materiales y proyectos; la galería pública reúne módulos de la comunidad." data-en="Your company shares materials and projects; the public gallery gathers community modules.">Tu empresa comparte materiales y proyectos; la galería pública reúne módulos de la comunidad.</p></div>
+  </div>
+
+  <div class="show">
+    <div class="pic"><img src="img/cut.jpg" alt="Lista de corte" width="1400" height="836" ></div>
+    <div><div class="kicker" data-es="Lista y plan de corte" data-en="Cut list and cutting plan">Lista y plan de corte</div>
+      <h2 data-es="Sabes cuántos tableros antes de pedirlos" data-en="Know how many sheets before you order">Sabes cuántos tableros antes de pedirlos</h2>
+      <p class="sub" data-es="El optimizador trabaja como la sierra de tu proveedor: tiras a lo largo, piezas a lo ancho y un sobrante grande y limpio al final." data-en="The optimizer works like your supplier’s saw: strips along the length, pieces across, and one big clean offcut at the end.">El optimizador trabaja como la sierra de tu proveedor: tiras a lo largo, piezas a lo ancho y un sobrante grande y limpio al final.</p>
+      <ul>
+        <li data-es="<b>Corte de sierra y refilado</b> a tu medida (4.4 mm, 10 mm…)" data-en="<b>Saw kerf and trim</b> to your setup (4.4 mm, 10 mm…)"><b>Corte de sierra y refilado</b> a tu medida (4.4 mm, 10 mm…)</li>
+        <li data-es="<b>Tableros lisos</b> giran las piezas libremente; los de veta la respetan" data-en="<b>Plain boards</b> turn parts freely; grained boards keep the grain"><b>Tableros lisos</b> giran las piezas libremente; los de veta la respetan</li>
+        <li data-es="<b>Herrajes, zócalo y metros de canto</b> contados por ti" data-en="<b>Hardware, plinth and metres of edge tape</b> counted for you"><b>Herrajes, zócalo y metros de canto</b> contados por ti</li><li data-es="<b>Canto por lado</b> de cada pieza, con medidas finales" data-en="<b>Edge tape per side</b> of every piece, at finished size"><b>Canto por lado</b> de cada pieza, con medidas finales</li>
+      </ul></div>
+  </div>
+  <div class="show rev">
+    <div class="pic"><img src="img/compose.jpg" alt="Composición" width="1200" height="1065" ></div>
+    <div><div class="kicker" data-es="Composición" data-en="Composition">Composición</div>
+      <h2 data-es="Arma la pared completa" data-en="Lay out the whole wall">Arma la pared completa</h2>
+      <p class="sub" data-es="Acomoda los módulos uno al lado del otro y uno encima del otro; PanelPro acota el conjunto y lo lleva al manual." data-en="Place modules side by side and on top of each other; PanelPro dimensions the set and puts it in the manual.">Acomoda los módulos uno al lado del otro y uno encima del otro; PanelPro acota el conjunto y lo lleva al manual.</p>
+      <div class="nums"><div><b>18</b><span data-es="módulos base" data-en="ready modules">módulos base</span></div><div><b>100+</b><span data-es="decorados" data-en="decors">decorados</span></div><div><b>2</b><span data-es="idiomas" data-en="languages">idiomas</span></div></div></div>
+  </div>
+</div></section>
+
+<section class="block" id="planes"><div class="wrap">
+  <div class="kicker" data-es="Planes" data-en="Plans">Planes</div>
+  <h2 data-es="Empieza con 7 días gratis" data-en="Start with 7 days free">Empieza con 7 días gratis</h2>
+  <p class="sub" data-es="Suscripción mensual o anual con PayPal. Cancela cuando quieras." data-en="Monthly or yearly subscription with PayPal. Cancel any time.">Suscripción mensual o anual con PayPal. Cancela cuando quieras.</p>
+  <div class="plans">
+    <div class="plan"><h3>Web</h3><p class="for" data-es="Para medir y cotizar en la obra" data-en="To measure and price on site">Para medir y cotizar en la obra</p>
+      <ul><li data-es="PanelPro Web en teléfono y computadora" data-en="PanelPro Web on phone and computer">PanelPro Web en teléfono y computadora</li><li data-es="Lista de corte, plan de corte y manual" data-en="Cut list, cutting plan and manual">Lista de corte, plan de corte y manual</li><li data-es="Catálogo de materiales" data-en="Material catalog">Catálogo de materiales</li><li class="no" data-es="Plugin para SketchUp" data-en="SketchUp plugin">Plugin para SketchUp</li></ul>
+      <a class="btn ghost small" href="app/" data-es="Probar gratis" data-en="Try free">Probar gratis</a></div>
+    <div class="plan best" data-badge="Recomendado"><h3 data-es="Completo" data-en="Full">Completo</h3><p class="for" data-es="El flujo entero, de la obra a SketchUp" data-en="The whole flow, from site to SketchUp">El flujo entero, de la obra a SketchUp</p>
+      <ul><li data-es="Todo lo de Web" data-en="Everything in Web">Todo lo de Web</li><li data-es="Plugin para SketchUp completo" data-en="Full SketchUp plugin">Plugin para SketchUp completo</li><li data-es="Sincronización entre apps y equipos" data-en="Sync across apps and devices">Sincronización entre apps y equipos</li><li data-es="Galería pública y empresa" data-en="Public gallery and company">Galería pública y empresa</li></ul>
+      <a class="btn primary small" href="app/" data-es="Probar gratis" data-en="Try free">Probar gratis</a></div>
+    <div class="plan"><h3>Plugin Lite</h3><p class="for" data-es="Solo el plugin para SketchUp" data-en="The SketchUp plugin only">Solo el plugin para SketchUp</p>
+      <ul><li data-es="Configurador de módulos en SketchUp" data-en="Module configurator in SketchUp">Configurador de módulos en SketchUp</li><li data-es="Lista de corte en Excel" data-en="Cut list in Excel">Lista de corte en Excel</li><li class="no" data-es="PanelPro Web" data-en="PanelPro Web">PanelPro Web</li><li class="no" data-es="Galería pública" data-en="Public gallery">Galería pública</li></ul>
+      <a class="btn ghost small" href="#apps" data-es="Ver el plugin" data-en="See the plugin">Ver el plugin</a></div>
+  </div>
+</div></section>
+
+<div class="wrap"><section class="final">
+  <h2 data-es="Tu próximo closet empieza en el teléfono" data-en="Your next closet starts on your phone">Tu próximo closet empieza en el teléfono</h2>
+  <p data-es="Crea una cuenta con Google, mide, diseña y manda la lista de corte hoy mismo." data-en="Create an account with Google, measure, design and send the cut list today.">Crea una cuenta con Google, mide, diseña y manda la lista de corte hoy mismo.</p>
+  <div class="ctas"><a class="btn primary" href="app/" data-es="Comenzar gratis ›" data-en="Start free ›">Comenzar gratis ›</a><a class="btn ghost" id="rbz3" href="#" data-es="Descargar plugin" data-en="Download plugin">Descargar plugin</a></div>
+</section></div>
+</main>
+
+<footer><div class="wrap">
+  <span>© 2026 PanelPro · A CSPARTNERS division <span id="ver"></span></span>
+  <span><a href="app/" data-es="Abrir la app" data-en="Open the app">Abrir la app</a></span>
+</div></footer>
+
+<script>
+(function () {
+  'use strict';
+  // language: Spanish first; English for English browsers or by the EN/ES button (remembered)
+  var KEY = 'panelpro.site.lang', lang = 'es';
+  try { lang = localStorage.getItem(KEY) || ((navigator.language || 'es').slice(0, 2) === 'en' ? 'en' : 'es'); } catch (e) { /* private mode */ }
+  function apply() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-es]').forEach(function (el) { el.innerHTML = el.getAttribute('data-' + lang); });
+    var best = document.querySelector('.plan.best');
+    if (best) { best.setAttribute('data-badge', lang === 'en' ? 'Recommended' : 'Recomendado'); }
+    document.getElementById('lang').textContent = lang === 'en' ? 'ES' : 'EN';
+  }
+  document.getElementById('lang').addEventListener('click', function () {
+    lang = lang === 'en' ? 'es' : 'en';
+    try { localStorage.setItem(KEY, lang); } catch (e) { /* */ }
+    apply();
+  });
+  apply();
+  // the latest plugin (.rbz) from the release feed
+  fetch('version.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (v) {
+    if (!v || !v.rbz) { return; }
+    ['rbz', 'rbz2', 'rbz3'].forEach(function (id) { var a = document.getElementById(id); if (a) { a.href = v.rbz; } });
+    document.getElementById('ver').textContent = '· v' + v.version;
+  }).catch(function () { /* offline: the buttons keep pointing at the apps section */ });
+})();
+</script>
+</body>
+</html>

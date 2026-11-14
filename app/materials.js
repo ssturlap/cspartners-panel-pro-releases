@@ -628,6 +628,7 @@
       loadList(); fillDatalist(); return texLoadAll();
     },
     stamp: function () { return stamp; },
+    ready: function () { return loadCatalog().catch(function () {}); },
     defaultMaterial: function () { var e = data.list.find(function (x) { return x.default; }); return e ? e.name : null; },
     localData: localData,
     cloudReset: function () { data = { list: [], tape: { roll_price: 0, roll_m: 0 } }; TEX = {}; stamp++; fillDatalist(); },
