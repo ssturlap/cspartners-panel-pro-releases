@@ -1,17 +1,13 @@
 {
-  "version": "0.3.53",
+  "version": "0.3.54",
   "date": "2026-11-14",
-  "title": "Japanese bed: 38 mm construction",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.53.rbz",
+  "title": "Beds: a height too low no longer breaks the preview",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.54.rbz",
   "notes": [
-    "Japanese beds have a Construction choice: 18 mm (inner bands, ledge supports, notched corner) or 38 mm.",
-    "38 mm: single heavy rails on the floor (the foot one full width over the sides, none at the head), the top ledge bands lying on them with the foot one full…",
-    "Rail, ledge and centre beam thickness can be set (38 mm); nailers and slats keep the panel thickness. The manual shows the butt corner in plan."
+    "An overall height lower than the mattress, the deck and the nailers allow is raised to the lowest bed that can be built (388 mm with a 30 cm mattress and 18…"
   ],
-  "title_es": "Cama japonesa: construcción en 38 mm",
+  "title_es": "Camas: una altura demasiado baja ya no quita la vista previa",
   "notes_es": [
-    "Las camas japonesas tienen una opción de Construcción: 18 mm (bandas interiores, soportes de repisa, esquina con rebaje) o 38 mm.",
-    "38 mm: largueros gruesos sencillos sobre el piso (el de pies a todo el ancho tapando los laterales, ninguno en la cabecera), las repisas acostadas encima…",
-    "Se puede ajustar el grueso de largueros, repisa y viga central (38 mm); los listones y las tablillas mantienen el grueso del tablero. El manual muestra la…"
+    "Una altura total más baja de lo que permiten el colchón, la base y los listones se sube a la cama más baja que se puede construir (388 mm con colchón de 30…"
   ]
 }
