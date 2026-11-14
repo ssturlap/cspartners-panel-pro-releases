@@ -988,3 +988,15 @@ body.desk .dk-table th.th-plain { font-size: 11px; font-weight: 700; letter-spac
 .hw-photo { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .hw-photo small { color: var(--muted); }
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* Accessories page: one heading per kind */
+.hw-grp { display: flex; align-items: center; gap: 8px; margin: 18px 2px 8px; font-size: 15px; font-weight: 700; color: var(--ink); }
+.hw-grp svg { width: 20px; height: 20px; color: var(--ink-2); }
+.hw-grp small { font-size: 12px; font-weight: 600; color: var(--muted); background: #e9edef; border-radius: 10px; padding: 1px 8px; }
+.hw-row .dhw { width: 44px; height: 44px; border-radius: 10px; }
+.hw-row .dhw svg { width: 26px; height: 26px; }
+.hw-row .t1 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Materials: My list grouped by brand / board type */
+.mat-groupbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 4px 2px 6px; }
+.mat-groupbar .meta-line { margin: 0; }
+.mat-grp { display: flex; align-items: center; gap: 8px; margin: 18px 2px 8px; font-size: 15px; font-weight: 700; color: var(--ink); }
+.mat-grp small { font-size: 12px; font-weight: 600; color: var(--muted); background: #e9edef; border-radius: 10px; padding: 1px 8px; }

@@ -37,7 +37,7 @@
     'Add all shown': 'Agregar todos los mostrados', 'materials': 'materiales', 'Added to your list': 'Agregado a su lista', 'Added: ': 'Agregados: ',
     'The boards of the PanelPro catalog (EGGER, BERNECK, ARKOPA, CLEAF, ONESKIN). Modules can use them by name even without adding them; add them to your list to set your prices.':
       'Los tableros del catálogo PanelPro (EGGER, BERNECK, ARKOPA, CLEAF, ONESKIN). Los módulos los pueden usar por el nombre aunque no los agregue; agréguelos a su lista para poner sus precios.',
-    'Melamine / MDP': 'Melamina / MDP', 'MDF': 'MDF', 'Plywood / wood': 'Triplay / Madera', 'Board type': 'Tipo de tablero',
+    'Melamine / MDP': 'Melamina / MDP', 'MDF': 'MDF', 'Plywood / wood': 'Triplay / Madera', 'Board type': 'Tipo de tablero', 'Group by': 'Agrupar por', 'None': 'Ninguno',
     'Notes': 'Notas', 'Has grain': 'Tiene veta (grano)', 'Wood patterns: parts follow the grain of the sheet.': 'Materiales con patrón de madera: las piezas siguen la veta del tablero.',
     'Default material': 'Material por defecto', 'New modules start with it (carcass).': 'Los módulos nuevos empiezan con él (caja).',
     'Edge banding work per metre': 'Aplicación de canto por metro', 'Edge banding work': 'Aplicación de canto', 'in the edge tape total': 'incluido en el canto',
@@ -228,17 +228,44 @@
     return (e.thick || []).map(function (x) { return fmt(x.t) + ' mm' + (x.price ? ' · ' + money(x.price) : ''); }).join('  |  ');
   }
 
+  // My list: grouped by brand or by board type (MDP / MDF / plywood), remembered on this device
+  var GROUP_KEY = 'panelpro.web.matGroup';
+  function groupMode() { try { return localStorage.getItem(GROUP_KEY) || 'brand'; } catch (e) { return 'brand'; } }
+  function brandOf(e) { var c = catFind(e.name); return (e.brand || (c && c.brand) || '').trim().toUpperCase() || ''; }
+  function typeOf(e) { var c = catFind(e.name); return e.type || (c && c.type) || 'melamine'; }
+  function groupBar() {
+    var m = groupMode();
+    return '<div class="mat-groupbar"><span class="meta-line">' + esc(t('Group by')) + '</span><div class="seg cat-seg">' +
+      [['brand', t('Brand')], ['type', t('Board type')], ['none', t('None')]].map(function (o) {
+        return '<button type="button" data-mgroup="' + o[0] + '" class="' + (m === o[0] ? 'on' : '') + '">' + esc(o[1]) + '</button>';
+      }).join('') + '</div></div>';
+  }
+  function groupedList(row) {
+    var m = groupMode(), list = data.list.slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
+    if (m === 'none') { return '<div class="list">' + list.map(row).join('') + '</div>'; }
+    var keyF = m === 'type' ? typeOf : brandOf, groups = {}, order = [];
+    list.forEach(function (e) { var k = keyF(e); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(e); });
+    order.sort(function (a, b) {
+      if (m === 'type') { var ks = Object.keys(TYPE_L); return ks.indexOf(a) - ks.indexOf(b); }
+      return (a === '' ? 1 : 0) - (b === '' ? 1 : 0) || a.localeCompare(b);
+    });
+    return order.map(function (k) {
+      var label = m === 'type' ? t(TYPE_L[k] || 'Other') : (k || t('Other'));
+      return '<h4 class="mat-grp"><span>' + esc(label) + '</span><small>' + groups[k].length + '</small></h4><div class="list">' + groups[k].map(row).join('') + '</div>';
+    }).join('');
+  }
+
   function renderList() {
     A.show(
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(A.t('Back')) + '">‹</button><h1>' + esc(t('Materials')) + '</h1>' +
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(A.t('More')) + '">⋯</button></header>' +
       '<div class="page page-wide">' + tabs('mine') +
-      (data.list.length ? '<div class="list">' + data.list.map(function (e) {
+      (data.list.length ? groupBar() + groupedList(function (e) {
         return '<button type="button" class="row-card" data-mat="' + esc(e.id) + '"><i class="mat-thumb" style="' + esc(swatchCss(e.name)) + '"></i>' +
-          '<span class="grow"><span class="t1">' + esc(e.name) + (e.brand ? ' <small class="muted">' + esc(e.brand) + '</small>' : '') + '</span>' +
+          '<span class="grow"><span class="t1">' + esc(e.name) + (e.brand && e.name.toUpperCase().indexOf(e.brand.toUpperCase()) < 0 ? ' <small class="muted">' + esc(e.brand) + '</small>' : '') + '</span>' +
           '<span class="t2">' + esc(len(e.sheet_l) + ' × ' + len(e.sheet_w)) + (thicksTxt(e) ? ' · ' + esc(thicksTxt(e)) : '') + '</span></span>' +
           '<span class="chev" aria-hidden="true">›</span></button>';
-      }).join('') + '</div>'
+      })
         : '<div class="empty"><h2>' + esc(t('No materials yet')) + '</h2><p>' + esc(t('Add the boards you buy: texture, sheet size, thicknesses, price per sheet and edge tape rolls. Type the same name in a module’s material boxes to use it.')) + '</p></div>') +
       '<div class="box fields" style="margin-top:16px"><h3 class="grp">' + esc(t('Default edge tape roll')) + '</h3>' +
         '<p class="meta-line">' + esc(t('For materials or thicknesses with no roll in the list.')) + ' ' + esc(t('Edge tape is costed in whole rolls: 1 m over a roll buys another roll.')) + '</p>' +
@@ -253,6 +280,9 @@
       e.name = ''; e.thick.push({ t: 18, price: 0, roll_price: 0, roll_m: 0 }); saveList();
       A.go('#/materials/' + encodeURIComponent(e.id));
     };
+    document.querySelectorAll('[data-mgroup]').forEach(function (b) {
+      b.onclick = function () { try { localStorage.setItem(GROUP_KEY, b.getAttribute('data-mgroup')); } catch (e) {} renderList(); };
+    });
     document.querySelectorAll('[data-mat]').forEach(function (b) {
       b.onclick = function () { A.go('#/materials/' + encodeURIComponent(b.getAttribute('data-mat'))); };
     });

@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.47';
-  var BUILD = '834762795b';
+  var BUILD = 'f97091c558';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Pieces': 'Piezas', 'Dashboard': 'Inicio', 'Recent projects': 'Proyectos recientes', 'All projects': 'Todos los proyectos', 'most used': 'más usados', 'Add material to the catalog': 'Agregar material al catálogo', 'Quick view: module catalog': 'Ver catálogo de módulos', 'Quick add hardware': 'Agregar accesorio', 'Colour / finish': 'Color / acabado', 'Hinge type': 'Tipo de bisagra', 'Slide type': 'Tipo de corredera', 'Pull type': 'Tipo de jaladera', 'Type / model': 'Tipo / modelo', 'Length (mm)': 'Largo (mm)', 'Size / hole centres (mm)': 'Medida / entre centros (mm)', 'Height (mm)': 'Alto (mm)', 'Size': 'Medida', 'Hardware': 'Accesorios', 'Accessories': 'Accesorios', '— (not linked)': '— (sin vincular)', 'Used for (what the modules ask for)': 'Se usa para (lo que piden los módulos)', 'Link each one to an item of your catalog: its price then goes into the project estimate.': 'Vincule cada uno con un artículo de su catálogo: su precio entra en el estimado del proyecto.', 'pieces': 'piezas', 'project': 'proyecto', 'projects': 'proyectos', 'used': 'usado', 'time': 'vez', 'times': 'veces', 'units': 'unidades', 'No materials used yet.': 'Aún no hay materiales usados.', 'No hardware used yet.': 'Aún no hay accesorios usados.', 'Counting your projects…': 'Contando sus proyectos…', 'Module catalog': 'Catálogo de módulos', 'Add to which project?': '¿Agregar a qué proyecto?', 'Open a project first': 'Abra primero un proyecto', 'Hinge': 'Bisagra', 'Drawer slide': 'Corredera', 'Pull / handle': 'Jaladera / tirador', 'Leg / plinth': 'Pata / zócalo', 'Shelf support': 'Soporte de entrepaño', 'Hanging rail': 'Tubo de closet', 'Other': 'Otro', 'piece': 'pieza', 'pair': 'par', 'set': 'juego', 'metre': 'metro', 'New hardware': 'Accesorio nuevo', 'No hardware listed yet': 'Aún no hay accesorios en su catálogo', 'Add the hinges, slides and pulls you buy, with their price.': 'Agregue las bisagras, correderas y jaladeras que compra, con su precio.', 'Used in your projects': 'Usados en sus proyectos', 'Photo (optional)': 'Foto (opcional)', 'Type': 'Tipo', 'Brand': 'Marca', 'Code': 'Código', 'Price': 'Precio', 'Per': 'Por', 'Enter a name': 'Escriba un nombre', 'Name': 'Nombre', 'Add': 'Agregar', 'Modules': 'Módulos', 'Estimated': 'Estimado', 'Totals': 'Totales', 'copy': 'copia', 'Project duplicated.': 'Proyecto duplicado.', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Pieces': 'Piezas', 'Dashboard': 'Inicio', 'Recent projects': 'Proyectos recientes', 'All projects': 'Todos los proyectos', 'most used': 'más usados', 'Add material to the catalog': 'Agregar material al catálogo', 'Quick view: module catalog': 'Ver catálogo de módulos', 'Quick add hardware': 'Agregar accesorio', 'Colour / finish': 'Color / acabado', 'Hinge type': 'Tipo de bisagra', 'Slide type': 'Tipo de corredera', 'Pull type': 'Tipo de jaladera', 'Type / model': 'Tipo / modelo', 'Length (mm)': 'Largo (mm)', 'Size / hole centres (mm)': 'Medida / entre centros (mm)', 'Height (mm)': 'Alto (mm)', 'Size': 'Medida', 'Hardware': 'Accesorios', 'Accessories': 'Accesorios', 'Hinges': 'Bisagras', 'Drawer slides & systems': 'Correderas y sistemas de gaveta', 'Pulls & handles': 'Jaladeras y tiradores', 'Lift-ups & flap stays': 'Abatibles y compases', 'Legs & plinth': 'Patas y zócalo', 'Supports & brackets': 'Soportes y escuadras', 'Wardrobe rails': 'Tubos de closet', 'Lift-up / flap fitting': 'Abatible / compás', '— (not linked)': '— (sin vincular)', 'Used for (what the modules ask for)': 'Se usa para (lo que piden los módulos)', 'Link each one to an item of your catalog: its price then goes into the project estimate.': 'Vincule cada uno con un artículo de su catálogo: su precio entra en el estimado del proyecto.', 'pieces': 'piezas', 'project': 'proyecto', 'projects': 'proyectos', 'used': 'usado', 'time': 'vez', 'times': 'veces', 'units': 'unidades', 'No materials used yet.': 'Aún no hay materiales usados.', 'No hardware used yet.': 'Aún no hay accesorios usados.', 'Counting your projects…': 'Contando sus proyectos…', 'Module catalog': 'Catálogo de módulos', 'Add to which project?': '¿Agregar a qué proyecto?', 'Open a project first': 'Abra primero un proyecto', 'Hinge': 'Bisagra', 'Drawer slide': 'Corredera', 'Pull / handle': 'Jaladera / tirador', 'Leg / plinth': 'Pata / zócalo', 'Shelf support': 'Soporte de entrepaño', 'Hanging rail': 'Tubo de closet', 'Other': 'Otro', 'piece': 'pieza', 'pair': 'par', 'set': 'juego', 'metre': 'metro', 'New hardware': 'Accesorio nuevo', 'No hardware listed yet': 'Aún no hay accesorios en su catálogo', 'Add the hinges, slides and pulls you buy, with their price.': 'Agregue las bisagras, correderas y jaladeras que compra, con su precio.', 'Used in your projects': 'Usados en sus proyectos', 'Photo (optional)': 'Foto (opcional)', 'Type': 'Tipo', 'Brand': 'Marca', 'Code': 'Código', 'Price': 'Precio', 'Per': 'Por', 'Enter a name': 'Escriba un nombre', 'Name': 'Nombre', 'Add': 'Agregar', 'Modules': 'Módulos', 'Estimated': 'Estimado', 'Totals': 'Totales', 'copy': 'copia', 'Project duplicated.': 'Proyecto duplicado.', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta', 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material': 'Arrastre para girar · pellizque para zoom · toque una puerta · mantenga presionado un panel para su material', 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material': 'Arrastre para girar · rueda para zoom · clic en una puerta · clic derecho en un panel para su material',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -610,7 +610,7 @@
     }).join('') : empty(t('No modules yet'));
     var hw = u.hw.length ? u.hw.map(function (x) {
       var item = hwFor(x[0]);
-      return '<li><i class="dhw">' + (item && item.photo ? '<img alt="" src="' + esc(item.photo) + '">' : HW_ICON) + '</i><span><b>' + esc(item ? item.name : u.hwName[x[0]] || x[0]) + '</b><small>' + x[1] + ' ' + esc(t('units')) +
+      return '<li><i class="dhw">' + (item && item.photo ? '<img alt="" src="' + esc(item.photo) + '">' : hwIcon(item ? item.type : hwTypeOf(x[0]), x[0])) + '</i><span><b>' + esc(item ? item.name : u.hwName[x[0]] || x[0]) + '</b><small>' + x[1] + ' ' + esc(t('units')) +
         (item && item.price ? ' · ' + esc(money(item.price)) : '') + '</small></span></li>';
     }).join('') : (u.pending ? '' : empty(t('No hardware used yet.')));
     var card = function (cls, title, list, btnId, btn) {
@@ -667,7 +667,41 @@
   // Your hardware (hinges, slides, pulls, legs…): name, type, brand / code, price, unit, photo.
   // The dashboard counts the hardware your projects use; a listed item shows its price and photo.
   var HW_KEY = 'panelpro.web.hardware.v1';
-  var HW_TYPES = [['hinge', 'Hinge'], ['slide', 'Drawer slide'], ['pull', 'Pull / handle'], ['leg', 'Leg / plinth'], ['support', 'Shelf support'], ['rail', 'Hanging rail'], ['other', 'Other']];
+  var HW_TYPES = [['hinge', 'Hinge'], ['slide', 'Drawer slide'], ['pull', 'Pull / handle'], ['lift', 'Lift-up / flap fitting'], ['leg', 'Leg / plinth'], ['support', 'Shelf support'], ['rail', 'Hanging rail'], ['other', 'Other']];
+  // group headings on the Accessories page, in this order
+  var HW_GROUPS = { hinge: 'Hinges', slide: 'Drawer slides & systems', pull: 'Pulls & handles', lift: 'Lift-ups & flap stays', leg: 'Legs & plinth', support: 'Supports & brackets', rail: 'Wardrobe rails', other: 'Other' };
+  // which kind of accessory a module's hardware line is (from its name)
+  function hwTypeOf(name) {
+    var n = String(name || '');
+    if (/lift-up|flap stay|aventos|abatible/i.test(n)) { return 'lift'; }
+    if (/hinge|bisagra/i.test(n)) { return 'hinge'; }
+    if (/slide|runner|drawer set|gallery rail|corredera|gaveta/i.test(n)) { return 'slide'; }
+    if (/pull|handle|jaladera|tirador/i.test(n)) { return 'pull'; }
+    if (/\bleg\b|toe.?kick|pata|z[oó]calo/i.test(n)) { return 'leg'; }
+    if (/wardrobe rail|hanging rail|tubo/i.test(n)) { return 'rail'; }
+    if (/shelf pin|cleat|bracket|support|soporte/i.test(n)) { return 'support'; }
+    return 'other';
+  }
+  var SVG0 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">';
+  var HW_ICONS = {
+    // cup hinge: round cup, arm, mounting plate
+    hinge: SVG0 + '<circle cx="6.5" cy="12" r="3.6"/><path d="M10 10.6h6.5M10 13.4h6.5"/><rect x="16.5" y="8" width="4.5" height="8" rx="1"/><circle cx="18.75" cy="10.2" r=".6"/><circle cx="18.75" cy="13.8" r=".6"/></svg>',
+    plate: SVG0 + '<rect x="4" y="8" width="16" height="8" rx="1.6"/><circle cx="7.5" cy="12" r="1"/><circle cx="16.5" cy="12" r="1"/><path d="M10.5 12h3"/></svg>',
+    // ball-bearing slide: two rails, balls between
+    slide: SVG0 + '<path d="M2.5 8.5h19M2.5 15.5h15"/><circle cx="6" cy="12" r="1.3"/><circle cx="10" cy="12" r="1.3"/><circle cx="14" cy="12" r="1.3"/><path d="M17.5 13.5v4M21.5 6.5v4"/></svg>',
+    // bar pull
+    pull: SVG0 + '<path d="M3 10h18"/><path d="M6 10v4.5M18 10v4.5"/><rect x="4.8" y="14.5" width="2.4" height="3" rx=".6"/><rect x="16.8" y="14.5" width="2.4" height="3" rx=".6"/></svg>',
+    // lift-up: cabinet top, door swung up, gas arm
+    lift: SVG0 + '<path d="M3 20V9h14"/><path d="M17 9l4-5"/><path d="M5 18l9-6.5"/><circle cx="5" cy="18" r="1"/><circle cx="14" cy="11.5" r="1"/></svg>',
+    // adjustable leg
+    leg: SVG0 + '<rect x="6" y="3" width="12" height="3" rx="1"/><path d="M9.5 6v9M14.5 6v9"/><path d="M9.5 9h5M9.5 12h5"/><path d="M7.5 15h9l-1.5 4.5h-6z"/></svg>',
+    // shelf pin
+    support: SVG0 + '<path d="M3 6h7v12H3"/><circle cx="6.5" cy="12" r="1.4"/><path d="M10 10.5h6.5l3.5-2v7l-3.5-2H10"/></svg>',
+    // wardrobe rail with two end supports
+    rail: SVG0 + '<path d="M3 4v8M21 4v8"/><path d="M3 9h18"/><path d="M8 9c0 3 4 3 4 6.5a2 2 0 1 1-4 0"/></svg>',
+    other: HW_ICON
+  };
+  function hwIcon(type, name) { return /mounting plate|base de bisagra/i.test(name || '') ? HW_ICONS.plate : (HW_ICONS[type] || HW_ICON); }
   var HW_UNITS = [['pc', 'piece'], ['pair', 'pair'], ['set', 'set'], ['m', 'metre']];
   var hwData = load(HW_KEY, { list: [] });
   function hwSave() { save(HW_KEY, hwData); }
@@ -686,24 +720,34 @@
     var U0 = usage(), used = U0.hwAll;
     var list = hwData.list.slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
     var typeL = function (k) { var x = HW_TYPES.find(function (y) { return y[0] === k; }); return t(x ? x[1] : 'Other'); };
+    // one heading per kind (hinges, slides, pulls…), each with its own grid
+    var grouped = function (items, typeOf, row) {
+      return HW_TYPES.map(function (ty) {
+        var g = items.filter(function (x) { return (typeOf(x) || 'other') === ty[0]; });
+        return g.length ? '<h4 class="hw-grp">' + hwIcon(ty[0]) + '<span>' + esc(t(HW_GROUPS[ty[0]])) + '</span><small>' + g.length + '</small></h4><div class="list">' + g.map(row).join('') + '</div>' : '';
+      }).join('');
+    };
     show(
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Accessories')) + '</h1></header>' +
       '<div class="page page-wide">' +
-      (list.length ? '<div class="list">' + list.map(function (h) {
-        return '<button type="button" class="row-card hw-row" data-hw="' + esc(h.id) + '"><i class="dhw">' + (h.photo ? '<img alt="" src="' + esc(h.photo) + '">' : HW_ICON) + '</i>' +
+      (list.length ? grouped(list, function (h) { return h.type; }, function (h) {
+        return '<button type="button" class="row-card hw-row" data-hw="' + esc(h.id) + '"><i class="dhw">' + (h.photo ? '<img alt="" src="' + esc(h.photo) + '">' : hwIcon(h.type, h.name)) + '</i>' +
           '<span class="grow"><span class="t1">' + esc(h.name) + '</span><span class="t2">' + esc([typeL(h.type), h.brand, h.kind, h.size ? h.size + (/^\d+$/.test(h.size) ? ' mm' : '') : '', h.color, h.code].filter(Boolean).join(' · ')) + '</span></span>' +
           '<b class="hw-price">' + (h.price ? esc(money(h.price)) + ' <small>/ ' + esc(t((HW_UNITS.find(function (u) { return u[0] === h.unit; }) || HW_UNITS[0])[1])) + '</small>' : '—') + '</b></button>';
-      }).join('') + '</div>' : '<div class="empty"><h2>' + esc(t('No hardware listed yet')) + '</h2><p>' + esc(t('Add the hinges, slides and pulls you buy, with their price.')) + '</p></div>') +
-      (used.length ? '<h3 class="grp" style="margin-top:22px">' + esc(t('Used in your projects')) + '</h3><p class="meta-line">' + esc(t('Link each one to an item of your catalog: its price then goes into the project estimate.')) + '</p><div class="list">' + used.map(function (x) {
-        var it = hwFor(x[0]);
-        return '<div class="row-card"><span class="grow"><span class="t1">' + esc(U0.hwName[x[0]] || x[0]) + '</span><span class="t2">' + x[1] + ' ' + esc(t('units')) +
-          (it ? ' · ✓ ' + esc(it.name) + (it.price ? ' · ' + esc(money(it.price)) : '') : '') + '</span></span>' +
-          (it ? '' : '<button type="button" class="btn small ghost" data-hwadd="' + esc(x[0]) + '">+ ' + esc(t('Add')) + '</button>') + '</div>';
-      }).join('') + '</div>' : '') +
+      }) : '<div class="empty"><h2>' + esc(t('No hardware listed yet')) + '</h2><p>' + esc(t('Add the hinges, slides and pulls you buy, with their price.')) + '</p></div>') +
+      (used.length ? '<h3 class="grp" style="margin-top:22px">' + esc(t('Used in your projects')) + '</h3><p class="meta-line">' + esc(t('Link each one to an item of your catalog: its price then goes into the project estimate.')) + '</p>' +
+        grouped(used, function (x) { return hwTypeOf(x[0]); }, function (x) {
+          var it = hwFor(x[0]), nm = U0.hwName[x[0]] || x[0];
+          return '<div class="row-card hw-row"><i class="dhw">' + (it && it.photo ? '<img alt="" src="' + esc(it.photo) + '">' : hwIcon(hwTypeOf(x[0]), x[0])) + '</i><span class="grow"><span class="t1" title="' + esc(nm) + '">' + esc(nm) + '</span><span class="t2">' + x[1] + ' ' + esc(t('units')) +
+            (it ? ' · ✓ ' + esc(it.name) + (it.price ? ' · ' + esc(money(it.price)) : '') : '') + '</span></span>' +
+            (it ? '' : '<button type="button" class="btn small ghost" data-hwadd="' + esc(x[0]) + '">+ ' + esc(t('Add')) + '</button>') + '</div>';
+        }) : '') +
       '</div><div class="dock"><button type="button" class="btn primary" id="hwNew">+ ' + esc(t('Quick add hardware')) + '</button></div>'
     );
     $('#back').onclick = function () { history.back(); };
     $('#hwNew').onclick = function () { go('#/hardware/new'); };
+    // projects not counted yet: count them, then show what they use
+    fillStats(function () { if (location.hash === '#/hardware') { renderHwList(); } }, true);
     screen.querySelectorAll('[data-hw]').forEach(function (b) { b.onclick = function () { go('#/hardware/' + encodeURIComponent(b.getAttribute('data-hw'))); }; });
     screen.querySelectorAll('[data-hwadd]').forEach(function (b) { b.onclick = function () { go('#/hardware/new?' + encodeURIComponent(b.getAttribute('data-hwadd'))); }; });
   }
@@ -713,7 +757,7 @@
     var presetName = preset ? (U0.hwName[preset] || preset) : '';
     var h = id === 'new' ? null : hwData.list.find(function (x) { return x.id === id; });
     if (id !== 'new' && !h) { return renderHwList(); }
-    var v = h || { name: presetName, for: preset, type: /hinge|bisagra/i.test(presetName) ? 'hinge' : /slide|corredera/i.test(presetName) ? 'slide' : /leg|pata/i.test(presetName) ? 'leg' : /rail|tubo/i.test(presetName) ? 'rail' : /support|soporte/i.test(presetName) ? 'support' : 'other', brand: '', code: '', price: 0, unit: /par|pair/i.test(presetName) ? 'pair' : 'pc', photo: '' };
+    var v = h || { name: presetName, for: preset, type: hwTypeOf(preset || presetName), brand: '', code: '', price: 0, unit: /par|pair/i.test(presetName) ? 'pair' : 'pc', photo: '' };
     // "Used for": the hardware the modules ask for (from your projects); free items stay unlinked
     var forOpts = [['', t('— (not linked)')]].concat(U0.hwAll.map(function (x) { return [x[0], U0.hwName[x[0]] || x[0]]; }));
     if (v.for && !forOpts.some(function (o) { return o[0] === v.for; })) { forOpts.push([v.for, v.for]); }
@@ -721,14 +765,14 @@
     show(
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(h ? h.name : t('New hardware')) + '</h1></header>' +
       '<div class="page">' +
-      '<div class="hw-photo"><button type="button" id="hwPic" class="dhw big">' + (v.photo ? '<img alt="" src="' + esc(v.photo) + '">' : HW_ICON) + '</button><small>' + esc(t('Photo (optional)')) + '</small><input type="file" accept="image/*" id="hwFile" hidden></div>' +
+      '<div class="hw-photo"><button type="button" id="hwPic" class="dhw big">' + (v.photo ? '<img alt="" src="' + esc(v.photo) + '">' : hwIcon(v.type, v.name)) + '</button><small>' + esc(t('Photo (optional)')) + '</small><input type="file" accept="image/*" id="hwFile" hidden></div>' +
       '<label class="field"><span>' + esc(t('Name')) + '</span><input class="text-in" id="hwName" value="' + esc(v.name) + '" placeholder="Bisagra cazoleta 110° cierre suave"></label>' +
       '<label class="field"><span>' + esc(t('Type')) + '</span><select class="sel" id="hwType">' + opt(HW_TYPES, v.type) + '</select></label>' +
       '<label class="field"><span>' + esc(t('Used for (what the modules ask for)')) + '</span><select class="sel" id="hwFor">' + forOpts.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (o[0] === (v.for || '') ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>' +
       '<label class="field"><span>' + esc(t('Brand')) + '</span><input class="text-in" id="hwBrand" list="hwBrands" value="' + esc(v.brand || '') + '" placeholder="Blum, Hettich, Grass…"></label>' +
       '<datalist id="hwBrands">' + ['Blum', 'Hettich', 'Grass', 'Salice', 'Häfele', 'Hafele', 'Accuride', 'King Slide', 'Emuca', 'FGV', 'Herrajes Hobi'].map(function (b) { return '<option value="' + b + '">'; }).join('') + '</datalist>' +
       // per type: hinges — type; slides — type and length; pulls — type, size and colour
-      '<label class="field hwx" data-for="hinge slide pull leg support rail other"><span id="hwKindL"></span><input class="text-in" id="hwKind" list="hwKinds" value="' + esc(v.kind || '') + '"></label><datalist id="hwKinds"></datalist>' +
+      '<label class="field hwx" data-for="hinge slide pull lift leg support rail other"><span id="hwKindL"></span><input class="text-in" id="hwKind" list="hwKinds" value="' + esc(v.kind || '') + '"></label><datalist id="hwKinds"></datalist>' +
       '<label class="field hwx" data-for="slide pull leg rail"><span id="hwSizeL"></span><input class="text-in" id="hwSize" value="' + esc(v.size || '') + '"></label>' +
       '<label class="field hwx" data-for="pull hinge leg rail"><span>' + esc(t('Colour / finish')) + '</span><input class="text-in" id="hwColor" list="hwColors" value="' + esc(v.color || '') + '"></label>' +
       '<datalist id="hwColors">' + ['Negro mate', 'Acero inoxidable', 'Aluminio', 'Níquel', 'Oro cepillado', 'Blanco', 'Bronce'].map(function (c) { return '<option value="' + c + '">'; }).join('') + '</datalist>' +
@@ -743,9 +787,9 @@
       hinge: ['Cazoleta 35 mm, 110°', 'Cazoleta 35 mm, 165°', 'Cierre suave (BLUMOTION)', 'Parche completo', 'Medio parche', 'Embutida', 'Para puerta de aluminio'],
       slide: ['Bolas, extensión total', 'Bolas, extensión total, cierre suave', 'Oculta (undermount), cierre suave', 'Caja metálica (MERIVOBOX, InnoTech…)', 'Push to open'],
       pull: ['Barra', 'Botón / pomo', 'Perfil de aluminio', 'Gola', 'Uñero', 'Push to open'],
-      leg: ['Pata regulable 100 mm', 'Pata regulable 150 mm', 'Zócalo PVC'], support: ['Soporte de entrepaño 5 mm', 'Soporte con seguro'], rail: ['Tubo ovalado', 'Tubo redondo 25 mm', 'Tubo abatible'], other: []
+      leg: ['Pata regulable 100 mm', 'Pata regulable 150 mm', 'Zócalo PVC'], support: ['Soporte de entrepaño 5 mm', 'Soporte con seguro'], rail: ['Tubo ovalado', 'Tubo redondo 25 mm', 'Tubo abatible'], lift: ['Pistón a gas', 'Compás de tapa, cierre suave', 'Abatible (AVENTOS HK / HF / HL)'], other: []
     };
-    var KIND_L = { hinge: 'Hinge type', slide: 'Slide type', pull: 'Pull type', leg: 'Type', support: 'Type', rail: 'Type', other: 'Type / model' };
+    var KIND_L = { lift: 'Type', hinge: 'Hinge type', slide: 'Slide type', pull: 'Pull type', leg: 'Type', support: 'Type', rail: 'Type', other: 'Type / model' };
     var SIZE_L = { slide: 'Length (mm)', pull: 'Size / hole centres (mm)', leg: 'Height (mm)', rail: 'Length (mm)' };
     function typeFields() {
       var ty = $('#hwType').value;
