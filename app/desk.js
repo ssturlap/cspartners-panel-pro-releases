@@ -11,7 +11,7 @@
   var MQ = window.matchMedia ? window.matchMedia('(min-width: 1024px)') : null;
   var lastClick = null;   // the element the last menu / number box was opened from
   var ES = {
-    'Dashboard': 'Inicio', 'Hardware': 'Accesorios', 'Accessories': 'Accesorios', 'Module catalog': 'Catálogo de módulos', 'Projects': 'Proyectos', 'Search projects': 'Buscar proyectos', 'Modules': 'Módulos', 'Updated': 'Actualizado',
+    'Dashboard': 'Inicio', 'Project manual': 'Manual del proyecto', 'Hardware': 'Accesorios', 'Accessories': 'Accesorios', 'Module catalog': 'Catálogo de módulos', 'Projects': 'Proyectos', 'Search projects': 'Buscar proyectos', 'Modules': 'Módulos', 'Updated': 'Actualizado',
     'Name': 'Nombre', 'Client': 'Cliente', 'Project': 'Proyecto', 'Type a size or a calculation': 'Escriba una medida o un cálculo',
     'Enter to set · Esc to cancel': 'Enter para fijar · Esc para cancelar', 'Add module': 'Agregar módulo',
     'No modules yet': 'Aún no hay módulos', 'Pick a module on the left, or add one.': 'Elija un módulo a la izquierda o agregue uno.',
@@ -36,7 +36,8 @@
     modules: '<rect x="4" y="4" width="7" height="16" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>',
     compose: '<path d="M3 20h18M5 20V11h6v9M13 20V6h6v14"/>',
     cut: '<path d="M8 4v16M4 8h16M14 12h6M14 16h6"/>',
-    opt: '<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M11 5v14M11 12h10"/>'
+    opt: '<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M11 5v14M11 12h10"/>',
+    doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 11h7M9 14h7M9 17h5"/>'
   };
   function ico(k) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[k] + '</svg>'; }
   function navItem(href, key, label, active, sub) {
@@ -56,7 +57,8 @@
         navItem(base, 'modules', t('Modules'), !p[2] || p[2] === 'm' || p[2] === 'new' || p[2] === 'pick', true) +
         navItem(base + '/compose', 'compose', t('Composition'), p[2] === 'compose', true) +
         navItem(base + '/cut', 'cut', t('Cut list'), p[2] === 'cut', true) +
-        navItem(base + '/opt', 'opt', t('Cutting plan'), p[2] === 'opt', true) + '</div>';
+        navItem(base + '/opt', 'opt', t('Cutting plan'), p[2] === 'opt', true) +
+        navItem(base + '/manual', 'doc', t('Project manual'), p[2] === 'manual', true) + '</div>';
     }
     out += navItem('#/materials', 'materials', t('Materials'), p[0] === 'materials');
     out += navItem('#/hardware', 'hardware', t('Accessories'), p[0] === 'hardware');

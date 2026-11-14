@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.58';
-  var BUILD = '3eb504007d';
+  var BUILD = '0fd54578bf';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Pieces': 'Piezas', 'Dashboard': 'Inicio', 'Recent projects': 'Proyectos recientes', 'All projects': 'Todos los proyectos', 'most used': 'más usados', 'Add material to the catalog': 'Agregar material al catálogo', 'Quick view: module catalog': 'Ver catálogo de módulos', 'Quick add hardware': 'Agregar accesorio', 'Colour / finish': 'Color / acabado', 'Hinge type': 'Tipo de bisagra', 'Slide type': 'Tipo de corredera', 'Pull type': 'Tipo de jaladera', 'Type / model': 'Tipo / modelo', 'Length (mm)': 'Largo (mm)', 'Size / hole centres (mm)': 'Medida / entre centros (mm)', 'Height (mm)': 'Alto (mm)', 'Size': 'Medida', 'Hardware': 'Accesorios', 'Accessories': 'Accesorios', 'Diagnostic view': 'Vista de diagnóstico', 'Full-extension slide, soft-close': 'Corredera extensión total, cierre suave', 'Full-extension slide, push to open': 'Corredera extensión total, push to open', 'Full-extension slide, regular': 'Corredera extensión total, normal', 'Concealed hinge, full overlay': 'Bisagra oculta, parche completo', 'Concealed hinge, half overlay': 'Bisagra oculta, medio parche', 'Concealed hinge, no overlay (inset)': 'Bisagra oculta, embutida (sin parche)', 'T-bar pull': 'Jaladera de barra (T-bar)', 'Face pull': 'Jaladera de frente', 'Edge pull': 'Jaladera de canto', 'Shelf pin': 'Soporte de entrepaño', 'Hinges': 'Bisagras', 'Drawer slides & systems': 'Correderas y sistemas de gaveta', 'Pulls & handles': 'Jaladeras y tiradores', 'Lift-ups & flap stays': 'Abatibles y compases', 'Legs & plinth': 'Patas y zócalo', 'Supports & brackets': 'Soportes y escuadras', 'Wardrobe rails': 'Tubos de closet', 'Lift-up / flap fitting': 'Abatible / compás', '— (not linked)': '— (sin vincular)', '— automatic (matching hardware)': '— automático (herrajes que coinciden)', 'Used for (what the modules ask for)': 'Se usa para (lo que piden los módulos)', 'Link each one to an item of your catalog: its price then goes into the project estimate.': 'Vincule cada uno con un artículo de su catálogo: su precio entra en el estimado del proyecto.', 'pieces': 'piezas', 'project': 'proyecto', 'projects': 'proyectos', 'used': 'usado', 'time': 'vez', 'times': 'veces', 'units': 'unidades', 'No materials used yet.': 'Aún no hay materiales usados.', 'No hardware used yet.': 'Aún no hay accesorios usados.', 'Counting your projects…': 'Contando sus proyectos…', 'Module catalog': 'Catálogo de módulos', 'Add to which project?': '¿Agregar a qué proyecto?', 'Open a project first': 'Abra primero un proyecto', 'Hinge': 'Bisagra', 'Drawer slide': 'Corredera', 'Pull / handle': 'Jaladera / tirador', 'Leg / plinth': 'Pata / zócalo', 'Shelf support': 'Soporte de entrepaño', 'Hanging rail': 'Tubo de closet', 'Other': 'Otro', 'piece': 'pieza', 'pair': 'par', 'set': 'juego', 'metre': 'metro', 'New hardware': 'Accesorio nuevo', 'No hardware listed yet': 'Aún no hay accesorios en su catálogo', 'Add the hinges, slides and pulls you buy, with their price.': 'Agregue las bisagras, correderas y jaladeras que compra, con su precio.', 'Used in your projects': 'Usados en sus proyectos', 'Photo (optional)': 'Foto (opcional)', 'Type': 'Tipo', 'Brand': 'Marca', 'Code': 'Código', 'Price': 'Precio', 'Per': 'Por', 'Enter a name': 'Escriba un nombre', 'Name': 'Nombre', 'Add': 'Agregar', 'Modules': 'Módulos', 'Estimated': 'Estimado', 'Totals': 'Totales', 'copy': 'copia', 'Project duplicated.': 'Proyecto duplicado.', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Pieces': 'Piezas', 'Dashboard': 'Inicio', 'Recent projects': 'Proyectos recientes', 'All projects': 'Todos los proyectos', 'most used': 'más usados', 'Add material to the catalog': 'Agregar material al catálogo', 'Quick view: module catalog': 'Ver catálogo de módulos', 'Quick add hardware': 'Agregar accesorio', 'Colour / finish': 'Color / acabado', 'Hinge type': 'Tipo de bisagra', 'Slide type': 'Tipo de corredera', 'Pull type': 'Tipo de jaladera', 'Type / model': 'Tipo / modelo', 'Length (mm)': 'Largo (mm)', 'Size / hole centres (mm)': 'Medida / entre centros (mm)', 'Height (mm)': 'Alto (mm)', 'Size': 'Medida', 'Hardware': 'Accesorios', 'Accessories': 'Accesorios', 'Project manual': 'Manual del proyecto', 'Manual for this module': 'Manual de este módulo', 'Close': 'Cerrar', 'Diagnostic view': 'Vista de diagnóstico', 'Full-extension slide, soft-close': 'Corredera extensión total, cierre suave', 'Full-extension slide, push to open': 'Corredera extensión total, push to open', 'Full-extension slide, regular': 'Corredera extensión total, normal', 'Concealed hinge, full overlay': 'Bisagra oculta, parche completo', 'Concealed hinge, half overlay': 'Bisagra oculta, medio parche', 'Concealed hinge, no overlay (inset)': 'Bisagra oculta, embutida (sin parche)', 'T-bar pull': 'Jaladera de barra (T-bar)', 'Face pull': 'Jaladera de frente', 'Edge pull': 'Jaladera de canto', 'Shelf pin': 'Soporte de entrepaño', 'Hinges': 'Bisagras', 'Drawer slides & systems': 'Correderas y sistemas de gaveta', 'Pulls & handles': 'Jaladeras y tiradores', 'Lift-ups & flap stays': 'Abatibles y compases', 'Legs & plinth': 'Patas y zócalo', 'Supports & brackets': 'Soportes y escuadras', 'Wardrobe rails': 'Tubos de closet', 'Lift-up / flap fitting': 'Abatible / compás', '— (not linked)': '— (sin vincular)', '— automatic (matching hardware)': '— automático (herrajes que coinciden)', 'Used for (what the modules ask for)': 'Se usa para (lo que piden los módulos)', 'Link each one to an item of your catalog: its price then goes into the project estimate.': 'Vincule cada uno con un artículo de su catálogo: su precio entra en el estimado del proyecto.', 'pieces': 'piezas', 'project': 'proyecto', 'projects': 'proyectos', 'used': 'usado', 'time': 'vez', 'times': 'veces', 'units': 'unidades', 'No materials used yet.': 'Aún no hay materiales usados.', 'No hardware used yet.': 'Aún no hay accesorios usados.', 'Counting your projects…': 'Contando sus proyectos…', 'Module catalog': 'Catálogo de módulos', 'Add to which project?': '¿Agregar a qué proyecto?', 'Open a project first': 'Abra primero un proyecto', 'Hinge': 'Bisagra', 'Drawer slide': 'Corredera', 'Pull / handle': 'Jaladera / tirador', 'Leg / plinth': 'Pata / zócalo', 'Shelf support': 'Soporte de entrepaño', 'Hanging rail': 'Tubo de closet', 'Other': 'Otro', 'piece': 'pieza', 'pair': 'par', 'set': 'juego', 'metre': 'metro', 'New hardware': 'Accesorio nuevo', 'No hardware listed yet': 'Aún no hay accesorios en su catálogo', 'Add the hinges, slides and pulls you buy, with their price.': 'Agregue las bisagras, correderas y jaladeras que compra, con su precio.', 'Used in your projects': 'Usados en sus proyectos', 'Photo (optional)': 'Foto (opcional)', 'Type': 'Tipo', 'Brand': 'Marca', 'Code': 'Código', 'Price': 'Precio', 'Per': 'Por', 'Enter a name': 'Escriba un nombre', 'Name': 'Nombre', 'Add': 'Agregar', 'Modules': 'Módulos', 'Estimated': 'Estimado', 'Totals': 'Totales', 'copy': 'copia', 'Project duplicated.': 'Proyecto duplicado.', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta', 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material': 'Arrastre para girar · pellizque para zoom · toque una puerta · mantenga presionado un panel para su material', 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material': 'Arrastre para girar · rueda para zoom · clic en una puerta · clic derecho en un panel para su material',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -385,6 +385,7 @@
   // ------------------------------------------------------------------ menu sheet
   // Each item can name an icon (item.icon); a ✓ at the start of a label becomes a check icon.
   var MENU_ICONS = {
+    doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 11h7M9 14h7M9 17h5"/>',
     runpanels: '<path d="M3 4h18M3 20h18"/><rect x="4" y="7" width="5" height="10"/><rect x="9.5" y="7" width="5" height="10"/><rect x="15" y="7" width="5" height="10"/>',
     user: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.5 3.6-5.5 7-5.5s6.2 2 7 5.5"/>',
     building: '<path d="M4 20V8l6-3v15M10 20V10h10v10M3 20h18M13 13h1M17 13h1M13 16h1M17 16h1"/>',
@@ -460,6 +461,11 @@
       if (p[2] === 'm' && p[3]) {
         var m = s.modules.find(function (x) { return x.id === p[3]; });
         if (m) { return renderEdit(s, m); }
+      }
+      if (p[2] === 'manual') {   // the project manual over the modules list; closing it goes back to the list
+        renderSite(s);
+        makeManual(s, null, function () { if (/\/manual$/.test(location.hash)) { go('#/site/' + encodeURIComponent(s.id), true); } });
+        return;
       }
       if (p[2] === 'cut') { return renderCut(s); }
       if (p[2] === 'opt') { return renderOpt(s, false); }
@@ -1102,6 +1108,7 @@
   }
   function siteMenu(s) {
       menu(s.name, [
+        { label: t('Project manual'), icon: 'doc', run: function () { makeManual(s); } },
         { label: t('Share project file'), icon: 'share', run: function () { shareSite(s); } },
         { label: t('Rename site'), icon: 'edit', run: function () { renderNewSite(s); } },
         window.PPCloud && window.PPCloud.on && (window.PPCloud.hasCompanies() || window.PPCloud.space().kind === 'company') ? { label: window.PPCloud.t('Move to a company…'), icon: 'move', run: function () { window.PPCloud.moveSite(s); } } : null,
@@ -1360,6 +1367,7 @@
       } },
       { label: t('Save as my preset…'), icon: 'bookmark', run: function () { savePresetFlow(); } }
     ];
+    if (mod) { items.unshift({ label: t('Manual for this module'), icon: 'doc', run: function () { makeManual(s, { id: mod.id, params: E.params }); } }); }
     if (E.presetKey && /^user:/.test(E.presetKey) && prefs.book[E.presetKey.slice(5)]) {
       items.push({ label: t('Update my preset “') + prefs.book[E.presetKey.slice(5)].name + '”', icon: 'refresh', run: function () {
         var r = Engine.call('presets_update', { book: prefs.book, key: E.presetKey.slice(5), params: E.params });
@@ -2194,16 +2202,23 @@
 
   // ------------------------------------------------------------------ printable documents (manual, cutting plan)
   // Shown full screen inside the app; Print opens the phone's print dialog (choose "Save as PDF").
-  function showDoc(html, title) {
+  // Documents (manuals, cutting plan) open in a large window over the app; ✕, Esc or a click
+  // outside closes it. onClose runs after it closes.
+  function showDoc(html, title, onClose) {
     var ov = document.createElement('div');
     ov.className = 'docview';
-    ov.innerHTML = '<header class="top"><button type="button" class="icon-btn" data-close aria-label="' + esc(t('Back')) + '">‹</button>' +
-      '<h1>' + esc(title) + '</h1><button type="button" class="text-btn" data-print>' + esc(t('Print / save PDF')) + '</button></header>' +
-      '<iframe title="' + esc(title) + '"></iframe>';
+    ov.innerHTML = '<div class="doc-modal" role="dialog" aria-modal="true" aria-label="' + esc(title) + '">' +
+      '<header class="doc-h"><h1>' + esc(title) + '</h1><button type="button" class="btn small primary" data-print>' + esc(t('Print / save PDF')) + '</button>' +
+      '<button type="button" class="icon-btn doc-x" data-close aria-label="' + esc(t('Close')) + '">✕</button></header>' +
+      '<iframe title="' + esc(title) + '"></iframe></div>';
     document.body.appendChild(ov);
     var fr = ov.querySelector('iframe');
     fr.srcdoc = html.replace(/<div class="np">[\s\S]*?<\/div>/, '');
-    ov.querySelector('[data-close]').onclick = function () { ov.remove(); };
+    var close = function () { ov.remove(); document.removeEventListener('keydown', key, true); if (onClose) { onClose(); } };
+    var key = function (e) { if (e.key === 'Escape') { e.preventDefault(); close(); } };
+    document.addEventListener('keydown', key, true);
+    ov.querySelector('[data-close]').onclick = close;
+    ov.onclick = function (e) { if (e.target === ov) { close(); } };
     ov.querySelector('[data-print]').onclick = function () { try { fr.contentWindow.focus(); fr.contentWindow.print(); } catch (e) { toast(e.message); } };
   }
 
@@ -2236,17 +2251,33 @@
       return { layout: Engine.call('room', { mods: list, lang: lang }), mods: mods, snap: snap };
     } catch (e) { return null; }
   }
-  function makeManual(s) {
-    var d;
-    try { d = projectData(s, true).manual_doc; } catch (e) { toast(e.message); return; }
+  // The manual: the whole project, or one module (one: { id, params } — the editor's current settings)
+  function makeManual(s, one, onClose) {
+    var d, code = '';
+    try {
+      if (one) {
+        var mods = s.modules.map(function (m) { return m.id === one.id ? Object.assign({}, m, { params: one.params }) : m; });
+        var full = Engine.call('project', { modules: mods, codes_state: s.codes_state || null, lang: lang, names: prefs.names, opt: prefs.opt, with_parts: true });
+        code = (full.codes || {})[one.id] || '';
+        d = full.manual_doc;
+        d.modules = (d.modules || []).filter(function (x) { return x.code === code; });
+        var only = d.modules[0];
+        d.count = only ? (only.qty || 1) : 0;
+        d.totals = only ? (only.hardware_l || []) : [];
+        d.kick = [];
+        d.scope = 'one';
+      } else {
+        d = projectData(s, true).manual_doc;
+        d.scope = 'all';
+        d.room = roomDoc(s);
+      }
+    } catch (e) { toast(e.message); return; }
     d.title = s.name + (s.client ? ' — ' + s.client : '');
     d.date = new Date().toISOString().slice(0, 10);
-    d.scope = 'all';
-    d.room = roomDoc(s);
     var html;
     try { html = window.PPManual.build(d, { t: t, show: L, units: U(), esc: esc, mats: matInfo }); }
     catch (e) { toast(t('Could not make the manual: ') + e.message); return; }
-    showDoc(html, t('Module manual'));
+    showDoc(html, one ? t('Module manual') + (code ? ' — ' + code : '') : t('Project manual'), onClose);
   }
 
   // ------------------------------------------------------------------ screens: sheet optimizer

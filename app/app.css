@@ -270,8 +270,14 @@ button { cursor: pointer; }
 /* ---------------------------------------------------------------- documents, cutting plan */
 .actions-row { display: flex; gap: 10px; margin: 2px 0 12px; }
 .actions-row .btn { flex: 1; }
-.docview { position: fixed; inset: 0; z-index: 35; background: #e9e6e0; display: flex; flex-direction: column; }
+.docview { position: fixed; inset: 0; z-index: 35; background: rgba(20, 28, 32, .55); display: flex; align-items: center; justify-content: center; padding: 3vh 3vw; }
+.doc-modal { width: min(1180px, 100%); height: 100%; background: #e9e6e0; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+.doc-h { display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 18px; background: #fff; border-bottom: 1px solid var(--line); }
+.doc-h h1 { flex: 1; margin: 0; font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.doc-h .btn { flex: none; }
+.doc-x { color: var(--ink); font-size: 18px; }
 .docview iframe { flex: 1; width: 100%; border: 0; background: #e9e6e0; }
+@media (max-width: 700px) { .docview { padding: 0; } .doc-modal { border-radius: 0; } }
 .stats { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); margin-bottom: 8px; }
 .stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
 .stat b { display: block; font-size: 24px; letter-spacing: -0.02em; }
