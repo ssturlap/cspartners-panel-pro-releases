@@ -130,7 +130,8 @@
       var es = ctx.es, show = ctx.show, deck = p.height - p.bed_mt, dk = p.bed_support === 'roll' ? p.bed_roll_t + p.bed_roll_rise : p.t, top = deck - dk + p.bed_inset;
       return (es ? 'Cama ' : 'Bed ') + show(p.width) + ' × ' + show(p.depth) + u(ctx) + (es ? ' (ancho × largo)' : ' (W × L)') + ' · ' +
         (es ? 'colchón apoya a ' : 'mattress rests at ') + show(deck) + ' · ' + (es ? 'borde del marco a ' : 'frame top at ') + show(top) + u(ctx) + ' · ' + (es ? 'el colchón entra ' : 'mattress sits ') + show(top - deck) + (es ? ' en el marco' : ' into the frame') +
-        (p.bed_style === 'japanese' ? ' · ' + (es ? 'repisa de ' : 'ledge ') + show(top - p.bed_clear) + (es ? ' de grueso' : ' thick') : '');
+        (p.bed_style === 'japanese' ? ' · ' + (es ? 'separación del piso (faldón) ' : 'floor clearance (red skirt) ') + show(top - 2 * p.t) + u(ctx) +
+          ' · ' + (es ? 'repisa de ' : 'ledge ') + show(2 * p.t) + (es ? ' de grueso' : ' thick') : '');
     },
     // Loose panel: the cut size.
     panel: function (p, ctx) {

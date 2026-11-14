@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.51** — Beds: headboard width, height lines  
-Download [cspartners_panel_pro_0.3.51.rbz](releases/cspartners_panel_pro_0.3.51.rbz) and install it in SketchUp:
+**Latest: 0.3.52** — Japanese bed: built the way the shop builds it (18 mm)  
+Download [cspartners_panel_pro_0.3.52.rbz](releases/cspartners_panel_pro_0.3.52.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.52 | [cspartners_panel_pro_0.3.52.rbz](releases/cspartners_panel_pro_0.3.52.rbz) |
 | 0.3.51 | [cspartners_panel_pro_0.3.51.rbz](releases/cspartners_panel_pro_0.3.51.rbz) |
 | 0.3.50 | [cspartners_panel_pro_0.3.50.rbz](releases/cspartners_panel_pro_0.3.50.rbz) |
 | 0.3.49 | [cspartners_panel_pro_0.3.49.rbz](releases/cspartners_panel_pro_0.3.49.rbz) |

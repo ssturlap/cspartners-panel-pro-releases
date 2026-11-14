@@ -177,6 +177,39 @@
     '.np{position:fixed;top:4mm;right:4mm;z-index:9}.np button{font:600 11pt Helvetica,Arial;padding:3mm 5mm;border-radius:2mm;border:0;background:#b4532a;color:#fff;cursor:pointer}'
   ].join('');
 
+  // A Japanese bed's foot-left corner in plan: the notched foot ledge support (cut by hand), the
+  // side support butting its ear (biscuit), the inner bands and the red skirt under the supports.
+  function bedNotchSVG(n, ctx, t) {
+    var T = n.t, L = n.ledge, E = n.ear, run = Math.min(n.mid / 2, L * 0.9), deep = L * 0.95;
+    var W = E + T + run, H = L + deep, pad = Math.max(40, L * 0.4), fs = Math.max(12, L * 0.13);
+    var Y = function (y) { return y; };   // y down = towards the head
+    var o = [];
+    function rect(x0, y0, x1, y1, fill) { o.push('<rect x="' + fmtN(x0) + '" y="' + fmtN(Y(y0)) + '" width="' + fmtN(x1 - x0) + '" height="' + fmtN(y1 - y0) + '" fill="' + fill + '" stroke="#3b3b3b" stroke-width="' + fmtN(fs * 0.12) + '"/>'); }
+    function txt(x, y, s, anchor) { o.push('<text x="' + fmtN(x) + '" y="' + fmtN(y) + '" font-size="' + fmtN(fs) + '" text-anchor="' + (anchor || 'middle') + '" fill="#1d2a30">' + s + '</text>'); }
+    function dimH(x0, x1, y, s) { o.push('<path d="M' + fmtN(x0) + ' ' + fmtN(y) + 'H' + fmtN(x1) + 'M' + fmtN(x0) + ' ' + fmtN(y - fs * 0.4) + 'v' + fmtN(fs * 0.8) + 'M' + fmtN(x1) + ' ' + fmtN(y - fs * 0.4) + 'v' + fmtN(fs * 0.8) + '" stroke="#1d2a30" stroke-width="' + fmtN(fs * 0.08) + '" fill="none"/>'); txt((x0 + x1) / 2, y - fs * 0.35, s); }
+    function dimV(y0, y1, x, s) { o.push('<path d="M' + fmtN(x) + ' ' + fmtN(y0) + 'V' + fmtN(y1) + 'M' + fmtN(x - fs * 0.4) + ' ' + fmtN(y0) + 'h' + fmtN(fs * 0.8) + 'M' + fmtN(x - fs * 0.4) + ' ' + fmtN(y1) + 'h' + fmtN(fs * 0.8) + '" stroke="#1d2a30" stroke-width="' + fmtN(fs * 0.08) + '" fill="none"/>'); txt(x - fs * 0.4, (y0 + y1) / 2 + fs * 0.35, s, 'end'); }
+    // red skirt (under the supports), dashed
+    o.push('<path d="M' + fmtN(E - T) + ' ' + fmtN(H) + 'V' + fmtN(L - 2 * T) + 'H' + fmtN(W) + 'M' + fmtN(E) + ' ' + fmtN(H) + 'V' + fmtN(L - T) + 'H' + fmtN(W) + '" stroke="#c0392b" stroke-dasharray="' + fmtN(fs * 0.5) + ' ' + fmtN(fs * 0.3) + '" stroke-width="' + fmtN(fs * 0.1) + '" fill="none"/>');
+    // inner bands
+    rect(E, L - T, W, L, '#f2e7a6');
+    rect(E, L, E + T, H, '#f2e7a6');
+    // supports: the foot one with its notch, the side one butting the ear
+    o.push('<polygon points="0,0 ' + fmtN(W) + ',0 ' + fmtN(W) + ',' + fmtN(L - T) + ' ' + fmtN(E) + ',' + fmtN(L - T) + ' ' + fmtN(E) + ',' + fmtN(L) + ' 0,' + fmtN(L) + '" fill="#e6c9ef" stroke="#3b3b3b" stroke-width="' + fmtN(fs * 0.12) + '"/>');
+    rect(0, L, E, H, '#efd9f4');
+    // biscuit
+    o.push('<ellipse cx="' + fmtN(E / 2) + '" cy="' + fmtN(L) + '" rx="' + fmtN(Math.min(E * 0.3, 28)) + '" ry="' + fmtN(fs * 0.35) + '" fill="#b88a4a"/>');
+    txt(E / 2, L + fs * 1.6, t('biscuit'));
+    txt(W - run / 2, (L - T) / 2 + fs * 0.35, t('Foot ledge support'));
+    txt(E / 2, L + deep / 2, t('Side support'));
+    // dimensions
+    dimV(0, L, -fs * 0.6, ctx.show(L));
+    dimH(0, E, -fs * 0.9, ctx.show(E));
+    dimV(L - T, L, W + fs * 2.6, ctx.show(T));
+    dimH(E, W, L + fs * 3.4, t('notch') + ' ' + ctx.show(T) + ' × ' + ctx.show(n.mid));
+    dimH(0, E, H - fs, ctx.show(E));
+    return '<svg viewBox="' + fmtN(-pad * 1.6) + ' ' + fmtN(-pad) + ' ' + fmtN(W + pad * 3) + ' ' + fmtN(H + pad * 1.4) + '" style="width:100%;max-height:230px" xmlns="http://www.w3.org/2000/svg">' + o.join('') + '</svg>';
+  }
+
   function build(d, ctx) {
     var t = ctx.t, esc = ctx.esc, u = ' ' + ctx.units;
     var mods = d.modules || [], nAll = d.count || mods.reduce(function (a, m) { return a + (m.qty || 1); }, 0);
@@ -275,10 +308,17 @@
         '<div class="v"><h3>' + t('Left view') + '</h3>' + viewSVG(all, 'left', ctx, hv) + '</div>' +
         '<div class="v"><h3>' + t('Right view') + '</h3>' + viewSVG(all, 'right', ctx, hv) + '</div>' +
         '<div class="v"><h3>' + t('Back view') + '</h3>' + viewSVG(all, 'back', ctx, hv) + '</div></div>';
+      // a Japanese bed: its ledge corner plan takes the place of the "open" picture (nothing opens)
+      var bedNotchBox = function (nb) {
+        return '<div class="v"><h3>' + t('Ledge corner — plan (foot, left; the right one mirrored)') + '</h3>' + bedNotchSVG(nb, ctx, t) +
+          '<p class="sub">' + esc(t('Cut the foot ledge support as a plain board; the installer cuts the notch by hand:') + ' ' + ctx.show(nb.t) + ' × ' + ctx.show(nb.mid) + u + ', ' +
+          t('ears') + ' ' + ctx.show(nb.ear) + u + '. ' + t('Side supports') + ' ' + ctx.show(nb.side) + u + ' ' + t('wide, butting the ears with a biscuit.')) + '</p></div>';
+      };
       var closed = window.P3D && window.P3D.snapshot ? window.P3D.snapshot(all, ctx.mats, m.movers, { open: false, w: 900, h: 640 }) : null;
       var open = window.P3D && window.P3D.snapshot && (m.movers || []).length ? window.P3D.snapshot(all, ctx.mats, m.movers, { open: true, w: 900, h: 640 }) : null;
       h += '<div class="three"><div class="v"><h3>' + t('3D — closed') + '</h3>' + (closed ? '<img src="' + closed + '">' : '') + '</div>' +
-        '<div class="v"><h3>' + t('3D — open') + '</h3>' + (open ? '<img src="' + open + '">' : '<p class="sub">' + t('No doors or drawers') + '</p>') + '</div></div>';
+        (m.bed && m.bed.notch ? bedNotchBox(m.bed.notch) :
+        '<div class="v"><h3>' + t('3D — open') + '</h3>' + (open ? '<img src="' + open + '">' : '<p class="sub">' + t('No doors or drawers') + '</p>') + '</div>') + '</div>';
       if ((m.qty || 1) > 1) { h += '<div class="warn" style="color:#6c665c">' + esc(t('Hardware for one module — build') + ' ' + m.qty + '.') + '</div>'; }
       h += '<div class="hw">' + (m.hardware_l || []).map(function (x) { return '<div><b>' + x[1] + '×</b> ' + esc(x[0]) + '</div>'; }).join('') + '</div>';
       if ((m.warnings || []).length) { h += '<div class="warn">⚠ ' + m.warnings.map(esc).join(' · ') + '</div>'; }
