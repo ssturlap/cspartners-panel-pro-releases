@@ -1,15 +1,13 @@
 {
-  "version": "0.3.55",
+  "version": "0.3.56",
   "date": "2026-11-14",
-  "title": "3D view turns around the centre",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.55.rbz",
+  "title": "Japanese bed 38 mm: 38 mm nailers",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.56.rbz",
   "notes": [
-    "The 3D view (Configurator preview and PanelPro Web) always turns around the centre of the module — or of the whole composition — with doors and drawers closed.",
-    "Zooming goes towards that centre instead of the cursor, so the turning point never drifts; after a pan, the next turn swings back to the centre."
+    "On the 38 mm Japanese bed the side and centre nailers are cut from the same 38 mm board as the rails and ledge."
   ],
-  "title_es": "La vista 3D gira alrededor del centro",
+  "title_es": "Cama japonesa 38 mm: listones de 38 mm",
   "notes_es": [
-    "La vista 3D (vista previa del Configurador y PanelPro Web) siempre gira alrededor del centro del módulo — o de toda la composición — con puertas y gavetas…",
-    "El zoom va hacia ese centro en vez de hacia el cursor, así el punto de giro no se mueve; después de desplazar la vista, el siguiente giro vuelve al centro."
+    "En la cama japonesa de 38 mm los listones de apoyo laterales y centrales se cortan del mismo tablero de 38 mm que los largueros y la repisa."
   ]
 }
