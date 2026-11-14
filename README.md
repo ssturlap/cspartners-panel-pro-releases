@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.49** — Beds: built the way the shop builds them  
-Download [cspartners_panel_pro_0.3.49.rbz](releases/cspartners_panel_pro_0.3.49.rbz) and install it in SketchUp:
+**Latest: 0.3.50** — Beds: store-bought slat rolls  
+Download [cspartners_panel_pro_0.3.50.rbz](releases/cspartners_panel_pro_0.3.50.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.50 | [cspartners_panel_pro_0.3.50.rbz](releases/cspartners_panel_pro_0.3.50.rbz) |
 | 0.3.49 | [cspartners_panel_pro_0.3.49.rbz](releases/cspartners_panel_pro_0.3.49.rbz) |
 | 0.3.48 | [cspartners_panel_pro_0.3.48.rbz](releases/cspartners_panel_pro_0.3.48.rbz) |
 | 0.3.47 | [cspartners_panel_pro_0.3.47.rbz](releases/cspartners_panel_pro_0.3.47.rbz) |

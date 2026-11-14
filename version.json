@@ -1,23 +1,17 @@
 {
-  "version": "0.3.49",
+  "version": "0.3.50",
   "date": "2026-11-14",
-  "title": "Beds: built the way the shop builds them",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.49.rbz",
+  "title": "Beds: store-bought slat rolls",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.50.rbz",
   "notes": [
-    "Simple and floating frames: decorative rails all round (the foot one full width over the sides’ ends), inner rails inside them flush at the bottom and 50 mm…",
-    "Legs: an L in each inside corner, under the nailer, screwed from inside — the frame is clean all round. The floor clearance is where the frame’s bottom edge…",
-    "Full, Queen and King: a centre beam of two panels between the inner end rails with a nailer on each side (a T); one pair of legs flat against it (two pairs…",
-    "Solid sheet: single cross beams (3, or 4 on long beds), split at the centre beam, under the sheet.",
-    "Floating frame: the same frame on bearers over the recessed base.",
-    "The mattress looks like one: rounded corners, a piped border and a quilted top."
+    "Mattress support has a third choice, Store-bought slat roll: drawn as arched slats on straps (one roll, or one each side of the centre beam), not cut; the…",
+    "Its slat thickness (8 mm), width, arch and gap can be set; the mattress depth in the frame follows the roll’s thickness and arch.",
+    "Cut slats keep the inner frame’s material and thickness."
   ],
-  "title_es": "Camas: construidas como las hace el taller",
+  "title_es": "Camas: rollos de tablillas comprados",
   "notes_es": [
-    "Marcos sencillo y flotante: largueros decorativos alrededor (el de los pies a todo el ancho, tapando los extremos de los laterales), largueros interiores…",
-    "Patas: una L en cada esquina interior, bajo el listón, atornillada por dentro — el marco queda limpio por fuera. La separación del piso es donde queda el…",
-    "Full, Queen y King: viga central de dos tableros entre los travesaños interiores, con un listón a cada lado (una T); un par de patas pegadas a ella (dos…",
-    "Tablero completo: vigas transversales sencillas (3, o 4 en camas largas), cortadas en la viga central, bajo el tablero.",
-    "Marco flotante: el mismo marco sobre travesaños de apoyo encima de la base retirada.",
-    "El colchón parece un colchón: esquinas redondeadas, ribete y parte de arriba acolchada."
+    "El apoyo del colchón tiene una tercera opción, Rollo de tablillas comprado: se dibuja como tablillas arqueadas sobre cintas (un rollo, o uno a cada lado de…",
+    "Se puede ajustar el grueso (8 mm), ancho, arco y separación de las tablillas; lo que entra el colchón en el marco sigue el grueso y el arco del rollo.",
+    "Las tablillas cortadas mantienen el material y el grueso del marco interior."
   ]
 }
