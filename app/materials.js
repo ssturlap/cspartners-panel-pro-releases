@@ -193,7 +193,7 @@
   function swatchCss(name, fallback) {
     var e = find(name);
     if (e && TEX[e.id]) { return 'background:#ccc url(' + TEX[e.id] + ') center/cover'; }
-    if (!e) { var c = catFind(name); if (c) { return c.tex ? 'background:#ccc url(' + (c.thumb || c.tex) + ') center/cover' : 'background:' + (c.color || fallback || '#ddd'); } }
+    if (!e || !e.color) { var c = catFind(name); if (c) { return c.tex ? 'background:#ccc url(' + (c.thumb || c.tex) + ') center/cover' : 'background:' + (c.color || fallback || '#ddd'); } }
     return 'background:' + ((e && e.color) || fallback || '#ddd');
   }
 
@@ -628,6 +628,12 @@
       loadList(); fillDatalist(); return texLoadAll();
     },
     stamp: function () { return stamp; },
+    // dashboard: "Add material to the catalog" — a new entry, opened for editing
+    newMaterial: function () {
+      var e = addEntry('');
+      e.name = ''; e.thick.push({ t: 18, price: 0, roll_price: 0, roll_m: 0 }); saveList();
+      A.go('#/materials/' + encodeURIComponent(e.id));
+    },
     ready: function () { return loadCatalog().catch(function () {}); },
     defaultMaterial: function () { var e = data.list.find(function (x) { return x.default; }); return e ? e.name : null; },
     localData: localData,

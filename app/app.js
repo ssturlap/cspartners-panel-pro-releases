@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.46';
-  var BUILD = '2a53ffc6a2';
+  var BUILD = '4e30f4228d';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,7 +44,7 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
-    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Pieces': 'Piezas', 'Modules': 'Módulos', 'Estimated': 'Estimado', 'Totals': 'Totales', 'copy': 'copia', 'Project duplicated.': 'Proyecto duplicado.', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
+    'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Pieces': 'Piezas', 'Dashboard': 'Inicio', 'Recent projects': 'Proyectos recientes', 'All projects': 'Todos los proyectos', 'most used': 'más usados', 'Add material to the catalog': 'Agregar material al catálogo', 'Quick view: module catalog': 'Ver catálogo de módulos', 'Quick add hardware': 'Agregar accesorio', 'Colour / finish': 'Color / acabado', 'Hinge type': 'Tipo de bisagra', 'Slide type': 'Tipo de corredera', 'Pull type': 'Tipo de jaladera', 'Type / model': 'Tipo / modelo', 'Length (mm)': 'Largo (mm)', 'Size / hole centres (mm)': 'Medida / entre centros (mm)', 'Height (mm)': 'Alto (mm)', 'Size': 'Medida', 'Hardware': 'Accesorios', 'Accessories': 'Accesorios', '— (not linked)': '— (sin vincular)', 'Used for (what the modules ask for)': 'Se usa para (lo que piden los módulos)', 'Link each one to an item of your catalog: its price then goes into the project estimate.': 'Vincule cada uno con un artículo de su catálogo: su precio entra en el estimado del proyecto.', 'pieces': 'piezas', 'project': 'proyecto', 'projects': 'proyectos', 'used': 'usado', 'time': 'vez', 'times': 'veces', 'units': 'unidades', 'No materials used yet.': 'Aún no hay materiales usados.', 'No hardware used yet.': 'Aún no hay accesorios usados.', 'Counting your projects…': 'Contando sus proyectos…', 'Module catalog': 'Catálogo de módulos', 'Add to which project?': '¿Agregar a qué proyecto?', 'Open a project first': 'Abra primero un proyecto', 'Hinge': 'Bisagra', 'Drawer slide': 'Corredera', 'Pull / handle': 'Jaladera / tirador', 'Leg / plinth': 'Pata / zócalo', 'Shelf support': 'Soporte de entrepaño', 'Hanging rail': 'Tubo de closet', 'Other': 'Otro', 'piece': 'pieza', 'pair': 'par', 'set': 'juego', 'metre': 'metro', 'New hardware': 'Accesorio nuevo', 'No hardware listed yet': 'Aún no hay accesorios en su catálogo', 'Add the hinges, slides and pulls you buy, with their price.': 'Agregue las bisagras, correderas y jaladeras que compra, con su precio.', 'Used in your projects': 'Usados en sus proyectos', 'Photo (optional)': 'Foto (opcional)', 'Type': 'Tipo', 'Brand': 'Marca', 'Code': 'Código', 'Price': 'Precio', 'Per': 'Por', 'Enter a name': 'Escriba un nombre', 'Name': 'Nombre', 'Add': 'Agregar', 'Modules': 'Módulos', 'Estimated': 'Estimado', 'Totals': 'Totales', 'copy': 'copia', 'Project duplicated.': 'Proyecto duplicado.', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta', 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material': 'Arrastre para girar · pellizque para zoom · toque una puerta · mantenga presionado un panel para su material', 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material': 'Arrastre para girar · rueda para zoom · clic en una puerta · clic derecho en un panel para su material',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
     'Set': 'Fijar', 'Enter a size': 'Escriba una medida', 'Not a valid calculation': 'Cálculo no válido',
@@ -250,6 +250,7 @@
       if (m) { setThumbImgs(id, moduleThumb(m)); }
     });
     liveThumb();
+    document.querySelectorAll('.dsw[data-mat]').forEach(function (el) { el.setAttribute('style', window.PPMaterials.swatchCss(el.getAttribute('data-mat'))); });
     // project pictures (first module) in the project list
     document.querySelectorAll('[data-sthumb]').forEach(function (img) {
       var st = site(img.getAttribute('data-sthumb')), m = st && st.modules.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); })[0];
@@ -466,6 +467,10 @@
       return renderSite(s);
     }
     if (p[0] === 'newsite') { return renderNewSite(); }
+    if (p[0] === 'projects') { return renderSites(); }
+    if (p[0] === 'catalog') { return renderPick(null); }
+    if (p[0] === 'hardware') { return p[1] ? renderHwEdit(p[1]) : renderHwList(); }
+    if (!p[0]) { return renderHome(); }
     if (p[0] === 'settings') { return renderSettings(); }
     if (p[0] === 'materials' && window.PPMaterials) { return window.PPMaterials.route(p); }
     renderSites();
@@ -502,7 +507,7 @@
   var siteStatsCache = load('panelpro.web.siteStats', {});
   function statKey(s) {
     var ms = window.PPMaterials && PPMaterials.stamp ? PPMaterials.stamp() : 0;
-    return s.updated + '|' + ms + '|' + JSON.stringify(prefs.opt || {}).length;
+    return s.updated + '|' + ms + '|' + JSON.stringify(prefs.opt || {}).length + '|' + hwStamp();
   }
   function siteStats(s) {
     var c = siteStatsCache[s.id];
@@ -513,12 +518,18 @@
     if (s.modules.length) {
       var d = projectData(s);
       st.pieces = d.cutlist.rows.reduce(function (a, r) { return a + (r.qty || 1); }, 0);
+      st.mats = {};
+      d.cutlist.rows.forEach(function (r) { if (r.mat) { st.mats[r.mat] = (st.mats[r.mat] || 0) + (r.qty || 1); } });
+      st.hw = {};   // item id → [name in the app's language, quantity]
+      (d.hw || []).forEach(function (x) { st.hw[x[0]] = [x[1], x[2]]; });
       if (d.cutlist.rows.length) {
         var M = window.PPMaterials, R = window.PPReports;
         var o = Engine.call('optimize', { rows: d.cutlist.rows, opt: prefs.opt, materials: M ? M.engineList() : [],
                                           costs: M ? M.costDefaults(prefs.opt.prices) : { prices: prefs.opt.prices } });
         st.sheets = o.sheets;
         st.cost = R.totalCost(o, { t: t, show: L, units: U(), es: lang === 'es', settings: { opt: prefs.opt } }) || 0;
+        st.hwCost = hwCost(st.hw);
+        st.cost += st.hwCost;
       }
     }
     siteStatsCache[s.id] = st;
@@ -535,21 +546,252 @@
       cell(t('Estimated'), st ? (st.cost ? money(st.cost) : '—') : '…', 'money') + '</span>';
   }
   // after the list shows: the missing numbers, one project at a time (the phone stays responsive)
-  function fillStats() {
+  // done(): called when finished (if anything was worked out); all: every project, not only those on screen
+  function fillStats(done, all) {
+    if (typeof done !== 'function') { done = null; }
     // the catalog first: its boards' sheet sizes change the sheet count
-    if (window.PPMaterials && PPMaterials.ready && !fillStats.ok) { PPMaterials.ready().then(function () { fillStats.ok = true; fillStats(); }); return; }
-    var todo = sites.filter(function (s) { return !siteStats(s) && document.querySelector('[data-pstats="' + s.id + '"]'); });
+    if (window.PPMaterials && PPMaterials.ready && !fillStats.ok) { PPMaterials.ready().then(function () { fillStats.ok = true; fillStats(done, all); }); return; }
+    var scr = screen;
+    var todo = sites.filter(function (s) { return !siteStats(s) && (all || document.querySelector('[data-pstats="' + s.id + '"]')); });
+    var worked = todo.length > 0;
     (function next() {
+      if (screen !== scr || !screen.isConnected) { return; }
       var s = todo.shift();
-      if (!s) { return; }
+      if (!s) { if (done && worked) { done(); } return; }
       var el = document.querySelector('[data-pstats="' + s.id + '"]');
-      if (!el) { return; }
+      if (!el && !all) { return; }
       try { computeStats(s); } catch (e) { siteStatsCache[s.id] = { k: statKey(s), modules: s.modules.length, pieces: 0, sheets: 0, cost: 0 }; }
-      var tmp = document.createElement('span'); tmp.innerHTML = statsHtml(s);
-      el.parentNode.replaceChild(tmp.firstChild, el);
+      if (el) { var tmp = document.createElement('span'); tmp.innerHTML = statsHtml(s); el.parentNode.replaceChild(tmp.firstChild, el); }
       setTimeout(next, 30);
     })();
   }
+  function siteCardHtml(s) {
+    return '<div class="row-card site-card" data-site="' + esc(s.id) + '" role="button" tabindex="0"><span class="grow"><span class="t1">' + esc(s.name) + '</span>' +
+      '<span class="t2">' + esc([s.client, new Date(s.updated).toLocaleDateString(lang)].filter(Boolean).join(' · ')) + '</span></span>' +
+      '<button type="button" class="icon-btn dupbtn" data-dup="' + esc(s.id) + '" aria-label="' + esc(t('Duplicate')) + '" title="' + esc(t('Duplicate')) + '">⧉</button>' + statsHtml(s) + '</div>';
+  }
+  function wireSiteCards() {
+    screen.querySelectorAll('.site-card[data-site]').forEach(function (b) {
+      b.onclick = function (e) {
+        var d = e.target.closest('[data-dup]');
+        if (d) { duplicateSite(site(d.getAttribute('data-dup'))); return; }
+        go('#/site/' + encodeURIComponent(b.getAttribute('data-site')));
+      };
+    });
+  }
+
+  // ------------------------------------------------------------------ screens: dashboard (start page)
+  // Most used materials, modules and hardware over all projects, and the 8 latest projects.
+  function usage() {
+    var mats = {}, mods = {}, hw = {}, hwName = {}, matSites = {}, pending = 0;
+    sites.forEach(function (s) {
+      s.modules.forEach(function (m) { var k = m.preset || (m.params && m.params.type) || ''; if (k) { mods[k] = (mods[k] || 0) + 1; } });
+      var st = siteStats(s);
+      if (!st && s.modules.length) { pending++; return; }
+      Object.keys((st && st.mats) || {}).forEach(function (k) { mats[k] = (mats[k] || 0) + st.mats[k]; (matSites[k] = matSites[k] || {})[s.id] = 1; });
+      Object.keys((st && st.hw) || {}).forEach(function (k) { var v = st.hw[k]; if (!Array.isArray(v)) { return; } hw[k] = (hw[k] || 0) + v[1]; hwName[k] = v[0]; });
+    });
+    var top = function (o, n) { return Object.keys(o).sort(function (a, b) { return o[b] - o[a]; }).slice(0, n).map(function (k) { return [k, o[k]]; }); };
+    return { mats: top(mats, 3), mods: top(mods, 3), hw: top(hw, 3), hwAll: top(hw, 999), hwName: hwName, matSites: matSites, pending: pending };
+  }
+  var HW_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M5.5 18.5l2.1-2.1M16.4 7.6l2.1-2.1"/></svg>';
+  function dashCards() {
+    var u = usage(), wait = u.pending ? '<p class="dash-wait">' + esc(t('Counting your projects…')) + '</p>' : '';
+    var empty = function (txt) { return '<p class="dash-empty">' + esc(txt) + '</p>'; };
+    var M = window.PPMaterials;
+    var mats = u.mats.length ? u.mats.map(function (x) {
+      var n = Object.keys(u.matSites[x[0]] || {}).length;
+      return '<li><i class="dsw" data-mat="' + esc(x[0]) + '" style="' + esc(M ? M.swatchCss(x[0]) : 'background:#ddd') + '"></i><span><b>' + esc(x[0]) + '</b><small>' + x[1] + ' ' + esc(t('pieces')) + ' · ' + n + ' ' + esc(t(n === 1 ? 'project' : 'projects')) + '</small></span></li>';
+    }).join('') : (u.pending ? '' : empty(t('No materials used yet.')));
+    var mods = u.mods.length ? u.mods.map(function (x) {
+      return '<li><img class="dpic" alt="" data-pk="' + esc(x[0]) + '"><span><b>' + esc(presetLabel(x[0]) || x[0]) + '</b><small>' + esc(t('used') + ' ' + x[1] + ' ' + t(x[1] === 1 ? 'time' : 'times')) + '</small></span></li>';
+    }).join('') : empty(t('No modules yet'));
+    var hw = u.hw.length ? u.hw.map(function (x) {
+      var item = hwFor(x[0]);
+      return '<li><i class="dhw">' + (item && item.photo ? '<img alt="" src="' + esc(item.photo) + '">' : HW_ICON) + '</i><span><b>' + esc(item ? item.name : u.hwName[x[0]] || x[0]) + '</b><small>' + x[1] + ' ' + esc(t('units')) +
+        (item && item.price ? ' · ' + esc(money(item.price)) : '') + '</small></span></li>';
+    }).join('') : (u.pending ? '' : empty(t('No hardware used yet.')));
+    var card = function (cls, title, list, btnId, btn) {
+      return '<section class="dash-card ' + cls + '"><h3>' + esc(title) + '<small>' + esc(t('most used')) + '</small></h3><ul>' + list + '</ul>' + (list ? '' : wait) +
+        '<button type="button" class="btn small ghost" id="' + btnId + '">' + esc(btn) + '</button></section>';
+    };
+    return card('dc-mat', t('Materials'), mats, 'dAddMat', '+ ' + t('Add material to the catalog')) +
+      card('dc-mod', t('Modules'), mods, 'dCatalog', '▦ ' + t('Quick view: module catalog')) +
+      card('dc-hw', t('Accessories'), hw, 'dAddHw', '+ ' + t('Quick add hardware'));
+  }
+  function renderHome() {
+    var cloud = window.PPCloud && window.PPCloud.on ? window.PPCloud : null;
+    var recent = sites.slice().sort(function (a, b) { return a.updated < b.updated ? 1 : -1; }).slice(0, 8);
+    show(
+      '<header class="top"><h1>' + esc(t('Dashboard')) + (cloud && !desk() ? '<button type="button" class="space-chip" id="spaceBtn">' + esc(cloud.space().name) + ' ▾</button>' : '') + '</h1>' +
+      (desk() ? '' : '<button type="button" class="text-btn" id="langBtn" aria-label="' + esc(t('Language')) + '">' + (lang === 'es' ? 'EN' : 'ES') + '</button>') +
+      '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
+      '<div class="page page-wide dash">' + (cloud ? cloud.invitesHtml() : '') +
+      '<div class="dash-cards" id="dashCards">' + dashCards() + '</div>' +
+      '<div class="dash-h"><h2>' + esc(t('Recent projects')) + '</h2><a href="#/projects">' + esc(t('All projects')) + ' ›</a></div>' +
+      (recent.length ? '<div class="list dash-recent">' + recent.map(siteCardHtml).join('') + '</div>'
+        : '<div class="empty"><h2>' + esc(t('No sites yet')) + '</h2><p>' + esc(t('Start one for the room you are measuring.')) + '</p></div>') +
+      '</div><div class="dock"><button type="button" class="btn primary" id="newSite">+ ' + esc(t('New site')) + '</button></div>'
+    );
+    if (desk()) { window.PPDesk.fixDock && window.PPDesk.fixDock(); }
+    function wireCards() {
+      $('#dAddMat').onclick = function () { if (window.PPMaterials && PPMaterials.newMaterial) { PPMaterials.newMaterial(); } else { go('#/materials'); } };
+      $('#dCatalog').onclick = function () { go('#/catalog'); };
+      $('#dAddHw').onclick = function () { go('#/hardware/new'); };
+      var imgs = Array.prototype.slice.call(document.querySelectorAll('#dashCards img[data-pk]'));
+      imgs.forEach(function (img) { var url = presetThumb(img.getAttribute('data-pk')); if (url) { img.src = url; } });
+    }
+    wireCards();
+    wireSiteCards();
+    $('#newSite').onclick = function () { go('#/newsite'); };
+    if ($('#langBtn')) { $('#langBtn').onclick = function () { setLang(lang === 'es' ? 'en' : 'es'); route(); }; }
+    if (cloud) { if ($('#spaceBtn')) { $('#spaceBtn').onclick = cloud.spaceMenu; } cloud.wireInvites(); }
+    $('#moreBtn').onclick = function () {
+      menu(cloud ? cloud.user().email : null, [
+        cloud ? { label: cloud.t('Account') + ' · ' + cloud.planLine(), icon: 'user', run: function () { go('#/account'); } } : null,
+        cloud ? { label: cloud.t('Companies'), icon: 'building', run: function () { go('#/companies'); } } : null,
+        { label: t('All projects'), icon: 'file', run: function () { go('#/projects'); } },
+        { label: t('Open a project file'), icon: 'file', run: function () { pickFile(null); } },
+        { label: window.PPMaterials ? window.PPMaterials.t('Materials') : 'Materials', icon: 'materials', run: function () { go('#/materials'); } },
+        { label: t('Accessories'), icon: 'materials', run: function () { go('#/hardware'); } },
+        { label: t('Settings'), icon: 'settings', run: function () { go('#/settings'); } }
+      ].filter(Boolean));
+    };
+    // the numbers of every project (not only the 8 shown), then the cards again
+    fillStats(function () { var el = $('#dashCards'); if (el) { el.innerHTML = dashCards(); wireCards(); } }, true);
+  }
+
+  // ------------------------------------------------------------------ screens: hardware list
+  // Your hardware (hinges, slides, pulls, legs…): name, type, brand / code, price, unit, photo.
+  // The dashboard counts the hardware your projects use; a listed item shows its price and photo.
+  var HW_KEY = 'panelpro.web.hardware.v1';
+  var HW_TYPES = [['hinge', 'Hinge'], ['slide', 'Drawer slide'], ['pull', 'Pull / handle'], ['leg', 'Leg / plinth'], ['support', 'Shelf support'], ['rail', 'Hanging rail'], ['other', 'Other']];
+  var HW_UNITS = [['pc', 'piece'], ['pair', 'pair'], ['set', 'set'], ['m', 'metre']];
+  var hwData = load(HW_KEY, { list: [] });
+  function hwSave() { save(HW_KEY, hwData); }
+  function hwKey(n) { return String(n || '').trim().toLowerCase(); }
+  function hwFind(name) { var k = hwKey(name); return hwData.list.find(function (x) { return hwKey(x.name) === k; }) || null; }
+  // the catalog item that supplies a hardware item the modules use (linked with "Used for")
+  function hwFor(id) { return hwData.list.find(function (x) { return x.for === id; }) || null; }
+  function hwStamp() { return hwData.list.map(function (x) { return (x.for || '') + ':' + (x.price || 0); }).join(',').length + '-' + hwData.list.length; }
+  // the hardware of a project, priced from the catalog (only linked items count)
+  function hwCost(hw) {
+    var c = 0;
+    Object.keys(hw || {}).forEach(function (id) { var it = hwFor(id); if (it && it.price && Array.isArray(hw[id])) { c += it.price * hw[id][1]; } });
+    return c;
+  }
+  function renderHwList() {
+    var U0 = usage(), used = U0.hwAll;
+    var list = hwData.list.slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
+    var typeL = function (k) { var x = HW_TYPES.find(function (y) { return y[0] === k; }); return t(x ? x[1] : 'Other'); };
+    show(
+      '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Accessories')) + '</h1></header>' +
+      '<div class="page page-wide">' +
+      (list.length ? '<div class="list">' + list.map(function (h) {
+        return '<button type="button" class="row-card hw-row" data-hw="' + esc(h.id) + '"><i class="dhw">' + (h.photo ? '<img alt="" src="' + esc(h.photo) + '">' : HW_ICON) + '</i>' +
+          '<span class="grow"><span class="t1">' + esc(h.name) + '</span><span class="t2">' + esc([typeL(h.type), h.brand, h.kind, h.size ? h.size + (/^\d+$/.test(h.size) ? ' mm' : '') : '', h.color, h.code].filter(Boolean).join(' · ')) + '</span></span>' +
+          '<b class="hw-price">' + (h.price ? esc(money(h.price)) + ' <small>/ ' + esc(t((HW_UNITS.find(function (u) { return u[0] === h.unit; }) || HW_UNITS[0])[1])) + '</small>' : '—') + '</b></button>';
+      }).join('') + '</div>' : '<div class="empty"><h2>' + esc(t('No hardware listed yet')) + '</h2><p>' + esc(t('Add the hinges, slides and pulls you buy, with their price.')) + '</p></div>') +
+      (used.length ? '<h3 class="grp" style="margin-top:22px">' + esc(t('Used in your projects')) + '</h3><p class="meta-line">' + esc(t('Link each one to an item of your catalog: its price then goes into the project estimate.')) + '</p><div class="list">' + used.map(function (x) {
+        var it = hwFor(x[0]);
+        return '<div class="row-card"><span class="grow"><span class="t1">' + esc(U0.hwName[x[0]] || x[0]) + '</span><span class="t2">' + x[1] + ' ' + esc(t('units')) +
+          (it ? ' · ✓ ' + esc(it.name) + (it.price ? ' · ' + esc(money(it.price)) : '') : '') + '</span></span>' +
+          (it ? '' : '<button type="button" class="btn small ghost" data-hwadd="' + esc(x[0]) + '">+ ' + esc(t('Add')) + '</button>') + '</div>';
+      }).join('') + '</div>' : '') +
+      '</div><div class="dock"><button type="button" class="btn primary" id="hwNew">+ ' + esc(t('Quick add hardware')) + '</button></div>'
+    );
+    $('#back').onclick = function () { history.back(); };
+    $('#hwNew').onclick = function () { go('#/hardware/new'); };
+    screen.querySelectorAll('[data-hw]').forEach(function (b) { b.onclick = function () { go('#/hardware/' + encodeURIComponent(b.getAttribute('data-hw'))); }; });
+    screen.querySelectorAll('[data-hwadd]').forEach(function (b) { b.onclick = function () { go('#/hardware/new?' + encodeURIComponent(b.getAttribute('data-hwadd'))); }; });
+  }
+  function renderHwEdit(id) {
+    var preset = '', U0 = usage();
+    if (/^new\?/.test(id)) { preset = decodeURIComponent(id.slice(4)); id = 'new'; }
+    var presetName = preset ? (U0.hwName[preset] || preset) : '';
+    var h = id === 'new' ? null : hwData.list.find(function (x) { return x.id === id; });
+    if (id !== 'new' && !h) { return renderHwList(); }
+    var v = h || { name: presetName, for: preset, type: /hinge|bisagra/i.test(presetName) ? 'hinge' : /slide|corredera/i.test(presetName) ? 'slide' : /leg|pata/i.test(presetName) ? 'leg' : /rail|tubo/i.test(presetName) ? 'rail' : /support|soporte/i.test(presetName) ? 'support' : 'other', brand: '', code: '', price: 0, unit: /par|pair/i.test(presetName) ? 'pair' : 'pc', photo: '' };
+    // "Used for": the hardware the modules ask for (from your projects); free items stay unlinked
+    var forOpts = [['', t('— (not linked)')]].concat(U0.hwAll.map(function (x) { return [x[0], U0.hwName[x[0]] || x[0]]; }));
+    if (v.for && !forOpts.some(function (o) { return o[0] === v.for; })) { forOpts.push([v.for, v.for]); }
+    var opt = function (list, cur) { return list.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === cur ? ' selected' : '') + '>' + esc(t(o[1])) + '</option>'; }).join(''); };
+    show(
+      '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(h ? h.name : t('New hardware')) + '</h1></header>' +
+      '<div class="page">' +
+      '<div class="hw-photo"><button type="button" id="hwPic" class="dhw big">' + (v.photo ? '<img alt="" src="' + esc(v.photo) + '">' : HW_ICON) + '</button><small>' + esc(t('Photo (optional)')) + '</small><input type="file" accept="image/*" id="hwFile" hidden></div>' +
+      '<label class="field"><span>' + esc(t('Name')) + '</span><input class="text-in" id="hwName" value="' + esc(v.name) + '" placeholder="Bisagra cazoleta 110° cierre suave"></label>' +
+      '<label class="field"><span>' + esc(t('Type')) + '</span><select class="sel" id="hwType">' + opt(HW_TYPES, v.type) + '</select></label>' +
+      '<label class="field"><span>' + esc(t('Used for (what the modules ask for)')) + '</span><select class="sel" id="hwFor">' + forOpts.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (o[0] === (v.for || '') ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>' +
+      '<label class="field"><span>' + esc(t('Brand')) + '</span><input class="text-in" id="hwBrand" list="hwBrands" value="' + esc(v.brand || '') + '" placeholder="Blum, Hettich, Grass…"></label>' +
+      '<datalist id="hwBrands">' + ['Blum', 'Hettich', 'Grass', 'Salice', 'Häfele', 'Hafele', 'Accuride', 'King Slide', 'Emuca', 'FGV', 'Herrajes Hobi'].map(function (b) { return '<option value="' + b + '">'; }).join('') + '</datalist>' +
+      // per type: hinges — type; slides — type and length; pulls — type, size and colour
+      '<label class="field hwx" data-for="hinge slide pull leg support rail other"><span id="hwKindL"></span><input class="text-in" id="hwKind" list="hwKinds" value="' + esc(v.kind || '') + '"></label><datalist id="hwKinds"></datalist>' +
+      '<label class="field hwx" data-for="slide pull leg rail"><span id="hwSizeL"></span><input class="text-in" id="hwSize" value="' + esc(v.size || '') + '"></label>' +
+      '<label class="field hwx" data-for="pull hinge leg rail"><span>' + esc(t('Colour / finish')) + '</span><input class="text-in" id="hwColor" list="hwColors" value="' + esc(v.color || '') + '"></label>' +
+      '<datalist id="hwColors">' + ['Negro mate', 'Acero inoxidable', 'Aluminio', 'Níquel', 'Oro cepillado', 'Blanco', 'Bronce'].map(function (c) { return '<option value="' + c + '">'; }).join('') + '</datalist>' +
+      '<label class="field"><span>' + esc(t('Code')) + '</span><input class="text-in" id="hwCode" value="' + esc(v.code || '') + '"></label>' +
+      '<div class="two-col"><label class="field"><span>' + esc(t('Price')) + ' (' + esc((prefs.opt && prefs.opt.currency) || '') + ')</span><input class="text-in" id="hwPrice" inputmode="decimal" value="' + (v.price || '') + '"></label>' +
+      '<label class="field"><span>' + esc(t('Per')) + '</span><select class="sel" id="hwUnit">' + opt(HW_UNITS, v.unit) + '</select></label></div>' +
+      (h ? '<button type="button" class="btn ghost danger" id="hwDel" style="margin-top:14px">' + esc(t('Delete')) + '</button>' : '') +
+      '</div><div class="dock"><button type="button" class="btn primary" id="hwSave">' + esc(t('Save')) + '</button></div>'
+    );
+    var photo = v.photo || '';
+    var KINDS = {
+      hinge: ['Cazoleta 35 mm, 110°', 'Cazoleta 35 mm, 165°', 'Cierre suave (BLUMOTION)', 'Parche completo', 'Medio parche', 'Embutida', 'Para puerta de aluminio'],
+      slide: ['Bolas, extensión total', 'Bolas, extensión total, cierre suave', 'Oculta (undermount), cierre suave', 'Caja metálica (MERIVOBOX, InnoTech…)', 'Push to open'],
+      pull: ['Barra', 'Botón / pomo', 'Perfil de aluminio', 'Gola', 'Uñero', 'Push to open'],
+      leg: ['Pata regulable 100 mm', 'Pata regulable 150 mm', 'Zócalo PVC'], support: ['Soporte de entrepaño 5 mm', 'Soporte con seguro'], rail: ['Tubo ovalado', 'Tubo redondo 25 mm', 'Tubo abatible'], other: []
+    };
+    var KIND_L = { hinge: 'Hinge type', slide: 'Slide type', pull: 'Pull type', leg: 'Type', support: 'Type', rail: 'Type', other: 'Type / model' };
+    var SIZE_L = { slide: 'Length (mm)', pull: 'Size / hole centres (mm)', leg: 'Height (mm)', rail: 'Length (mm)' };
+    function typeFields() {
+      var ty = $('#hwType').value;
+      screen.querySelectorAll('.hwx').forEach(function (f) { f.hidden = f.getAttribute('data-for').split(' ').indexOf(ty) < 0; });
+      $('#hwKindL').textContent = t(KIND_L[ty] || 'Type / model');
+      $('#hwSizeL').textContent = t(SIZE_L[ty] || 'Size');
+      $('#hwKinds').innerHTML = (KINDS[ty] || []).map(function (k) { return '<option value="' + esc(k) + '">'; }).join('');
+    }
+    $('#hwType').onchange = function () { typeFields(); var du = { slide: 'pair', rail: 'm' }[$('#hwType').value]; if (!v.price) { $('#hwUnit').value = du || 'pc'; } };
+    typeFields();
+    $('#back').onclick = function () { history.back(); };
+    $('#hwPic').onclick = function () { $('#hwFile').click(); };
+    $('#hwFile').onchange = function () {
+      var f = this.files && this.files[0];
+      if (!f) { return; }
+      var img = new Image(), url = URL.createObjectURL(f);
+      img.onload = function () {
+        var c = document.createElement('canvas'), k = Math.min(1, 256 / Math.max(img.width, img.height));
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        photo = c.toDataURL('image/jpeg', 0.82);
+        $('#hwPic').innerHTML = '<img alt="" src="' + photo + '">';
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    };
+    if (!h) { setTimeout(function () { $('#hwName').focus(); }, 50); }
+    $('#hwSave').onclick = function () {
+      var name = $('#hwName').value.trim();
+      if (!name) { toast(t('Enter a name')); return; }
+      var rec = h || { id: uid() };
+      rec.name = name; rec.type = $('#hwType').value; rec.brand = $('#hwBrand').value.trim(); rec.code = $('#hwCode').value.trim();
+      rec.price = parseFloat(String($('#hwPrice').value).replace(/,/g, '')) || 0; rec.unit = $('#hwUnit').value; rec.photo = photo;
+      rec.for = $('#hwFor').value || '';
+      ['kind', 'size', 'color'].forEach(function (k) { var el = $('#hw' + k[0].toUpperCase() + k.slice(1)); rec[k] = el && !el.closest('.hwx').hidden ? el.value.trim() : ''; });
+      if (rec.for) { hwData.list.forEach(function (x) { if (x !== rec && x.for === rec.for) { x.for = ''; } }); }   // one catalog item per hardware need
+      if (!h) { hwData.list.push(rec); }
+      hwSave(); toast(t('Saved'));
+      go('#/hardware', true);
+    };
+    if ($('#hwDel')) {
+      $('#hwDel').onclick = function () {
+        if (!confirm(t('Delete') + ' ' + h.name + '?')) { return; }
+        hwData.list = hwData.list.filter(function (x) { return x !== h; }); hwSave(); go('#/hardware', true);
+      };
+    }
+  }
+
   // "Duplicate": a copy of the project with new ids (same modules, codes and notes)
   function duplicateSite(s) {
     var c = clone(s);
@@ -627,29 +869,22 @@
     var cloud = window.PPCloud && window.PPCloud.on ? window.PPCloud : null;
     var list = sites.slice().sort(function (a, b) { return a.updated < b.updated ? 1 : -1; });
     show(
-      '<header class="top"><h1>' + esc(t('Sites')) + (cloud ? '<button type="button" class="space-chip" id="spaceBtn">' + esc(cloud.space().name) + ' ▾</button>' : '') + '</h1>' +
+      '<header class="top"><button type="button" class="icon-btn" id="homeBack" aria-label="' + esc(t('Dashboard')) + '">‹</button><h1>' + esc(t('Sites')) + (cloud ? '<button type="button" class="space-chip" id="spaceBtn">' + esc(cloud.space().name) + ' ▾</button>' : '') + '</h1>' +
       '<button type="button" class="text-btn" id="langBtn" aria-label="' + esc(t('Language')) + '">' + (lang === 'es' ? 'EN' : 'ES') + '</button>' +
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
       '<div class="page page-wide">' + (cloud ? cloud.invitesHtml() : '') +
       (list.length ? '<div class="list">' + list.map(function (s) {
         var n = s.modules.length;
-        return '<div class="row-card site-card" data-site="' + esc(s.id) + '" role="button" tabindex="0"><span class="grow"><span class="t1">' + esc(s.name) + '</span>' +
-          '<span class="t2">' + esc([s.client, new Date(s.updated).toLocaleDateString(lang)].filter(Boolean).join(' · ')) + '</span></span>' +
-          '<button type="button" class="icon-btn dupbtn" data-dup="' + esc(s.id) + '" aria-label="' + esc(t('Duplicate')) + '" title="' + esc(t('Duplicate')) + '">⧉</button>' + statsHtml(s) + '</div>';
+        return siteCardHtml(s);
       }).join('') + '</div>'
         : '<div class="empty"><h2>' + esc(t('No sites yet')) + '</h2><p>' + esc(t('Start one for the room you are measuring.')) + '</p></div>') +
       '<p class="meta-line" style="margin-top:28px;text-align:center">PanelPro Web ' + esc(VERSION) + ' · ' + esc(t('Engine')) + ' ' + esc(Engine.version || '') + '</p>' +
       '</div>' +
       '<div class="dock"><button type="button" class="btn primary" id="newSite">' + esc(t('New site')) + '</button></div>'
     );
-    screen.querySelectorAll('[data-site]').forEach(function (b) {
-      b.onclick = function (e) {
-        var d = e.target.closest('[data-dup]');
-        if (d) { duplicateSite(site(d.getAttribute('data-dup'))); return; }
-        go('#/site/' + encodeURIComponent(b.getAttribute('data-site')));
-      };
-    });
+    wireSiteCards();
     setTimeout(fillStats, 200);
+    $('#homeBack').onclick = function () { go('#/'); };
     $('#newSite').onclick = function () { go('#/newsite'); };
     $('#langBtn').onclick = function () { setLang(lang === 'es' ? 'en' : 'es'); route(); };
     if (cloud) { $('#spaceBtn').onclick = cloud.spaceMenu; cloud.wireInvites(); }
@@ -734,7 +969,7 @@
       (s.client ? '<span class="sub">' + esc(s.client) + '</span>' : '') + '</h1></header>' +
       '<div class="ws">' + deskModsHtml(s, null) + '<div class="ws-empty"><div class="empty"><h2>' + esc(DT('No modules yet')) + '</h2><p>' + esc(t('Add the first module for this site.')) + '</p>' +
       '<button type="button" class="btn primary" id="wsAdd2">+ ' + esc(DT('Add module')) + '</button></div></div></div>');
-    $('#back').onclick = function () { go('#/'); };
+    $('#back').onclick = function () { go('#/projects'); };
     wireDeskMods(s);
     $('#wsAdd2').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/pick'); };
   }
@@ -764,7 +999,7 @@
       '</div>' +
       '<div class="dock"><button type="button" class="btn primary" id="addMod">' + esc(t('Add module')) + '</button></div>'
     );
-    $('#back').onclick = function () { go('#/'); };
+    $('#back').onclick = function () { go('#/projects'); };
     $('#addMod').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/pick'); };
     if ($('#cutBtn')) { $('#cutBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/cut'); }; }
     if ($('#compBtn')) { $('#compBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/compose'); }; }
@@ -783,7 +1018,7 @@
         window.PPCloud && window.PPCloud.on && (window.PPCloud.hasCompanies() || window.PPCloud.space().kind === 'company') ? { label: window.PPCloud.t('Move to a company…'), icon: 'move', run: function () { window.PPCloud.moveSite(s); } } : null,
         { label: t('Delete site'), icon: 'trash', danger: true, run: function () {
           if (!confirm(t('Delete this site and its modules?'))) { return; }
-          sites = sites.filter(function (x) { return x !== s; }); persist(); toast(t('Deleted')); go('#/', true);
+          sites = sites.filter(function (x) { return x !== s; }); persist(); toast(t('Deleted')); go('#/projects', true);
         } }
       ].filter(Boolean));
   }
@@ -837,7 +1072,7 @@
       }).join(''));
     }).join('');
     show(
-      '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Pick a module')) + '</h1></header>' +
+      '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(s ? t('Pick a module') : t('Module catalog')) + '</h1></header>' +
       '<div class="page page-wide picker">' + html + '</div>'
     );
     // pictures of the open section, one at a time (keeps the phone responsive)
@@ -886,7 +1121,7 @@
             (G.gallery.admin('modules', g, function () { renderPick(s); }) ? '<button type="button" class="gmore" data-gmore="' + esc(g.id) + '" aria-label="⋯">⋯</button>' : '') + '</div>';
         }).join('');
         el.querySelectorAll('[data-gal]').forEach(function (b) {
-          b.onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/new/' + encodeURIComponent('gal:' + b.getAttribute('data-gal'))); };
+          b.onclick = function () { if (!s) { toast(t('Open a project first')); return; } go('#/site/' + encodeURIComponent(s.id) + '/new/' + encodeURIComponent('gal:' + b.getAttribute('data-gal'))); };
         });
         el.querySelectorAll('[data-gmore]').forEach(function (b) {
           b.onclick = function () { var g = list.find(function (x) { return x.id === b.getAttribute('data-gmore'); }); G.gallery.admin('modules', g, function () { renderPick(s); })(); };
@@ -895,7 +1130,15 @@
     }
     $('#back').onclick = function () { history.back(); };
     screen.querySelectorAll('[data-key]').forEach(function (b) {
-      b.onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/new/' + encodeURIComponent(b.getAttribute('data-key'))); };
+      b.onclick = function () {
+        var key = b.getAttribute('data-key');
+        if (s) { go('#/site/' + encodeURIComponent(s.id) + '/new/' + encodeURIComponent(key)); return; }
+        // the catalog on its own (dashboard): which project does it go into?
+        var recent = sites.slice().sort(function (a, c) { return a.updated < c.updated ? 1 : -1; }).slice(0, 8);
+        menu(t('Add to which project?'), recent.map(function (x) {
+          return { label: x.name + (x.client ? ' · ' + x.client : ''), icon: 'file', run: function () { go('#/site/' + encodeURIComponent(x.id) + '/new/' + encodeURIComponent(key)); } };
+        }).concat([{ label: '+ ' + t('New site'), icon: 'file', run: function () { go('#/newsite'); } }]));
+      };
     });
   }
   function presetThumb(key) {

@@ -11,7 +11,7 @@
   var MQ = window.matchMedia ? window.matchMedia('(min-width: 1024px)') : null;
   var lastClick = null;   // the element the last menu / number box was opened from
   var ES = {
-    'Projects': 'Proyectos', 'Search projects': 'Buscar proyectos', 'Modules': 'Módulos', 'Updated': 'Actualizado',
+    'Dashboard': 'Inicio', 'Hardware': 'Accesorios', 'Accessories': 'Accesorios', 'Module catalog': 'Catálogo de módulos', 'Projects': 'Proyectos', 'Search projects': 'Buscar proyectos', 'Modules': 'Módulos', 'Updated': 'Actualizado',
     'Name': 'Nombre', 'Client': 'Cliente', 'Project': 'Proyecto', 'Type a size or a calculation': 'Escriba una medida o un cálculo',
     'Enter to set · Esc to cancel': 'Enter para fijar · Esc para cancelar', 'Add module': 'Agregar módulo',
     'No modules yet': 'Aún no hay módulos', 'Pick a module on the left, or add one.': 'Elija un módulo a la izquierda o agregue uno.',
@@ -26,6 +26,8 @@
 
   // ------------------------------------------------------------------ frame
   var ICON = {
+    home: '<path d="M3.5 11 12 4l8.5 7M6 9.5V20h12V9.5M10 20v-5h4v5"/>',
+    hardware: '<circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>',
     projects: '<path d="M3 6.5h7l2 2h9v10.5H3z"/>',
     materials: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M10 4v16"/>',
     gallery: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.4 3.5 5.2 3.5 8.5s-1 6.1-3.5 8.5c-2.5-2.4-3.5-5.2-3.5-8.5s1-6.1 3.5-8.5z"/>',
@@ -46,7 +48,8 @@
     var site = p[0] === 'site' && p[1] ? A.site(p[1]) : null;
     var out = '<div class="dk-brand"><span class="dk-mark"><i></i><i></i><i></i></span><b>PanelPro</b></div>';
     if (sp) { out += '<button type="button" class="dk-space" id="dkSpace"><small>' + esc(t('Projects')) + '</small><span>' + esc(sp.name) + '</span><em>▾</em></button>'; }
-    out += '<nav class="dk-navs">' + navItem('#/', 'projects', t('Projects'), !p[0] || (p[0] === 'site' && !site));
+    out += '<nav class="dk-navs">' + navItem('#/', 'home', t('Dashboard'), !p[0]) +
+      navItem('#/projects', 'projects', t('Projects'), p[0] === 'projects' || (p[0] === 'site' && !site));
     if (site) {
       var base = '#/site/' + encodeURIComponent(site.id);
       out += '<div class="dk-proj"><div class="dk-proj-name" title="' + esc(site.name) + '">' + esc(site.name) + '</div>' +
@@ -56,6 +59,8 @@
         navItem(base + '/opt', 'opt', t('Cutting plan'), p[2] === 'opt', true) + '</div>';
     }
     out += navItem('#/materials', 'materials', t('Materials'), p[0] === 'materials');
+    out += navItem('#/hardware', 'hardware', t('Accessories'), p[0] === 'hardware');
+    out += navItem('#/catalog', 'modules', t('Module catalog'), p[0] === 'catalog');
     if (C) {
       out += navItem('#/gallery', 'gallery', t('Public gallery'), p[0] === 'gallery');
       out += navItem('#/companies', 'companies', t('Companies'), p[0] === 'companies' || p[0] === 'company');
