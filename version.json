@@ -1,17 +1,15 @@
 {
-  "version": "0.3.50",
+  "version": "0.3.51",
   "date": "2026-11-14",
-  "title": "Beds: store-bought slat rolls",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.50.rbz",
+  "title": "Beds: headboard width, height lines",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.51.rbz",
   "notes": [
-    "Mattress support has a third choice, Store-bought slat roll: drawn as arched slats on straps (one roll, or one each side of the centre beam), not cut; the…",
-    "Its slat thickness (8 mm), width, arch and gap can be set; the mattress depth in the frame follows the roll’s thickness and arch.",
-    "Cut slats keep the inner frame’s material and thickness."
+    "Headboard width can be set (0 = as wide as the bed); a wider one stays centred on the bed.",
+    "PanelPro Web: a bed shows its floor clearance, side-rail height, frame height, height with the mattress and headboard height on the 3D view, and both widths…"
   ],
-  "title_es": "Camas: rollos de tablillas comprados",
+  "title_es": "Camas: ancho de cabecera, líneas de altura",
   "notes_es": [
-    "El apoyo del colchón tiene una tercera opción, Rollo de tablillas comprado: se dibuja como tablillas arqueadas sobre cintas (un rollo, o uno a cada lado de…",
-    "Se puede ajustar el grueso (8 mm), ancho, arco y separación de las tablillas; lo que entra el colchón en el marco sigue el grueso y el arco del rollo.",
-    "Las tablillas cortadas mantienen el material y el grueso del marco interior."
+    "Se puede poner el ancho de la cabecera (0 = el ancho de la cama); una más ancha queda centrada en la cama.",
+    "PanelPro Web: una cama muestra en la vista 3D la separación del piso, la altura de los largueros, la del marco, la altura con el colchón y la de la…"
   ]
 }

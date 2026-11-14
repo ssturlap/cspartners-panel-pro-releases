@@ -313,8 +313,9 @@
   // dimension lines beside the module with the size in mm. Off unless the app turns it on.
   var dimsOn = false, dimsGroup = null, dimsKey = '';
   // extra height lines [[z0, z1, column]] beside the overall height (set before update)
-  var extraH = [];
+  var extraH = [], extraW = [];
   P3D.setHeights = function (list) { extraH = Array.isArray(list) ? list : []; };
+  P3D.setWidths = function (list) { extraW = Array.isArray(list) ? list : []; };
   // Dimension labels are plain numbers; one note in the corner names the unit.
   var dimUnit = { k: 1, name: 'mm' }, noteEl = null;
   function dimNote() {
@@ -404,7 +405,14 @@
     var k = dimsSide();
     var sx = k[0], sy = k[1];
     var xs = sx < 0 ? mn.x : mx.x, ys = sy < 0 ? mn.y : mx.y, yf = sy < 0 ? mx.y : mn.y;
-    dim(V(mn.x, ys, mn.z), V(mx.x, ys, mn.z), V(0, sy, 0), size.x);   // width
+    // extra widths (a bed under a wider headboard), then the overall
+    var wcols = 0, wsame = false;
+    extraW.forEach(function (q) {
+      wcols = Math.max(wcols, q[2] || 1);
+      if (Math.abs(q[0] - mn.x) < 0.5 && Math.abs(q[1] - mx.x) < 0.5) { wsame = true; }
+      if (q[1] - q[0] > 0.5) { dim(V(q[0], ys, mn.z), V(q[1], ys, mn.z), V(0, sy, 0), q[1] - q[0], q[2] || 1); }
+    });
+    if (!wsame) { dim(V(mn.x, ys, mn.z), V(mx.x, ys, mn.z), V(0, sy, 0), size.x, wcols + 1); }   // width
     // extra heights (a bed: clearance, side rails, frame, with the mattress), in columns, then the overall
     var cols = 0, same = false;
     extraH.forEach(function (h) {

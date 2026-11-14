@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.50';
-  var BUILD = 'cb021f78b9';
+  var VERSION = '0.3.51';
+  var BUILD = '785391fb03';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1416,7 +1416,8 @@
     if (b.clear > 0) { out.push([0, b.clear, 1]); }
     out.push([b.clear, b.top, 1]);
     out.push([0, b.top, 2]);
-    if (E.params && E.params.bed_mattress && view.vis.hardware !== false) { out.push([0, E.params.height, 3]); }
+    if (E.params && E.params.bed_mattress) { out.push([0, b.height, 3]); }
+    if (b.headboard) { out.push([0, b.headboard[2], 4]); }   // the headboard
     return out;
   }
   function rebuild() {
@@ -1447,6 +1448,9 @@
     }
     P3D.setSoft(E.params ? E.params.soft_close : true);
     P3D.setHeights(bedHeights(r));
+    // a headboard wider than the bed: the bed's width as well as the headboard's
+    var hbw = r.bed && r.bed.headboard;
+    P3D.setWidths(hbw && hbw[1] - hbw[0] > r.bed.width + 0.5 ? [[0, r.bed.width, 1], [hbw[0], hbw[1], 2]] : null);
     P3D.update(parts, matInfo, r.movers);
     if (reset || firstDraw) { P3D.reset('iso'); firstDraw = false; }
   }

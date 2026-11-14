@@ -99,6 +99,7 @@
       ['#', 'Headboard', BED],
       ['bed_hb', 'Headboard (screwed to the head band)', 'bool', BED],
       ['bed_hb_h', 'Headboard height above the mattress', 'len', function (p) { return p.bed && p.bed_hb; }],
+      ['bed_hb_w', 'Headboard width (0 = as wide as the bed)', 'len', function (p) { return p.bed && p.bed_hb; }],
       ['bed_hb_t', 'Headboard thickness', 'len', function (p) { return p.bed && p.bed_hb; }],
       ['#', 'Corner module', CORNER],
       ['corner', 'Blind corner', 'sel', [['none', 'No (regular module)'], ['left', 'Blind on the left'], ['right', 'Blind on the right']], CORNER],
