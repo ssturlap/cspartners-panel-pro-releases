@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.70';
-  var BUILD = '6719e54ac2';
+  var VERSION = '0.3.71';
+  var BUILD = '932d99ba64';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -43,7 +43,7 @@
     'Names used in the cut list and its files. Leave a box empty for the default.': 'Nombres usados en la lista de corte y sus archivos. Deje la casilla vacía para el nombre por defecto.',
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
-    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Outside': 'Exterior', 'Between the sides': 'Entre costados', 'Module name': 'Nombre del módulo', 'Height from the floor': 'Altura desde el piso',
+    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Undo': 'Deshacer', 'The render server is not switched on yet — renders start working once it is set up.': 'El servidor de renders aún no está activado — los renders funcionarán cuando se configure.', 'Redo': 'Rehacer', 'Undone': 'Deshecho', 'Redone': 'Rehecho', 'Nothing to undo': 'Nada que deshacer', 'Outside': 'Exterior', 'Between the sides': 'Entre costados', 'Module name': 'Nombre del módulo', 'Height from the floor': 'Altura desde el piso',
     'Raised off the floor (besides the toe kick)': 'Elevado del piso (además del zócalo)', 'Are you sure?': '¿Está seguro?', 'Discard': 'Descartar', 'Replace': 'Reemplazar', 'OK': 'Aceptar',
     'Renders need a signed-in PanelPro account.': 'Los renders necesitan una cuenta de PanelPro con sesión iniciada.', 'The 3D view is not available on this device.': 'La vista 3D no está disponible en este dispositivo.',
     'Could not capture the 3D view.': 'No se pudo capturar la vista 3D.',
@@ -540,11 +540,22 @@
     sheet.innerHTML = '<div class="rd-box"></div>';
     document.body.appendChild(sheet);
     var photo = null;
-    function close() { if (has3d) { P3D.setBackdrop(null); } sheet.remove(); }
+    function close() { if (has3d) { P3D.setBackdrop(null); } sheet.remove(); document.removeEventListener('keydown', esc1, true); }
+    function esc1(e) { if (e.key === 'Escape' && !document.querySelector('.ask')) { e.preventDefault(); close(); } }
+    document.addEventListener('keydown', esc1, true);
+    // a click outside the panel closes it (not while placing the furniture on a photo)
+    sheet.addEventListener('mousedown', function (e) { if (e.target === sheet && !sheet.classList.contains('placing')) { close(); } });
     window.PPRender.open(sheet.firstChild, {
       t: t, lang: lang, app: 'web', site: s.id, title: title,
       scenes: ['studio', 'kitchen', 'bedroom', 'living', 'bathroom', 'office', 'music', 'closet'].concat(has3d ? ['photo'] : []), scene: 'studio',
-      call: function (action, data) { return C.call('renderCall', Object.assign({ action: action }, data), 300000); },
+      call: function (action, data) {
+        return C.call('renderCall', Object.assign({ action: action }, data), 300000).catch(function (e) {
+          // the function not published yet (or the server down) answers "internal" / "not-found"
+          var code = String((e && e.code) || ''), msg = String((e && e.message) || '');
+          if (/internal|not-found|unavailable/.test(code) || /^internal/.test(msg)) { throw new Error(t('The render server is not switched on yet — renders start working once it is set up.')); }
+          throw e;
+        });
+      },
       setPhoto: function (url) { photo = url; if (has3d) { P3D.setBackdrop(url); } },
       place: function (on) { sheet.classList.toggle('placing', !!on); },
       capture: function (o) {
@@ -581,10 +592,12 @@
     view: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
     open: '<rect x="4" y="3.5" width="10" height="17" rx="1"/><path d="M14 4.5l6 2v13l-6-1.5M11 12h.01"/>',
     fit: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
-    render: '<path d="M4 6.5h3l1.5-2h7L17 6.5h3v13H4z"/><circle cx="12" cy="13" r="3.6"/><path d="M18.5 2.5v3M17 4h3"/>'
+    render: '<path d="M4 6.5h3l1.5-2h7L17 6.5h3v13H4z"/><circle cx="12" cy="13" r="3.6"/><path d="M18.5 2.5v3M17 4h3"/>',
+    undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+    redo: '<path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>'
   };
   function vtBtn(id, icon, label, extra) {
-    return '<button type="button" id="' + id + '" class="vt" title="' + esc(label) + '" aria-label="' + esc(label) + '"' + (extra || '') + '>' +
+    return '<button type="button" id="' + id + '" class="vt" data-label="' + esc(label) + '" aria-label="' + esc(label) + '"' + (extra || '') + '>' +
       '<svg viewBox="0 0 24 24" aria-hidden="true">' + VT_ICONS[icon] + '</svg></button>';
   }
   // Diagnostic view: flat colours by kind of part (remembered on this device)
@@ -1435,6 +1448,7 @@
       catch (e) { go('#/site/' + encodeURIComponent(s.id), true); return; }
       // a new module goes step by step through the tabs (Save & next); an edited one saves in place
       E = { site: s, mod: mod, presetKey: mod ? mod.preset || null : presetKey, params: params, dirty: !mod, changed: {}, wizard: !mod };
+      E.hist = [JSON.stringify(params)]; E.hi = 0;   // undo / redo (Ctrl+Z, Ctrl+Shift+Z / Ctrl+Y, the ↶ ↷ buttons)
       if (!mod) { editTab = 'layout'; }
     }
     rebuild();
@@ -1448,9 +1462,9 @@
       '<div class="view3d" id="v3d"><svg class="elev" id="elev" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<span class="view-hint" id="viewHint"></span><div class="dimchips" id="dimChips"></div>' +
       '<div class="side-bar" id="sideBar" role="tablist">' + SIDES.map(function (k) { return '<button type="button" data-side="' + k + '">' + esc(sideLabel(k)) + '</button>'; }).join('') + '</div>' +
-      '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" title="2D / 3D">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
+      '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" data-label="2D / 3D" aria-label="2D / 3D">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
       vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View')) +
-      vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('renderV', 'render', t('Render (AI)')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
+      vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('undoV', 'undo', t('Undo') + ' (Ctrl+Z)') + vtBtn('redoV', 'redo', t('Redo') + ' (Ctrl+Shift+Z)') + vtBtn('renderV', 'render', t('Render (AI)')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
       '<div class="edit-side"><div class="page" id="editBody"></div>' +
       '<div class="dock"><span class="steps" id="steps"></span><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save') : t('Add to site')) + '</button></div></div>' +
       '</div>'
@@ -1479,6 +1493,9 @@
     $('#fitBtn').onclick = function () { if (has3d && view.mode === '3d') { P3D.zoomExtents(); } };
     wireDiag();
     $('#manualV').onclick = function () { makeManual(s, { id: mod ? mod.id : '__new', params: E.params }); };
+    $('#undoV').onclick = function () { histGo(-1); };
+    $('#redoV').onclick = function () { histGo(1); };
+    undoState();
     $('#renderV').onclick = function () { if (view.mode !== '3d') { setViewMode('3d'); } openRender(s, (E.params.name || t('Module')) + ' · ' + s.name, [E.params]); };
     $('#dimsBtn').onclick = function () {
       var on = !dimsShown();
@@ -1651,10 +1668,39 @@
   }
   function changed(reset3d) {
     E.dirty = true;
+    histPush();
     rebuild();
     draw3d(reset3d);
     renderEditBody();
     liveThumb();
+  }
+
+  // ------------------------------------------------------------------ undo / redo (module editor)
+  function histPush() {
+    if (!E || !E.hist) { return; }
+    var j = JSON.stringify(E.params);
+    if (j === E.hist[E.hi]) { return; }
+    E.hist = E.hist.slice(0, E.hi + 1);
+    E.hist.push(j);
+    if (E.hist.length > 150) { E.hist.shift(); }
+    E.hi = E.hist.length - 1;
+    undoState();
+  }
+  function histGo(d) {
+    if (!E || !E.hist) { return; }
+    var i = E.hi + d;
+    if (i < 0 || i >= E.hist.length) { return; }
+    E.hi = i;
+    E.params = JSON.parse(E.hist[i]);
+    E.dirty = true;
+    rebuild(); draw3d(false); renderEditBody(); liveThumb();
+    undoState();
+    toast(t(d < 0 ? 'Undone' : 'Redone'));
+  }
+  function undoState() {
+    var u = $('#undoV'), r = $('#redoV');
+    if (u) { u.disabled = !E || !E.hist || E.hi <= 0; }
+    if (r) { r.disabled = !E || !E.hist || E.hi >= E.hist.length - 1; }
   }
 
   // Press and hold (or right-click) a panel in the 3D view: change its material, for every
@@ -2164,6 +2210,18 @@
       }
     };
   }
+
+  // Undo / redo keys: Ctrl+Z (⌘Z), Ctrl+Shift+Z or Ctrl+Y — in the module editor and the composition.
+  // Inside a text box the browser's own undo of the typing stays.
+  document.addEventListener('keydown', function (e) {
+    if (!(e.ctrlKey || e.metaKey) || e.altKey) { return; }
+    var k = e.key.toLowerCase();
+    if (k !== 'z' && k !== 'y') { return; }
+    if (/INPUT|TEXTAREA/.test((document.activeElement || {}).tagName || '') || document.querySelector('.menu, .dpad-wrap, .docview, .ask, .rd-sheet, .rp-sheet, #pad:not([hidden])')) { return; }
+    var redo = k === 'y' || e.shiftKey;
+    if (E && /\/(m|new)\//.test(location.hash)) { e.preventDefault(); histGo(redo ? 1 : -1); }
+    else if (/\/compose$/.test(location.hash) && window.PPCompose && window.PPCompose.undo) { e.preventDefault(); window.PPCompose.undo(redo ? 1 : -1); }
+  });
 
   // Desktop editor keys: Ctrl+S save, Ctrl+D duplicate, Delete removes the module.
   document.addEventListener('keydown', function (e) {

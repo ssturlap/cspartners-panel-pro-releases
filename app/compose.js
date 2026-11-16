@@ -109,7 +109,40 @@
                     z: it.m.pos.z, rot: r.rot != null ? r.rot : w.rot };
     });
   }
-  function save() { syncRoom(); A.persist(); }
+  function save() { syncRoom(); A.persist(); histPush(); }
+  // ------------------------------------------------------------------ undo / redo
+  // Every change of the composition (moves, pieces, compositions) is kept: Ctrl+Z / Ctrl+Shift+Z
+  // (Ctrl+Y) or the ↶ ↷ buttons step back and forth.
+  function histSnap() { return JSON.stringify({ modules: C.s.modules, comps: C.s.comps || [] }); }
+  function histPush() {
+    if (!C || !C.hist) { return; }
+    var j = histSnap();
+    if (j === C.hist[C.hi]) { return; }
+    C.hist = C.hist.slice(0, C.hi + 1);
+    C.hist.push(j);
+    if (C.hist.length > 100) { C.hist.shift(); }
+    C.hi = C.hist.length - 1;
+    undoState();
+  }
+  function undo(d) {
+    if (!C || !C.hist) { return; }
+    var i = C.hi + d;
+    if (i < 0 || i >= C.hist.length) { return; }
+    C.hi = i;
+    var o = JSON.parse(C.hist[i]);
+    C.s.modules = o.modules; C.s.comps = o.comps;
+    C.s.updated = new Date().toISOString();
+    A.persist();
+    C.sel = null; C.pick = null;
+    C.refreshing = true; load(); C.refreshing = false;
+    redraw(false); panel(); undoState();
+    A.toast(A.t(d < 0 ? 'Undone' : 'Redone'));
+  }
+  function undoState() {
+    var u = document.getElementById('cUndo'), r = document.getElementById('cRedo');
+    if (u) { u.disabled = !C || !C.hist || C.hi <= 0; }
+    if (r) { r.disabled = !C || !C.hist || C.hi >= C.hist.length - 1; }
+  }
   function isAll() { return C.room && C.tab === 'all'; }
   // how far each module stands from the wall (run panels, 3D)
   function offY(it, D) { return C.room && it.perp != null ? it.perp - (C.wallBack - D) : D - (Number(it.m.params.depth) || 0); }
@@ -578,7 +611,7 @@
           C.s.comps = C.s.comps.filter(function (x) { return x !== c; });
         }
         A.persist(); close();
-        C.pick = null; C.pickFor = null; load(); fitBox(); redraw(false); panel();
+        C.pick = null; C.pickFor = null; load(); fitBox(); redraw(false); panel(); histPush();
         A.toast(t('Pieces') + ': ' + res.pieces.length);
       },
       cancel: close
@@ -754,8 +787,11 @@
   function render(s) {
     A = window.PPApp;
     var t = A.t, esc = A.esc;
-    C = { s: s, items: [], sel: C && C.s === s ? C.sel : null, tab: C && C.s === s ? C.tab : null, pick: null, mode: A.has3d() ? A.loadPref('panelpro.web.cmode', '2d') : '2d' };
+    var keep = C && C.s === s;
+    C = { s: s, items: [], sel: keep ? C.sel : null, tab: keep ? C.tab : null, pick: null, mode: A.has3d() ? A.loadPref('panelpro.web.cmode', '2d') : '2d',
+          hist: keep ? C.hist : null, hi: keep ? C.hi : 0 };
     load();
+    if (!C.hist) { C.hist = [histSnap()]; C.hi = 0; }
     fitBox();
     A.show(
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button>' +
@@ -763,8 +799,8 @@
       '<button type="button" class="icon-btn" id="cMore" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
       '<div class="compose"><div class="cview view3d" id="cview"><div id="ctabs">' + tabsHtml() + '</div><svg id="csvg" class="csvg" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<div class="dim-note" id="cNote">' + esc(t('Dimensions in ' + A.U())) + '</div>' +
-      '<div class="view-tools"><button type="button" id="cMode" class="vt vt-txt" title="2D / 3D">3D</button>' + A.vtBtn('cOpen', 'open', t('Open all'), ' aria-pressed="false"') +
-      A.diagBtn() + A.vtBtn('cRender', 'render', t('Render (AI)')) + A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
+      '<div class="view-tools"><button type="button" id="cMode" class="vt vt-txt" data-label="2D / 3D" aria-label="2D / 3D">3D</button>' + A.vtBtn('cOpen', 'open', t('Open all'), ' aria-pressed="false"') +
+      A.diagBtn() + A.vtBtn('cUndo', 'undo', t('Undo') + ' (Ctrl+Z)') + A.vtBtn('cRedo', 'redo', t('Redo') + ' (Ctrl+Shift+Z)') + A.vtBtn('cRender', 'render', t('Render (AI)')) + A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
       '<div class="cpanel" id="cpanel"></div></div>'
     );
     var host = document.getElementById('cview');
@@ -777,6 +813,9 @@
     document.getElementById('cFit').onclick = function () { if (C.mode === '2d') { fitBox(); draw2d(); } else { P3D.zoomExtents(); } };
     document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('all'); A.setOpenBtn(this, o); };
     A.wireDiag();
+    document.getElementById('cUndo').onclick = function () { undo(-1); };
+    document.getElementById('cRedo').onclick = function () { undo(1); };
+    undoState();
     document.getElementById('cRender').onclick = function () {
       if (!A.has3d()) { A.toast(t('The 3D view is not available on this device.')); return; }
       if (C.mode !== '3d') { C.mode = '3d'; A.savePref('panelpro.web.cmode', '3d'); redraw(true); }
@@ -804,5 +843,5 @@
     panel();
   }
 
-  window.PPCompose = { render: render, refresh: refreshSite };
+  window.PPCompose = { render: render, refresh: refreshSite, undo: function (d) { undo(d); } };
 })();

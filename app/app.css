@@ -1084,3 +1084,21 @@ body.desk .dk-table .rowbtns .icon-btn { height: 34px; width: 34px; padding: 0; 
 body.desk .top:has(~ .dk-body > .page.page-wide) { padding-left: max(16px, calc((100% - 1440px) / 2 + 16px)); padding-right: max(16px, calc((100% - 1440px) / 2 + 28px)); }
 body.desk .top:has(~ .dk-body > .page:not(.page-wide)) { padding-left: max(16px, calc((100% - 760px) / 2 + 16px)); padding-right: max(16px, calc((100% - 760px) / 2 + 28px)); }
 body.desk .top:has(~ .dk-body > .edit-layout), body.desk .top:has(~ .dk-body .compose) { padding-left: max(16px, calc((100% - 2000px) / 2 + 16px)); padding-right: max(16px, calc((100% - 2000px) / 2 + 16px)); }
+
+/* undo / redo buttons over the views: dimmed when there is nothing to step to */
+.view-tools .vt:disabled { opacity: .35; cursor: default; }
+
+/* the icons sit in the middle of their squares */
+.view-tools .vt { display: inline-flex !important; align-items: center; justify-content: center; padding: 0 !important; box-sizing: border-box; flex: none; line-height: 1; }
+.view-tools .vt svg { display: block; flex: none; margin: 0; }
+.view-tools .vt .vt-txt { display: block; width: 100%; text-align: center; }
+
+/* the name of a view button slides out to the left from behind it (no browser bubble) */
+@media (hover: hover) and (pointer: fine) {
+  .view-tools .vt { position: relative; }
+  .view-tools .vt[data-label]::after { content: attr(data-label); position: absolute; right: calc(100% - 8px); top: 50%; z-index: -1;
+    height: 26px; line-height: 26px; padding: 0 16px 0 10px; border-radius: 7px 0 0 7px; background: var(--ink); color: #fff;
+    font: 600 12px/26px -apple-system, "Segoe UI", Inter, Roboto, sans-serif; letter-spacing: 0; white-space: nowrap; pointer-events: none;
+    opacity: 0; transform: translate(40%, -50%); clip-path: inset(0 0 0 100%); transition: transform .18s ease, clip-path .18s ease, opacity .12s; }
+  .view-tools .vt[data-label]:hover::after, .view-tools .vt[data-label]:focus-visible::after { opacity: 1; transform: translate(0, -50%); clip-path: inset(0 0 0 0); }
+}

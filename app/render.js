@@ -44,6 +44,9 @@
     '.rd select{font:inherit;padding:6px;border:1px solid var(--line,#d5d0c6);border-radius:8px;background:#fff;max-width:100%}',
     '.rd-err{color:#b3261e;font-weight:600;font-size:12px}',
     '.rd-place-bar{display:none}',
+    '.rd{position:relative}.rd-x{position:absolute;top:-6px;right:-6px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line,#d5d0c6);background:#fff;color:inherit;font-size:15px;line-height:1;cursor:pointer;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.12)}',
+    '.rd-x:hover{background:#24221f;color:#fff;border-color:#24221f}.rd.placing .rd-x{display:none}',
+    '.rd-side{padding-top:30px}',
     '.rd.placing{display:block;height:auto}.rd.placing>.rd-main,.rd.placing>.rd-side{display:none}',
     '.rd.placing .rd-place-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}',
     '@media (max-width:760px){.rd{grid-template-columns:1fr;height:auto}.rd-view{min-height:220px;max-height:52vh}.rd-side{overflow:visible}}'
@@ -164,8 +167,8 @@
           (S.renders.length ? '<div class="rd-card"><h4>' + esc(t('Renders of this project')) + '</h4><select id="rdList">' + S.renders.map(function (r) {
             return '<option value="' + esc(r.id) + '"' + (cur && cur.id === r.id ? ' selected' : '') + '>' + esc(new Date(r.created).toLocaleString(ctx.lang) + ' · ' + t(SCENE_LABEL[r.scene] || r.scene) + ' · ' + r.versions.length + ' ' + t('versions')) + '</option>';
           }).join('') + '</select>' + (cur ? '<button type="button" class="rd-btn small" data-act="delete">' + esc(t('Delete this render and its versions')) + '</button>' : '') + '</div>' : '') +
-          '<div class="rd-row"><button type="button" class="rd-btn" data-act="close">' + esc(t('Close')) + '</button></div>' +
-        '</div></div>';
+        '</div>' +
+        '<button type="button" class="rd-x" data-act="close" aria-label="' + esc(t('Close')) + '" title="' + esc(t('Close')) + '">✕</button></div>';
       host.innerHTML = h;
       host.scrollTop = y;
       wire();

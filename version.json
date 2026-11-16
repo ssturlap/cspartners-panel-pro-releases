@@ -1,13 +1,17 @@
 {
-  "version": "0.3.70",
+  "version": "0.3.71",
   "date": "2026-11-16",
-  "title": "Carcass and overall sizes one over the other",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.70.rbz",
+  "title": "Undo on the web, tidier render window",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.71.rbz",
   "notes": [
-    "Decorative panels: the carcass size and the overall size are shown one over the other with the widths, heights and depths lined up under W, H and D."
+    "PanelPro Web: undo and redo in the module editor and the composition — Ctrl+Z (⌘Z), Ctrl+Shift+Z or Ctrl+Y, or the ↶ ↷ buttons on the view.",
+    "Render window: closes with the ✕ in its corner, Esc or a click outside it; it says plainly when the render server is not switched on yet.",
+    "PanelPro Web: the view buttons' names slide out to the left from behind the button; icons centred in their squares; the top bar lines up with the page."
   ],
-  "title_es": "Medidas de caja y total una sobre otra",
+  "title_es": "Deshacer en la web, ventana de render más ordenada",
   "notes_es": [
-    "Paneles decorativos: la medida de la caja y la medida total se muestran una sobre otra con los anchos, altos y fondos alineados bajo Ancho, Alto y Fondo."
+    "PanelPro Web: deshacer y rehacer en el editor de módulos y en la composición — Ctrl+Z (⌘Z), Ctrl+Shift+Z o Ctrl+Y, o los botones ↶ ↷ de la vista.",
+    "Ventana de render: se cierra con la ✕ de la esquina, Esc o un clic fuera; dice claramente cuando el servidor de renders aún no está activado.",
+    "PanelPro Web: los nombres de los botones de la vista se deslizan a la izquierda desde detrás del botón; iconos centrados; la barra superior se alinea con la…"
   ]
 }
