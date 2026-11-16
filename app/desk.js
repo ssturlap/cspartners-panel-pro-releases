@@ -73,7 +73,9 @@
         (u.photoURL ? '<img alt="" src="' + esc(u.photoURL) + '" referrerpolicy="no-referrer">' : '<i>' + esc((u.displayName || u.email || '?')[0]) + '</i>') +
         '<span><b>' + esc(u.displayName || u.email) + '</b><small>' + esc(C.planLine()) + '</small></span></a>';
     }
-    out += '<a class="dk-ver" href="#/settings" title="' + esc(A.t('Check for updates')) + '"' + (u ? '' : ' style="margin-top:auto"') + '>PanelPro Web ' + esc(A.version) + '</a>';
+    // version and Check for updates, under the user (moved here from Settings)
+    out += '<div class="dk-upd"' + (u ? '' : ' style="margin-top:auto"') + '><span class="dk-ver" title="PanelPro Web ' + esc(A.version) + '">v' + esc(A.version) + '</span>' +
+      '<button type="button" id="dkUpd" class="dk-updbtn">' + esc(A.t('Check for updates')) + '</button></div>';
     return out;
   }
   function wrap(html) {
@@ -93,6 +95,8 @@
     if (top) { dockInto(top, body); }
     var sp = screen.querySelector('#dkSpace');
     if (sp) { sp.onclick = function () { cloud().spaceMenu(); }; }
+    var up = screen.querySelector('#dkUpd');
+    if (up) { up.onclick = function () { A.checkUpdate(up); }; }
   }
   // a .dock directly in the scrolling body → its buttons go to the right of the title bar
   function dockInto(top, body) {

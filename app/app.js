@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.65';
-  var BUILD = 'b63c01e7c1';
+  var BUILD = 'dc41363f03';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -43,7 +43,7 @@
     'Names used in the cut list and its files. Leave a box empty for the default.': 'Nombres usados en la lista de corte y sus archivos. Deje la casilla vacía para el nombre por defecto.',
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
-    'Add modules to the site first.': 'Primero agregue módulos a la obra.',
+    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Are you sure?': '¿Está seguro?', 'Discard': 'Descartar', 'Replace': 'Reemplazar', 'OK': 'Aceptar',
     'Renders need a signed-in PanelPro account.': 'Los renders necesitan una cuenta de PanelPro con sesión iniciada.', 'The 3D view is not available on this device.': 'La vista 3D no está disponible en este dispositivo.',
     'Could not capture the 3D view.': 'No se pudo capturar la vista 3D.',
     'New composition: top, back and side panels…': 'Nueva composición: tope, panel trasero y laterales…', 'Composition: top, back and side panels…': 'Composición: tope, panel trasero y laterales…',
@@ -556,6 +556,7 @@
         a.href = 'data:' + mime + ';base64,' + b64; a.download = name;
         document.body.appendChild(a); a.click(); a.remove();
       },
+      ask: function (title) { return ask({ title: title, ok: t('Delete'), danger: true }); },
       close: close
     });
   }
@@ -963,17 +964,54 @@
     };
     if ($('#hwDel')) {
       $('#hwDel').onclick = function () {
-        if (!confirm(t('Delete') + ' ' + h.name + '?')) { return; }
-        hwData.list = hwData.list.filter(function (x) { return x !== h; }); hwSave(); go('#/hardware', true);
+        ask({ title: t('Delete') + ' ' + h.name + '?', ok: t('Delete'), danger: true }).then(function (ok) {
+          if (ok) { hwData.list = hwData.list.filter(function (x) { return x !== h; }); hwSave(); go('#/hardware', true); }
+        });
       };
     }
   }
 
+  // The app's own "are you sure?" box (instead of the browser's): Promise of true / false.
+  // o: { title, text, ok (button label), danger (red button), cancel }
+  function ask(o) {
+    o = typeof o === 'string' ? { title: o } : (o || {});
+    return new Promise(function (done) {
+      var m = document.createElement('div'), prev = document.activeElement;
+      m.className = 'ask';
+      m.innerHTML = '<div class="ask-box" role="alertdialog" aria-modal="true" aria-labelledby="askT">' +
+        (o.danger ? '<div class="ask-ico danger">' + menuIcon('trash') + '</div>' : '') +
+        '<h2 id="askT">' + esc(o.title || t('Are you sure?')) + '</h2>' + (o.text ? '<p>' + esc(o.text) + '</p>' : '') +
+        '<div class="ask-btns"><button type="button" class="btn" data-a="0">' + esc(o.cancel || t('Cancel')) + '</button>' +
+        '<button type="button" class="btn ' + (o.danger ? 'danger' : 'primary') + '" data-a="1">' + esc(o.ok || t('OK')) + '</button></div></div>';
+      document.body.appendChild(m);
+      requestAnimationFrame(function () { m.classList.add('on'); });
+      var go1 = m.querySelector('[data-a="1"]');
+      go1.focus();
+      function close(v) {
+        document.removeEventListener('keydown', key, true);
+        m.classList.remove('on');
+        setTimeout(function () { m.remove(); }, 160);
+        if (prev && prev.focus) { try { prev.focus(); } catch (e) { /* */ } }
+        done(v);
+      }
+      function key(e) {
+        if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(false); }
+        else if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); close(true); }
+        else if (e.key === 'Tab') { e.preventDefault(); (document.activeElement === go1 ? m.querySelector('[data-a="0"]') : go1).focus(); }
+      }
+      document.addEventListener('keydown', key, true);
+      m.addEventListener('mousedown', function (e) { if (e.target === m) { close(false); } });
+      m.querySelectorAll('[data-a]').forEach(function (b) { b.onclick = function () { close(b.getAttribute('data-a') === '1'); }; });
+    });
+  }
   // Delete a project (after asking); then(): what to show next
   function deleteSite(s, then) {
-    if (!s || !confirm(t('Delete this site and its modules?') + '\n\n' + s.name)) { return; }
-    sites = sites.filter(function (x) { return x !== s; }); persist(); toast(t('Deleted'));
-    if (then) { then(); }
+    if (!s) { return; }
+    ask({ title: t('Delete this site and its modules?'), text: s.name, ok: t('Delete'), danger: true }).then(function (ok) {
+      if (!ok) { return; }
+      sites = sites.filter(function (x) { return x !== s; }); persist(); toast(t('Deleted'));
+      if (then) { then(); }
+    });
   }
   // the project list's row buttons: icons, with their name shown on hover
   function rowBtns(s) {
@@ -1135,9 +1173,13 @@
     $('#projMore').onclick = function () { siteMenu(s); };
     screen.querySelectorAll('[data-wsmod]').forEach(function (b) {
       b.onclick = function () {
-        if (E && E.dirty && (E.mod || E.presetKey) && !confirm(t('Discard your changes?'))) { return; }
+        var to = '#/site/' + encodeURIComponent(s.id) + '/m/' + encodeURIComponent(b.getAttribute('data-wsmod'));
+        if (E && E.dirty && (E.mod || E.presetKey)) {
+          ask({ title: t('Discard your changes?'), ok: t('Discard'), danger: true }).then(function (ok) { if (ok) { E = null; go(to); } });
+          return;
+        }
         E = null;
-        go('#/site/' + encodeURIComponent(s.id) + '/m/' + encodeURIComponent(b.getAttribute('data-wsmod')));
+        go(to);
       };
     });
     var imgs = Array.prototype.slice.call(screen.querySelectorAll('[data-wthumb]'));
@@ -1412,7 +1454,11 @@
     else { P3D.setDimUnits(uk(), U()); P3D.setDims(dimsShown()); P3D.resize(); }
     setViewMode(view.mode, true);
     $('#back').onclick = function () {
-      if (E.dirty && E.mod && !confirm(t('Discard your changes?'))) { return; }
+      if (E.dirty && E.mod && !this.asked) {
+        var me = this;
+        ask({ title: t('Discard your changes?'), ok: t('Discard'), danger: true }).then(function (ok) { if (ok) { me.asked = true; me.click(); me.asked = false; } });
+        return;
+      }
       if (E.mod && !mod) { var sid = s.id; E = null; go('#/site/' + encodeURIComponent(sid), true); return; }   // a new module, saved step by step
       E = null;
       if (desk()) { go(mod ? '#/' : '#/site/' + encodeURIComponent(s.id)); } else { history.back(); }
@@ -1490,9 +1536,11 @@
     if (mod) {
       items.push({ label: t('Duplicate'), icon: 'copy', run: function () { duplicateModule(); } });
       items.push({ label: t('Delete module'), icon: 'trash', danger: true, run: function () {
-        if (!confirm(t('Delete this module?'))) { return; }
-        s.modules = s.modules.filter(function (x) { return x !== mod; }); if (window.PPCompose) { window.PPCompose.refresh(s); } touch(s); persist();
-        E = null; toast(t('Deleted')); go('#/site/' + encodeURIComponent(s.id), true);
+        ask({ title: t('Delete this module?'), text: E.params.name || '', ok: t('Delete'), danger: true }).then(function (ok) {
+          if (!ok) { return; }
+          s.modules = s.modules.filter(function (x) { return x !== mod; }); if (window.PPCompose) { window.PPCompose.refresh(s); } touch(s); persist();
+          E = null; toast(t('Deleted')); go('#/site/' + encodeURIComponent(s.id), true);
+        });
       } });
     }
     menu(title, items);
@@ -2097,10 +2145,12 @@
     else if (mod && e.key.toLowerCase() === 'd' && E.mod) { e.preventDefault(); duplicateModule(); }
     else if (!typing && (e.key === 'Delete') && E.mod) {
       e.preventDefault();
-      if (!confirm(t('Delete this module?'))) { return; }
       var s = E.site, m = E.mod;
-      s.modules = s.modules.filter(function (x) { return x !== m; }); if (window.PPCompose) { window.PPCompose.refresh(s); } touch(s); persist();
-      E = null; toast(t('Deleted')); go('#/site/' + encodeURIComponent(s.id), true);
+      ask({ title: t('Delete this module?'), text: E.params.name || '', ok: t('Delete'), danger: true }).then(function (ok) {
+        if (!ok || !E || E.mod !== m) { return; }
+        s.modules = s.modules.filter(function (x) { return x !== m; }); if (window.PPCompose) { window.PPCompose.refresh(s); } touch(s); persist();
+        E = null; toast(t('Deleted')); go('#/site/' + encodeURIComponent(s.id), true);
+      });
     }
   });
   // The dock: new module → "Save & next: <tab> ›" (last: "Save & finish ✓") and "Step n of N";
@@ -2177,7 +2227,9 @@
     if (mod && mod.params && mod.params.edges) { src.edges = clone(mod.params.edges); }
     try { boxes = Engine.call('build', { params: src, lang: lang }).boxes || []; } catch (e) { toast(e.message); return; }
     if (boxes.length < 2) { toast(t('This module has no splits.')); return; }
-    if (!confirm(t('Separate into modules') + ': ' + boxes.length + '?')) { return; }
+    ask({ title: t('Separate into modules') + ': ' + boxes.length + '?', ok: t('Separate into modules') }).then(function (ok) { if (ok) { separateNow(s, mod, boxes); } });
+  }
+  function separateNow(s, mod, boxes) {
     var at = mod ? s.modules.indexOf(mod) : s.modules.length, made = [];
     boxes.forEach(function (b) {
       var m = { id: uid(), order: s.next_order++, created: now(), updated: now(), params: b.params };
@@ -2537,9 +2589,9 @@
       (CL ? '<div class="box fields"><h3 class="grp">' + esc(CL.t('Account')) + '</h3><div class="frow-f"><span class="flbl">' + esc(CL.user().email + ' · ' + CL.planLine()) + '</span>' +
             '<button type="button" class="valbtn" id="acctBtn">›</button></div>' +
             (CL.canEdit() ? '' : '<p class="warn-line">' + esc(CL.t('Only admins change company materials and settings.')) + '</p>') + '</div>' : '') +
-      '<div class="box fields"><h3 class="grp">' + esc(t('App version')) + '</h3>' +
+      (desk() ? '' : '<div class="box fields"><h3 class="grp">' + esc(t('App version')) + '</h3>' +   // on a computer: under the user in the side bar
         '<p class="app-ver"><b>PanelPro Web ' + esc(VERSION) + '</b> · ' + esc(t('build')) + ' ' + esc(BUILD) + ' · ' + esc(t('Engine')) + ' ' + esc(Engine.version || '') + '</p>' +
-        '<button type="button" class="btn small" id="updBtn" style="width:100%">' + esc(t('Check for updates')) + '</button></div>' +
+        '<button type="button" class="btn small" id="updBtn" style="width:100%">' + esc(t('Check for updates')) + '</button></div>') +
       '<div class="box fields"><h3 class="grp">' + esc(t('Language')) + '</h3>' +
         seg('lang', [['en', 'English'], ['es', 'Español']], lang) +
         '<h3 class="grp">' + esc(t('Units')) + '</h3>' + seg('units', [['mm', 'mm'], ['cm', 'cm']], prefs.units) +
@@ -2594,7 +2646,7 @@
     $('#showAll').onchange = function () { prefs.showAll = this.checked; F().showAll = prefs.showAll; savePrefs(); };
     if ($('#matsBtn')) { $('#matsBtn').onclick = function () { go('#/materials'); }; }
     if ($('#acctBtn')) { $('#acctBtn').onclick = function () { go('#/account'); }; }
-    $('#updBtn').onclick = function () { checkUpdate(this); };
+    if ($('#updBtn')) { $('#updBtn').onclick = function () { checkUpdate(this); }; }
     screen.querySelectorAll('[data-pname]').forEach(function (inp) {
       inp.onchange = function () {
         var m = prefs.names[lang] = prefs.names[lang] || {};
@@ -2604,8 +2656,9 @@
     });
     screen.querySelectorAll('[data-delpreset]').forEach(function (b) {
       b.onclick = function () {
-        if (!confirm(t('Delete this preset?'))) { return; }
-        prefs.book = Engine.call('presets_delete', { book: prefs.book, key: b.getAttribute('data-delpreset') }).book; savePrefs(); renderSettings();
+        ask({ title: t('Delete this preset?'), ok: t('Delete'), danger: true }).then(function (ok) {
+          if (ok) { prefs.book = Engine.call('presets_delete', { book: prefs.book, key: b.getAttribute('data-delpreset') }).book; savePrefs(); renderSettings(); }
+        });
       };
     });
     screen.querySelectorAll('[data-delfin]').forEach(function (b) {
@@ -2692,14 +2745,14 @@
       s.modules.forEach(function (m, i) { m.id = m.id || uid(); m.order = m.order || i + 1; m.updated = m.updated || now(); });
       s.next_order = Math.max(s.next_order || 1, s.modules.reduce(function (a, m) { return Math.max(a, m.order + 1); }, 1));
       var old = site(s.id);
-      if (old) {
-        if (!confirm(t('This site is already on the phone. Replace it with the file?'))) { return; }
-        sites = sites.filter(function (x) { return x !== old; });
-      }
-      s.updated = s.updated || now();
-      sites.push(s); persist();
-      toast(t('Opened') + ': ' + s.name);
-      go('#/site/' + encodeURIComponent(s.id));
+      var add = function () {
+        if (old) { sites = sites.filter(function (x) { return x !== old; }); }
+        s.updated = s.updated || now();
+        sites.push(s); persist();
+        toast(t('Opened') + ': ' + s.name);
+        go('#/site/' + encodeURIComponent(s.id));
+      };
+      if (old) { ask({ title: t('This site is already on the phone. Replace it with the file?'), text: s.name, ok: t('Replace') }).then(function (ok) { if (ok) { add(); } }); } else { add(); }
     };
     r.readAsText(file);
   }
@@ -2770,7 +2823,7 @@
     t: t, esc: esc, fmt: fmt, L: L, LU: LU, U: U, show: show, go: go, menu: menu, toast: toast, openPad: openPad,
     persist: function () { persist(); }, codesOf: codesOf, codeSort: codeSort, dimsOf: dimsOf, matInfo: matInfo,
     viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown, openRender: openRender,
-    loadPref: load, savePref: save, uid: uid, menuItemHtml: menuItemHtml, version: VERSION, build: BUILD, vtBtn: vtBtn, setOpenBtn: setOpenBtn, diagBtn: diagBtn, wireDiag: wireDiag, lang: function () { return lang; }, site: site, uk: uk,
+    loadPref: load, savePref: save, uid: uid, menuItemHtml: menuItemHtml, version: VERSION, build: BUILD, checkUpdate: checkUpdate, ask: ask, vtBtn: vtBtn, setOpenBtn: setOpenBtn, diagBtn: diagBtn, wireDiag: wireDiag, lang: function () { return lang; }, site: site, uk: uk,
     prefsOpt: function () { return prefs.opt; }, shareFile: shareFile, pickFile: pickFile,
     sites: function () { return sites; }, prefs: function () { return prefs; }, resetPrefs: resetPrefs, fixPrefs: fixPrefs,
     route: function () { route(); }, setLang: setLang, presetThumb: presetThumb, moduleThumb: function (m) { return moduleThumb(m); },

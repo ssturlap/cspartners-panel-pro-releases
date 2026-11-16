@@ -63,7 +63,7 @@
     'Nothing shared yet.': 'Aún no hay nada compartido.', 'My list': 'Mi lista', 'Mark official': 'Marcar oficial', 'Not official': 'No oficial',
     'Remove from gallery': 'Quitar de la galería', 'Remove this item from the public gallery?': '¿Quitar este elemento de la galería pública?',
     'Prices stay private: only the texture, sheet size and thicknesses are shared.': 'Los precios quedan privados: solo se comparten la textura, el tamaño del tablero y los espesores.',
-    'Developer': 'Desarrollador', 'AI renders': 'Renders con IA', 'Image model': 'Modelo de imagen', 'Allow 4K': 'Permitir 4K', 'Renders per month': 'Renders por mes', 'Trial': 'Prueba', 'PayPal client ID': 'Client ID de PayPal', 'PayPal mode': 'Modo de PayPal', 'Sandbox (tests)': 'Sandbox (pruebas)', 'Live': 'Real',
+    'Developer': 'Desarrollador', 'Leave': 'Salir', 'AI renders': 'Renders con IA', 'Image model': 'Modelo de imagen', 'Allow 4K': 'Permitir 4K', 'Renders per month': 'Renders por mes', 'Trial': 'Prueba', 'PayPal client ID': 'Client ID de PayPal', 'PayPal mode': 'Modo de PayPal', 'Sandbox (tests)': 'Sandbox (pruebas)', 'Live': 'Real',
     'PayPal plans': 'Planes de PayPal', 'PayPal plan ID': 'ID del plan de PayPal', 'Price label': 'Precio (texto)', '+ Plan': '+ Plan',
     'Tier switches': 'Interruptores de los planes', 'Give a plan': 'Dar un plan', 'User email': 'Correo del usuario', 'Days': 'Días',
     'Plan given': 'Plan asignado', 'No user with that email (they must sign in once).': 'No hay un usuario con ese correo (debe iniciar sesión una vez).',
@@ -597,10 +597,12 @@
     $('#coWork').onclick = function () { pickSpace(cid); };
     $('#coLeave').onclick = function () {
       if (admin && (c.admins || []).length < 2) { A.toast(t('Make another member admin before you leave.')); return; }
-      if (!confirm(t('Leave this company? You lose access to its projects.'))) { return; }
-      var up = {}; up['members.' + user.uid] = FB.deleteField(); up.memberIds = FB.arrayRemove(user.uid);
-      if (admin) { up.admins = FB.arrayRemove(user.uid); }
-      FB.updateDoc(dref('companies/' + cid), up).then(function () { if (space && space.id === cid) { pickSpace('user'); } A.go('#/companies', true); }, err);
+      A.ask({ title: t('Leave this company? You lose access to its projects.'), text: c.name || '', ok: t('Leave'), danger: true }).then(function (ok) {
+        if (!ok) { return; }
+        var up = {}; up['members.' + user.uid] = FB.deleteField(); up.memberIds = FB.arrayRemove(user.uid);
+        if (admin) { up.admins = FB.arrayRemove(user.uid); }
+        FB.updateDoc(dref('companies/' + cid), up).then(function () { if (space && space.id === cid) { pickSpace('user'); } A.go('#/companies', true); }, err);
+      });
     };
     if (!admin) { return; }
     $('#moreBtn').onclick = function () {
@@ -645,7 +647,9 @@
     };
   }
   function deleteCompany(c) {
-    if (!confirm(t('Delete this company and all its projects and materials?'))) { return; }
+    A.ask({ title: t('Delete this company and all its projects and materials?'), text: c.name || '', ok: A.t('Delete'), danger: true }).then(function (ok) { if (ok) { deleteCompanyNow(c); } });
+  }
+  function deleteCompanyNow(c) {
     var root = 'companies/' + c.id;
     Promise.all(['sites', 'materials', 'textures', 'settings'].map(function (k) {
       return FB.getDocs(FB.collection(db, root + '/' + k)).then(function (q) { return Promise.all(q.docs.map(function (d) { return FB.deleteDoc(d.ref); })); });
@@ -712,8 +716,9 @@
           FB.updateDoc(dref('gallery_' + kind + '/' + item.id), { official: !item.official }).then(function () { gal[kind] = null; done(); }, err);
         } } : null,
         { label: t('Remove from gallery'), icon: 'trash', danger: true, run: function () {
-          if (!confirm(t('Remove this item from the public gallery?'))) { return; }
-          FB.deleteDoc(dref('gallery_' + kind + '/' + item.id)).then(function () { gal[kind] = null; done(); }, err);
+          A.ask({ title: t('Remove this item from the public gallery?'), text: item.name || '', ok: t('Remove from gallery'), danger: true }).then(function (ok) {
+            if (ok) { FB.deleteDoc(dref('gallery_' + kind + '/' + item.id)).then(function () { gal[kind] = null; done(); }, err); }
+          });
         } }
       ].filter(Boolean));
     };

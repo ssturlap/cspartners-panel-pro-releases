@@ -540,10 +540,12 @@
     }
     lockIfReadOnly();
     document.getElementById('mDel').onclick = function () {
-      if (!confirm(t('Delete this material?'))) { return; }
-      data.list = data.list.filter(function (x) { return x !== e; });
-      texDel(e.id); saveList();
-      A.go('#/materials', true);
+      A.ask({ title: t('Delete this material?'), text: e.name || '', ok: A.t('Delete'), danger: true }).then(function (ok) {
+        if (!ok) { return; }
+        data.list = data.list.filter(function (x) { return x !== e; });
+        texDel(e.id); saveList();
+        A.go('#/materials', true);
+      });
     };
   }
 

@@ -1028,9 +1028,10 @@ body.desk .edit-layout, body.desk .compose { max-width: 2000px; margin: 0 auto; 
 .rowbtns .icon-btn svg.mi { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .rowbtns .icon-btn:hover { color: var(--ink); border-color: var(--ink); background: var(--soft, #f0ebe2); }
 .rowbtns .delbtn:hover { color: #b3261e; border-color: #b3261e; background: #fdecea; }
-.rowbtns .icon-btn[data-tip]::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); right: 0; padding: 4px 8px; border-radius: 6px;
-  background: #24221f; color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(3px); transition: opacity .12s, transform .12s; z-index: 5; }
-.rowbtns .icon-btn[data-tip]:hover::after, .rowbtns .icon-btn[data-tip]:focus-visible::after { opacity: 1; transform: none; }
+.rowbtns .icon-btn[data-tip]::after { content: attr(data-tip); position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 8px; border-radius: 6px;
+  background: #24221f; color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(4px, -50%); transition: opacity .12s, transform .12s; z-index: 5; }
+.rowbtns .icon-btn[data-tip]:hover::after, .rowbtns .icon-btn[data-tip]:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
+.rowbtns .delbtn[data-tip]::after { background: #b3261e; }
 body.desk .dk-table .rowbtns .icon-btn { height: 34px; width: 34px; padding: 0; }
 
 /* AI renders (ui/render.js): a panel over the screen; while placing furniture on a photo, a bar at the bottom */
@@ -1039,3 +1040,26 @@ body.desk .dk-table .rowbtns .icon-btn { height: 34px; width: 34px; padding: 0; 
 .rd-sheet.placing { inset: auto 0 0 0; background: transparent; padding: 10px; pointer-events: none; }
 .rd-sheet.placing .rd-box { pointer-events: auto; box-shadow: 0 6px 30px rgba(0, 0, 0, .25); }
 @media (max-width: 760px) { .rd-sheet { padding: 0; } .rd-sheet .rd-box { border-radius: 0; } }
+
+/* side bar: version + Check for updates under the user */
+.dk-upd { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 10px 2px; }
+.dk-upd .dk-ver { padding: 0; }
+.dk-updbtn { font: inherit; font-size: 11px; font-weight: 600; color: #b9c6c9; background: transparent; border: 1px solid rgba(255,255,255,.18); border-radius: 6px; padding: 3px 8px; cursor: pointer; white-space: nowrap; }
+.dk-updbtn:hover { color: #fff; border-color: rgba(255,255,255,.45); background: rgba(255,255,255,.06); }
+.dk-updbtn:disabled { opacity: .6; cursor: default; }
+
+/* the app's own "are you sure?" box (instead of the browser's) */
+.ask { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px;
+  background: rgba(20, 24, 26, 0); backdrop-filter: blur(0); transition: background .16s, backdrop-filter .16s; }
+.ask.on { background: rgba(20, 24, 26, .45); backdrop-filter: blur(2px); }
+.ask-box { width: min(420px, 100%); background: #fff; border-radius: 16px; padding: 22px 22px 18px; box-shadow: 0 24px 60px rgba(0, 0, 0, .28);
+  text-align: center; transform: translateY(10px) scale(.97); opacity: 0; transition: transform .16s, opacity .16s; }
+.ask.on .ask-box { transform: none; opacity: 1; }
+.ask-ico { width: 48px; height: 48px; margin: 0 auto 10px; border-radius: 50%; display: grid; place-items: center; background: #fdecea; }
+.ask-ico .mi { width: 24px; height: 24px; fill: none; stroke: #b3261e; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ask-box h2 { margin: 0 0 6px; font-size: 17px; line-height: 1.3; color: var(--ink); }
+.ask-box p { margin: 0 0 4px; color: var(--muted); font-size: 14px; font-weight: 600; word-break: break-word; }
+.ask-btns { display: flex; gap: 10px; margin-top: 18px; }
+.ask-btns .btn { flex: 1; justify-content: center; }
+.ask-btns .btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
+.ask-btns .btn.danger:hover { background: #9a1f18; }

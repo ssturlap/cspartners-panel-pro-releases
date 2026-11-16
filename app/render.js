@@ -206,12 +206,15 @@
           else if (a === 'place') { S.placing = true; if (ctx.place) { ctx.place(true); } draw(); }
           else if (a === 'unplace') { S.placing = false; if (ctx.place) { ctx.place(false); } draw(); }
           else if (a === 'close') { if (ctx.setPhoto) { ctx.setPhoto(null); } ctx.close(); }
-          else if (a === 'delete' && S.cur && confirm(t('Delete this render and all its versions?'))) {
-            var id = S.cur.id;
-            ctx.call('delete', { rid: id }).then(function () {
-              S.renders = S.renders.filter(function (r) { return r.id !== id; }); S.cur = null; S.v = 0;
-              if (S.renders.length) { pick(S.renders[0]); } else { draw(); }
-            }, fail);
+          else if (a === 'delete' && S.cur) {
+            var id = S.cur.id, sure = ctx.ask ? ctx.ask(t('Delete this render and all its versions?')) : Promise.resolve(window.confirm(t('Delete this render and all its versions?')));
+            sure.then(function (ok) {
+              if (!ok) { return; }
+              ctx.call('delete', { rid: id }).then(function () {
+                S.renders = S.renders.filter(function (r) { return r.id !== id; }); S.cur = null; S.v = 0;
+                if (S.renders.length) { pick(S.renders[0]); } else { draw(); }
+              }, fail);
+            });
           }
         };
       });
