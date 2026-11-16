@@ -10,6 +10,23 @@
   var R = {};
   window.PPReports = R;
 
+  // A readout as HTML: plain text, or rows of tab-separated cells shown as a small table whose
+  // columns line up over and under (numbers on the right).
+  R.readoutHtml = function (txt) {
+    var e = function (x) { return String(x).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    if (String(txt).indexOf('\t') < 0) { return e(txt); }
+    return '<table class="ro-t">' + String(txt).split('\n').map(function (line, i) {
+      return '<tr' + (i === 0 ? ' class="h"' : '') + '>' + line.split('\t').map(function (c, k) { return '<td' + (k === 0 ? ' class="l"' : '') + '>' + e(c) + '</td>'; }).join('') + '</tr>';
+    }).join('') + '</table>';
+  };
+  if (!document.getElementById('ro-css')) {
+    var st = document.createElement('style');
+    st.id = 'ro-css';
+    st.textContent = '.ro-t{border-collapse:collapse;font-variant-numeric:tabular-nums}.ro-t td{padding:1px 4px;text-align:right;white-space:nowrap}' +
+      '.ro-t td.l{text-align:left;padding-left:0;padding-right:10px;font-weight:600}.ro-t tr.h td{font-size:.82em;opacity:.65;text-align:right}.ro-t td:empty{padding:0 2px}';
+    (document.head || document.documentElement).appendChild(st);
+  }
+
   // ------------------------------------------------------------------ 2D front view
   var ORDER = ['back', 'base', 'carcass', 'shelf', 'drawer', 'hardware', 'top', 'frame', 'front'];
 
@@ -105,13 +122,15 @@
       var es = ctx.es, show = ctx.show;
       var n = (p.skin_l ? 1 : 0) + (p.skin_r ? 1 : 0), st = n * F.skinT(p);
       var cw = p.skin_add ? p.width : p.width - st;
-      var txt = (es ? 'Caja ' : 'Carcass ') + show(cw) + ' × ' + show(p.height) + ' × ' + show(p.depth) + u(ctx);
+      // rows of cells (tab-separated) so the sizes line up over and under (R.readoutHtml)
+      var unit = u(ctx).trim();
+      var txt = '\t' + (es ? 'Ancho' : 'W') + '\t\t' + (es ? 'Alto' : 'H') + '\t\t' + (es ? 'Fondo' : 'D') + '\t\n' +
+        (es ? 'Caja' : 'Carcass') + '\t' + show(cw) + '\t×\t' + show(p.height) + '\t×\t' + show(p.depth) + '\t' + unit;
       var bb = ctx.bbox;
       if (bb) {
-        txt += (es ? ' · total ' : ' · overall ') + show(bb[1][0] - bb[0][0]) + ' × ' + show(bb[1][2] - bb[0][2]) +
-               ' × ' + show(bb[1][1] - bb[0][1]) + u(ctx);
+        txt += '\n' + (es ? 'Total' : 'Overall') + '\t' + show(bb[1][0] - bb[0][0]) + '\t×\t' + show(bb[1][2] - bb[0][2]) + '\t×\t' + show(bb[1][1] - bb[0][1]) + '\t' + unit;
       }
-      return txt + (es ? '  (ancho × alto × fondo)' : '  (W × H × D)');
+      return txt;
     },
     // Metal box system: the sizes the system gives (or the ones typed by hand).
     box: function (p, ctx) {

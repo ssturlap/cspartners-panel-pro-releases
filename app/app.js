@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.69';
-  var BUILD = '28090dea8c';
+  var VERSION = '0.3.70';
+  var BUILD = 'daed34d3d4';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1763,7 +1763,7 @@
     if (SKIP[key] || !c(p) || (p.panel && key === 'inner_w')) { return ''; }
     if (type === 'info') {
       var ik = window.PPReports.INFO_KEYS[key], txt = ik ? window.PPReports.info[ik](p, rctx()) : '';
-      return txt ? '<p class="readout">' + esc(txt) + '</p>' : '';
+      return txt ? '<div class="readout">' + window.PPReports.readoutHtml(txt) + '</div>' : '';
     }
     if (type === 'btn') { return '<button type="button" class="btn small fbtn" data-btn="' + key + '">' + esc(label) + '</button>'; }
     if (type === 'cards') {

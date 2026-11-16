@@ -1,15 +1,13 @@
 {
-  "version": "0.3.69",
+  "version": "0.3.70",
   "date": "2026-11-16",
-  "title": "Tidier settings",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.69.rbz",
+  "title": "Carcass and overall sizes one over the other",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.70.rbz",
   "notes": [
-    "The full text on hover no longer pops up over scrolling bars (like the tab bar), only over texts that are cut off.",
-    "PanelPro Web: every tab is laid out the same way — each setting's title on top with its value and quick picks under it on the left; on / off switches stay…"
+    "Decorative panels: the carcass size and the overall size are shown one over the other with the widths, heights and depths lined up under W, H and D."
   ],
-  "title_es": "Ajustes más ordenados",
+  "title_es": "Medidas de caja y total una sobre otra",
   "notes_es": [
-    "El texto completo al pasar el mouse ya no aparece sobre barras que se desplazan (como la de pestañas), solo sobre textos cortados.",
-    "PanelPro Web: todas las pestañas se organizan igual — el título de cada ajuste arriba con su valor y opciones rápidas debajo a la izquierda; los…"
+    "Paneles decorativos: la medida de la caja y la medida total se muestran una sobre otra con los anchos, altos y fondos alineados bajo Ancho, Alto y Fondo."
   ]
 }
