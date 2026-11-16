@@ -74,8 +74,8 @@
         '<span><b>' + esc(u.displayName || u.email) + '</b><small>' + esc(C.planLine()) + '</small></span></a>';
     }
     // version and Check for updates, under the user (moved here from Settings)
-    out += '<div class="dk-upd"' + (u ? '' : ' style="margin-top:auto"') + '><span class="dk-ver" title="PanelPro Web ' + esc(A.version) + '">v' + esc(A.version) + '</span>' +
-      '<button type="button" id="dkUpd" class="dk-updbtn">' + esc(A.t('Check for updates')) + '</button></div>';
+    out += '<div class="dk-upd"' + (u ? '' : ' style="margin-top:auto"') + '><button type="button" id="dkUpd" class="dk-updbtn">' + esc(A.t('Check for updates')) + '</button>' +
+      '<span class="dk-ver" title="PanelPro Web ' + esc(A.version) + '">v' + esc(A.version) + '</span></div>';
     return out;
   }
   function wrap(html) {

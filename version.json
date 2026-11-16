@@ -1,21 +1,17 @@
 {
-  "version": "0.3.65",
+  "version": "0.3.66",
   "date": "2026-11-16",
-  "title": "AI renders (photoreal pictures of your modules)",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.65.rbz",
+  "title": "Crown on a module, row heights on the preview",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.66.rbz",
   "notes": [
-    "Extensions › CSPARTNERS PANEL PRO › Render (AI)… (also on the right-click menu): the view as it is now — modules and everything else in the model (walls,…",
-    "Tell the AI what to change (\"warmer light\", \"darker floor\"): each change is a new version made from the one you picked; every version is kept with the…",
-    "The materials of your modules (names and texture swatches) go with the view so the wood and stone look like yours.",
-    "PanelPro Web: the camera button on the 3D view (module editor and composition) does the same, with a photo studio or a room as the setting — or your own…",
-    "Renders are made on the PanelPro server and need a signed-in account; each plan has a monthly number of renders (set on the Developer screen). They start…"
+    "Decorative panels › Crown: strips on edge on top of the module, on the sides you pick (front, left, right, back or any combination such as front + left or…",
+    "The 3D preview shows a second dimension line with the height of each row (base, each row, top), next to the overall height — in the plugin too: the new…",
+    "PanelPro Web: \"Check for updates\" moved to the side bar under your account; the app asks its own questions (delete, discard) instead of the browser's; the…"
   ],
-  "title_es": "Renders con IA (imágenes fotorrealistas de sus módulos)",
+  "title_es": "Corona en un módulo, alturas de filas en la vista previa",
   "notes_es": [
-    "Extensiones › CSPARTNERS PANEL PRO › Render (IA)… (también en el menú de clic derecho): la vista tal como está — los módulos y todo lo demás del modelo…",
-    "Dígale a la IA qué cambiar (\"luz más cálida\", \"piso más oscuro\"): cada cambio es una nueva versión hecha a partir de la que eligió; todas las versiones se…",
-    "Los materiales de sus módulos (nombres y muestras de textura) van con la vista para que la madera y la piedra se vean como las suyas.",
-    "PanelPro Web: el botón de cámara en la vista 3D (editor de módulo y composición) hace lo mismo, con un estudio o un ambiente — o su propia foto del espacio:…",
-    "Los renders se hacen en el servidor de PanelPro y necesitan una cuenta con sesión iniciada; cada plan tiene un número de renders por mes (se ajusta en la…"
+    "Paneles decorativos › Corona: listones de canto sobre el módulo, en los lados que elija (frente, izquierda, derecha, atrás o cualquier combinación como…",
+    "La vista 3D muestra una segunda línea de cota con la altura de cada fila (base, cada fila, tapa), junto a la altura total — también en el plugin: el nuevo…",
+    "PanelPro Web: \"Buscar actualizaciones\" pasó a la barra lateral debajo de su cuenta; la app hace sus propias preguntas (eliminar, descartar) en lugar de las…"
   ]
 }

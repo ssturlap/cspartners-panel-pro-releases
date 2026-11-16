@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.65** — AI renders (photoreal pictures of your modules)  
-Download [cspartners_panel_pro_0.3.65.rbz](releases/cspartners_panel_pro_0.3.65.rbz) and install it in SketchUp:
+**Latest: 0.3.66** — Crown on a module, row heights on the preview  
+Download [cspartners_panel_pro_0.3.66.rbz](releases/cspartners_panel_pro_0.3.66.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.66 | [cspartners_panel_pro_0.3.66.rbz](releases/cspartners_panel_pro_0.3.66.rbz) |
 | 0.3.65 | [cspartners_panel_pro_0.3.65.rbz](releases/cspartners_panel_pro_0.3.65.rbz) |
 | 0.3.64 | [cspartners_panel_pro_0.3.64.rbz](releases/cspartners_panel_pro_0.3.64.rbz) |
 | 0.3.63 | [cspartners_panel_pro_0.3.63.rbz](releases/cspartners_panel_pro_0.3.63.rbz) |

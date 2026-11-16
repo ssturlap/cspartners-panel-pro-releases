@@ -15,6 +15,7 @@
   var NOTBED = function (p) { return !p.bed && !p.slab; };
   var SLAB = function (p) { return !!p.slab; };             // a loose stone piece (made by a composition)
   var NOTSTONELESS = function (p) { return !p.bed && !p.panel && !p.slab; };   // modules that can carry a stone top
+  var CROWN = function (p) { return !!p.crown && !p.bed && !p.panel && !p.slab; };
   var STONE = function (p) { return !!p.stone && !p.bed && !p.panel && !p.slab; };
 
   // ---- what the module actually has (from its layout). A setting tied to one of these shows only
@@ -199,6 +200,16 @@
       ['skin_top', 'Top projection', 'len', function (p) { return SKINB(p) && !(p.add_top && p.top_skin_mode === 'over') && !(p.add_top && p.skin_top_flush); }],
       ['skin_floor', 'Bottom: to the floor', 'bool', SKINB],
       ['skin_bottom', 'Bottom projection', 'len', function (p) { return SKINB(p) && !p.skin_floor; }],
+      ['#', 'Crown', NOTSTONELESS],
+      ['crown', 'Crown (strips on edge on top of the module)', 'bool', NOTSTONELESS],
+      ['crown_sides', 'Crown sides', 'sel', [['F', 'Front'], ['FL', 'Front + left'], ['FR', 'Front + right'], ['FLR', 'Front + both sides'], ['FLRB', 'All four sides'],
+        ['L', 'Left'], ['R', 'Right'], ['LR', 'Both sides'], ['B', 'Back'], ['FB', 'Front + back'], ['LB', 'Left + back'], ['RB', 'Right + back'], ['LRB', 'Both sides + back'],
+        ['FLB', 'Front + left + back'], ['FRB', 'Front + right + back']], CROWN],
+      ['crown_pos', 'Crown position', 'sel', [['fronts', 'In line with the fronts'], ['carcass', 'In line with the carcass edge'], ['recessed', 'Recessed']], CROWN],
+      ['crown_setback', 'Recessed by', 'len', function (p) { return CROWN(p) && p.crown_pos === 'recessed'; }],
+      ['crown_h', 'Crown height', 'len', CROWN],
+      ['crown_t_same', 'Same as panel thickness', 'bool', CROWN],
+      ['crown_t', 'Crown thickness', 'len', function (p) { return CROWN(p) && !p.crown_t_same; }],
       ['#', 'Stone top', NOTSTONELESS],
       ['stone', 'Show a granite / marble top (picture only, not cut)', 'bool', NOTSTONELESS],
       ['stone_t', 'Slab', 'sel', [['20', 'Single 2 cm slab'], ['40', '4 cm (doubled, double bullnose)']], STONE],
@@ -325,7 +336,7 @@
       ['mat_frame', 'Face frame', 'mat', function (p) { return F_.showAll || p.construction === 'face_frame'; }],
       ['mat_drawer', 'Drawer boxes', 'mat', DRAWER],
       ['mat_inner', 'Inner drawer fronts and shoe shelves', 'mat', ctx(HAS.inner)],
-      ['mat_top', 'Decorative top', 'mat', function (p) { return F_.showAll || !!p.add_top; }],
+      ['mat_top', 'Decorative top and crown', 'mat', function (p) { return F_.showAll || !!p.add_top || !!p.crown; }],
       ['mat_kick', 'Toe kick / plinth', 'mat', function (p) { return p.kick_type === 'integral' || p.kick_type === 'plinth' || (p.bed && p.bed_style === 'floating'); }],
       ['mat_skin', 'Decorative side panels', 'mat', function (p) { return F_.showAll || SKINB(p); }],
       ['#', 'Visible end panels', NOTBED],

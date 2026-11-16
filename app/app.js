@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.65';
-  var BUILD = 'f46c54f025';
+  var VERSION = '0.3.66';
+  var BUILD = '1d1dcb7188';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1597,6 +1597,10 @@
     if (b.headboard) { out.push([0, b.headboard[2], 4]); }   // the headboard
     return out;
   }
+  // the rows' heights as a second dimension line (floor → top: base, each row, top panels)
+  function rowHeights(r) {
+    return r && r.row_dims ? r.row_dims.map(function (z) { return [z[0], z[1], 1]; }) : null;
+  }
   function rebuild() {
     try {
       var r = Engine.call('build', { params: E.params, lang: lang });
@@ -1626,7 +1630,7 @@
       return;
     }
     P3D.setSoft(E.params ? E.params.soft_close : true);
-    P3D.setHeights(bedHeights(r));
+    P3D.setHeights(bedHeights(r) || rowHeights(r));
     // a headboard wider than the bed: the bed's width as well as the headboard's
     var hbw = r.bed && r.bed.headboard;
     P3D.setWidths(hbw && hbw[1] - hbw[0] > r.bed.width + 0.5 ? [[0, r.bed.width, 1], [hbw[0], hbw[1], 2]] : null);
