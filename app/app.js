@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.71';
-  var BUILD = '932d99ba64';
+  var BUILD = 'a3ed212d27';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -552,7 +552,7 @@
         return C.call('renderCall', Object.assign({ action: action }, data), 300000).catch(function (e) {
           // the function not published yet (or the server down) answers "internal" / "not-found"
           var code = String((e && e.code) || ''), msg = String((e && e.message) || '');
-          if (/internal|not-found|unavailable/.test(code) || /^internal/.test(msg)) { throw new Error(t('The render server is not switched on yet — renders start working once it is set up.')); }
+          if (/internal|not-found/.test(code) || /^internal/.test(msg)) { throw new Error(t('The render server is not switched on yet — renders start working once it is set up.')); }
           throw e;
         });
       },
