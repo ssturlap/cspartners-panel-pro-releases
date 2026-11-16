@@ -167,8 +167,9 @@
     var old = document.querySelector('.dpad-wrap'); if (old) { old.remove(); }
     var w = document.createElement('div');
     w.className = 'dpad-wrap';
-    var val = opts.value == null || opts.value === 'auto' ? '' : A.fmt(Number(opts.value) / k);
+    var val = opts.value == null || opts.value === 'auto' ? '' : A.fmt(Number(opts.value) / k), md = opts.modes ? opts.modes.value : null;
     w.innerHTML = '<div class="dpad" role="dialog" aria-label="' + esc(opts.label) + '"><label>' + esc(opts.label) + '</label>' +
+      (opts.modes ? '<div class="dpad-modes seg">' + opts.modes.list.map(function (o) { return '<button type="button" data-mode="' + o[0] + '" aria-pressed="' + (md === o[0]) + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' : '') +
       '<div class="dpad-in"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="' + esc(val) + '" placeholder="' + esc(t('Type a size or a calculation')) + '"><span>' + esc(unit) + '</span></div>' +
       '<div class="dpad-res"></div>' +
       ((opts.chips || []).length ? '<div class="dpad-chips">' + opts.chips.map(function (c) { var v = A.fmt(c / k); return '<button type="button" data-chip="' + v + '">' + v + '</button>'; }).join('') + '</div>' : '') +
@@ -190,7 +191,7 @@
       if (v == null) { res.classList.add('bad'); res.textContent = A.t('Enter a size'); return; }
       if (isNaN(v) || v < 0 || (v === 0 && !opts.allowZero)) { res.classList.add('bad'); res.textContent = A.t('Not a valid calculation'); return; }
       close();
-      opts.done(Math.round(v * k * 1000) / 1000);
+      opts.done(Math.round(v * k * 1000) / 1000, md);
     };
     inp.addEventListener('input', show);
     inp.addEventListener('keydown', function (e) {
@@ -200,7 +201,11 @@
     w.addEventListener('mousedown', function (e) { if (e.target === w) { close(); } });
     box.addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b) { return; }
-      if (b.hasAttribute('data-chip')) { inp.value = b.getAttribute('data-chip'); show(); inp.focus(); }
+      if (b.hasAttribute('data-mode')) {
+        md = b.getAttribute('data-mode');
+        box.querySelectorAll('[data-mode]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        inp.value = A.fmt(opts.modes.values[md] / k); show(); inp.focus(); inp.select();
+      } else if (b.hasAttribute('data-chip')) { inp.value = b.getAttribute('data-chip'); show(); inp.focus(); }
       else if (b.hasAttribute('data-auto')) { close(); opts.done('auto'); }
       else if (b.hasAttribute('data-set')) { set(); }
     });

@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.66';
-  var BUILD = 'a53faebb5e';
+  var BUILD = '8ae191f5f9';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -43,7 +43,8 @@
     'Names used in the cut list and its files. Leave a box empty for the default.': 'Nombres usados en la lista de corte y sus archivos. Deje la casilla vacía para el nombre por defecto.',
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
-    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Are you sure?': '¿Está seguro?', 'Discard': 'Descartar', 'Replace': 'Reemplazar', 'OK': 'Aceptar',
+    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Outside': 'Exterior', 'Between the sides': 'Entre costados', 'Module name': 'Nombre del módulo', 'Height from the floor': 'Altura desde el piso',
+    'Raised off the floor (besides the toe kick)': 'Elevado del piso (además del zócalo)', 'Are you sure?': '¿Está seguro?', 'Discard': 'Descartar', 'Replace': 'Reemplazar', 'OK': 'Aceptar',
     'Renders need a signed-in PanelPro account.': 'Los renders necesitan una cuenta de PanelPro con sesión iniciada.', 'The 3D view is not available on this device.': 'La vista 3D no está disponible en este dispositivo.',
     'Could not capture the 3D view.': 'No se pudo capturar la vista 3D.',
     'New composition: top, back and side panels…': 'Nueva composición: tope, panel trasero y laterales…', 'Composition: top, back and side panels…': 'Composición: tope, panel trasero y laterales…',
@@ -336,6 +337,8 @@
     pad.fresh = true;
     pad.allowZero = !!opts.allowZero;
     $('#padLabel').textContent = opts.label;
+    pad.modes = opts.modes || null; pad.mode = pad.modes ? pad.modes.value : null;
+    padModes();
     $('#padChips').innerHTML = (opts.chips || []).map(function (c) {
       var cv = fmt(c / pad.k);
       return '<button type="button" data-chip="' + cv + '">' + cv + '</button>';
@@ -346,6 +349,13 @@
     $('#pad .pad-unit').textContent = pad.unit;
     $('#pad').hidden = false;
     padShow();
+  }
+  // a choice above the keys (the width: outside / between the sides); switching shows that value
+  function padModes() {
+    var el = $('#padModes'), m = pad.modes;
+    if (!el) { return; }
+    el.hidden = !m;
+    el.innerHTML = m ? m.list.map(function (o) { return '<button type="button" data-mode="' + o[0] + '" aria-pressed="' + (pad.mode === o[0]) + '">' + esc(o[1]) + '</button>'; }).join('') : '';
   }
   function padShow() {
     $('#padExpr').textContent = pad.expr || '0';
@@ -371,13 +381,15 @@
         padShow();
       } else if (chip) {
         pad.expr = chip; pad.fresh = false; padShow();
+      } else if (b.getAttribute('data-mode')) {
+        pad.mode = b.getAttribute('data-mode'); pad.expr = fmt(pad.modes.values[pad.mode] / pad.k); pad.fresh = true; padModes(); padShow();
       } else if (act === 'cancel') { closePad(); }
       else if (act === 'auto') { var cb0 = pad.cb; closePad(); if (cb0) { cb0('auto'); } }
       else if (act === 'set') {
         var v = calc(pad.expr);
         if (v == null) { $('#padResult').textContent = t('Enter a size'); return; }
         if (isNaN(v) || v < 0 || (v === 0 && !pad.allowZero)) { $('#padResult').classList.add('bad'); $('#padResult').textContent = t('Not a valid calculation'); return; }
-        var cb = pad.cb; closePad(); if (cb) { cb(Math.round(v * pad.k * 1000) / 1000); }
+        var cb = pad.cb, md = pad.mode; closePad(); if (cb) { cb(Math.round(v * pad.k * 1000) / 1000, md); }
       }
     });
     document.addEventListener('keydown', function (e) {
@@ -1710,12 +1722,13 @@
   var KICK_TITLE = 'Base / toe kick';   // its own step after Box
   var TABS = [['layout', 'Layout', ['layout']], ['module', 'Module', ['module']],
               ['box', 'Box', [{ sec: 'box', until: KICK_TITLE }]],
-              ['kick', 'Toe kick', [{ sec: 'box', from: KICK_TITLE, until: DECO_TITLE }]],
+              ['kick', 'Toe kick', [{ sec: 'box', from: KICK_TITLE, until: DECO_TITLE }, { defs: [['elevation', 'Off the floor', 'len', null, 'here']] }]],
               ['panels', 'Decorative panels', [{ sec: 'box', from: DECO_TITLE }, { sec: 'materials', from: ENDS_TITLE, until: CUT_TITLE }]],
               ['fronts', 'Fronts', ['fronts', 'frame', 'pulls', 'motion']], ['drawers', 'Drawers', ['drawers']],
               ['materials', 'Materials', [{ sec: 'materials', until: ENDS_TITLE }, { sec: 'materials', from: CUT_TITLE }]]];
   function sectionDefs(spec) {
     if (typeof spec === 'string') { return F().SECTIONS[spec] || []; }
+    if (spec.defs) { return spec.defs; }
     var list = F().SECTIONS[spec.sec] || [], out = [], on = !spec.from;
     list.forEach(function (d) {
       if (d[0] === '#' && d[1] === spec.from) { on = true; }
@@ -1741,7 +1754,11 @@
   }
   function fieldHtml(d, p) {
     var key = d[0], label = t(WEB_LABEL[key] || d[1]), type = d[2];
-    var c = F().condOf(d);
+    var c = d[3] === null ? function (q) { return !q.bed && !q.panel && !q.slab; } : F().condOf(d);
+    // shown elsewhere on the web: the name over the sizes, the inner width in the width keypad,
+    // the height off the floor in the Toe kick tab (loose panels / stone pieces keep it here)
+    if (key === 'name' || key === 'inner_w' || (key === 'elevation' && d[4] !== 'here' && !p.panel && !p.slab)) { return ''; }
+    if (key === 'elevation' && d[4] === 'here') { label = t(p.kick_type === 'none' ? 'Height from the floor' : 'Raised off the floor (besides the toe kick)'); }
     if (key === '#') { return F().cond(d[2])(p) ? '<h3 class="grp">' + esc(label) + '</h3>' : ''; }
     if (SKIP[key] || !c(p) || (p.panel && key === 'inner_w')) { return ''; }
     if (type === 'info') {
@@ -1907,7 +1924,8 @@
     if (!body) { return; }
     var p = E.params;
     var scrollY = body.scrollTop;
-    var html = '<div class="measure">' + (p.panel ? panelDims(p).map(function (d) {
+    var html = '<input class="ed-name" data-text="name" value="' + esc(p.name || '') + '" placeholder="' + esc(t('Module name')) + '" autocomplete="off" aria-label="' + esc(t('Name')) + '">' +
+      '<div class="measure">' + (p.panel ? panelDims(p).map(function (d) {
       // a loose panel: Length (the grain) × Width × Thickness, whichever way it stands
       return '<button type="button" data-pdim="' + d[0] + '" class="' + (E.changed[d[1]] ? 'changed' : '') + '"><span class="lbl">' + esc(t(d[2])) + '</span>' +
         '<span class="num">' + L(p[d[1]]) + '</span><span class="unit">' + U() + '</span></button>';
@@ -1924,7 +1942,7 @@
     // show only when something in them applies to this module (Layout and Materials always)
     var tabs = p.slab ? TABS.filter(function (x) { return x[0] === 'module'; })
       : p.panel || p.bed ? TABS.filter(function (x) { return x[0] === 'module' || x[0] === 'materials'; })
-      : TABS.filter(function (x) { return x[0] === 'layout' || x[0] === 'module' || x[0] === 'materials' || tabFields(x, p) !== ''; });
+      : TABS.filter(function (x) { return x[0] === 'layout' || x[0] === 'materials' || tabFields(x, p) !== ''; });   // Module only when something is left in it (corner, fridge…)
     var tab = tabs.find(function (x) { return x[0] === editTab; }) || tabs[0];
     html += '<nav class="etabs" role="tablist">' + tabs.map(function (tb) {
       return '<button type="button" role="tab" data-tab="' + tb[0] + '" aria-selected="' + (tab[0] === tb[0]) + '">' + esc(t(tb[1])) + '</button>';
@@ -2023,7 +2041,10 @@
         return;
       }
       if ((a = b.getAttribute('data-dim'))) {
-        openPad({ label: dimLabel(a), value: p[a], chips: p.bed || p.slab ? undefined : CHIPS[a], done: function (v) {
+        var wm = a === 'width' && !p.bed && !p.slab && !p.panel ? { list: [['outer', t('Outside')], ['inner', t('Between the sides')]], value: 'outer',
+          values: { outer: p.width, inner: Math.round((p.width - F().innerExtra(p)) * 1000) / 1000 } } : null;
+        openPad({ label: dimLabel(a), value: p[a], chips: p.bed || p.slab ? undefined : CHIPS[a], modes: wm, done: function (v, mode) {
+          if (mode === 'inner') { setP('inner_w', v); changed(true); return; }
           E.params[a] = v; E.changed[a] = true;
           if (E.params.bed) {
             if (a === 'height') { E.params.bed_height = v; }
