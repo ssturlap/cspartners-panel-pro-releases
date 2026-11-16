@@ -168,7 +168,7 @@
               return '<button type="button" data-size="' + k + '" class="' + (S.size === k ? 'on' : '') + '">' + k + '</button>';
             }).join('') + '</div></div>' +
             '<div class="rd-row"><button type="button" class="rd-btn go" data-act="render"' + (S.busy || remaining === 0 ? ' disabled' : '') + '>' + esc(t('Render')) + '</button>' +
-            '<span class="rd-sub">' + (remaining == null ? '' : esc(t('Renders left this month')) + ': ' + remaining) + '</span></div></div>' +
+            '<span class="rd-sub">' + (remaining == null ? '' : remaining > 50000 ? esc(t('Unlimited renders (developer account) — each one is paid from your Google AI credit')) : esc(t('Renders left this month')) + ': ' + remaining) + '</span></div></div>' +
           (cur ? '<div class="rd-card"><h4>' + esc(t('Renders of this project')) + ': ' + S.renders.length + '</h4>' +
             '<div class="rd-sub">' + esc(t('All of them are in the strip under the picture (newest first). This one') + ': ' + new Date(cur.created).toLocaleString(ctx.lang) + ' · ' + t(SCENE_LABEL[cur.scene] || cur.scene) + ' · ' + cur.versions.length + ' ' + t('versions')) + '</div>' +
             '<button type="button" class="rd-btn small" data-act="delete">' + esc(t('Delete this render and its versions')) + '</button></div>' : '') +
@@ -237,7 +237,8 @@
     refreshStatus();
     ctx.call('list', { site: ctx.site }).then(function (r) {
       S.renders = r.renders || [];
-      if (S.renders.length) { pick(S.renders[0]); } else { draw(); }
+      var st = ctx.start && S.renders.find(function (x) { return x.id === ctx.start.rid; });
+      if (st) { pick(st, ctx.start.v); } else if (S.renders.length) { pick(S.renders[0]); } else { draw(); }
     }, function (e) { S.err = (e && e.message) || ''; draw(); });
   }
 

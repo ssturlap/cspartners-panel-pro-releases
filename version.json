@@ -1,13 +1,15 @@
 {
-  "version": "0.3.73",
+  "version": "0.3.74",
   "date": "2026-11-16",
-  "title": "Every render in view",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.73.rbz",
+  "title": "Renders gallery",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.74.rbz",
   "notes": [
-    "Render window: every render of the project and all their versions are in the strip under the picture (newest first, #2 v1, #1 v2 ← v1…), so a new render…"
+    "PanelPro Web: a new Renders page for each project (side menu, under Project manual; a Renders button on the phone) shows every AI picture of the project,…",
+    "Render window: a developer account shows \"Unlimited renders\" instead of a large number left."
   ],
-  "title_es": "Todos los renders a la vista",
+  "title_es": "Galería de renders",
   "notes_es": [
-    "Ventana de render: todos los renders del proyecto y todas sus versiones están en la tira bajo la imagen (el más reciente primero, #2 v1, #1 v2 ← v1…), así…"
+    "PanelPro Web: una nueva página Renders en cada proyecto (menú lateral, bajo Manual del proyecto; un botón Renders en el teléfono) muestra todas las imágenes…",
+    "Ventana de render: una cuenta de desarrollador muestra \"Renders ilimitados\" en lugar de un número grande."
   ]
 }

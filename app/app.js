@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.73';
-  var BUILD = 'f88d25abe5';
+  var VERSION = '0.3.74';
+  var BUILD = '68149da0b7';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -43,9 +43,11 @@
     'Names used in the cut list and its files. Leave a box empty for the default.': 'Nombres usados en la lista de corte y sus archivos. Deje la casilla vacía para el nombre por defecto.',
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
-    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Undo': 'Deshacer', 'The render server is not switched on yet — renders start working once it is set up.': 'El servidor de renders aún no está activado — los renders funcionarán cuando se configure.', 'Redo': 'Rehacer', 'Undone': 'Deshecho', 'Redone': 'Rehecho', 'Nothing to undo': 'Nada que deshacer', 'Outside': 'Exterior', 'Between the sides': 'Entre costados', 'Module name': 'Nombre del módulo', 'Height from the floor': 'Altura desde el piso',
+    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Renders': 'Renders', 'No renders yet': 'Aún no hay renders',
+    'Open a module or the composition and press the camera button on the 3D view.': 'Abra un módulo o la composición y pulse el botón de cámara en la vista 3D.',
+    'pictures': 'imágenes', 'renders': 'renders', 'Project': 'Proyecto', 'Undo': 'Deshacer', 'The render server is not switched on yet — renders start working once it is set up.': 'El servidor de renders aún no está activado — los renders funcionarán cuando se configure.', 'Redo': 'Rehacer', 'Undone': 'Deshecho', 'Redone': 'Rehecho', 'Nothing to undo': 'Nada que deshacer', 'Outside': 'Exterior', 'Between the sides': 'Entre costados', 'Module name': 'Nombre del módulo', 'Height from the floor': 'Altura desde el piso',
     'Raised off the floor (besides the toe kick)': 'Elevado del piso (además del zócalo)', 'Are you sure?': '¿Está seguro?', 'Discard': 'Descartar', 'Replace': 'Reemplazar', 'OK': 'Aceptar',
-    'Renders need a signed-in PanelPro account.': 'Los renders necesitan una cuenta de PanelPro con sesión iniciada.', 'The 3D view is not available on this device.': 'La vista 3D no está disponible en este dispositivo.',
+    'To make a new render, open the module or the composition and press the camera button there.': 'Para hacer un render nuevo, abra el módulo o la composición y pulse allí el botón de cámara.', 'Renders need a signed-in PanelPro account.': 'Los renders necesitan una cuenta de PanelPro con sesión iniciada.', 'The 3D view is not available on this device.': 'La vista 3D no está disponible en este dispositivo.',
     'Could not capture the 3D view.': 'No se pudo capturar la vista 3D.',
     'New composition: top, back and side panels…': 'Nueva composición: tope, panel trasero y laterales…', 'Composition: top, back and side panels…': 'Composición: tope, panel trasero y laterales…',
     'Tap the modules of the composition, then Next.': 'Toque los módulos de la composición y luego Siguiente.',
@@ -487,6 +489,7 @@
         return;
       }
       if (p[2] === 'cut') { return renderCut(s); }
+      if (p[2] === 'renders') { return renderGallery(s); }
       if (p[2] === 'opt') { return renderOpt(s, false); }
       if (p[2] === 'compose') { return window.PPCompose.render(s); }
       return renderSite(s);
@@ -532,8 +535,75 @@
     });
     return Promise.all(jobs).then(function (l) { return l.filter(Boolean).slice(0, 6); });
   }
+  // ------------------------------------------------------------------ render gallery
+  // Every AI render of the project (its modules and compositions) with all their versions; tap a
+  // picture to see it big, save it, or open it in the render window to change it.
+  function renderGallery(s) {
+    var C = window.PPCloud, base = '#/site/' + encodeURIComponent(s.id);
+    show('<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Renders')) +
+      '<span class="sub">' + esc(s.name) + '</span></h1></header><div class="page page-wide"><div id="galBody"><p class="meta-line">' + esc(t('Loading…')) + '</p></div></div>');
+    $('#back').onclick = function () { go(base); };
+    var body = $('#galBody');
+    if (!C || !C.on || !C.user()) { body.innerHTML = '<div class="empty"><p>' + esc(t('Renders need a signed-in PanelPro account.')) + '</p></div>'; return; }
+    var cache = {};
+    function img(rid, v, el) {
+      var k = rid + ':' + v;
+      if (cache[k]) { if (el) { el.style.backgroundImage = 'url(' + cache[k] + ')'; } return Promise.resolve(cache[k]); }
+      return C.call('renderCall', { action: 'image', rid: rid, v: v }, 120000).then(function (r) {
+        cache[k] = 'data:' + (r.mime || 'image/jpeg') + ';base64,' + r.data;
+        if (el) { el.style.backgroundImage = 'url(' + cache[k] + ')'; }
+        return cache[k];
+      });
+    }
+    C.call('renderCall', { action: 'list', site: s.id }, 60000).then(function (res) {
+      var list = res.renders || [];
+      if (!list.length) {
+        body.innerHTML = '<div class="empty"><h2>' + esc(t('No renders yet')) + '</h2><p>' + esc(t('Open a module or the composition and press the camera button on the 3D view.')) + '</p></div>';
+        return;
+      }
+      var total = list.reduce(function (a, r) { return a + r.versions.length; }, 0);
+      body.innerHTML = '<p class="meta-line">' + total + ' ' + esc(t('pictures')) + ' · ' + list.length + ' ' + esc(t('renders')) + '</p>' + list.map(function (r) {
+        var what = (r.title || '').split(' · ')[0] || t('Project');
+        return '<section class="gal-r"><h3>' + esc(what) + ' <small>' + esc(new Date(r.created).toLocaleString(lang) + ' · ' + t((window.PPRender.SCENE_LABEL || {})[r.scene] || r.scene)) + '</small></h3>' +
+          '<div class="gal-grid">' + r.versions.slice().reverse().map(function (x) {
+            return '<button type="button" class="gal-pic" data-rid="' + esc(r.id) + '" data-v="' + x.v + '"><span class="th"></span>' +
+              '<small>v' + x.v + (x.parent ? ' ← v' + x.parent : '') + (x.prompt ? ' · ' + esc(x.prompt) : '') + '</small></button>';
+          }).join('') + '</div></section>';
+      }).join('');
+      var n = 0;
+      body.querySelectorAll('.gal-pic').forEach(function (b) {
+        var th = b.querySelector('.th');
+        if (n++ < 60) { img(b.getAttribute('data-rid'), +b.getAttribute('data-v'), th).catch(function () { th.classList.add('bad'); }); }
+        b.onclick = function () {
+          var rid = b.getAttribute('data-rid'), v = +b.getAttribute('data-v'), r = list.find(function (x) { return x.id === rid; });
+          var box = document.createElement('div');
+          box.className = 'gal-view';
+          box.innerHTML = '<div class="gal-in"><button type="button" class="rd-x gal-x" aria-label="' + esc(t('Close')) + '">✕</button><div class="gal-big"><span>' + esc(t('Loading…')) + '</span></div>' +
+            '<div class="gal-bar"><b>' + esc((r.title || '').split(' · ')[0]) + ' · v' + v + '</b><span class="grow"></span>' +
+            '<button type="button" class="btn small" data-g="save">' + esc(t('Save image')) + '</button>' +
+            '<button type="button" class="btn small primary" data-g="open">' + esc(t('Change this picture')) + '</button></div></div>';
+          document.body.appendChild(box);
+          function close() { box.remove(); document.removeEventListener('keydown', k1, true); }
+          function k1(e) { if (e.key === 'Escape') { e.preventDefault(); close(); } }
+          document.addEventListener('keydown', k1, true);
+          box.addEventListener('mousedown', function (e) { if (e.target === box) { close(); } });
+          box.querySelector('.gal-x').onclick = close;
+          var url = null;
+          img(rid, v, null).then(function (u) { url = u; box.querySelector('.gal-big').innerHTML = '<img alt="" src="' + u + '">'; });
+          box.querySelector('[data-g="save"]').onclick = function () {
+            if (!url) { return; }
+            var a = document.createElement('a'); a.href = url; a.download = (s.name + ' ' + (r.title || '').split(' · ')[0] + ' v' + v).replace(/[^\w\- ]+/g, '') + '.jpg';
+            document.body.appendChild(a); a.click(); a.remove();
+          };
+          box.querySelector('[data-g="open"]').onclick = function () { close(); openRender(s, r.title || s.name, [], null, { rid: rid, v: v }); };
+        };
+      });
+    }, function (e) { body.innerHTML = '<p class="meta-line">' + esc(e.message) + '</p>'; });
+  }
+
   // dims: the real size { w, h, d } in mm (or a function giving it) — the AI needs it for the scale
-  function openRender(s, title, paramsList, dims) {
+  // start: { rid, v } — the picture to show first
+  function openRender(s, title, paramsList, dims, start) {
     var C = window.PPCloud;
     if (!C || !C.on || !C.user()) { toast(t('Renders need a signed-in PanelPro account.')); return; }
     var sheet = document.createElement('div');
@@ -547,7 +617,7 @@
     // a click outside the panel closes it (not while placing the furniture on a photo)
     sheet.addEventListener('mousedown', function (e) { if (e.target === sheet && !sheet.classList.contains('placing')) { close(); } });
     window.PPRender.open(sheet.firstChild, {
-      t: t, lang: lang, app: 'web', site: s.id, title: title,
+      t: t, lang: lang, app: 'web', site: s.id, title: title, start: start || null,
       scenes: ['studio', 'kitchen', 'bedroom', 'living', 'bathroom', 'office', 'music', 'closet'].concat(has3d ? ['photo'] : []), scene: 'studio',
       call: function (action, data) {
         return C.call('renderCall', Object.assign({ action: action }, data), 300000).catch(function (e) {
@@ -561,6 +631,7 @@
       place: function (on) { sheet.classList.toggle('placing', !!on); },
       capture: function (o) {
         if (!has3d) { return Promise.reject(new Error(t('The 3D view is not available on this device.'))); }
+        if (!paramsList.length) { return Promise.reject(new Error(t('To make a new render, open the module or the composition and press the camera button there.'))); }
         var names = renderMaterials(paramsList);
         var view = P3D.capture({ w: 1600, transparent: o.scene === 'photo' });
         if (!view) { return Promise.reject(new Error(t('Could not capture the 3D view.'))); }
@@ -1249,7 +1320,8 @@
           '<span class="t2 dims">' + dimsOf(m.params) + '</span></span></button>';
       }).join('') + '</div>' +
       '<div class="actions-row" style="margin-top:16px"><button type="button" class="btn" id="compBtn">' + esc(t('Composition')) + '</button>' +
-      '<button type="button" class="btn" id="cutBtn">' + esc(t('Cut list')) + '</button></div>' +
+      '<button type="button" class="btn" id="cutBtn">' + esc(t('Cut list')) + '</button>' +
+      '<button type="button" class="btn" id="galBtn">' + esc(t('Renders')) + '</button></div>' +
       '<div class="actions-row">' +
       '<button type="button" class="btn" id="shareBtn">' + esc(t('Share project file')) + '</button></div>'
         : '<div class="empty"><h2>' + esc(t('No modules yet')) + '</h2><p>' + esc(t('Add the first module for this site.')) + '</p></div>') +
@@ -1260,6 +1332,7 @@
     $('#addMod').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/pick'); };
     if ($('#cutBtn')) { $('#cutBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/cut'); }; }
     if ($('#compBtn')) { $('#compBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/compose'); }; }
+    if ($('#galBtn')) { $('#galBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/renders'); }; }
     if ($('#shareBtn')) { $('#shareBtn').onclick = function () { shareSite(s); }; }
     screen.querySelectorAll('[data-mod]').forEach(function (b) {
       b.onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/m/' + encodeURIComponent(b.getAttribute('data-mod'))); };

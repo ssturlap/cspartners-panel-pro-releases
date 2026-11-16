@@ -1102,3 +1102,24 @@ body.desk .top:has(~ .dk-body > .edit-layout), body.desk .top:has(~ .dk-body .co
     opacity: 0; transform: translate(40%, -50%); clip-path: inset(0 0 0 100%); transition: transform .18s ease, clip-path .18s ease, opacity .12s; }
   .view-tools .vt[data-label]:hover::after, .view-tools .vt[data-label]:focus-visible::after { opacity: 1; transform: translate(0, -50%); clip-path: inset(0 0 0 0); }
 }
+
+/* render gallery */
+.gal-r { margin: 18px 0 8px; }
+.gal-r h3 { font-size: 15px; margin: 0 0 8px; }
+.gal-r h3 small { font-weight: 500; color: var(--muted); font-size: 12.5px; margin-left: 6px; }
+.gal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.gal-pic { padding: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.gal-pic:hover { border-color: var(--ink); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+.gal-pic .th { display: block; aspect-ratio: 4 / 3; background: #e6e2da center / cover no-repeat; }
+.gal-pic .th.bad { background: #f3e1df; }
+.gal-pic small { display: block; padding: 6px 9px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gal-view { position: fixed; inset: 0; z-index: 70; background: rgba(20, 19, 17, .7); display: flex; align-items: center; justify-content: center; padding: 18px; }
+.gal-in { position: relative; background: #1e1d1b; border-radius: 14px; padding: 12px; max-width: min(1500px, 100%); max-height: 100%; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; }
+.gal-big { display: flex; align-items: center; justify-content: center; min-height: 240px; color: #cfc8bb; }
+.gal-big img { max-width: 100%; max-height: calc(100vh - 140px); display: block; border-radius: 8px; }
+.gal-bar { display: flex; align-items: center; gap: 8px; color: #fff; flex-wrap: wrap; }
+.gal-bar .grow { flex: 1; }
+.gal-x { position: absolute; top: -10px; right: -10px; }
+.gal-bar .btn { width: auto; flex: none; margin: 0; }
+.gal-bar .btn:not(.primary) { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.45); }
+.gal-bar .btn:not(.primary):hover { background: rgba(255,255,255,.12); }
