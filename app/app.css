@@ -952,7 +952,7 @@ body.desk .dk-table .dupbtn { height: 32px; padding: 0 10px; font-size: 13px; wh
 .site-card .t1 { font-size: 16.5px; font-weight: 700; }
 .site-card .t2 { font-size: 13px; }
 .site-card { padding: 12px 10px 12px 14px; }
-.site-card .dupbtn { width: 34px; height: 34px; font-size: 15px; margin-top: -2px; }
+.site-card .rowbtns { align-items: center; }
 body.desk .dk-table .pstats { display: grid; grid-template-columns: 64px 64px 64px 120px; }
 .pstats { grid-template-columns: auto auto auto minmax(0, 1fr); }
 .pst { padding: 6px 9px; }
@@ -1028,11 +1028,18 @@ body.desk .edit-layout, body.desk .compose { max-width: 2000px; margin: 0 auto; 
 .rowbtns .icon-btn svg.mi { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .rowbtns .icon-btn:hover { color: var(--ink); border-color: var(--ink); background: var(--soft, #f0ebe2); }
 .rowbtns .delbtn:hover { color: #b3261e; border-color: #b3261e; background: #fdecea; }
-.rowbtns .icon-btn[data-tip]::after { content: attr(data-tip); position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 8px; border-radius: 6px;
-  background: #24221f; color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(4px, -50%); transition: opacity .12s, transform .12s; z-index: 5; }
-.rowbtns .icon-btn[data-tip]:hover::after, .rowbtns .icon-btn[data-tip]:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
+.rowbtns .icon-btn { margin: 0 !important; width: 36px !important; height: 36px !important; }
+/* the name pops up above the button: a small bubble with a pointer */
+.rowbtns .icon-btn[data-tip]::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 9px); left: 50%; padding: 5px 9px; border-radius: 7px;
+  background: #24221f; color: #fff; font: 600 12px/1.2 -apple-system, "Segoe UI", Inter, Roboto, sans-serif; white-space: nowrap; pointer-events: none;
+  opacity: 0; transform: translate(-50%, 4px) scale(.92); transform-origin: 50% 100%; transition: opacity .12s, transform .14s; z-index: 6; box-shadow: 0 4px 12px rgba(0,0,0,.18); }
+.rowbtns .icon-btn[data-tip]::before { content: ''; position: absolute; bottom: calc(100% + 3px); left: 50%; border: 6px solid transparent; border-bottom: 0; border-top-color: #24221f;
+  transform: translate(-50%, 4px); opacity: 0; transition: opacity .12s, transform .14s; pointer-events: none; z-index: 6; }
+.rowbtns .icon-btn[data-tip]:hover::after, .rowbtns .icon-btn[data-tip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0) scale(1); }
+.rowbtns .icon-btn[data-tip]:hover::before, .rowbtns .icon-btn[data-tip]:focus-visible::before { opacity: 1; transform: translate(-50%, 0); }
 .rowbtns .delbtn[data-tip]::after { background: #b3261e; }
-body.desk .dk-table .rowbtns .icon-btn { height: 34px; width: 34px; padding: 0; }
+.rowbtns .delbtn[data-tip]::before { border-top-color: #b3261e; }
+body.desk .dk-table .rowbtns .icon-btn { height: 34px !important; width: 34px !important; padding: 0; }
 
 /* AI renders (ui/render.js): a panel over the screen; while placing furniture on a photo, a bar at the bottom */
 .rd-sheet { position: fixed; inset: 0; z-index: 60; background: rgba(20, 19, 17, .55); display: flex; align-items: stretch; justify-content: center; padding: 18px; }
