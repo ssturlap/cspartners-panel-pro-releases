@@ -13,6 +13,8 @@
   var PANEL = function (p) { return !!p.panel; };
   var BED = function (p) { return !!p.bed; };
   var NOTBED = function (p) { return !p.bed; };
+  var NOTSTONELESS = function (p) { return !p.bed && !p.panel; };   // modules that can carry a stone top
+  var STONE = function (p) { return !!p.stone && !p.bed && !p.panel; };
 
   // ---- what the module actually has (from its layout). A setting tied to one of these shows only
   // when the module has that thing — unless "Show all settings" is on (PPFields.showAll).
@@ -188,7 +190,16 @@
       ['skin_top_flush', 'Side panels: flush with the top panel', 'bool', function (p) { return SKIN(p) && p.add_top && p.top_skin_mode === 'between'; }],
       ['skin_top', 'Top projection', 'len', function (p) { return SKINB(p) && !(p.add_top && p.top_skin_mode === 'over') && !(p.add_top && p.skin_top_flush); }],
       ['skin_floor', 'Bottom: to the floor', 'bool', SKINB],
-      ['skin_bottom', 'Bottom projection', 'len', function (p) { return SKINB(p) && !p.skin_floor; }]
+      ['skin_bottom', 'Bottom projection', 'len', function (p) { return SKINB(p) && !p.skin_floor; }],
+      ['#', 'Stone top', NOTSTONELESS],
+      ['stone', 'Show a granite / marble top (picture only, not cut)', 'bool', NOTSTONELESS],
+      ['stone_t', 'Slab', 'sel', [['20', 'Single 2 cm slab'], ['40', '4 cm (doubled, double bullnose)']], STONE],
+      ['stone_look', 'Stone', 'sel', [['marble_white', 'White marble'], ['granite_grey', 'Grey granite'], ['granite_black', 'Black granite']], STONE],
+      ['stone_ref', 'Front overhang measured from', 'sel', [['fronts', 'The fronts (doors / drawers)'], ['carcass', 'The carcass']], STONE],
+      ['stone_oh_front', 'Stone overhang — front', 'len', STONE],
+      ['stone_oh_left', 'Stone overhang — left', 'len', STONE],
+      ['stone_oh_right', 'Stone overhang — right', 'len', STONE],
+      ['stone_oh_back', 'Stone overhang — back', 'len', STONE]
     ],
     base: [],
     layout: [

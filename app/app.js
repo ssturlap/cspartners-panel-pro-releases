@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.62';
-  var BUILD = '36541a7dac';
+  var VERSION = '0.3.63';
+  var BUILD = 'bd7b3dccf0';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -123,7 +123,7 @@
   var COLORS = {
     'PanelPro Carcass': '#ece8de', 'PanelPro Back': '#cdc6b8', 'PanelPro Fronts': '#96a8ba', 'PanelPro Face Frame': '#b08458',
     'PanelPro Drawer Box': '#dec496', 'PanelPro Top': '#7d6854', 'PanelPro Kick': '#464646', 'PanelPro Glass': '#8c643e',
-    'PanelPro Black Aluminium': '#202022', 'PanelPro Kick Stainless': '#c4c6c8', 'PanelPro Metal': '#969ba0', 'PanelPro Mattress': '#f3f1ec', 'PanelPro Mattress Trim': '#7d8794', 'PanelPro Slat Roll': '#e2cea8', 'PanelPro Strap': '#82878c',
+    'PanelPro Black Aluminium': '#202022', 'PanelPro Kick Stainless': '#c4c6c8', 'PanelPro Metal': '#969ba0', 'PanelPro Mattress': '#f3f1ec', 'PanelPro Mattress Trim': '#7d8794', 'PanelPro Slat Roll': '#e2cea8', 'PanelPro Strap': '#82878c', 'PanelPro Stone White Marble': '#eceae4', 'PanelPro Stone Grey Granite': '#80807e', 'PanelPro Stone Black Granite': '#262628',
     'PanelPro Pull Black': '#232325', 'PanelPro Pull Stainless': '#c0c2c4', 'PanelPro Pull Aluminium': '#aab0b8', 'PanelPro Pull Gold': '#c4a052'
   };
   function matInfo(name) {
