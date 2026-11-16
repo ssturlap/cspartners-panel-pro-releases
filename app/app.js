@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.63';
-  var BUILD = 'bd7b3dccf0';
+  var VERSION = '0.3.64';
+  var BUILD = '66bf95adb9';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -43,7 +43,11 @@
     'Names used in the cut list and its files. Leave a box empty for the default.': 'Nombres usados en la lista de corte y sus archivos. Deje la casilla vacía para el nombre por defecto.',
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
-    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
+    'Add modules to the site first.': 'Primero agregue módulos a la obra.',
+    'New composition: top, back and side panels…': 'Nueva composición: tope, panel trasero y laterales…', 'Composition: top, back and side panels…': 'Composición: tope, panel trasero y laterales…',
+    'Tap the modules of the composition, then Next.': 'Toque los módulos de la composición y luego Siguiente.',
+    'Tap the modules of the composition (on every wall it covers), then Next.': 'Toque los módulos de la composición (en cada pared que cubre) y luego Siguiente.',
+    'The modules of this composition are no longer in the site.': 'Los módulos de esta composición ya no están en la obra.', 'From the left': 'Desde la izquierda', 'Edit module': 'Editar módulo',
     'Put on the floor': 'Poner en el piso', 'Flat (over a module)': 'Acostado (sobre un módulo)', 'On edge (beside a module)': 'De canto (al costado de un módulo)', 'Upright (front / gap)': 'De pie (frente / hueco)', 'Arrange again side by side': 'Acomodar de nuevo uno al lado del otro', 'Whole room': 'Espacio completo', 'Move up': 'Subir', 'Move down': 'Bajar', 'Length ↔ grain': 'Largo ↔ veta', 'Length': 'Largo', 'Thickness': 'Espesor', 'Choose…': 'Elegir…', 'Pieces': 'Piezas', 'Dashboard': 'Inicio', 'Recent projects': 'Proyectos recientes', 'All projects': 'Todos los proyectos', 'most used': 'más usados', 'Add material to the catalog': 'Agregar material al catálogo', 'Quick view: module catalog': 'Ver catálogo de módulos', 'Quick add hardware': 'Agregar accesorio', 'Colour / finish': 'Color / acabado', 'Hinge type': 'Tipo de bisagra', 'Slide type': 'Tipo de corredera', 'Pull type': 'Tipo de jaladera', 'Type / model': 'Tipo / modelo', 'Length (mm)': 'Largo (mm)', 'Size / hole centres (mm)': 'Medida / entre centros (mm)', 'Height (mm)': 'Alto (mm)', 'Size': 'Medida', 'Hardware': 'Accesorios', 'Accessories': 'Accesorios', 'Project manual': 'Manual del proyecto', 'Manual for this module': 'Manual de este módulo', 'Close': 'Cerrar', 'Diagnostic view': 'Vista de diagnóstico', 'Full-extension slide, soft-close': 'Corredera extensión total, cierre suave', 'Full-extension slide, push to open': 'Corredera extensión total, push to open', 'Full-extension slide, regular': 'Corredera extensión total, normal', 'Concealed hinge, full overlay': 'Bisagra oculta, parche completo', 'Concealed hinge, half overlay': 'Bisagra oculta, medio parche', 'Concealed hinge, no overlay (inset)': 'Bisagra oculta, embutida (sin parche)', 'T-bar pull': 'Jaladera de barra (T-bar)', 'Face pull': 'Jaladera de frente', 'Edge pull': 'Jaladera de canto', 'Shelf pin': 'Soporte de entrepaño', 'Hinges': 'Bisagras', 'Drawer slides & systems': 'Correderas y sistemas de gaveta', 'Pulls & handles': 'Jaladeras y tiradores', 'Lift-ups & flap stays': 'Abatibles y compases', 'Legs & plinth': 'Patas y zócalo', 'Supports & brackets': 'Soportes y escuadras', 'Wardrobe rails': 'Tubos de closet', 'Lift-up / flap fitting': 'Abatible / compás', '— (not linked)': '— (sin vincular)', '— automatic (matching hardware)': '— automático (herrajes que coinciden)', 'Used for (what the modules ask for)': 'Se usa para (lo que piden los módulos)', 'Link each one to an item of your catalog: its price then goes into the project estimate.': 'Vincule cada uno con un artículo de su catálogo: su precio entra en el estimado del proyecto.', 'pieces': 'piezas', 'project': 'proyecto', 'projects': 'proyectos', 'used': 'usado', 'time': 'vez', 'times': 'veces', 'units': 'unidades', 'No materials used yet.': 'Aún no hay materiales usados.', 'No hardware used yet.': 'Aún no hay accesorios usados.', 'Counting your projects…': 'Contando sus proyectos…', 'Module catalog': 'Catálogo de módulos', 'Add to which project?': '¿Agregar a qué proyecto?', 'Open a project first': 'Abra primero un proyecto', 'Hinge': 'Bisagra', 'Drawer slide': 'Corredera', 'Pull / handle': 'Jaladera / tirador', 'Leg / plinth': 'Pata / zócalo', 'Shelf support': 'Soporte de entrepaño', 'Hanging rail': 'Tubo de closet', 'Other': 'Otro', 'piece': 'pieza', 'pair': 'par', 'set': 'juego', 'metre': 'metro', 'New hardware': 'Accesorio nuevo', 'No hardware listed yet': 'Aún no hay accesorios en su catálogo', 'Add the hinges, slides and pulls you buy, with their price.': 'Agregue las bisagras, correderas y jaladeras que compra, con su precio.', 'Used in your projects': 'Usados en sus proyectos', 'Photo (optional)': 'Foto (opcional)', 'Type': 'Tipo', 'Brand': 'Marca', 'Code': 'Código', 'Price': 'Precio', 'Per': 'Por', 'Enter a name': 'Escriba un nombre', 'Name': 'Nombre', 'Add': 'Agregar', 'Modules': 'Módulos', 'Estimated': 'Estimado', 'Totals': 'Totales', 'copy': 'copia', 'Project duplicated.': 'Proyecto duplicado.', 'Leg space': 'Hueco para piernas', 'W': 'An', 'H': 'Al', 'D': 'Fo', 'T': 'Es', 'Save': 'Guardar', 'Save & finish': 'Guardar y terminar', 'Save & next: ': 'Guardar y seguir: ', 'Step ': 'Paso ', ' of ': ' de ', 'Reset materials': 'Restablecer materiales', 'Copy materials from…': 'Copiar materiales de…', 'Materials reset.': 'Materiales restablecidos.', 'Materials copied.': 'Materiales copiados.', 'No other module in this site yet.': 'Todavía no hay otro módulo en esta obra.', 'Split below': 'Dividir debajo', 'As the module (Distribution)': 'Como el módulo (Distribución)', 'Stretchers': 'Travesaños', 'Full panel': 'Tablero completo', 'boxes stacked in this module.': 'cajas apiladas en este módulo.', 'Separate into modules': 'Separar en módulos', 'Separated into modules.': 'Separado en módulos.', 'This module has no splits.': 'Este módulo no tiene divisiones.', 'Top of the lower boxes (split module)': 'Techo de las cajas de abajo (módulo dividido)', 'Installation': 'Instalación', 'wall': 'pared', 'walls': 'paredes', 'Plan from above': 'Planta vista desde arriba', 'Elevation': 'Elevación', 'Seen from the front, left to right': 'Vista de frente, de izquierda a derecha', 'Floor': 'Piso', 'Wall cabinets': 'Alacenas', 'Open wall': 'Ver pared', 'Open a wall first.': 'Abrí una pared primero.', 'The whole room as placed in SketchUp. Open a wall to move its modules along it.': 'El espacio completo tal como está en SketchUp. Abrí una pared para mover sus módulos a lo largo de ella.', 'Room plan': 'Planta del espacio', 'Wall': 'Pared', 'Front view': 'Vista frontal', 'Column': 'Columna', 'Empty': 'Vacío',
     'Columns run left → right, rows top → bottom. Leave auto to share what’s left.': 'Las columnas van de izquierda a derecha y las filas de arriba abajo. Deje auto para repartir lo que queda.', 'Close all': 'Cerrar todo', 'Fit': 'Ajustar', 'Drag to turn · pinch to zoom · tap a door': 'Arrastre para girar · pellizque para zoom · toque una puerta', 'Drag to turn · pinch to zoom · tap a door · hold a panel for its material': 'Arrastre para girar · pellizque para zoom · toque una puerta · mantenga presionado un panel para su material', 'Drag to turn · scroll to zoom · click a door · right-click a panel for its material': 'Arrastre para girar · rueda para zoom · clic en una puerta · clic derecho en un panel para su material',
     'Drag to turn · scroll to zoom · click a door': 'Arrastre para girar · rueda para zoom · clic en una puerta',
@@ -193,6 +197,7 @@
   }
   function dimsOf(p) {
     if (p.panel) { return panelDims(p).map(function (d) { return L(p[d[1]]); }).join(' × ') + ' ' + U(); }   // L × W × T
+    if (p.slab) { return L(p.slab_l) + ' × ' + L(p.slab_w) + ' × ' + L(p.stone_t) + ' ' + U(); }             // stone piece
     return L(p.width) + ' × ' + L(p.height) + ' × ' + L(p.depth) + ' ' + U();
   }
   function presetLabel(key) {
@@ -1400,7 +1405,7 @@
       items.push({ label: t('Duplicate'), icon: 'copy', run: function () { duplicateModule(); } });
       items.push({ label: t('Delete module'), icon: 'trash', danger: true, run: function () {
         if (!confirm(t('Delete this module?'))) { return; }
-        s.modules = s.modules.filter(function (x) { return x !== mod; }); touch(s); persist();
+        s.modules = s.modules.filter(function (x) { return x !== mod; }); if (window.PPCompose) { window.PPCompose.refresh(s); } touch(s); persist();
         E = null; toast(t('Deleted')); go('#/site/' + encodeURIComponent(s.id), true);
       } });
     }
@@ -1732,13 +1737,19 @@
   var hintT = null;
   // The sizes as chips on the 3D view (phone): tap one = its keypad (the size box below, hidden)
   // a bed is sized by its mattress (W × L) and its overall height (floor → top of the mattress)
-  function dimKeys(p) { return p.bed ? ['bed_mw', 'bed_ml', 'height'] : ['width', 'height', 'depth']; }
-  function dimLabel(k) { return t({ bed_mw: 'Mattress width', bed_ml: 'Mattress length', height: E.params && E.params.bed ? 'Overall height' : 'Height' }[k] || (k[0].toUpperCase() + k.slice(1))); }
+  // a stone piece (made by a composition) by its length and its depth (top) or height (backsplash / trim)
+  function dimKeys(p) { return p.bed ? ['bed_mw', 'bed_ml', 'height'] : p.slab ? ['slab_l', 'slab_w'] : ['width', 'height', 'depth']; }
+  function dimLabel(k) {
+    var sl = E.params && E.params.slab;
+    return t({ bed_mw: 'Mattress width', bed_ml: 'Mattress length', height: E.params && E.params.bed ? 'Overall height' : 'Height',
+               slab_l: 'Length', slab_w: sl && E.params.slab_kind !== 'top' ? 'Height' : 'Depth' }[k] || (k[0].toUpperCase() + k.slice(1)));
+  }
   function fillDimChips(p) {
     var host = $('#dimChips');
     if (!host) { return; }
     var list = p.panel ? panelDims(p).map(function (d) { return ['pdim', d[0], d[1], d[0] === 'len' ? 'L' : d[0] === 'wid' ? t('W') : t('T')]; })
       : p.bed ? [['dim', 'bed_mw', 'bed_mw', t('Mattress W')], ['dim', 'bed_ml', 'bed_ml', t('Mattress L')], ['dim', 'height', 'height', t('H')]]
+      : p.slab ? [['dim', 'slab_l', 'slab_l', 'L'], ['dim', 'slab_w', 'slab_w', p.slab_kind === 'top' ? t('D') : t('H')]]
       : [['dim', 'width', 'width', t('W')], ['dim', 'height', 'height', t('H')], ['dim', 'depth', 'depth', t('D')]];
     host.innerHTML = list.map(function (d) {
       return '<button type="button" data-chip="' + d[0] + ':' + d[1] + '"' + (E.changed[d[2]] ? ' class="changed"' : '') + '><small>' + esc(d[3]) + '</small>' + L(p[d[2]]) + '</button>';
@@ -1771,7 +1782,8 @@
     }
     // a loose panel has no box, fronts or drawers: only its own settings and materials; other tabs
     // show only when something in them applies to this module (Layout and Materials always)
-    var tabs = p.panel || p.bed ? TABS.filter(function (x) { return x[0] === 'module' || x[0] === 'materials'; })
+    var tabs = p.slab ? TABS.filter(function (x) { return x[0] === 'module'; })
+      : p.panel || p.bed ? TABS.filter(function (x) { return x[0] === 'module' || x[0] === 'materials'; })
       : TABS.filter(function (x) { return x[0] === 'layout' || x[0] === 'module' || x[0] === 'materials' || tabFields(x, p) !== ''; });
     var tab = tabs.find(function (x) { return x[0] === editTab; }) || tabs[0];
     html += '<nav class="etabs" role="tablist">' + tabs.map(function (tb) {
@@ -1871,7 +1883,7 @@
         return;
       }
       if ((a = b.getAttribute('data-dim'))) {
-        openPad({ label: dimLabel(a), value: p[a], chips: p.bed ? undefined : CHIPS[a], done: function (v) {
+        openPad({ label: dimLabel(a), value: p[a], chips: p.bed || p.slab ? undefined : CHIPS[a], done: function (v) {
           E.params[a] = v; E.changed[a] = true;
           if (E.params.bed) {
             if (a === 'height') { E.params.bed_height = v; }
@@ -2001,7 +2013,7 @@
       e.preventDefault();
       if (!confirm(t('Delete this module?'))) { return; }
       var s = E.site, m = E.mod;
-      s.modules = s.modules.filter(function (x) { return x !== m; }); touch(s); persist();
+      s.modules = s.modules.filter(function (x) { return x !== m; }); if (window.PPCompose) { window.PPCompose.refresh(s); } touch(s); persist();
       E = null; toast(t('Deleted')); go('#/site/' + encodeURIComponent(s.id), true);
     }
   });
@@ -2028,6 +2040,7 @@
     if (E.mod) {
       if (E.mod.params && E.mod.params.edges) { E.params.edges = clone(E.mod.params.edges); } else { delete E.params.edges; }
       E.mod.params = clone(E.params); E.mod.updated = now();
+      if (window.PPCompose && s.comps && s.comps.length) { window.PPCompose.refresh(s); }   // its composition's pieces follow
     } else {
       E.mod = { id: uid(), order: s.next_order++, created: now(), updated: now(), params: clone(E.params), preset: E.presetKey || null };
       s.modules.push(E.mod);

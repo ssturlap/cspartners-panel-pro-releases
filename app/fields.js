@@ -12,9 +12,10 @@
   var FRIDGE = function (p) { return !!p.fridge; };
   var PANEL = function (p) { return !!p.panel; };
   var BED = function (p) { return !!p.bed; };
-  var NOTBED = function (p) { return !p.bed; };
-  var NOTSTONELESS = function (p) { return !p.bed && !p.panel; };   // modules that can carry a stone top
-  var STONE = function (p) { return !!p.stone && !p.bed && !p.panel; };
+  var NOTBED = function (p) { return !p.bed && !p.slab; };
+  var SLAB = function (p) { return !!p.slab; };             // a loose stone piece (made by a composition)
+  var NOTSTONELESS = function (p) { return !p.bed && !p.panel && !p.slab; };   // modules that can carry a stone top
+  var STONE = function (p) { return !!p.stone && !p.bed && !p.panel && !p.slab; };
 
   // ---- what the module actually has (from its layout). A setting tied to one of these shows only
   // when the module has that thing — unless "Show all settings" is on (PPFields.showAll).
@@ -52,7 +53,7 @@
     knee: function (p) { return p.layout_mode !== 'nooks' && (p.columns || []).some(function (c) { return c.kind === 'kneehole'; }); },
     rows2: function (p) { return p.layout_mode !== 'nooks' && (p.columns || []).some(function (c) { return c.kind !== 'kneehole' && (c.rows || []).length > 1; }); },
     corner: function (p) { return !!p.corner && p.corner !== 'none'; },
-    box: function (p) { return !p.panel && !p.bed; }
+    box: function (p) { return !p.panel && !p.bed && !p.slab; }
   };
   var F_ = { showAll: false };
   // ctx(has, extra): shows when the module has it (or Show all), and the extra rule holds
@@ -126,6 +127,13 @@
       ['fridge_h', 'Fridge height', 'len', FRIDGE],
       ['fridge_d', 'Fridge depth', 'len', FRIDGE],
       ['fridge_fit', 'Fit module to fridge', 'btn', FRIDGE],
+      ['#', 'Stone piece', SLAB],
+      ['slab_info', '', 'info', SLAB],
+      ['slab_kind', 'Piece', 'sel', [['top', 'Top slab'], ['splash', 'Backsplash'], ['trim', 'Trim']], SLAB],
+      ['slab_l', 'Length', 'len', SLAB],
+      ['slab_w', 'Depth (top) or height (backsplash / trim)', 'len', SLAB],
+      ['stone_t', 'Slab', 'sel', [['20', 'Single 2 cm slab'], ['40', '4 cm (doubled, double bullnose)']], function (p) { return p.slab && p.slab_kind === 'top'; }],
+      ['stone_look', 'Stone', 'sel', [['marble_white', 'White marble'], ['granite_grey', 'Grey granite'], ['granite_black', 'Black granite']], SLAB],
       ['#', 'Panel', PANEL],
       ['panel_kind', 'Kind of panel', 'sel', [['top', 'Top / overpanel (lies flat over modules)'], ['bottom', 'Underpanel (lies flat under wall cabinets)'], ['side', 'End panel (stands at the side)'], ['filler', 'Filler (closes a gap at the front)'], ['crown', 'Crown (strip on edge on top, up to the ceiling)'], ['back', 'Back cover']], PANEL],
       ['panel_info', '', 'info', PANEL],

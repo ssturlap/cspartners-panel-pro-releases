@@ -133,6 +133,13 @@
         (p.bed_style === 'japanese' ? ' · ' + (es ? 'separación del piso (faldón) ' : 'floor clearance (red skirt) ') + show(top - lt) + u(ctx) +
           ' · ' + (es ? 'repisa de ' : 'ledge ') + show(lt) + (es ? ' de grueso' : ' thick') : '');
     },
+    // Stone piece (from a composition): what goes to the stone supplier.
+    slab: function (p, ctx) {
+      if (!p.slab) { return ''; }
+      var es = ctx.es, show = ctx.show;
+      return (es ? 'Piedra (de terceros, no se corta) ' : 'Stone (by others, not cut) ') + show(p.slab_l) + ' × ' + show(p.slab_w) + ' × ' + show(p.stone_t) + u(ctx) +
+        (es ? ' — la composición la vuelve a hacer cuando cambian sus módulos' : ' — the composition makes it again when its modules change');
+    },
     // Loose panel: the cut size.
     panel: function (p, ctx) {
       if (!p.panel) { return ''; }
@@ -143,7 +150,7 @@
     }
   };
   // field key → readout
-  R.INFO_KEYS = { fridge_info: 'fridge', corner_info: 'corner', deco_info: 'deco', bx_info: 'box', panel_info: 'panel', bed_info: 'bed' };
+  R.INFO_KEYS = { fridge_info: 'fridge', corner_info: 'corner', deco_info: 'deco', bx_info: 'box', panel_info: 'panel', bed_info: 'bed', slab_info: 'slab' };
 
   // ------------------------------------------------------------------ sheet optimizer drawings + printable plan
   function escH(v) { return String(v).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }

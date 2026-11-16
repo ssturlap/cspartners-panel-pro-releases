@@ -1,17 +1,31 @@
 {
-  "version": "0.3.63",
+  "version": "0.3.64",
   "date": "2026-11-16",
-  "title": "Granite / marble top",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.63.rbz",
+  "title": "Compositions: one top, back and side panels over many modules",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.64.rbz",
   "notes": [
-    "Decorative panels › Stone top: a toggle to show a granite or marble top on any module (picture only, not cut). Choose a single 2 cm slab or a 4 cm slab with…",
-    "Set how far it goes past the front (measured from the fronts or from the carcass), each side and the back. It sits on the decorative top if there is one and…",
-    "It is listed in the hardware as \"Stone top (by others)\" with its size, for the stone supplier."
+    "Select placed modules (or a group of them) › right-click › CSPARTNERS PANEL PRO › Create composition. Right-click the composition to add a top, a back panel…",
+    "Top: stone (granite / marble, 2 cm or 4 cm double bullnose) or a wood panel. Front overhang from the fronts or the carcass, back overhang, an overhang at…",
+    "Along the back of a stone top: none, a trim (7 cm, 10 cm or your height) or a backsplash (up to the wall cabinets, or your height), with returns at the ends…",
+    "An L (modules facing two ways) gets a butt joint: the longer run goes through to the corner, the other stops against its front edge — switch which one in…",
+    "Slabs up to 3000 mm (you can change it); joints are suggested on the seams between modules and can be put anywhere (distances from the left end). A pantry…",
+    "Back panel (from the floor to the top) and side panels at the open ends, in your panel material; the top covers them.",
+    "The pieces live inside the composition and are made again by themselves whenever a module in it is moved, added, removed or changed. Modules with their own…",
+    "Stone pieces are listed in the hardware for the stone supplier (size, edge, finished ends); wood pieces are in the cut list.",
+    "Send to PanelPro on save (Extensions menu, on by default): each save writes the project as \"<model>.panelpro.json\" next to the .skp to open in PanelPro Web;…",
+    "PanelPro Web: Composition › ⋯ › New composition: the same top, back and side panels (pick the modules on every wall the composition covers); the pieces…"
   ],
-  "title_es": "Tope de granito / mármol",
+  "title_es": "Composiciones: un solo tope, panel trasero y laterales sobre varios módulos",
   "notes_es": [
-    "Paneles decorativos › Tope de piedra: un interruptor para mostrar un tope de granito o mármol en cualquier módulo (solo imagen, no se corta). Elige una losa…",
-    "Indica cuánto sobresale al frente (medido desde los frentes o desde el casco), a cada lado y atrás. Se apoya sobre la tapa decorativa si la hay y cubre los…",
-    "Aparece en los herrajes como \"Tope de piedra (de terceros)\" con su medida, para el proveedor de la piedra."
+    "Seleccione módulos colocados (o un grupo de ellos) › clic derecho › CSPARTNERS PANEL PRO › Crear composición. Haga clic derecho en la composición para…",
+    "Tope: piedra (granito / mármol, 2 cm o 4 cm con canto doble media caña) o un panel de madera. Vuelo frontal desde los frentes o el casco, vuelo trasero, un…",
+    "En la parte trasera de un tope de piedra: nada, un remate (7 cm, 10 cm o su altura) o un salpicadero (hasta los aéreos, o su altura), con retornos en los…",
+    "Una L (módulos mirando a dos lados) lleva unión a tope: el tramo más largo pasa hasta la esquina y el otro se detiene contra su canto frontal — puede…",
+    "Losas de hasta 3000 mm (se puede cambiar); las uniones se sugieren en las juntas entre módulos y se pueden poner donde quiera (distancias desde el extremo…",
+    "Panel trasero (del piso al tope) y paneles laterales en los extremos libres, en su material de panel; el tope los cubre.",
+    "Las piezas viven dentro de la composición y se vuelven a hacer solas cuando un módulo se mueve, se agrega, se quita o cambia. Los módulos con tope de piedra…",
+    "Las piezas de piedra salen en los herrajes para el proveedor de piedra (medida, canto, extremos pulidos); las de madera en la lista de corte.",
+    "Enviar a PanelPro al guardar (menú Extensiones, activo por defecto): cada vez que guarda, el proyecto se escribe como \"<modelo>.panelpro.json\" junto al .skp…",
+    "PanelPro Web: Composición › ⋯ › Nueva composición: el mismo tope, panel trasero y laterales (toque los módulos en cada pared que cubre); las piezas siguen a…"
   ]
 }

@@ -33,6 +33,12 @@
   }
 
   function load() {
+    load0();
+    if (!C.refreshing && refreshComps()) {        // modules of a composition changed: its pieces are made again
+      C.refreshing = true; A.persist(); load0(); C.refreshing = false;
+    }
+  }
+  function load0() {
     var s = C.s, codes = A.codesOf(s);
     C.all = s.modules.slice().sort(A.codeSort(codes)).map(function (m) {
       var res = A.buildModule(m);
@@ -397,10 +403,10 @@
   // ------------------------------------------------------------------ panels for a run
   // Pick the modules of a run (wall cabinets…), then the shared form (ui/runpanels.js) plans an
   // underpanel / overpanel / crown with the shared engine; they are added as panel modules.
-  function depthOf() { return C.items.reduce(function (a, it) { return it.m.params.panel ? a : Math.max(a, Number(it.m.params.depth) || 0); }, 0); }
-  function startPick(first) { C.pick = first ? [first] : []; C.sel = null; draw2d(); panel(); }
+  function depthOf() { return C.items.reduce(function (a, it) { return it.m.params.panel || it.m.params.slab ? a : Math.max(a, Number(it.m.params.depth) || 0); }, 0); }
+  function startPick(first, forComp) { C.pick = first ? [first] : []; C.pickFor = forComp ? 'comp' : 'run'; C.sel = null; draw2d(); panel(); }
   function togglePick(it) {
-    if (it.m.params.panel) { A.toast(A.t('Panels are not part of a run')); return; }
+    if (it.m.params.panel || it.m.params.slab) { A.toast(A.t('Panels are not part of a run')); return; }
     var i = C.pick.indexOf(it.m.id);
     if (i >= 0) { C.pick.splice(i, 1); } else { C.pick.push(it.m.id); }
     draw2d(); panel();
@@ -455,6 +461,141 @@
     });
   }
 
+  // ------------------------------------------------------------------ compositions
+  // A composition: modules (on one wall, or turning a corner in the room) with pieces made for them
+  // by the shared engine (core/composition.rb): a stone or wood top, a back panel, side panels.
+  // Kept with the site: s.comps = [{ id, mods: [module ids], opts, pieces: [module ids], sig }]. The
+  // pieces are ordinary modules of the site; they are made again whenever the modules change.
+  function compOf(id) {
+    return (C.s.comps || []).find(function (c) { return c.mods.indexOf(id) >= 0 || c.pieces.indexOf(id) >= 0; }) || null;
+  }
+  function modById(id) { return C.s.modules.find(function (m) { return m.id === id; }) || null; }
+  function compSig(c) {
+    return JSON.stringify(c.mods.map(function (id) {
+      var m = modById(id);
+      return m ? [m.params, m.room || (m.pos ? [m.pos.x, m.pos.z] : null)] : null;
+    }));
+  }
+  // The modules in legs (one per wall) with their places, and where a leg's pieces go.
+  function compLegs(ids) {
+    var legs = [], places = [];
+    if (C.room) {
+      C.room.walls.forEach(function (w) {
+        var mods = w.mods.filter(function (wm) { return ids.indexOf(wm.id) >= 0; }).map(function (wm) {
+          var it = C.all.find(function (x) { return x.m.id === wm.id; });
+          return it ? { code: it.code, id: it.m.id, params: it.m.params, off: [wm.along, wm.perp, wm.z] } : null;
+        }).filter(Boolean);
+        if (mods.length) { legs.push({ mods: mods, frame: { o: w.origin, u: w.u, n: w.n } }); places.push({ w: w }); }
+      });
+    } else {
+      var D = depthOf();
+      var mods = C.all.filter(function (it) { return ids.indexOf(it.m.id) >= 0 && it.m.pos; }).map(function (it) {
+        return { code: it.code, id: it.m.id, params: it.m.params, off: [it.m.pos.x, offY(it, D), it.m.pos.z] };
+      });
+      if (mods.length) { legs.push({ mods: mods }); places.push({ D: D }); }
+    }
+    return { legs: legs, places: places };
+  }
+  function boardOpts(opts) {
+    var o = A.prefsOpt() || {};
+    return Object.assign({}, opts, { sheet_l: o.sheet_l || 2440, trim: o.trim == null ? 10 : o.trim });
+  }
+  function compPlan(c, opts) {
+    var L = compLegs(c.mods);
+    if (!L.legs.length) { throw new Error(A.t('The modules of this composition are no longer in the site.')); }
+    return { L: L, res: Engine.call('comp_plan', { legs: L.legs, opts: boardOpts(opts), lang: A.lang() }) };
+  }
+  // Make the pieces again (opts: new choices); the modules' own stone tops are switched off.
+  function applyComp(c, opts) {
+    var r = compPlan(c, opts), s = C.s, now = new Date().toISOString();
+    s.modules = s.modules.filter(function (m) { return c.pieces.indexOf(m.id) < 0; });
+    (r.res.stone_off || []).forEach(function (id) {
+      var m = modById(id);
+      if (m && m.params.stone) { m.params = A.normalize(Object.assign({}, m.params, { stone: false })); m.updated = now; }
+    });
+    c.pieces = [];
+    r.res.pieces.forEach(function (pc) {
+      var o = pc.origin, pl = r.L.places[pc.leg] || r.L.places[0];
+      var nm = { id: A.uid(), order: s.next_order++, created: now, updated: now, params: pc.params, comp: c.id };
+      if (pl.w) {
+        var w = pl.w;
+        nm.room = { x: Math.round((w.origin[0] + w.u[0] * o[0] + w.n[0] * o[1]) * 10) / 10, y: Math.round((w.origin[1] + w.u[1] * o[0] + w.n[1] * o[1]) * 10) / 10, z: o[2], rot: w.rot };
+      } else {
+        nm.pos = { x: o[0], z: o[2], wy: pl.D - o[1] };
+      }
+      s.modules.push(nm);
+      c.pieces.push(nm.id);
+    });
+    c.opts = opts;
+    c.sig = compSig(c);
+    s.updated = now;
+    return r.res;
+  }
+  // Compositions whose modules changed (or went): pieces made again / composition removed.
+  function refreshComps() {
+    var s = C.s, changed = false;
+    if (!s.comps || !s.comps.length) { return false; }
+    s.comps = s.comps.filter(function (c) {
+      c.mods = c.mods.filter(function (id) { return !!modById(id); });
+      if (c.mods.length) { return true; }
+      s.modules = s.modules.filter(function (m) { return c.pieces.indexOf(m.id) < 0; });
+      changed = true;
+      return false;
+    });
+    s.comps.forEach(function (c) {
+      if (c.sig === compSig(c)) { return; }
+      try { applyComp(c, c.opts || {}); } catch (e) { c.sig = compSig(c); }
+      changed = true;
+    });
+    return changed;
+  }
+  function openComp(c) {
+    var t = A.t, isNew = !c;
+    if (isNew) {
+      if (!C.pick || !C.pick.length) { return; }
+      c = { id: A.uid(), mods: C.pick.slice(), opts: {}, pieces: [], sig: '' };
+    }
+    var M = window.PPMaterials, list = M && M.engineList ? M.engineList() : [];
+    var sheet = document.createElement('div');
+    sheet.className = 'rp-sheet';
+    sheet.innerHTML = '<div class="rp-box"></div>';
+    document.body.appendChild(sheet);
+    function close() { sheet.remove(); }
+    sheet.addEventListener('click', function (e) { if (e.target === sheet) { close(); } });
+    window.PPCompForm.render(sheet.firstChild, {
+      t: t, show: function (v) { return A.L(v); }, units: A.U(), lang: A.lang(), opts: c.opts, focus: isNew ? 'stone' : null,
+      name: t('Composition') + ' · ' + c.mods.length + ' ' + t('modules'),
+      parse: function (x) { var v = window.PP_CALC ? window.PP_CALC(x) : parseFloat(String(x).replace(',', '.')); return v == null || !isFinite(v) ? null : v * A.uk(); },
+      mats: list.map(function (x) { return x.name; }),
+      plan: function (opts, done) {
+        try { done(compPlan(c, opts).res); } catch (e) { done({ pieces: [], segs: [], corners: [], errors: [e.message], warnings: [] }); }
+      },
+      apply: function (opts) {
+        var res;
+        try { res = applyComp(c, opts); } catch (e) { A.toast(e.message); return; }
+        if (isNew) { C.s.comps = (C.s.comps || []).concat([c]); }
+        if (!opts.top && !opts.back && !opts.sides) {        // nothing left: no composition
+          C.s.comps = C.s.comps.filter(function (x) { return x !== c; });
+        }
+        A.persist(); close();
+        C.pick = null; C.pickFor = null; load(); fitBox(); redraw(false); panel();
+        A.toast(t('Pieces') + ': ' + res.pieces.length);
+      },
+      cancel: close
+    });
+  }
+  // From other screens (a module of the site was edited or removed): pieces made again.
+  function refreshSite(s) {
+    if (!s || !s.comps || !s.comps.length) { return false; }
+    var keep = C;
+    A = window.PPApp;
+    C = { s: s, items: [], refreshing: true };
+    var changed = false;
+    try { load0(); changed = refreshComps(); } catch (e) { changed = false; }
+    C = keep;
+    return changed;
+  }
+
   // ------------------------------------------------------------------ 3D
   function shifted(it) {
     var p = it.m.pos, pre = it.m.id + ':', dy = C.depth - (Number(it.m.params.depth) || 0); // backs against the wall
@@ -507,12 +648,12 @@
     if (!box) { return; }
     var t = A.t, esc = A.esc;
     if (C.pick) {
-      box.innerHTML = '<p class="meta-line">' + esc(t('Tap the modules of the run, then Next.')) + '</p>' +
+      box.innerHTML = '<p class="meta-line">' + esc(t(C.pickFor === 'comp' ? (C.room ? 'Tap the modules of the composition (on every wall it covers), then Next.' : 'Tap the modules of the composition, then Next.') : 'Tap the modules of the run, then Next.')) + '</p>' +
         '<div class="crow"><b class="grow">' + C.pick.length + ' ' + esc(t('selected')) + '</b>' +
         '<button type="button" class="btn small" id="cPickNo">' + esc(t('Cancel')) + '</button>' +
         '<button type="button" class="btn small primary" id="cPickGo"' + (C.pick.length ? '' : ' disabled') + '>' + esc(t('Next')) + '</button></div>';
       document.getElementById('cPickNo').onclick = function () { C.pick = null; draw2d(); panel(); };
-      document.getElementById('cPickGo').onclick = openRunPanels;
+      document.getElementById('cPickGo').onclick = C.pickFor === 'comp' ? function () { openComp(null); } : openRunPanels;
       return;
     }
     if (isAll()) {
@@ -540,7 +681,8 @@
       }).join('') + '</div>' : '') +
       '<div class="crow"><button type="button" class="btn small" id="cEdit" style="flex:1">' + esc(t('Edit module')) + '</button>' +
       '<button type="button" class="btn small" id="cFloor" style="flex:1">' + esc(t('Put on the floor')) + '</button></div>' +
-      (it.m.params.panel ? '' : '<div class="crow"><button type="button" class="btn small" id="cRun" style="flex:1">' + esc(t('Panels for a run…')) + '</button></div>');
+      (it.m.params.panel || it.m.params.slab ? '' : '<div class="crow"><button type="button" class="btn small" id="cRun" style="flex:1">' + esc(t('Panels for a run…')) + '</button></div>') +
+      (compOf(it.m.id) ? '<div class="crow"><button type="button" class="btn small" id="cComp" style="flex:1">' + esc(t('Composition: top, back and side panels…')) + '</button></div>' : '');
     box.querySelectorAll('[data-cpos]').forEach(function (b) {
       b.onclick = function () {
         var k = b.getAttribute('data-cpos');
@@ -557,6 +699,8 @@
     document.getElementById('cFloor').onclick = function () { it.m.pos.z = -it.bb.z0; delete it.m.pos.wy; save(); fitBox(); redraw(false); panel(); };
     var rb = document.getElementById('cRun');
     if (rb) { rb.onclick = function () { startPick(it.m.id); }; }
+    var cb = document.getElementById('cComp');
+    if (cb) { cb.onclick = function () { openComp(compOf(it.m.id)); }; }
   }
 
   // Turn a loose panel: its two face sizes move to the new orientation (the length stays the
@@ -585,7 +729,8 @@
     }).join('') + '<button type="button" data-ctab="all" aria-pressed="' + (C.tab === 'all') + '">' + esc(t('Whole room')) + '</button></div>';
   }
   function setTab(k) {
-    C.tab = k; C.sel = null; C.pick = null;
+    C.tab = k; C.sel = null;
+    if (C.pickFor !== 'comp') { C.pick = null; }   // a composition can turn a corner: its modules are picked on every wall
     pickTab();
     var bar = document.getElementById('ctabs');
     if (bar) { bar.innerHTML = tabsHtml(); wireTabs(); }
@@ -634,7 +779,11 @@
     A.wireDiag();
     document.getElementById('cMore').onclick = function () {
       if (isAll()) { A.toast(t('Open a wall first.')); return; }
-      var list = [{ label: t('Panels for a run…'), icon: 'runpanels', run: function () { startPick(null); } }];
+      var list = [{ label: t('Panels for a run…'), icon: 'runpanels', run: function () { startPick(null); } },
+                  { label: t('New composition: top, back and side panels…'), icon: 'runpanels', run: function () { startPick(null, true); } }];
+      (C.s.comps || []).forEach(function (c, i) {
+        list.push({ label: t('Composition') + ' ' + (i + 1) + ' (' + c.mods.length + ' ' + t('modules') + ')…', icon: 'runpanels', run: function () { openComp(c); } });
+      });
       if (!C.room) {
         list.push({ label: t('Arrange again side by side'), icon: 'layout', run: function () {
           C.items.forEach(function (it) { delete it.m.pos; }); autoPlace(C.items); save(); fitBox(); redraw(true); panel();
@@ -650,5 +799,5 @@
     panel();
   }
 
-  window.PPCompose = { render: render };
+  window.PPCompose = { render: render, refresh: refreshSite };
 })();
