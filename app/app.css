@@ -1096,11 +1096,14 @@ body.desk .top:has(~ .dk-body > .edit-layout), body.desk .top:has(~ .dk-body .co
 /* the name of a view button slides out to the left from behind it (no browser bubble) */
 @media (hover: hover) and (pointer: fine) {
   .view-tools .vt { position: relative; }
-  .view-tools .vt[data-label]::after { content: attr(data-label); position: absolute; right: calc(100% - 8px); top: 50%; z-index: -1;
-    height: 26px; line-height: 26px; padding: 0 16px 0 10px; border-radius: 7px 0 0 7px; background: var(--ink); color: #fff;
-    font: 600 12px/26px -apple-system, "Segoe UI", Inter, Roboto, sans-serif; letter-spacing: 0; white-space: nowrap; pointer-events: none;
-    opacity: 0; transform: translate(40%, -50%); clip-path: inset(0 0 0 100%); transition: transform .18s ease, clip-path .18s ease, opacity .12s; }
-  .view-tools .vt[data-label]:hover::after, .view-tools .vt[data-label]:focus-visible::after { opacity: 1; transform: translate(0, -50%); clip-path: inset(0 0 0 0); }
+  /* plain dark text, no box: it wipes out of the button's edge and settles 10 px to its left */
+  .view-tools .vt[data-label]::after { content: attr(data-label); position: absolute; right: calc(100% + 10px); top: 50%;
+    color: var(--ink); font: 700 12.5px/1 -apple-system, "Segoe UI", Inter, Roboto, sans-serif; letter-spacing: 0; white-space: nowrap; pointer-events: none;
+    text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 10px rgba(255,255,255,.9);
+    opacity: 0; transform: translate(calc(100% + 10px), -50%); clip-path: inset(-6px 0 -6px 100%);
+    transition: transform .26s cubic-bezier(.2,.8,.2,1), clip-path .26s cubic-bezier(.2,.8,.2,1), opacity .15s; }
+  .view-tools .vt[data-label]:hover::after, .view-tools .vt[data-label]:focus-visible::after { opacity: 1; transform: translate(0, -50%); clip-path: inset(-6px -6px -6px -6px); }
+  .view-tools .vt[aria-pressed="true"][data-label]::after { color: var(--ink); }
 }
 
 /* render gallery */
