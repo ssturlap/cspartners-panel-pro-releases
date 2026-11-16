@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.66';
-  var BUILD = '1d1dcb7188';
+  var BUILD = 'a53faebb5e';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1707,8 +1707,10 @@
   // ---- full editor: the plugin's Configurator settings (ui/fields.js, shared), drawn for touch
   // A tab lists whole sections of ui/fields.js, or a slice of one: { sec, from, until } (group titles).
   var DECO_TITLE = 'Decorative panels', ENDS_TITLE = 'Visible end panels', CUT_TITLE = 'Cut list';
+  var KICK_TITLE = 'Base / toe kick';   // its own step after Box
   var TABS = [['layout', 'Layout', ['layout']], ['module', 'Module', ['module']],
-              ['box', 'Box', [{ sec: 'box', until: DECO_TITLE }]],
+              ['box', 'Box', [{ sec: 'box', until: KICK_TITLE }]],
+              ['kick', 'Toe kick', [{ sec: 'box', from: KICK_TITLE, until: DECO_TITLE }]],
               ['panels', 'Decorative panels', [{ sec: 'box', from: DECO_TITLE }, { sec: 'materials', from: ENDS_TITLE, until: CUT_TITLE }]],
               ['fronts', 'Fronts', ['fronts', 'frame', 'pulls', 'motion']], ['drawers', 'Drawers', ['drawers']],
               ['materials', 'Materials', [{ sec: 'materials', until: ENDS_TITLE }, { sec: 'materials', from: CUT_TITLE }]]];
