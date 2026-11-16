@@ -1103,13 +1103,14 @@ body.desk .top:has(~ .dk-body > .edit-layout), body.desk .top:has(~ .dk-body .co
 /* the name of a view button slides out to the left from behind it (no browser bubble) */
 @media (hover: hover) and (pointer: fine) {
   .view-tools .vt { position: relative; }
-  /* plain dark text, no box: it wipes out of the button's edge and settles 10 px to its left */
+  /* plain dark text, no box: it slides out of the button and settles 10 px to its left; the part still
+     "inside" the button is clipped, going out and coming back, so it never shows past the button */
   .view-tools .vt[data-label]::after { content: attr(data-label); position: absolute; right: calc(100% + 10px); top: 50%;
     color: var(--ink); font: 700 12.5px/1 -apple-system, "Segoe UI", Inter, Roboto, sans-serif; letter-spacing: 0; white-space: nowrap; pointer-events: none;
     text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 10px rgba(255,255,255,.9);
-    opacity: 0; transform: translate(calc(100% + 10px), -50%); clip-path: inset(-6px 0 -6px 100%);
-    transition: transform .26s cubic-bezier(.2,.8,.2,1), clip-path .26s cubic-bezier(.2,.8,.2,1), opacity .15s; }
-  .view-tools .vt[data-label]:hover::after, .view-tools .vt[data-label]:focus-visible::after { opacity: 1; transform: translate(0, -50%); clip-path: inset(-6px -6px -6px -6px); }
+    opacity: 0; transform: translate(calc(100% + 10px), -50%); clip-path: inset(-6px 100% -6px -6px);
+    transition: transform .26s cubic-bezier(.2,.8,.2,1), clip-path .26s cubic-bezier(.2,.8,.2,1), opacity .26s step-end; }
+  .view-tools .vt[data-label]:hover::after, .view-tools .vt[data-label]:focus-visible::after { opacity: 1; transform: translate(0, -50%); clip-path: inset(-6px 0 -6px -6px); transition: transform .26s cubic-bezier(.2,.8,.2,1), clip-path .26s cubic-bezier(.2,.8,.2,1), opacity 0s; }
   .view-tools .vt[aria-pressed="true"][data-label]::after { color: var(--ink); }
 }
 
