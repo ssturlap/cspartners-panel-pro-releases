@@ -244,7 +244,7 @@
     'Make the change': 'Hacer el cambio', 'Save image': 'Guardar imagen', 'A new version is made from the one picked below the picture; the others stay.': 'Se hace una nueva versión a partir de la elegida debajo de la imagen; las demás se conservan.',
     'The SketchUp view as it is now — walls, windows, doors and everything else in it come along. Tip: use SketchUp’s Match Photo to put the model in a photo of the room.': 'La vista de SketchUp tal como está — paredes, ventanas, puertas y todo lo demás se incluye. Consejo: use Igualar fotografía de SketchUp para poner el modelo en una foto del espacio.',
     'Anything else: wood floor, white walls, evening light, plants…': 'Algo más: piso de madera, paredes blancas, luz de tarde, plantas…',
-    'Renders left this month': 'Renders disponibles este mes', 'Renders of this project': 'Renders de este proyecto', 'versions': 'versiones',
+    'Renders left this month': 'Renders disponibles este mes', 'Renders of this project': 'Renders de este proyecto', 'All of them are in the strip under the picture (newest first). This one': 'Todos están en la tira bajo la imagen (el más reciente primero). Este', 'versions': 'versiones',
     'Delete this render and its versions': 'Eliminar este render y sus versiones', 'Delete this render and all its versions?': '¿Eliminar este render y todas sus versiones?', 'Close': 'Cerrar',
     'Stone piece': 'Pieza de piedra', 'Piece': 'Pieza', 'Top slab': 'Losa de tope', 'Backsplash': 'Salpicadero', 'Trim': 'Remate',
     'Depth (top) or height (backsplash / trim)': 'Fondo (tope) o altura (salpicadero / remate)', 'Depth': 'Fondo',

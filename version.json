@@ -1,13 +1,13 @@
 {
-  "version": "0.3.72",
+  "version": "0.3.73",
   "date": "2026-11-16",
-  "title": "Renders at real size",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.72.rbz",
+  "title": "Every render in view",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.73.rbz",
   "notes": [
-    "AI renders: the real size of the module or composition goes with the view and the AI is told it is full-size furniture photographed at eye height with…"
+    "Render window: every render of the project and all their versions are in the strip under the picture (newest first, #2 v1, #1 v2 ← v1…), so a new render…"
   ],
-  "title_es": "Renders a tamaño real",
+  "title_es": "Todos los renders a la vista",
   "notes_es": [
-    "Renders con IA: la medida real del módulo o la composición va con la vista y se le indica a la IA que es un mueble de tamaño real fotografiado a la altura…"
+    "Ventana de render: todos los renders del proyecto y todas sus versiones están en la tira bajo la imagen (el más reciente primero, #2 v1, #1 v2 ← v1…), así…"
   ]
 }

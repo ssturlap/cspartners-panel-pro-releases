@@ -25,7 +25,7 @@
     '.rd-busy{position:absolute;inset:0;background:rgba(20,19,17,.62);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;font-weight:600}',
     '.rd-spin{width:38px;height:38px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:#fff;animation:rdspin 1s linear infinite}',
     '@keyframes rdspin{to{transform:rotate(360deg)}}',
-    '.rd-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;min-height:84px}',
+    '.rd-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;min-height:84px;align-items:stretch}.rd-sep{flex:none;width:1px;background:var(--line,#d5d0c6);margin:4px 2px}',
     '.rd-ver{flex:none;width:112px;border:2px solid transparent;border-radius:9px;background:var(--soft,#f0ebe2);cursor:pointer;padding:0;overflow:hidden;text-align:left;font:inherit;color:inherit}',
     '.rd-ver.on{border-color:var(--accent,#b5652e)}',
     '.rd-ver .th{width:100%;height:62px;background:#d8d2c6 center/cover no-repeat;display:block}',
@@ -82,7 +82,8 @@
     function pick(r, v) {
       S.cur = r; S.v = v || (r.versions.length ? r.versions[r.versions.length - 1].v : 0); S.err = '';
       if (S.v) { load(r.id, S.v); }
-      r.versions.forEach(function (x) { load(r.id, x.v); });
+      var n = 0;
+      S.renders.forEach(function (rr) { rr.versions.slice().reverse().forEach(function (x) { if (n++ < 40) { load(rr.id, x.v); } }); });
       draw();
     }
 
@@ -140,10 +141,14 @@
           (u ? '<img alt="" src="' + u + '">' : '<div class="rd-empty">' + esc(cur && S.v ? t('Loading…') : t('Pick a setting and press Render: the view as it is now becomes a photorealistic picture. Then tell the AI what to change — every version is kept.')) + '</div>') +
           (S.busy ? '<div class="rd-busy"><div class="rd-spin"></div><div>' + esc(S.busy) + '</div></div>' : '') +
         '</div>' +
-        '<div class="rd-strip">' + (cur ? cur.versions.map(function (x) {
-          var th = img(cur.id, x.v);
-          return '<button type="button" class="rd-ver' + (x.v === S.v ? ' on' : '') + '" data-ver="' + x.v + '" title="' + esc(verLabel(x)) + '"><span class="th"' + (th ? ' style="background-image:url(' + th + ')"' : '') + '></span><small>' + esc(verLabel(x)) + '</small></button>';
-        }).join('') : '') + '</div></div>' +
+        '<div class="rd-strip">' + S.renders.map(function (r, ri) {
+          // every render of the project stays here (newest first), each with all its versions
+          return (ri ? '<span class="rd-sep" aria-hidden="true"></span>' : '') + r.versions.slice().reverse().map(function (x) {
+            var th = img(r.id, x.v), on = cur && cur.id === r.id && x.v === S.v;
+            var lab = (S.renders.length > 1 ? '#' + (S.renders.length - ri) + ' ' : '') + verLabel(x);
+            return '<button type="button" class="rd-ver' + (on ? ' on' : '') + '" data-rid="' + esc(r.id) + '" data-ver="' + x.v + '" title="' + esc(lab) + '"><span class="th"' + (th ? ' style="background-image:url(' + th + ')"' : '') + '></span><small>' + esc(lab) + '</small></button>';
+          }).join('');
+        }).join('') + '</div></div>' +
         '<div class="rd-side">' +
           (S.err ? '<div class="rd-err">' + esc(S.err) + '</div>' : '') +
           (cur ? '<div class="rd-card"><h4>' + esc(t('Change this picture')) + ' (v' + S.v + ')</h4>' +
@@ -164,9 +169,9 @@
             }).join('') + '</div></div>' +
             '<div class="rd-row"><button type="button" class="rd-btn go" data-act="render"' + (S.busy || remaining === 0 ? ' disabled' : '') + '>' + esc(t('Render')) + '</button>' +
             '<span class="rd-sub">' + (remaining == null ? '' : esc(t('Renders left this month')) + ': ' + remaining) + '</span></div></div>' +
-          (S.renders.length ? '<div class="rd-card"><h4>' + esc(t('Renders of this project')) + '</h4><select id="rdList">' + S.renders.map(function (r) {
-            return '<option value="' + esc(r.id) + '"' + (cur && cur.id === r.id ? ' selected' : '') + '>' + esc(new Date(r.created).toLocaleString(ctx.lang) + ' · ' + t(SCENE_LABEL[r.scene] || r.scene) + ' · ' + r.versions.length + ' ' + t('versions')) + '</option>';
-          }).join('') + '</select>' + (cur ? '<button type="button" class="rd-btn small" data-act="delete">' + esc(t('Delete this render and its versions')) + '</button>' : '') + '</div>' : '') +
+          (cur ? '<div class="rd-card"><h4>' + esc(t('Renders of this project')) + ': ' + S.renders.length + '</h4>' +
+            '<div class="rd-sub">' + esc(t('All of them are in the strip under the picture (newest first). This one') + ': ' + new Date(cur.created).toLocaleString(ctx.lang) + ' · ' + t(SCENE_LABEL[cur.scene] || cur.scene) + ' · ' + cur.versions.length + ' ' + t('versions')) + '</div>' +
+            '<button type="button" class="rd-btn small" data-act="delete">' + esc(t('Delete this render and its versions')) + '</button></div>' : '') +
         '</div>' +
         '<button type="button" class="rd-x" data-act="close" aria-label="' + esc(t('Close')) + '" title="' + esc(t('Close')) + '">✕</button></div>';
       host.innerHTML = h;
@@ -185,7 +190,12 @@
         };
       });
       host.querySelectorAll('[data-size]').forEach(function (b) { b.onclick = function () { S.size = b.getAttribute('data-size'); draw(); }; });
-      host.querySelectorAll('[data-ver]').forEach(function (b) { b.onclick = function () { S.v = +b.getAttribute('data-ver'); load(S.cur.id, S.v); draw(); }; });
+      host.querySelectorAll('[data-ver]').forEach(function (b) {
+        b.onclick = function () {
+          var r = S.renders.find(function (x) { return x.id === b.getAttribute('data-rid'); }) || S.cur;
+          S.cur = r; S.v = +b.getAttribute('data-ver'); load(r.id, S.v); draw();
+        };
+      });
       var n = q('#rdNotes'); if (n) { n.oninput = function () { S.notes = n.value; }; }
       var tw = q('#rdTweak'); if (tw) { tw.oninput = function () { S.tweak = tw.value; }; tw.onkeydown = function (e) { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { tweak(); } }; }
       var ph = q('#rdPhoto');
