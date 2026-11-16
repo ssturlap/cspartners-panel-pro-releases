@@ -1,15 +1,15 @@
 {
-  "version": "0.3.74",
+  "version": "0.3.75",
   "date": "2026-11-16",
-  "title": "Renders gallery",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.74.rbz",
+  "title": "The render workshop",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.75.rbz",
   "notes": [
-    "PanelPro Web: a new Renders page for each project (side menu, under Project manual; a Renders button on the phone) shows every AI picture of the project,…",
-    "Render window: a developer account shows \"Unlimited renders\" instead of a large number left."
+    "Render window: while the AI works, a \"workshop\" window shows a little hopping cabinet, a running timer and a changing joke (\"Telling the furniture it is NOT…",
+    "Render and Make the change work once per click: pressing again while a picture is being made does nothing (no more duplicate renders)."
   ],
-  "title_es": "Galería de renders",
+  "title_es": "El taller de renders",
   "notes_es": [
-    "PanelPro Web: una nueva página Renders en cada proyecto (menú lateral, bajo Manual del proyecto; un botón Renders en el teléfono) muestra todas las imágenes…",
-    "Ventana de render: una cuenta de desarrollador muestra \"Renders ilimitados\" en lugar de un número grande."
+    "Ventana de render: mientras la IA trabaja, una ventana de \"taller\" muestra un mueblecito que salta, un cronómetro y un chiste que cambia (\"Explicándole al…",
+    "Render y Hacer el cambio funcionan una vez por clic: pulsar otra vez mientras se hace la imagen no hace nada (no más renders duplicados)."
   ]
 }

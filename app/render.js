@@ -25,6 +25,25 @@
     '.rd-busy{position:absolute;inset:0;background:rgba(20,19,17,.62);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;font-weight:600}',
     '.rd-spin{width:38px;height:38px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:#fff;animation:rdspin 1s linear infinite}',
     '@keyframes rdspin{to{transform:rotate(360deg)}}',
+    // the "workshop" while the AI works: covers the whole window, whatever mode it is in
+    '.rd-wait{position:fixed;inset:0;z-index:9000;background:rgba(20,19,17,.78);display:flex;align-items:center;justify-content:center;padding:18px;animation:rdfade .2s}',
+    '@keyframes rdfade{from{opacity:0}}',
+    '.rd-wait-card{background:#fffaf2;color:#24221f;border-radius:18px;padding:26px 26px 20px;width:min(420px,100%);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);font:14px/1.45 -apple-system,"Segoe UI",Inter,Roboto,sans-serif}',
+    '.rd-wait svg{width:120px;height:120px;display:block;margin:0 auto 6px;overflow:visible}',
+    '.rd-wait .cab{animation:rdhop 1.4s ease-in-out infinite;transform-origin:60px 104px}',
+    '@keyframes rdhop{0%,100%{transform:translateY(0) scale(1,1)}12%{transform:translateY(0) scale(1.06,.92)}40%{transform:translateY(-16px) scale(.96,1.05)}62%{transform:translateY(0) scale(1.05,.94)}75%{transform:scale(1)}}',
+    '.rd-wait .door{transform-origin:34px 0;animation:rddoor 2.8s ease-in-out infinite}',
+    '@keyframes rddoor{0%,45%,100%{transform:scaleX(1)}60%,85%{transform:scaleX(.18)}}',
+    '.rd-wait .eye{animation:rdblink 3.2s infinite;transform-origin:center 52px;transform-box:fill-box}',
+    '@keyframes rdblink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}',
+    '.rd-wait .shadow{animation:rdshadow 1.4s ease-in-out infinite;transform-origin:60px 110px}',
+    '@keyframes rdshadow{40%{transform:scaleX(.7);opacity:.35}}',
+    '.rd-wait .spark{animation:rdspark 1.4s ease-out infinite;opacity:0}',
+    '@keyframes rdspark{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-26px)}}',
+    '.rd-wait h3{margin:4px 0 2px;font-size:17px}',
+    '.rd-wait-msg{min-height:42px;margin:8px 0 12px;color:#4a463f;font-weight:600;transition:opacity .25s}.rd-wait-msg.out{opacity:0}',
+    '.rd-wait-bar{height:6px;border-radius:9px;background:#ece5d8;overflow:hidden}.rd-wait-bar i{display:block;height:100%;width:0;background:var(--accent,#b5652e);border-radius:9px;transition:width 1s linear}',
+    '.rd-wait-foot{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:#7a746a}',
     '.rd-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;min-height:84px;align-items:stretch}.rd-sep{flex:none;width:1px;background:var(--line,#d5d0c6);margin:4px 2px}',
     '.rd-ver{flex:none;width:112px;border:2px solid transparent;border-radius:9px;background:var(--soft,#f0ebe2);cursor:pointer;padding:0;overflow:hidden;text-align:left;font:inherit;color:inherit}',
     '.rd-ver.on{border-color:var(--accent,#b5652e)}',
@@ -76,7 +95,7 @@
         S.imgs[key(rid, v)] = 'data:' + (r.mime || 'image/jpeg') + ';base64,' + r.data; draw();
       }, function () { delete S.imgs[key(rid, v) + ':loading']; });
     }
-    function fail(e) { S.busy = ''; S.err = (e && (e.message || e.error)) || String(e); draw(); }
+    function fail(e) { S.busy = ''; waitHide(); S.err = (e && (e.message || e.error)) || String(e); draw(); }
     function refreshStatus() { ctx.call('status', {}).then(function (r) { S.status = r; draw(); }, function (e) { S.err = (e && e.message) || ''; draw(); }); }
 
     function pick(r, v) {
@@ -87,10 +106,60 @@
       draw();
     }
 
+    // ------------------------------------------------------------ the waiting room
+    var JOKES = {
+      render: ['Sanding the edges…', 'Convincing the sunlight to come in through the window…', 'Asking the wood to show off its best grain…',
+        'Telling the furniture it is NOT a miniature. It took it well.', 'Measuring twice, rendering once…', 'Sweeping the sawdust under the rug…',
+        'Adjusting the softboxes. A bit left. No, right. Perfect.', 'Hiring a very picky photographer…', 'Polishing the handles (no fingerprints, promise)…',
+        'Waiting for the varnish to dry…', 'Shooing the cat out of the shot…', 'Straightening the pictures on the wall…',
+        'Negotiating with the pixels. They want a raise.', 'Fluffing the cushions nobody will sit on…', 'Checking every door closes. Twice.',
+        'Teaching the shadows where to sit…', 'Bribing the camera with coffee…', 'Almost there — the AI is on its last coat of paint…'],
+      tweak: ['Reading your notes very carefully…', 'Moving the lamp. Moving it back. Moving it again…', 'The AI is squinting at your request…',
+        'Repainting without touching the furniture (it bites)…', 'Asking the light to try a different mood…', 'Smudging out the old version, keeping it safe in the drawer…',
+        'Polishing the handles (again)…', 'Bribing the camera with more coffee…', 'Almost there — just a last touch-up…']
+    };
+    var wait = null;
+    function waitShow(kind, title) {
+      waitHide();
+      var list = JOKES[kind].slice(), t0 = Date.now(), k = 0;
+      for (var i = list.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), x = list[i]; list[i] = list[j]; list[j] = x; }
+      var el = document.createElement('div');
+      el.className = 'rd-wait';
+      el.innerHTML = '<div class="rd-wait-card" role="status" aria-live="polite">' +
+        '<svg viewBox="0 0 120 120" aria-hidden="true">' +
+          '<ellipse class="shadow" cx="60" cy="110" rx="34" ry="5" fill="#000" opacity=".15"/>' +
+          '<g class="cab"><rect x="26" y="24" width="68" height="80" rx="4" fill="#c9a77c" stroke="#5b4630" stroke-width="3"/>' +
+          '<rect x="22" y="18" width="76" height="9" rx="3" fill="#3a3632"/>' +
+          '<rect x="60" y="30" width="28" height="68" rx="2" fill="#d9bd95" stroke="#5b4630" stroke-width="2.5"/>' +
+          '<g transform="translate(32 30)"><rect class="door" x="0" y="0" width="28" height="68" rx="2" fill="#d9bd95" stroke="#5b4630" stroke-width="2.5"/></g>' +
+          '<circle class="eye" cx="48" cy="52" r="3.4" fill="#24221f"/><circle class="eye" cx="72" cy="52" r="3.4" fill="#24221f"/>' +
+          '<path d="M52 64q8 7 16 0" fill="none" stroke="#24221f" stroke-width="2.6" stroke-linecap="round"/>' +
+          '<rect x="34" y="104" width="6" height="5" fill="#5b4630"/><rect x="80" y="104" width="6" height="5" fill="#5b4630"/></g>' +
+          '<circle class="spark" cx="20" cy="40" r="3" fill="#f2c94c" style="--dx:-8px"/><circle class="spark" cx="100" cy="34" r="2.5" fill="#f2c94c" style="--dx:9px;animation-delay:.5s"/>' +
+          '<circle class="spark" cx="104" cy="70" r="2" fill="#b5652e" style="--dx:6px;animation-delay:.9s"/></svg>' +
+        '<h3>' + esc(title) + '</h3><div class="rd-wait-msg">' + esc(t(list[0])) + '</div>' +
+        '<div class="rd-wait-bar"><i></i></div><div class="rd-wait-foot"><span class="sec">0 s</span><span>' + esc(t('Usually 20–60 seconds')) + '</span></div></div>';
+      document.body.appendChild(el);
+      var msg = el.querySelector('.rd-wait-msg'), bar = el.querySelector('.rd-wait-bar i'), sec = el.querySelector('.sec');
+      wait = { el: el, timer: setInterval(function () {
+        if (!host.isConnected) { waitHide(); return; }   // the window was closed: the picture still lands in the list
+        var s = Math.round((Date.now() - t0) / 1000);
+        sec.textContent = s + ' s';
+        bar.style.width = Math.min(96, 100 * (1 - Math.exp(-s / 28))) + '%';
+        if (s && s % 4 === 0) {
+          msg.classList.add('out');
+          setTimeout(function () { k = (k + 1) % list.length; msg.textContent = t(list[k]); msg.classList.remove('out'); }, 250);
+        }
+      }, 1000) };
+    }
+    function waitHide() { if (wait) { clearInterval(wait.timer); wait.el.remove(); wait = null; } }
+
     function render() {
+      if (S.busy) { return; }   // one at a time: a second click does nothing
       S.err = '';
       if (S.scene === 'photo' && !S.photo) { S.err = t('Choose a photo of the room first.'); draw(); return; }
       S.busy = t('Capturing the view…'); draw();
+      waitShow('render', t('Your picture is in the workshop'));
       ctx.capture({ scene: S.scene, photo: S.photo }).then(function (cap) {
         S.busy = t('Rendering… this takes 20–60 seconds'); draw();
         return ctx.call('new', {
@@ -98,7 +167,7 @@
           photo: cap.photo || null, materials: cap.materials || [], swatches: cap.swatches || [], dims: cap.dims || null
         });
       }).then(function (r) {
-        S.busy = '';
+        S.busy = ''; waitHide();
         S.imgs[key(r.rid, r.v)] = 'data:' + (r.mime || 'image/jpeg') + ';base64,' + r.image;
         S.renders.unshift(r.render); S.cur = r.render; S.v = r.v;
         if (S.status) { S.status.remaining = r.remaining; }
@@ -109,10 +178,11 @@
 
     function tweak() {
       var txt = S.tweak.trim();
-      if (!txt || !S.cur) { return; }
+      if (!txt || !S.cur || S.busy) { return; }
       S.err = ''; S.busy = t('Making the change… 20–60 seconds'); draw();
+      waitShow('tweak', t('Making your change'));
       ctx.call('tweak', { rid: S.cur.id, from: S.v, text: txt }).then(function (r) {
-        S.busy = ''; S.tweak = '';
+        S.busy = ''; S.tweak = ''; waitHide();
         S.imgs[key(r.rid, r.v)] = 'data:' + (r.mime || 'image/jpeg') + ';base64,' + r.image;
         S.cur.versions.push(r.version); S.cur.updated = r.version.at; S.v = r.v;
         if (S.status) { S.status.remaining = r.remaining; }
@@ -135,8 +205,9 @@
       var remaining = S.status ? S.status.remaining : null, allow4k = S.status && S.status.allow4k;
       var h = '<div class="rd' + (S.placing ? ' placing' : '') + '">' +
         '<div class="rd-place-bar"><b>' + esc(t('Move, turn and zoom the 3D view until the furniture sits where it goes in the photo.')) + '</b>' +
-          '<button type="button" class="rd-btn go" data-act="render">' + esc(t('Render')) + '</button>' +
-          '<button type="button" class="rd-btn" data-act="unplace">' + esc(t('Back')) + '</button></div>' +
+          '<button type="button" class="rd-btn go" data-act="render"' + (S.busy ? ' disabled' : '') + '>' + esc(t('Render')) + '</button>' +
+          '<button type="button" class="rd-btn" data-act="unplace">' + esc(t('Back')) + '</button>' +
+          (S.err ? '<div class="rd-err">' + esc(S.err) + '</div>' : '') + '</div>' +
         '<div class="rd-main"><div class="rd-view">' +
           (u ? '<img alt="" src="' + u + '">' : '<div class="rd-empty">' + esc(cur && S.v ? t('Loading…') : t('Pick a setting and press Render: the view as it is now becomes a photorealistic picture. Then tell the AI what to change — every version is kept.')) + '</div>') +
           (S.busy ? '<div class="rd-busy"><div class="rd-spin"></div><div>' + esc(S.busy) + '</div></div>' : '') +
