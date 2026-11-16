@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.70';
-  var BUILD = 'daed34d3d4';
+  var BUILD = '6719e54ac2';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';

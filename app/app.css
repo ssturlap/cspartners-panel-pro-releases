@@ -1079,3 +1079,8 @@ body.desk .dk-table .rowbtns .icon-btn { height: 34px; width: 34px; padding: 0; 
 .vrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .vrow .picks { margin: 0; display: inline-flex; flex-wrap: wrap; gap: 6px; }
 .vrow .valbtn { margin: 0; }
+
+/* the top bar lines up with the page under it (title over the content's left edge, buttons over its right edge) */
+body.desk .top:has(~ .dk-body > .page.page-wide) { padding-left: max(16px, calc((100% - 1440px) / 2 + 16px)); padding-right: max(16px, calc((100% - 1440px) / 2 + 28px)); }
+body.desk .top:has(~ .dk-body > .page:not(.page-wide)) { padding-left: max(16px, calc((100% - 760px) / 2 + 16px)); padding-right: max(16px, calc((100% - 760px) / 2 + 28px)); }
+body.desk .top:has(~ .dk-body > .edit-layout), body.desk .top:has(~ .dk-body .compose) { padding-left: max(16px, calc((100% - 2000px) / 2 + 16px)); padding-right: max(16px, calc((100% - 2000px) / 2 + 16px)); }
