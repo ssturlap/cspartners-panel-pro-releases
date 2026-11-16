@@ -1,17 +1,13 @@
 {
-  "version": "0.3.71",
+  "version": "0.3.72",
   "date": "2026-11-16",
-  "title": "Undo on the web, tidier render window",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.71.rbz",
+  "title": "Renders at real size",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.72.rbz",
   "notes": [
-    "PanelPro Web: undo and redo in the module editor and the composition — Ctrl+Z (⌘Z), Ctrl+Shift+Z or Ctrl+Y, or the ↶ ↷ buttons on the view.",
-    "Render window: closes with the ✕ in its corner, Esc or a click outside it; it says plainly when the render server is not switched on yet.",
-    "PanelPro Web: the view buttons' names slide out to the left from behind the button; icons centred in their squares; the top bar lines up with the page."
+    "AI renders: the real size of the module or composition goes with the view and the AI is told it is full-size furniture photographed at eye height with…"
   ],
-  "title_es": "Deshacer en la web, ventana de render más ordenada",
+  "title_es": "Renders a tamaño real",
   "notes_es": [
-    "PanelPro Web: deshacer y rehacer en el editor de módulos y en la composición — Ctrl+Z (⌘Z), Ctrl+Shift+Z o Ctrl+Y, o los botones ↶ ↷ de la vista.",
-    "Ventana de render: se cierra con la ✕ de la esquina, Esc o un clic fuera; dice claramente cuando el servidor de renders aún no está activado.",
-    "PanelPro Web: los nombres de los botones de la vista se deslizan a la izquierda desde detrás del botón; iconos centrados; la barra superior se alinea con la…"
+    "Renders con IA: la medida real del módulo o la composición va con la vista y se le indica a la IA que es un mueble de tamaño real fotografiado a la altura…"
   ]
 }

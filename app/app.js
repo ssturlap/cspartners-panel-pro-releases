@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.71';
-  var BUILD = 'a3ed212d27';
+  var VERSION = '0.3.72';
+  var BUILD = 'e157f7d125';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -532,7 +532,8 @@
     });
     return Promise.all(jobs).then(function (l) { return l.filter(Boolean).slice(0, 6); });
   }
-  function openRender(s, title, paramsList) {
+  // dims: the real size { w, h, d } in mm (or a function giving it) — the AI needs it for the scale
+  function openRender(s, title, paramsList, dims) {
     var C = window.PPCloud;
     if (!C || !C.on || !C.user()) { toast(t('Renders need a signed-in PanelPro account.')); return; }
     var sheet = document.createElement('div');
@@ -572,7 +573,7 @@
           g.drawImage(view, 0, 0);
           return { image: jpeg(c), photo: jpeg(scaled(im, 1600), 0.88), w: w, h: h };
         }) : Promise.resolve({ image: jpeg(view), w: view.width, h: view.height });
-        return base.then(function (r) { return swatches(names).then(function (sw) { r.materials = names; r.swatches = sw; return r; }); });
+        return base.then(function (r) { r.dims = typeof dims === 'function' ? dims() : dims; return swatches(names).then(function (sw) { r.materials = names; r.swatches = sw; return r; }); });
       },
       save: function (b64, mime, name) {
         var a = document.createElement('a');
@@ -1496,7 +1497,10 @@
     $('#undoV').onclick = function () { histGo(-1); };
     $('#redoV').onclick = function () { histGo(1); };
     undoState();
-    $('#renderV').onclick = function () { if (view.mode !== '3d') { setViewMode('3d'); } openRender(s, (E.params.name || t('Module')) + ' · ' + s.name, [E.params]); };
+    $('#renderV').onclick = function () { if (view.mode !== '3d') { setViewMode('3d'); } openRender(s, (E.params.name || t('Module')) + ' · ' + s.name, [E.params], function () {
+      var b = E.res && E.res.bbox;
+      return b ? { w: b[1][0] - b[0][0], h: b[1][2] - b[0][2], d: b[1][1] - b[0][1] } : { w: E.params.width, h: E.params.height, d: E.params.depth };
+    }); };
     $('#dimsBtn').onclick = function () {
       var on = !dimsShown();
       save('panelpro.web.dims', on);

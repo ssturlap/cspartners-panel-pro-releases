@@ -819,7 +819,10 @@
     document.getElementById('cRender').onclick = function () {
       if (!A.has3d()) { A.toast(t('The 3D view is not available on this device.')); return; }
       if (C.mode !== '3d') { C.mode = '3d'; A.savePref('panelpro.web.cmode', '3d'); redraw(true); }
-      A.openRender(C.s, t('Composition') + ' · ' + C.s.name, C.items.map(function (it) { return it.m.params; }));
+      A.openRender(C.s, t('Composition') + ' · ' + C.s.name, C.items.map(function (it) { return it.m.params; }), function () {
+        var e = extents(), d = C.items.reduce(function (a, it) { return Math.max(a, it.bb ? it.bb.y1 - it.bb.y0 : 0); }, 0);
+        return { w: e.x1 - e.x0, h: e.z1 - e.z0, d: d };
+      });
     };
     document.getElementById('cMore').onclick = function () {
       if (isAll()) { A.toast(t('Open a wall first.')); return; }
