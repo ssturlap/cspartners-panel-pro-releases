@@ -135,6 +135,7 @@
     'Bed — Nightstand, wall hung, drawer + door below': 'Cama — Mesa de noche, colgada, gaveta + puerta abajo',
     'Bed — Nightstand, floor standing, door only': 'Cama — Mesa de noche, de piso, solo puerta',
     'Bed — Nightstand, wall hung, door only': 'Cama — Mesa de noche, colgada, solo puerta',
+    'Other — Blank module (start from scratch)': 'Otro — Módulo en blanco (empezar desde cero)',
     'Bed': 'Cama', 'Nightstand': 'Mesa de noche', 'Bed — Simple frame': 'Cama — Marco sencillo', 'Bed — Floating frame': 'Cama — Marco flotante', 'Bed — Japanese style (low, with ledge)': 'Cama — Estilo japonés (baja, con repisa)',
     'Simple frame': 'Marco sencillo', 'Skirts between L legs at the corners': 'Faldones entre patas en L en las esquinas', 'Floating frame': 'Marco flotante',
     'On a base set back on 3 sides, no legs': 'Sobre una base retirada en 3 lados, sin patas', 'Japanese style': 'Estilo japonés', 'Low, wide ledge on 3 sides': 'Baja, repisa ancha en 3 lados',

@@ -1,13 +1,13 @@
 {
-  "version": "0.3.60",
+  "version": "0.3.61",
   "date": "2026-11-16",
-  "title": "Nightstands",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.60.rbz",
+  "title": "Blank module",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.61.rbz",
   "notes": [
-    "Six nightstands in the catalog (under Bed): floor standing (500 × 560 × 400 on a 60 mm plinth) and wall hung (500 × 380 × 380, hung 300 mm off the floor),…"
+    "Catalog › Other › Blank module: a plain 600 × 800 × 600 box with a full top, no fronts and no toe kick — the starting point when no preset is close to what…"
   ],
-  "title_es": "Mesas de noche",
+  "title_es": "Módulo en blanco",
   "notes_es": [
-    "Seis mesas de noche en el catálogo (en Cama): de piso (500 × 560 × 400 sobre un zócalo de 60 mm) y colgadas (500 × 380 × 380, a 300 mm del piso), cada una…"
+    "Catálogo › Otro › Módulo en blanco: una caja simple de 600 × 800 × 600 con techo completo, sin frentes y sin zócalo — el punto de partida cuando ningún…"
   ]
 }
