@@ -63,7 +63,7 @@
     'Nothing shared yet.': 'Aún no hay nada compartido.', 'My list': 'Mi lista', 'Mark official': 'Marcar oficial', 'Not official': 'No oficial',
     'Remove from gallery': 'Quitar de la galería', 'Remove this item from the public gallery?': '¿Quitar este elemento de la galería pública?',
     'Prices stay private: only the texture, sheet size and thicknesses are shared.': 'Los precios quedan privados: solo se comparten la textura, el tamaño del tablero y los espesores.',
-    'Developer': 'Desarrollador', 'PayPal client ID': 'Client ID de PayPal', 'PayPal mode': 'Modo de PayPal', 'Sandbox (tests)': 'Sandbox (pruebas)', 'Live': 'Real',
+    'Developer': 'Desarrollador', 'AI renders': 'Renders con IA', 'Image model': 'Modelo de imagen', 'Allow 4K': 'Permitir 4K', 'Renders per month': 'Renders por mes', 'Trial': 'Prueba', 'PayPal client ID': 'Client ID de PayPal', 'PayPal mode': 'Modo de PayPal', 'Sandbox (tests)': 'Sandbox (pruebas)', 'Live': 'Real',
     'PayPal plans': 'Planes de PayPal', 'PayPal plan ID': 'ID del plan de PayPal', 'Price label': 'Precio (texto)', '+ Plan': '+ Plan',
     'Tier switches': 'Interruptores de los planes', 'Give a plan': 'Dar un plan', 'User email': 'Correo del usuario', 'Days': 'Días',
     'Plan given': 'Plan asignado', 'No user with that email (they must sign in once).': 'No hay un usuario con ese correo (debe iniciar sesión una vez).',
@@ -755,7 +755,7 @@
     if (!isDev()) { A.go('#/', true); return; }
     var c = JSON.parse(JSON.stringify(appCfg)); c.paypal = c.paypal || { mode: 'sandbox', plans: {} }; c.paypal.plans = c.paypal.plans || {};
     c.tiers = Object.assign({}, JSON.parse(JSON.stringify(TIERS)), c.tiers || {});
-    var plans = Object.keys(c.paypal.plans);
+    var plans = Object.keys(c.paypal.plans), rc = c.render || {};
     A.show(header(t('Developer')) + '<div class="page">' +
       '<div class="box fields"><h3 class="grp">PayPal</h3>' +
         '<div class="frow-f stack"><span class="flbl">' + esc(t('PayPal client ID')) + '</span><input class="text-in" id="dvCid" value="' + esc(c.paypal.client_id || '') + '"></div>' +
@@ -770,6 +770,15 @@
             return '<td><input type="checkbox" data-tier="' + tr + ':' + f + '"' + (c.tiers[tr][f] ? ' checked' : '') + '></td>';
           }).join('') + '</tr>';
         }).join('') + '</table></div>' +
+      '<div class="box fields"><h3 class="grp">' + esc(t('AI renders')) + '</h3>' +
+        '<div class="frow-f stack"><span class="flbl">' + esc(t('Image model')) + '</span><input class="text-in" id="dvRModel" value="' + esc(rc.model || 'gemini-nano-banana-2.1') + '"></div>' +
+        '<div class="frow-f"><span class="flbl">API</span><select id="dvRApi" class="text-in" style="max-width:220px"><option value="interactions">Interactions</option><option value="generate"' + (rc.api === 'generate' ? ' selected' : '') + '>generateContent</option></select></div>' +
+        '<div class="frow-f"><span class="flbl">' + esc(t('Allow 4K')) + '</span><input type="checkbox" id="dvR4k"' + (rc.allow4k === false ? '' : ' checked') + '></div>' +
+        '<h3 class="grp">' + esc(t('Renders per month')) + '</h3>' +
+        [['web', 'Web', 40], ['lite', 'Plugin Lite', 40], ['full', 'Full', 120], ['trial', t('Trial'), 10]].map(function (x) {
+          var v = rc.limits && rc.limits[x[0]] != null ? rc.limits[x[0]] : x[2];
+          return '<div class="frow-f"><span class="flbl">' + esc(x[1]) + '</span><input class="text-in" type="number" min="0" data-rlim="' + x[0] + '" value="' + esc(v) + '" style="max-width:120px"></div>';
+        }).join('') + '</div>' +
       '<button type="button" class="btn primary" id="dvSave" style="width:100%">' + esc(A.t('Save changes')) + '</button>' +
       '<div class="box fields" style="margin-top:16px"><h3 class="grp">' + esc(t('Give a plan')) + '</h3>' +
         '<div class="frow-f stack"><span class="flbl">' + esc(t('User email')) + '</span><input class="text-in" id="gpMail" type="email"></div>' +
@@ -797,6 +806,8 @@
       });
       ['web', 'lite', 'full'].forEach(function (tr) { out.tiers[tr] = {}; });
       document.querySelectorAll('[data-tier]').forEach(function (cb) { var a = cb.getAttribute('data-tier').split(':'); out.tiers[a[0]][a[1]] = cb.checked; });
+      out.render = { model: $('#dvRModel').value.trim() || 'gemini-nano-banana-2.1', api: $('#dvRApi').value, allow4k: $('#dvR4k').checked, limits: {} };
+      document.querySelectorAll('[data-rlim]').forEach(function (i) { out.render.limits[i.getAttribute('data-rlim')] = Math.max(0, Number(i.value) || 0); });
       FB.updateDoc(dref('config/app'), out).then(function () { A.toast(t('Saved')); }, err);
     };
     $('#gpGo').onclick = function () {
@@ -842,6 +853,11 @@
     spaceMenu: spaceMenu, moveSite: moveSite, hasCompanies: function () { return companies.length > 0; },
     gallery: { load: loadGallery, cached: function (k) { return gal[k]; }, shareModule: shareModule, unshareModule: unshareModule,
                shareMaterial: shareMaterial, unshareMaterial: unshareMaterial, admin: galleryAdmin },
-    planLine: planLine
+    planLine: planLine,
+    // a callable function of the PanelPro server (renders): Promise of its data
+    call: function (name, data, timeout) {
+      if (!ON || !user) { return Promise.reject(new Error(t('Sign in first'))); }
+      return FB.httpsCallable(fns, name, { timeout: timeout || 70000 })(data).then(function (r) { return r.data; });
+    }
   };
 })();

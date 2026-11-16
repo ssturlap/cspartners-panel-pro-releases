@@ -1032,3 +1032,10 @@ body.desk .edit-layout, body.desk .compose { max-width: 2000px; margin: 0 auto; 
   background: #24221f; color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(3px); transition: opacity .12s, transform .12s; z-index: 5; }
 .rowbtns .icon-btn[data-tip]:hover::after, .rowbtns .icon-btn[data-tip]:focus-visible::after { opacity: 1; transform: none; }
 body.desk .dk-table .rowbtns .icon-btn { height: 34px; width: 34px; padding: 0; }
+
+/* AI renders (ui/render.js): a panel over the screen; while placing furniture on a photo, a bar at the bottom */
+.rd-sheet { position: fixed; inset: 0; z-index: 60; background: rgba(20, 19, 17, .55); display: flex; align-items: stretch; justify-content: center; padding: 18px; }
+.rd-sheet .rd-box { background: var(--bg, #f6f4ef); border-radius: 14px; padding: 14px; width: min(1400px, 100%); max-height: 100%; overflow: auto; box-sizing: border-box; }
+.rd-sheet.placing { inset: auto 0 0 0; background: transparent; padding: 10px; pointer-events: none; }
+.rd-sheet.placing .rd-box { pointer-events: auto; box-shadow: 0 6px 30px rgba(0, 0, 0, .25); }
+@media (max-width: 760px) { .rd-sheet { padding: 0; } .rd-sheet .rd-box { border-radius: 0; } }

@@ -31,7 +31,7 @@
   P3D.init = function (el) {
     host = el;
     try {
-      renderer = new T.WebGLRenderer({ antialias: true, alpha: false, preserveDrawingBuffer: true });
+      renderer = new T.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });   // alpha: a photo can show behind (renders)
     } catch (e) { P3D.ok = false; return false; }
     renderer.setPixelRatio(window.devicePixelRatio || 1);
     renderer.setClearColor(0xffffff, 1);
@@ -50,6 +50,43 @@
     P3D.resize();
     loop();
     return true;
+  };
+
+  // ------------------------------------------------------------------ AI renders
+  // A photo of the room behind the 3D view (url or null): the background goes see-through and the
+  // photo fills the view (CSS cover, centred) so the furniture can be placed on it.
+  var backdrop = null;
+  P3D.setBackdrop = function (url) {
+    backdrop = url || null;
+    if (!renderer || !host) { return; }
+    host.style.backgroundImage = backdrop ? 'url("' + backdrop + '")' : '';
+    host.style.backgroundSize = backdrop ? 'cover' : '';
+    host.style.backgroundPosition = backdrop ? 'center' : '';
+    renderer.setClearColor(0xffffff, backdrop ? 0 : 1);
+    dirty = true;
+  };
+  // The view as it is now (same camera, no dimension lines), w px wide: a canvas. transparent:
+  // the background left see-through (to lay over a photo).
+  P3D.capture = function (opts) {
+    opts = opts || {};
+    if (!renderer || !host) { return null; }
+    var hw = host.clientWidth || 300, hh = host.clientHeight || 200;
+    var w = Math.round(opts.w || 1600), h = Math.round(w * hh / hw);
+    var r;
+    try { r = new T.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true }); } catch (e) { return null; }
+    r.setPixelRatio(1); r.setSize(w, h, false); r.setClearColor(0xffffff, opts.transparent ? 0 : 1);
+    var c = cam().clone();
+    if (c.isPerspectiveCamera) { c.aspect = w / h; } else { syncOrtho(); c = ortho.clone(); }
+    c.updateProjectionMatrix();
+    var dv = dimsGroup ? dimsGroup.visible : null;
+    if (dimsGroup) { dimsGroup.visible = false; }
+    r.render(scene, c);
+    if (dimsGroup) { dimsGroup.visible = dv; }
+    var out = document.createElement('canvas');
+    out.width = w; out.height = h;
+    out.getContext('2d').drawImage(r.domElement, 0, 0);
+    r.dispose();
+    return out;
   };
 
   P3D.resize = function () {

@@ -1,31 +1,21 @@
 {
-  "version": "0.3.64",
+  "version": "0.3.65",
   "date": "2026-11-16",
-  "title": "Compositions: one top, back and side panels over many modules",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.64.rbz",
+  "title": "AI renders (photoreal pictures of your modules)",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.65.rbz",
   "notes": [
-    "Select placed modules (or a group of them) › right-click › CSPARTNERS PANEL PRO › Create composition. Right-click the composition to add a top, a back panel…",
-    "Top: stone (granite / marble, 2 cm or 4 cm double bullnose) or a wood panel. Front overhang from the fronts or the carcass, back overhang, an overhang at…",
-    "Along the back of a stone top: none, a trim (7 cm, 10 cm or your height) or a backsplash (up to the wall cabinets, or your height), with returns at the ends…",
-    "An L (modules facing two ways) gets a butt joint: the longer run goes through to the corner, the other stops against its front edge — switch which one in…",
-    "Slabs up to 3000 mm (you can change it); joints are suggested on the seams between modules and can be put anywhere (distances from the left end). A pantry…",
-    "Back panel (from the floor to the top) and side panels at the open ends, in your panel material; the top covers them.",
-    "The pieces live inside the composition and are made again by themselves whenever a module in it is moved, added, removed or changed. Modules with their own…",
-    "Stone pieces are listed in the hardware for the stone supplier (size, edge, finished ends); wood pieces are in the cut list.",
-    "Send to PanelPro on save (Extensions menu, on by default): each save writes the project as \"<model>.panelpro.json\" next to the .skp to open in PanelPro Web;…",
-    "PanelPro Web: Composition › ⋯ › New composition: the same top, back and side panels (pick the modules on every wall the composition covers); the pieces…"
+    "Extensions › CSPARTNERS PANEL PRO › Render (AI)… (also on the right-click menu): the view as it is now — modules and everything else in the model (walls,…",
+    "Tell the AI what to change (\"warmer light\", \"darker floor\"): each change is a new version made from the one you picked; every version is kept with the…",
+    "The materials of your modules (names and texture swatches) go with the view so the wood and stone look like yours.",
+    "PanelPro Web: the camera button on the 3D view (module editor and composition) does the same, with a photo studio or a room as the setting — or your own…",
+    "Renders are made on the PanelPro server and need a signed-in account; each plan has a monthly number of renders (set on the Developer screen). They start…"
   ],
-  "title_es": "Composiciones: un solo tope, panel trasero y laterales sobre varios módulos",
+  "title_es": "Renders con IA (imágenes fotorrealistas de sus módulos)",
   "notes_es": [
-    "Seleccione módulos colocados (o un grupo de ellos) › clic derecho › CSPARTNERS PANEL PRO › Crear composición. Haga clic derecho en la composición para…",
-    "Tope: piedra (granito / mármol, 2 cm o 4 cm con canto doble media caña) o un panel de madera. Vuelo frontal desde los frentes o el casco, vuelo trasero, un…",
-    "En la parte trasera de un tope de piedra: nada, un remate (7 cm, 10 cm o su altura) o un salpicadero (hasta los aéreos, o su altura), con retornos en los…",
-    "Una L (módulos mirando a dos lados) lleva unión a tope: el tramo más largo pasa hasta la esquina y el otro se detiene contra su canto frontal — puede…",
-    "Losas de hasta 3000 mm (se puede cambiar); las uniones se sugieren en las juntas entre módulos y se pueden poner donde quiera (distancias desde el extremo…",
-    "Panel trasero (del piso al tope) y paneles laterales en los extremos libres, en su material de panel; el tope los cubre.",
-    "Las piezas viven dentro de la composición y se vuelven a hacer solas cuando un módulo se mueve, se agrega, se quita o cambia. Los módulos con tope de piedra…",
-    "Las piezas de piedra salen en los herrajes para el proveedor de piedra (medida, canto, extremos pulidos); las de madera en la lista de corte.",
-    "Enviar a PanelPro al guardar (menú Extensiones, activo por defecto): cada vez que guarda, el proyecto se escribe como \"<modelo>.panelpro.json\" junto al .skp…",
-    "PanelPro Web: Composición › ⋯ › Nueva composición: el mismo tope, panel trasero y laterales (toque los módulos en cada pared que cubre); las piezas siguen a…"
+    "Extensiones › CSPARTNERS PANEL PRO › Render (IA)… (también en el menú de clic derecho): la vista tal como está — los módulos y todo lo demás del modelo…",
+    "Dígale a la IA qué cambiar (\"luz más cálida\", \"piso más oscuro\"): cada cambio es una nueva versión hecha a partir de la que eligió; todas las versiones se…",
+    "Los materiales de sus módulos (nombres y muestras de textura) van con la vista para que la madera y la piedra se vean como las suyas.",
+    "PanelPro Web: el botón de cámara en la vista 3D (editor de módulo y composición) hace lo mismo, con un estudio o un ambiente — o su propia foto del espacio:…",
+    "Los renders se hacen en el servidor de PanelPro y necesitan una cuenta con sesión iniciada; cada plan tiene un número de renders por mes (se ajusta en la…"
   ]
 }

@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.64';
-  var BUILD = '62db712ccd';
+  var VERSION = '0.3.65';
+  var BUILD = 'b63c01e7c1';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -44,6 +44,8 @@
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
     'Add modules to the site first.': 'Primero agregue módulos a la obra.',
+    'Renders need a signed-in PanelPro account.': 'Los renders necesitan una cuenta de PanelPro con sesión iniciada.', 'The 3D view is not available on this device.': 'La vista 3D no está disponible en este dispositivo.',
+    'Could not capture the 3D view.': 'No se pudo capturar la vista 3D.',
     'New composition: top, back and side panels…': 'Nueva composición: tope, panel trasero y laterales…', 'Composition: top, back and side panels…': 'Composición: tope, panel trasero y laterales…',
     'Tap the modules of the composition, then Next.': 'Toque los módulos de la composición y luego Siguiente.',
     'Tap the modules of the composition (on every wall it covers), then Next.': 'Toque los módulos de la composición (en cada pared que cubre) y luego Siguiente.',
@@ -486,6 +488,78 @@
     if (p[0] === 'materials' && window.PPMaterials) { return window.PPMaterials.route(p); }
     renderSites();
   }
+  // ------------------------------------------------------------------ AI renders (ui/render.js)
+  // The 3D view as it is now → a photoreal picture made on the PanelPro server; tweaks make new
+  // versions, all kept with the project. A photo of the room can be put behind the 3D view to place
+  // the furniture in it. Needs the signed-in account (cloud on).
+  var MAT_KEYS = ['mat_carcass', 'mat_front', 'mat_top', 'mat_skin', 'mat_back', 'mat_frame', 'mat_drawer', 'mat_kick', 'mat_inner', 'mat_end'];
+  var STONE_NAMES = { marble_white: 'White marble', granite_grey: 'Grey granite', granite_black: 'Black granite' };
+  function renderMaterials(list) {
+    var names = [];
+    (list || []).forEach(function (p) {
+      MAT_KEYS.forEach(function (k) { if (p[k] && !/^PanelPro /.test(p[k]) && names.indexOf(p[k]) < 0) { names.push(p[k]); } });   // not the plain stand-in colours
+      if ((p.stone || p.slab) && STONE_NAMES[p.stone_look] && names.indexOf(STONE_NAMES[p.stone_look]) < 0) { names.push(STONE_NAMES[p.stone_look]); }
+    });
+    return names.slice(0, 12);
+  }
+  function loadImg(src) {
+    return new Promise(function (ok, no) { var im = new Image(); im.crossOrigin = 'anonymous'; im.onload = function () { ok(im); }; im.onerror = no; im.src = src; });
+  }
+  function jpeg(canvas, q) { return canvas.toDataURL('image/jpeg', q || 0.9).split(',')[1]; }
+  function scaled(im, max) {
+    var k = Math.min(1, max / Math.max(im.naturalWidth || im.width, im.naturalHeight || im.height));
+    var c = document.createElement('canvas'); c.width = Math.round((im.naturalWidth || im.width) * k); c.height = Math.round((im.naturalHeight || im.height) * k);
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    return c;
+  }
+  function swatches(names) {
+    var jobs = names.map(function (n) {
+      var inf = matInfo(n), src = inf && (inf.thumb || inf.tex);
+      if (!src) { return Promise.resolve(null); }
+      return loadImg(src).then(function (im) { return { mime: 'image/jpeg', data: jpeg(scaled(im, 512), 0.85) }; }, function () { return null; });
+    });
+    return Promise.all(jobs).then(function (l) { return l.filter(Boolean).slice(0, 6); });
+  }
+  function openRender(s, title, paramsList) {
+    var C = window.PPCloud;
+    if (!C || !C.on || !C.user()) { toast(t('Renders need a signed-in PanelPro account.')); return; }
+    var sheet = document.createElement('div');
+    sheet.className = 'rd-sheet';
+    sheet.innerHTML = '<div class="rd-box"></div>';
+    document.body.appendChild(sheet);
+    var photo = null;
+    function close() { if (has3d) { P3D.setBackdrop(null); } sheet.remove(); }
+    window.PPRender.open(sheet.firstChild, {
+      t: t, lang: lang, app: 'web', site: s.id, title: title,
+      scenes: ['studio', 'kitchen', 'bedroom', 'living', 'bathroom', 'office', 'music', 'closet'].concat(has3d ? ['photo'] : []), scene: 'studio',
+      call: function (action, data) { return C.call('renderCall', Object.assign({ action: action }, data), 300000); },
+      setPhoto: function (url) { photo = url; if (has3d) { P3D.setBackdrop(url); } },
+      place: function (on) { sheet.classList.toggle('placing', !!on); },
+      capture: function (o) {
+        if (!has3d) { return Promise.reject(new Error(t('The 3D view is not available on this device.'))); }
+        var names = renderMaterials(paramsList);
+        var view = P3D.capture({ w: 1600, transparent: o.scene === 'photo' });
+        if (!view) { return Promise.reject(new Error(t('Could not capture the 3D view.'))); }
+        var base = o.scene === 'photo' && photo ? loadImg(photo).then(function (im) {
+          // the photo as it showed behind the view (cover, centred), then the furniture on it
+          var c = document.createElement('canvas'), w = view.width, h = view.height, k = Math.max(w / im.naturalWidth, h / im.naturalHeight);
+          c.width = w; c.height = h;
+          var g = c.getContext('2d');
+          g.drawImage(im, (w - im.naturalWidth * k) / 2, (h - im.naturalHeight * k) / 2, im.naturalWidth * k, im.naturalHeight * k);
+          g.drawImage(view, 0, 0);
+          return { image: jpeg(c), photo: jpeg(scaled(im, 1600), 0.88), w: w, h: h };
+        }) : Promise.resolve({ image: jpeg(view), w: view.width, h: view.height });
+        return base.then(function (r) { return swatches(names).then(function (sw) { r.materials = names; r.swatches = sw; return r; }); });
+      },
+      save: function (b64, mime, name) {
+        var a = document.createElement('a');
+        a.href = 'data:' + mime + ';base64,' + b64; a.download = name;
+        document.body.appendChild(a); a.click(); a.remove();
+      },
+      close: close
+    });
+  }
+
   // Small icon buttons over the 3D view (the label shows as a tooltip and is read out).
   var VT_ICONS = {
     sizes: '<path d="M3.5 15.5 15.5 3.5l5 5-12 12z"/><path d="M7.5 11.5l2 2M10.5 8.5l2 2M13.5 5.5l2 2"/>',
@@ -493,7 +567,8 @@
     doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 11h7M9 14h7M9 17h5"/>',
     view: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
     open: '<rect x="4" y="3.5" width="10" height="17" rx="1"/><path d="M14 4.5l6 2v13l-6-1.5M11 12h.01"/>',
-    fit: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'
+    fit: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+    render: '<path d="M4 6.5h3l1.5-2h7L17 6.5h3v13H4z"/><circle cx="12" cy="13" r="3.6"/><path d="M18.5 2.5v3M17 4h3"/>'
   };
   function vtBtn(id, icon, label, extra) {
     return '<button type="button" id="' + id + '" class="vt" title="' + esc(label) + '" aria-label="' + esc(label) + '"' + (extra || '') + '>' +
@@ -1321,7 +1396,7 @@
       '<div class="side-bar" id="sideBar" role="tablist">' + SIDES.map(function (k) { return '<button type="button" data-side="' + k + '">' + esc(sideLabel(k)) + '</button>'; }).join('') + '</div>' +
       '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" title="2D / 3D">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
       vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View')) +
-      vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
+      vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('renderV', 'render', t('Render (AI)')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
       '<div class="edit-side"><div class="page" id="editBody"></div>' +
       '<div class="dock"><span class="steps" id="steps"></span><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save') : t('Add to site')) + '</button></div></div>' +
       '</div>'
@@ -1346,6 +1421,7 @@
     $('#fitBtn').onclick = function () { if (has3d && view.mode === '3d') { P3D.zoomExtents(); } };
     wireDiag();
     $('#manualV').onclick = function () { makeManual(s, { id: mod ? mod.id : '__new', params: E.params }); };
+    $('#renderV').onclick = function () { if (view.mode !== '3d') { setViewMode('3d'); } openRender(s, (E.params.name || t('Module')) + ' · ' + s.name, [E.params]); };
     $('#dimsBtn').onclick = function () {
       var on = !dimsShown();
       save('panelpro.web.dims', on);
@@ -2693,7 +2769,7 @@
   window.PPApp = {
     t: t, esc: esc, fmt: fmt, L: L, LU: LU, U: U, show: show, go: go, menu: menu, toast: toast, openPad: openPad,
     persist: function () { persist(); }, codesOf: codesOf, codeSort: codeSort, dimsOf: dimsOf, matInfo: matInfo,
-    viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown,
+    viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown, openRender: openRender,
     loadPref: load, savePref: save, uid: uid, menuItemHtml: menuItemHtml, version: VERSION, build: BUILD, vtBtn: vtBtn, setOpenBtn: setOpenBtn, diagBtn: diagBtn, wireDiag: wireDiag, lang: function () { return lang; }, site: site, uk: uk,
     prefsOpt: function () { return prefs.opt; }, shareFile: shareFile, pickFile: pickFile,
     sites: function () { return sites; }, prefs: function () { return prefs; }, resetPrefs: resetPrefs, fixPrefs: fixPrefs,

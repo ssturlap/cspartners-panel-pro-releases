@@ -764,7 +764,7 @@
       '<div class="compose"><div class="cview view3d" id="cview"><div id="ctabs">' + tabsHtml() + '</div><svg id="csvg" class="csvg" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<div class="dim-note" id="cNote">' + esc(t('Dimensions in ' + A.U())) + '</div>' +
       '<div class="view-tools"><button type="button" id="cMode" class="vt vt-txt" title="2D / 3D">3D</button>' + A.vtBtn('cOpen', 'open', t('Open all'), ' aria-pressed="false"') +
-      A.diagBtn() + A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
+      A.diagBtn() + A.vtBtn('cRender', 'render', t('Render (AI)')) + A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
       '<div class="cpanel" id="cpanel"></div></div>'
     );
     var host = document.getElementById('cview');
@@ -777,6 +777,11 @@
     document.getElementById('cFit').onclick = function () { if (C.mode === '2d') { fitBox(); draw2d(); } else { P3D.zoomExtents(); } };
     document.getElementById('cOpen').onclick = function () { var o = P3D.toggle('all'); A.setOpenBtn(this, o); };
     A.wireDiag();
+    document.getElementById('cRender').onclick = function () {
+      if (!A.has3d()) { A.toast(t('The 3D view is not available on this device.')); return; }
+      if (C.mode !== '3d') { C.mode = '3d'; A.savePref('panelpro.web.cmode', '3d'); redraw(true); }
+      A.openRender(C.s, t('Composition') + ' · ' + C.s.name, C.items.map(function (it) { return it.m.params; }));
+    };
     document.getElementById('cMore').onclick = function () {
       if (isAll()) { A.toast(t('Open a wall first.')); return; }
       var list = [{ label: t('Panels for a run…'), icon: 'runpanels', run: function () { startPick(null); } },
