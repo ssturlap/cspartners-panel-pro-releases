@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.64';
-  var BUILD = '66bf95adb9';
+  var BUILD = '62db712ccd';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -594,13 +594,14 @@
   function siteCardHtml(s) {
     return '<div class="row-card site-card" data-site="' + esc(s.id) + '" role="button" tabindex="0"><span class="grow"><span class="t1">' + esc(s.name) + '</span>' +
       '<span class="t2">' + esc([s.client, new Date(s.updated).toLocaleDateString(lang)].filter(Boolean).join(' · ')) + '</span></span>' +
-      '<button type="button" class="icon-btn dupbtn" data-dup="' + esc(s.id) + '" aria-label="' + esc(t('Duplicate')) + '" title="' + esc(t('Duplicate')) + '">⧉</button>' + statsHtml(s) + '</div>';
+      rowBtns(s) + statsHtml(s) + '</div>';
   }
   function wireSiteCards() {
     screen.querySelectorAll('.site-card[data-site]').forEach(function (b) {
       b.onclick = function (e) {
-        var d = e.target.closest('[data-dup]');
+        var d = e.target.closest('[data-dup]'), x = e.target.closest('[data-del]');
         if (d) { duplicateSite(site(d.getAttribute('data-dup'))); return; }
+        if (x) { deleteSite(site(x.getAttribute('data-del')), function () { route(); }); return; }
         go('#/site/' + encodeURIComponent(b.getAttribute('data-site')));
       };
     });
@@ -893,6 +894,17 @@
     }
   }
 
+  // Delete a project (after asking); then(): what to show next
+  function deleteSite(s, then) {
+    if (!s || !confirm(t('Delete this site and its modules?') + '\n\n' + s.name)) { return; }
+    sites = sites.filter(function (x) { return x !== s; }); persist(); toast(t('Deleted'));
+    if (then) { then(); }
+  }
+  // the project list's row buttons: icons, with their name shown on hover
+  function rowBtns(s) {
+    return '<span class="rowbtns"><button type="button" class="icon-btn dupbtn" data-dup="' + esc(s.id) + '" aria-label="' + esc(t('Duplicate')) + '" data-tip="' + esc(t('Duplicate')) + '">' + menuIcon('copy') + '</button>' +
+      '<button type="button" class="icon-btn delbtn" data-del="' + esc(s.id) + '" aria-label="' + esc(t('Delete site')) + '" data-tip="' + esc(t('Delete site')) + '">' + menuIcon('trash') + '</button></span>';
+  }
   // "Duplicate": a copy of the project with new ids (same modules, codes and notes)
   function duplicateSite(s) {
     var c = clone(s);
@@ -926,7 +938,7 @@
             return '<tr data-site="' + esc(s.id) + '" tabindex="0"><td class="td-pic"><img alt="" data-sthumb="' + esc(s.id) + '"></td>' +
               '<td class="td-name"><b>' + esc(s.name) + '</b>' + (s.client ? '<small class="cli">' + esc(s.client) + '</small>' : '') + '</td>' +
               '<td>' + statsHtml(s) + '</td><td class="n">' + esc(new Date(s.updated).toLocaleDateString(lang)) + '</td>' +
-              '<td class="n"><button type="button" class="btn small ghost dupbtn" data-dup="' + esc(s.id) + '">⧉ ' + esc(t('Duplicate')) + '</button></td></tr>';
+              '<td class="n">' + rowBtns(s) + '</td></tr>';
           }).join('') : '<tr><td colspan="5" class="muted">' + esc(DT('No projects match.')) + '</td></tr>') + '</tbody></table>'
         : '<div class="empty"><h2>' + esc(t('No sites yet')) + '</h2><p>' + esc(t('Start one for the room you are measuring.')) + '</p></div>') +
       '<p class="meta-line" style="margin-top:20px">PanelPro Web ' + esc(VERSION) + ' · ' + esc(t('Engine')) + ' ' + esc(Engine.version || '') + '</p>' +
@@ -935,10 +947,11 @@
     if (cloud) { cloud.wireInvites(); }
     screen.querySelectorAll('tr[data-site]').forEach(function (r) {
       var open = function () { go('#/site/' + encodeURIComponent(r.getAttribute('data-site'))); };
-      r.onclick = function (e) { if (e.target.closest('[data-dup]')) { return; } open(); };
+      r.onclick = function (e) { if (e.target.closest('[data-dup],[data-del]')) { return; } open(); };
       r.onkeydown = function (e) { if (e.key === 'Enter') { open(); } };
     });
     screen.querySelectorAll('[data-dup]').forEach(function (b) { b.onclick = function () { duplicateSite(site(b.getAttribute('data-dup'))); }; });
+    screen.querySelectorAll('[data-del]').forEach(function (b) { b.onclick = function () { deleteSite(site(b.getAttribute('data-del')), function () { route(); }); }; });
     setTimeout(fillStats, 200);
     screen.querySelectorAll('[data-sort]').forEach(function (b) {
       b.onclick = function () {
@@ -1118,10 +1131,7 @@
         { label: t('Share project file'), icon: 'share', run: function () { shareSite(s); } },
         { label: t('Rename site'), icon: 'edit', run: function () { renderNewSite(s); } },
         window.PPCloud && window.PPCloud.on && (window.PPCloud.hasCompanies() || window.PPCloud.space().kind === 'company') ? { label: window.PPCloud.t('Move to a company…'), icon: 'move', run: function () { window.PPCloud.moveSite(s); } } : null,
-        { label: t('Delete site'), icon: 'trash', danger: true, run: function () {
-          if (!confirm(t('Delete this site and its modules?'))) { return; }
-          sites = sites.filter(function (x) { return x !== s; }); persist(); toast(t('Deleted')); go('#/projects', true);
-        } }
+        { label: t('Delete site'), icon: 'trash', danger: true, run: function () { deleteSite(s, function () { go('#/projects', true); }); } }
       ].filter(Boolean));
   }
   function siteThumbs(s) {

@@ -1020,3 +1020,15 @@ body.desk .edit-layout, body.desk .compose { max-width: 2000px; margin: 0 auto; 
 .side-bar button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 /* phone, 2D: the drawing has its own dimension lines, so no size chips; the side bar sits at the very bottom, under the drawing */
 @media (max-width: 860px) { .view3d.is2d .dimchips { display: none; } .view3d.is2d .side-bar { bottom: 8px; } .side-bar button { padding: 6px 10px; } }
+
+/* project list: duplicate / delete as icons, their name shown on hover */
+.rowbtns { display: inline-flex; gap: 6px; flex: none; }
+.rowbtns .icon-btn { position: relative; width: 36px; height: 36px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: 9px; background: var(--panel, #fff); color: var(--muted); }
+.rowbtns .icon-btn svg.mi { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.rowbtns .icon-btn:hover { color: var(--ink); border-color: var(--ink); background: var(--soft, #f0ebe2); }
+.rowbtns .delbtn:hover { color: #b3261e; border-color: #b3261e; background: #fdecea; }
+.rowbtns .icon-btn[data-tip]::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); right: 0; padding: 4px 8px; border-radius: 6px;
+  background: #24221f; color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(3px); transition: opacity .12s, transform .12s; z-index: 5; }
+.rowbtns .icon-btn[data-tip]:hover::after, .rowbtns .icon-btn[data-tip]:focus-visible::after { opacity: 1; transform: none; }
+body.desk .dk-table .rowbtns .icon-btn { height: 34px; width: 34px; padding: 0; }
