@@ -1,13 +1,15 @@
 {
-  "version": "0.3.68",
+  "version": "0.3.69",
   "date": "2026-11-16",
-  "title": "Nooks: every title over its options",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.68.rbz",
+  "title": "Tidier settings",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.69.rbz",
   "notes": [
-    "Nooks: each setting (size, split, front, hinge, inside…) has its title on its own line with the options under it, the same in every row."
+    "The full text on hover no longer pops up over scrolling bars (like the tab bar), only over texts that are cut off.",
+    "PanelPro Web: every tab is laid out the same way — each setting's title on top with its value and quick picks under it on the left; on / off switches stay…"
   ],
-  "title_es": "Nichos: cada título sobre sus opciones",
+  "title_es": "Ajustes más ordenados",
   "notes_es": [
-    "Nichos: cada ajuste (medida, división, frente, bisagra, interior…) tiene su título en su propia línea con las opciones debajo, igual en todas las filas."
+    "El texto completo al pasar el mouse ya no aparece sobre barras que se desplazan (como la de pestañas), solo sobre textos cortados.",
+    "PanelPro Web: todas las pestañas se organizan igual — el título de cada ajuste arriba con su valor y opciones rápidas debajo a la izquierda; los…"
   ]
 }

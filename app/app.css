@@ -231,7 +231,7 @@ button { cursor: pointer; }
 .chk { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 14px; color: var(--ink-2); }
 .chk input { width: 20px; height: 20px; }
 .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 1px solid rgba(0,0,0,.2); margin-right: 8px; vertical-align: -2px; }
-.picks { margin: -2px 0 8px; justify-content: flex-end; }
+.picks { margin: -2px 0 8px; justify-content: flex-start; }   /* quick picks on the left, under the title */
 .picks button { min-height: 34px; padding: 0 12px; font-size: 14px; }
 .fbtn { width: 100%; margin: 8px 0; }
 .colbox { padding-bottom: 8px; }
@@ -1074,3 +1074,8 @@ body.desk .dk-table .rowbtns .icon-btn { height: 34px; width: 34px; padding: 0; 
 .ed-name:focus { outline: none; border-color: var(--ink); background: #fff; }
 .pad-modes, .dpad-modes { display: flex; margin: 6px 0 8px; }
 .pad-modes button, .dpad-modes button { flex: 1; }
+
+/* a size field: its value and quick picks on one line under the title, on the left */
+.vrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.vrow .picks { margin: 0; display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.vrow .valbtn { margin: 0; }

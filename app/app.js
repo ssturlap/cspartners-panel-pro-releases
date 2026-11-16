@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.68';
-  var BUILD = '40419038a8';
+  var VERSION = '0.3.69';
+  var BUILD = '28090dea8c';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1817,12 +1817,15 @@
     var picks = '';
     if (F().PICKS[key]) {
       var mk = F().MODE_KEYS[key], active = mk && F().tMult(p[mk]) ? p[mk] : null;
-      picks = '<div class="seg picks">' + F().PICKS[key].map(function (x) {
+      picks = '<span class="seg picks">' + F().PICKS[key].map(function (x) {
         var on = active ? String(x) === active : (typeof x === 'number' && Math.abs(x - p[key]) < 0.01);
         return '<button type="button" class="num-chip" data-pick="' + key + '" data-v="' + x + '" aria-pressed="' + on + '">' + esc(x === 0 ? t('Flush') : String(x)) + '</button>';
-      }).join('') + '</div>';
+      }).join('') + '</span>';
     }
-    return '<div class="frow-f"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>' + picks;
+    // every tab the same way: the title on top, its value and quick picks under it on the left
+    // (on / off switches stay beside their title)
+    if (type === 'bool') { return '<div class="frow-f"><span class="flbl">' + esc(label) + '</span>' + ctl + '</div>'; }
+    return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span><div class="vrow">' + ctl + picks + '</div></div>';
   }
 
   var nkSel = null, nkN = 2;

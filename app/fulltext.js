@@ -28,7 +28,9 @@
     if (el.tagName === 'INPUT' && !/^(text|search|)$/.test(el.type)) { return false; }
     var w = el.clientWidth, h = el.clientHeight;
     if (!w || !textOf(el)) { return false; }
+    if (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA' && el.children.length > 3) { return false; }   // a list or a bar, not a text
     var cs = getComputedStyle(el);
+    if (/auto|scroll/.test(cs.overflowX + cs.overflowY) && el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA') { return false; }   // scrolls: nothing hidden
     var hides = cs.overflow !== 'visible' || cs.overflowX !== 'visible' || cs.textOverflow === 'ellipsis' || cs.webkitLineClamp !== 'none' && cs.webkitLineClamp;
     if (!hides && el.tagName !== 'INPUT') { return false; }
     return el.scrollWidth > w + 1 || (cs.whiteSpace !== 'nowrap' && el.scrollHeight > h + 2 && el.tagName !== 'INPUT');

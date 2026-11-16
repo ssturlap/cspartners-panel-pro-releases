@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.68** — Nooks: every title over its options  
-Download [cspartners_panel_pro_0.3.68.rbz](releases/cspartners_panel_pro_0.3.68.rbz) and install it in SketchUp:
+**Latest: 0.3.69** — Tidier settings  
+Download [cspartners_panel_pro_0.3.69.rbz](releases/cspartners_panel_pro_0.3.69.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.69 | [cspartners_panel_pro_0.3.69.rbz](releases/cspartners_panel_pro_0.3.69.rbz) |
 | 0.3.68 | [cspartners_panel_pro_0.3.68.rbz](releases/cspartners_panel_pro_0.3.68.rbz) |
 | 0.3.67 | [cspartners_panel_pro_0.3.67.rbz](releases/cspartners_panel_pro_0.3.67.rbz) |
 | 0.3.66 | [cspartners_panel_pro_0.3.66.rbz](releases/cspartners_panel_pro_0.3.66.rbz) |
