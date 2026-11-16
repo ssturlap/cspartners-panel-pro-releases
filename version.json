@@ -1,15 +1,15 @@
 {
-  "version": "0.3.75",
+  "version": "0.3.76",
   "date": "2026-11-16",
-  "title": "The render workshop",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.75.rbz",
+  "title": "Slimmer slides",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.76.rbz",
   "notes": [
-    "Render window: while the AI works, a \"workshop\" window shows a little hopping cabinet, a running timer and a changing joke (\"Telling the furniture it is NOT…",
-    "Render and Make the change work once per click: pressing again while a picture is being made does nothing (no more duplicate renders)."
+    "3D view: side-mount drawer slides (and the shoe pull-out slides) are drawn 30 mm high, like the real ones. In SketchUp the real slide model is still used…",
+    "PanelPro Web: welcome banner on the dashboard, your picture instead of ⋯, project card buttons lined up with a pop-up name, view button names slide in and…"
   ],
-  "title_es": "El taller de renders",
+  "title_es": "Correderas más delgadas",
   "notes_es": [
-    "Ventana de render: mientras la IA trabaja, una ventana de \"taller\" muestra un mueblecito que salta, un cronómetro y un chiste que cambia (\"Explicándole al…",
-    "Render y Hacer el cambio funcionan una vez por clic: pulsar otra vez mientras se hace la imagen no hace nada (no más renders duplicados)."
+    "Vista 3D: las correderas laterales de las gavetas (y las de los zapateros extraíbles) se dibujan de 30 mm de alto, como las reales. En SketchUp se sigue…",
+    "PanelPro Web: bienvenida en el inicio, su foto en lugar de ⋯, botones de las tarjetas de proyecto alineados con nombre emergente, y los nombres de los…"
   ]
 }

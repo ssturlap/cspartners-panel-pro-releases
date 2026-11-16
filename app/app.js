@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.75';
-  var BUILD = '4dacec648a';
+  var VERSION = '0.3.76';
+  var BUILD = 'f9aa81cb77';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -218,6 +218,7 @@
     viewer.className = 'view3d-host';
     viewer.style.cssText = 'position:absolute;inset:0';
     has3d = !!(window.P3D && window.P3D.ok && window.P3D.init(viewer));
+    if (window.P3D && window.P3D.speed) { window.P3D.speed.orbit = 0.5; window.P3D.speed.zoom = 0.45; }   // calmer turning and zooming on the web
     if (has3d) { P3D.onPartMenu = function (p) { partMatMenu(p); }; P3D.setDiag(load('panelpro.web.diag', false)); }
     return viewer;
   }

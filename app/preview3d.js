@@ -12,7 +12,8 @@
 (function () {
   'use strict';
   var T = window.THREE;
-  var P3D = { ok: !!T };
+  // speed: how fast the mouse turns and zooms the view (1 = the plugin's; PanelPro Web sets it slower)
+  var P3D = { ok: !!T, speed: { orbit: 1, zoom: 1 } };
   window.P3D = P3D;
   if (!T) { return; }
 
@@ -692,9 +693,9 @@
     toPerspective();
     target.copy(centre());
     var off = persp.position.clone().sub(target);
-    off.applyAxisAngle(new T.Vector3(0, 0, 1), -dx * 0.008);
+    off.applyAxisAngle(new T.Vector3(0, 0, 1), -dx * 0.008 * P3D.speed.orbit);
     var right = new T.Vector3().crossVectors(off, new T.Vector3(0, 0, 1)).normalize();
-    var test = off.clone().applyAxisAngle(right, -dy * 0.008);
+    var test = off.clone().applyAxisAngle(right, -dy * 0.008 * P3D.speed.orbit);
     var ang = test.angleTo(new T.Vector3(0, 0, 1));
     if (ang > 0.03 && ang < Math.PI - 0.03) { off = test; }
     persp.position.copy(target).add(off);
@@ -838,13 +839,13 @@
       drag.x = e.clientX; drag.y = e.clientY;
       if (drag.mode === 'orbit') { orbit(dx, dy); }
       else if (drag.mode === 'pan') { pan(dx, dy); }
-      else if (drag.mode === 'zoom') { zoom(Math.exp(dy * 0.006), null); }
+      else if (drag.mode === 'zoom') { zoom(Math.exp(dy * 0.006 * P3D.speed.zoom), null); }
     });
     window.addEventListener('mouseup', function () { drag = null; });
     el.addEventListener('wheel', function (e) {
       e.preventDefault();
       var dy = e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY;
-      zoom(Math.exp(dy * 0.0015), e);
+      zoom(Math.exp(dy * 0.0015 * P3D.speed.zoom), e);
     }, { passive: false });
     // double-click middle button: centre on that point
     var lastMid = 0;
