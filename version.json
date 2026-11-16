@@ -1,13 +1,13 @@
 {
-  "version": "0.3.61",
+  "version": "0.3.62",
   "date": "2026-11-16",
-  "title": "Blank module",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.61.rbz",
+  "title": "The Configurator opens on the blank module",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.62.rbz",
   "notes": [
-    "Catalog › Other › Blank module: a plain 600 × 800 × 600 box with a full top, no fronts and no toe kick — the starting point when no preset is close to what…"
+    "When the Configurator opens, it starts from the Blank module (600 × 800 × 600, no fronts) instead of the kitchen base with one door."
   ],
-  "title_es": "Módulo en blanco",
+  "title_es": "El Configurador abre con el módulo en blanco",
   "notes_es": [
-    "Catálogo › Otro › Módulo en blanco: una caja simple de 600 × 800 × 600 con techo completo, sin frentes y sin zócalo — el punto de partida cuando ningún…"
+    "Al abrir el Configurador, empieza con el Módulo en blanco (600 × 800 × 600, sin frentes) en lugar del bajo de cocina con una puerta."
   ]
 }
