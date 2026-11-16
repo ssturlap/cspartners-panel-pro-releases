@@ -1,15 +1,13 @@
 {
-  "version": "0.3.59",
-  "date": "2026-11-14",
-  "title": "2D view: every side, drawn like the manual",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.59.rbz",
+  "version": "0.3.60",
+  "date": "2026-11-16",
+  "title": "Nightstands",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.60.rbz",
   "notes": [
-    "The 2D preview (Configurator and PanelPro Web) has a bar at the bottom to pick the side — Front, Right, Back, Left or Top — and draws it like the module…",
-    "PanelPro Web: the manual opens in a window over the app, with Project manual in the project’s menu and sidebar, Manual for this module in the editor’s menu,…"
+    "Six nightstands in the catalog (under Bed): floor standing (500 × 560 × 400 on a 60 mm plinth) and wall hung (500 × 380 × 380, hung 300 mm off the floor),…"
   ],
-  "title_es": "Vista 2D: todos los lados, dibujados como el manual",
+  "title_es": "Mesas de noche",
   "notes_es": [
-    "La vista previa 2D (Configurador y PanelPro Web) tiene una barra abajo para elegir el lado — Frente, Derecha, Atrás, Izquierda o Arriba — y lo dibuja como…",
-    "PanelPro Web: el manual se abre en una ventana sobre la app, con Manual del proyecto en el menú y la barra lateral del proyecto, Manual de este módulo en el…"
+    "Seis mesas de noche en el catálogo (en Cama): de piso (500 × 560 × 400 sobre un zócalo de 60 mm) y colgadas (500 × 380 × 380, a 300 mm del piso), cada una…"
   ]
 }
