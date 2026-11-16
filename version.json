@@ -1,17 +1,13 @@
 {
-  "version": "0.3.67",
+  "version": "0.3.68",
   "date": "2026-11-16",
-  "title": "Full text on hover, nook split on one line",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.67.rbz",
+  "title": "Nooks: every title over its options",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.68.rbz",
   "notes": [
-    "Wherever a text is cut off (names in lists, long labels, text fields), resting the mouse on it shows the full text — in the plugin windows and in PanelPro Web.",
-    "Nooks: the number of pieces and the two split buttons (↔ Side by side, ↕ Over and under) are on one line.",
-    "PanelPro Web: the module editor has no Module tab any more for ordinary modules — the name is over the sizes, the inner width is a choice in the width…"
+    "Nooks: each setting (size, split, front, hinge, inside…) has its title on its own line with the options under it, the same in every row."
   ],
-  "title_es": "Texto completo al pasar el mouse, división de nichos en una línea",
+  "title_es": "Nichos: cada título sobre sus opciones",
   "notes_es": [
-    "Donde un texto aparece cortado (nombres en listas, etiquetas largas, campos de texto), al dejar el mouse encima se muestra completo — en las ventanas del…",
-    "Nichos: la cantidad de piezas y los dos botones de división (↔ Lado a lado, ↕ Uno sobre otro) están en una sola línea.",
-    "PanelPro Web: el editor de módulos ya no tiene la pestaña Módulo para los módulos normales — el nombre está sobre las medidas, el ancho interior es una…"
+    "Nichos: cada ajuste (medida, división, frente, bisagra, interior…) tiene su título en su propia línea con las opciones debajo, igual en todas las filas."
   ]
 }

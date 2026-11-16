@@ -91,7 +91,7 @@
     '.nk-step{display:inline-flex;align-items:center;gap:6px}.nk-step button{width:28px;height:28px;border-radius:7px;border:1px solid var(--line,#ccc);background:#fff;cursor:pointer;font:inherit}',
     '.nk-hint{font-size:12px;color:var(--muted,#777)}',
     '.nk-line{display:inline-flex;align-items:center;gap:6px;flex-wrap:nowrap;white-space:nowrap}.nk-line .nk-b{padding:5px 8px}',
-    '@media (max-width:420px){.nk-r>span.l{min-width:100%}}'
+    '.nk-r>span.l{flex-basis:100%;min-width:100%}.nk-r>span.l:empty{display:none}'   // every title over its options, the same in each row
   ].join('\n');
 
   function render(host, ctx) {
