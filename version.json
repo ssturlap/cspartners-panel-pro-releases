@@ -1,17 +1,17 @@
 {
-  "version": "0.3.66",
+  "version": "0.3.67",
   "date": "2026-11-16",
-  "title": "Crown on a module, row heights on the preview",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.66.rbz",
+  "title": "Full text on hover, nook split on one line",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.67.rbz",
   "notes": [
-    "Decorative panels › Crown: strips on edge on top of the module, on the sides you pick (front, left, right, back or any combination such as front + left or…",
-    "The 3D preview shows a second dimension line with the height of each row (base, each row, top), next to the overall height — in the plugin too: the new…",
-    "PanelPro Web: \"Check for updates\" moved to the side bar under your account; the app asks its own questions (delete, discard) instead of the browser's; the…"
+    "Wherever a text is cut off (names in lists, long labels, text fields), resting the mouse on it shows the full text — in the plugin windows and in PanelPro Web.",
+    "Nooks: the number of pieces and the two split buttons (↔ Side by side, ↕ Over and under) are on one line.",
+    "PanelPro Web: the module editor has no Module tab any more for ordinary modules — the name is over the sizes, the inner width is a choice in the width…"
   ],
-  "title_es": "Corona en un módulo, alturas de filas en la vista previa",
+  "title_es": "Texto completo al pasar el mouse, división de nichos en una línea",
   "notes_es": [
-    "Paneles decorativos › Corona: listones de canto sobre el módulo, en los lados que elija (frente, izquierda, derecha, atrás o cualquier combinación como…",
-    "La vista 3D muestra una segunda línea de cota con la altura de cada fila (base, cada fila, tapa), junto a la altura total — también en el plugin: el nuevo…",
-    "PanelPro Web: \"Buscar actualizaciones\" pasó a la barra lateral debajo de su cuenta; la app hace sus propias preguntas (eliminar, descartar) en lugar de las…"
+    "Donde un texto aparece cortado (nombres en listas, etiquetas largas, campos de texto), al dejar el mouse encima se muestra completo — en las ventanas del…",
+    "Nichos: la cantidad de piezas y los dos botones de división (↔ Lado a lado, ↕ Uno sobre otro) están en una sola línea.",
+    "PanelPro Web: el editor de módulos ya no tiene la pestaña Módulo para los módulos normales — el nombre está sobre las medidas, el ancho interior es una…"
   ]
 }

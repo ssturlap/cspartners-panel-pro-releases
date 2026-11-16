@@ -226,7 +226,7 @@
     'Decorative panels': 'Paneles decorativos', 'Top decorative panel': 'Tapa decorativa',
     'Top panel thickness': 'Espesor de la tapa', 'Top panel overhang — front': 'Vuelo de la tapa — frente',
     'Top panel overhang — each side': 'Vuelo de la tapa — cada lado', 'Top panel overhang — back': 'Vuelo de la tapa — atrás',
-    'Stone top': 'Tope de piedra', 'Crown (strips on edge on top of the module)': 'Corona (listones de canto sobre el módulo)', 'Crown sides': 'Lados de la corona',
+    'Stone top': 'Tope de piedra', 'Over and under': 'Uno sobre otro', 'Crown (strips on edge on top of the module)': 'Corona (listones de canto sobre el módulo)', 'Crown sides': 'Lados de la corona',
     'Front + left': 'Frente + izquierda', 'Front + right': 'Frente + derecha', 'Front + both sides': 'Frente + ambos lados', 'All four sides': 'Los cuatro lados',
     'Both sides': 'Ambos lados', 'Front + back': 'Frente + atrás', 'Left + back': 'Izquierda + atrás', 'Right + back': 'Derecha + atrás', 'Both sides + back': 'Ambos lados + atrás',
     'Front + left + back': 'Frente + izquierda + atrás', 'Front + right + back': 'Frente + derecha + atrás', 'Crown position': 'Posición de la corona',

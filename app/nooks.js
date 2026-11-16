@@ -89,7 +89,9 @@
     '.nk input.nk-n{width:76px;font:inherit;padding:5px 7px;border:1px solid var(--line,#ccc);border-radius:7px;text-align:right}',
     '.nk-auto{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(--line,#ccc);border-radius:8px;background:#fff;cursor:pointer}.nk-auto.on{background:var(--nk-on,#24221f);color:#fff;border-color:var(--nk-on,#24221f)}',
     '.nk-step{display:inline-flex;align-items:center;gap:6px}.nk-step button{width:28px;height:28px;border-radius:7px;border:1px solid var(--line,#ccc);background:#fff;cursor:pointer;font:inherit}',
-    '.nk-hint{font-size:12px;color:var(--muted,#777)}'
+    '.nk-hint{font-size:12px;color:var(--muted,#777)}',
+    '.nk-line{display:inline-flex;align-items:center;gap:6px;flex-wrap:nowrap;white-space:nowrap}.nk-line .nk-b{padding:5px 8px}',
+    '@media (max-width:420px){.nk-r>span.l{min-width:100%}}'
   ].join('\n');
 
   function render(host, ctx) {
@@ -126,11 +128,12 @@
         '<button type="button" class="nk-auto' + (auto ? ' on' : '') + '" data-nk="auto" data-calc="' + (calc || '') + '">↔ ' + esc(t('auto')) + '</button>' +
         '<span class="nk-hint">' + esc(t('clear size')) + '</span></div>';
     }
-    h += '<div class="nk-r"><span class="l">' + esc(t('Split')) + '</span>' +
-      '<button type="button" class="nk-b go" data-nk="split" data-dir="v">↔ ' + esc(t('Side by side')) + '</button>' +
-      '<button type="button" class="nk-b go" data-nk="split" data-dir="h">↕ ' + esc(t('One above the other')) + '</button>' +
+    // how many, then which way — on one line
+    h += '<div class="nk-r"><span class="l">' + esc(t('Split')) + '</span><span class="nk-line">' +
       '<span class="nk-step"><button type="button" data-nk="n" data-d="-1">−</button><b id="nkN">' + (ctx.n || 2) + '</b><button type="button" data-nk="n" data-d="1">+</button></span>' +
-      (par ? '<button type="button" class="nk-b del" data-nk="merge">' + esc(t('Join (undo the split)')) + '</button>' : '') + '</div>';
+      '<button type="button" class="nk-b go" data-nk="split" data-dir="v">↔ ' + esc(t('Side by side')) + '</button>' +
+      '<button type="button" class="nk-b go" data-nk="split" data-dir="h">↕ ' + esc(t('Over and under')) + '</button></span></div>' +
+      (par ? '<div class="nk-r"><span class="l"></span><button type="button" class="nk-b del" data-nk="merge">' + esc(t('Join (undo the split)')) + '</button></div>' : '');
     function seg(key, list, v) {
       return '<span class="nk-seg">' + list.map(function (o) {
         return '<button type="button" data-nk="set" data-k="' + key + '" data-v="' + o[0] + '" class="' + (String(v) === o[0] ? 'on' : '') + '">' + esc(t(o[1])) + '</button>';
