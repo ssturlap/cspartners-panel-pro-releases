@@ -1063,3 +1063,6 @@ body.desk .dk-table .rowbtns .icon-btn { height: 34px; width: 34px; padding: 0; 
 .ask-btns .btn { flex: 1; justify-content: center; }
 .ask-btns .btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .ask-btns .btn.danger:hover { background: #9a1f18; }
+
+/* scroll areas keep room for their scroll bar, so the panel keeps its width when it grows past the screen */
+.edit-side .page, .dk-body, .dk-side, .ws-list, .rp-box, .rd-sheet .rd-box { scrollbar-gutter: stable; }
