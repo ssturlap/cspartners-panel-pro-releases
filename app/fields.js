@@ -150,6 +150,9 @@
         ['top_full', 'Top full width', 'Top over the sides · bottom between the sides', 'M0 6h6v38H0zM34 6h6v38h-6z|M0 0h40v6H0zM6 38h28v6H6z'],
         ['bottom_full', 'Bottom full width', 'Bottom under the sides · top between the sides', 'M0 0h6v38H0zM34 0h6v38h-6z|M6 0h28v6H6zM0 38h40v6H0z'],
         ['top_bottom_full', 'Top and bottom full width', 'Both over the sides', 'M0 6h6v32H0zM34 6h6v32h-6z|M0 0h40v6H0zM0 38h40v6H0z']]],
+      ['side_up', 'Sides go up past the top', 'len', function (p) { return p.joint === 'sides_full'; }],
+      ['side_down', 'Sides go down past the bottom', 'len', function (p) { return p.joint === 'sides_full' && p.kick_type === 'none'; }],
+      ['top_setback', 'Top set back from the front (fronts become inset)', 'len', function (p) { return p.joint === 'sides_full' && p.top_type !== 'stretchers'; }],
       ['t', 'Panel thickness', 'len'],
       ['#', 'Back'],
       ['back_mount', 'Back panel (respaldo)', 'cards', [

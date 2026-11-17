@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.77** — Full-depth top and bottom, toe kick set back  
-Download [cspartners_panel_pro_0.3.77.rbz](releases/cspartners_panel_pro_0.3.77.rbz) and install it in SketchUp:
+**Latest: 0.3.78** — Sides full height: up past the top, set-back top  
+Download [cspartners_panel_pro_0.3.78.rbz](releases/cspartners_panel_pro_0.3.78.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.78 | [cspartners_panel_pro_0.3.78.rbz](releases/cspartners_panel_pro_0.3.78.rbz) |
 | 0.3.77 | [cspartners_panel_pro_0.3.77.rbz](releases/cspartners_panel_pro_0.3.77.rbz) |
 | 0.3.76 | [cspartners_panel_pro_0.3.76.rbz](releases/cspartners_panel_pro_0.3.76.rbz) |
 | 0.3.75 | [cspartners_panel_pro_0.3.75.rbz](releases/cspartners_panel_pro_0.3.75.rbz) |

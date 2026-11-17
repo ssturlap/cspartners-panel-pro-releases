@@ -1,17 +1,19 @@
 {
-  "version": "0.3.77",
+  "version": "0.3.78",
   "date": "2026-11-17",
-  "title": "Full-depth top and bottom, toe kick set back",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.77.rbz",
+  "title": "Sides full height: up past the top, set-back top",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.78.rbz",
   "notes": [
-    "Top and bottom are now always as deep as the sides. When the back panel is recessed, it sits between them, so nothing sticks out at the back any more.",
-    "Toe kick: its front face now sits the setback (20 mm by default) behind the carcass front — before, the setback was measured to the back of the board, so it…",
-    "Modules already drawn change when they are rebuilt or edited; check the cut list (top, bottom and plinth rail sizes change)."
+    "Carcass joint \"Sides full height\" has three new sizes: sides up past the top (the top sits that much lower, between the sides), sides down past the bottom…",
+    "A set-back top makes the doors and drawer fronts inset, flush with the sides and up to the top of the sides; no setback brings them back to overlay.",
+    "With \"Sides full height\" and a plinth, the sides now run to the floor and the plinth boards fit between them.",
+    "PanelPro Web: Box is the first step, then Layout; arrows either side of the steps move to the previous or next one."
   ],
-  "title_es": "Techo y piso a toda la profundidad, zócalo retrasado",
+  "title_es": "Costados de altura completa: por encima del techo, techo retrasado",
   "notes_es": [
-    "El techo y el piso ahora siempre tienen la misma profundidad que los costados. Si el fondo va retrasado, queda entre ellos y ya nada sobresale por detrás.",
-    "Zócalo: su cara frontal ahora queda retrasada la medida indicada (20 mm por defecto) desde el frente del cuerpo; antes se medía hasta la cara trasera de la…",
-    "Los módulos ya dibujados cambian al reconstruirlos o editarlos; revise la lista de corte (cambian las medidas del techo, el piso y los travesaños del zócalo)."
+    "La unión \"Costados de altura completa\" tiene tres medidas nuevas: costados por encima del techo (el techo baja esa medida, entre los costados), costados por…",
+    "Un techo retrasado hace que puertas y frentes de gaveta sean internos, al ras de los costados y hasta arriba de ellos; sin retraso vuelven a ser sobrepuestos.",
+    "Con \"Costados de altura completa\" y zócalo, los costados ahora llegan al piso y las tablas del zócalo quedan entre ellos.",
+    "PanelPro Web: Cuerpo es el primer paso, luego Distribución; flechas a cada lado de los pasos llevan al anterior o al siguiente."
   ]
 }

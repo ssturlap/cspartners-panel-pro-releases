@@ -1168,3 +1168,13 @@ body.desk .top:has(~ .dk-body > .edit-layout), body.desk .top:has(~ .dk-body .co
 .avatar-btn img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .avatar-btn i { font-style: normal; font-weight: 800; font-size: 16px; }
 .avatar-btn svg { width: 22px; height: 22px; }
+/* tab strip with previous / next: the strip scrolls between the two arrows */
+.etabs-w { display: flex; align-items: stretch; gap: 2px; margin: 4px -14px 8px; border-bottom: 1px solid var(--line); }
+.etabs-w .etabs { flex: 1; min-width: 0; margin: 0; border-bottom: 0; scroll-behavior: smooth; padding: 0 6px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%); }
+.et-nav { flex: none; width: 30px; border: 0; background: none; color: var(--ink); font-size: 24px; line-height: 1; cursor: pointer; border-radius: 8px; padding: 0 0 3px; }
+.et-nav:hover:not(:disabled) { background: var(--soft, rgba(0,0,0,.05)); }
+.et-nav:disabled { color: var(--line); cursor: default; }
+body.desk .etabs-w { margin: 4px 0 8px; }
+.etabs-w { position: sticky; top: 0; z-index: 3; background: var(--card); }
+.etabs-w .etabs { position: static; background: none; }

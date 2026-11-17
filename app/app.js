@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.77';
-  var BUILD = 'd175fde261';
+  var VERSION = '0.3.78';
+  var BUILD = '3303c1e48e';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1556,7 +1556,7 @@
       // a new module goes step by step through the tabs (Save & next); an edited one saves in place
       E = { site: s, mod: mod, presetKey: mod ? mod.preset || null : presetKey, params: params, dirty: !mod, changed: {}, wizard: !mod };
       E.hist = [JSON.stringify(params)]; E.hi = 0;   // undo / redo (Ctrl+Z, Ctrl+Shift+Z / Ctrl+Y, the ↶ ↷ buttons)
-      if (!mod) { editTab = 'layout'; }
+      if (!mod) { editTab = 'box'; }
     }
     rebuild();
     var p = E.params;
@@ -1876,8 +1876,7 @@
   // A tab lists whole sections of ui/fields.js, or a slice of one: { sec, from, until } (group titles).
   var DECO_TITLE = 'Decorative panels', ENDS_TITLE = 'Visible end panels', CUT_TITLE = 'Cut list';
   var KICK_TITLE = 'Base / toe kick';   // its own step after Box
-  var TABS = [['layout', 'Layout', ['layout']], ['module', 'Module', ['module']],
-              ['box', 'Box', [{ sec: 'box', until: KICK_TITLE }]],
+  var TABS = [['box', 'Box', [{ sec: 'box', until: KICK_TITLE }]], ['layout', 'Layout', ['layout']], ['module', 'Module', ['module']],
               ['kick', 'Toe kick', [{ sec: 'box', from: KICK_TITLE, until: DECO_TITLE }, { defs: [['elevation', 'Off the floor', 'len', null, 'here']] }]],
               ['panels', 'Decorative panels', [{ sec: 'box', from: DECO_TITLE }, { sec: 'materials', from: ENDS_TITLE, until: CUT_TITLE }]],
               ['fronts', 'Fronts', ['fronts', 'frame', 'pulls', 'motion']], ['drawers', 'Drawers', ['drawers']],
@@ -1898,7 +1897,7 @@
   var HINGE_CH = [['L', 'Hinge left'], ['R', 'Hinge right'], ['T', 'Lift up'], ['B', 'Drop down']];
   var INTERIOR_CH = [['none', 'Empty'], ['shelves', 'Shelves'], ['hang', 'Hang rail'], ['inner_drawers', 'Inner drawers'], ['shoe_pullout', 'Shoe pull-outs'], ['shoe_rack', 'Shoe rack']];
   var COUNT_L = { shelves: 'Shelves', inner_drawers: 'Drawers', shoe_pullout: 'Pull-outs', shoe_rack: 'Racks' };
-  var editTab = load('panelpro.web.tab', 'layout');
+  var editTab = load('panelpro.web.tab', 'box');
 
   function F() { return window.PPFields; }
   function rctx() {
@@ -2103,9 +2102,11 @@
       : p.panel || p.bed ? TABS.filter(function (x) { return x[0] === 'module' || x[0] === 'materials'; })
       : TABS.filter(function (x) { return x[0] === 'layout' || x[0] === 'materials' || tabFields(x, p) !== ''; });   // Module only when something is left in it (corner, fridge…)
     var tab = tabs.find(function (x) { return x[0] === editTab; }) || tabs[0];
-    html += '<nav class="etabs" role="tablist">' + tabs.map(function (tb) {
+    var ti = tabs.indexOf(tab);
+    html += '<div class="etabs-w"><button type="button" class="et-nav" data-tabgo="-1" aria-label="' + esc(t('Previous')) + '"' + (ti <= 0 ? ' disabled' : '') + '>‹</button>' +
+      '<nav class="etabs" role="tablist">' + tabs.map(function (tb) {
       return '<button type="button" role="tab" data-tab="' + tb[0] + '" aria-selected="' + (tab[0] === tb[0]) + '">' + esc(t(tb[1])) + '</button>';
-    }).join('') + '</nav>';
+    }).join('') + '</nav><button type="button" class="et-nav" data-tabgo="1" aria-label="' + esc(t('Next')) + '"' + (ti >= tabs.length - 1 ? ' disabled' : '') + '>›</button></div>';
     html += '<div class="tabbody">';
     if (tab[0] === 'layout') { html += layoutHtml(p); }
     var fields = tabFields(tab, p);
@@ -2117,7 +2118,7 @@
     E.tabs = tabs.map(function (x) { return x[0]; });
     E.tab = tab[0];
     var nav = body.querySelector('.etabs'), on = nav && nav.querySelector('[aria-selected="true"]');
-    if (on) { nav.scrollLeft = Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2); }
+    if (on) { nav.scrollTo({ left: Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2), behavior: 'instant' }); }
     fillDimChips(p);
     dockState();
     wireEditBody(body);
@@ -2180,6 +2181,20 @@
           F().setMatLink(p, mk, ln || null, name);
           changed(false);
         }, { links: links });
+        return;
+      }
+      if ((a = b.getAttribute('data-tabgo'))) {
+        var ix = E.tabs.indexOf(E.tab) + Number(a);
+        if (ix < 0 || ix >= E.tabs.length) { return; }
+        var nv0 = $('#editBody .etabs'), from = nv0 ? nv0.scrollLeft : 0;
+        editTab = E.tabs[ix]; save('panelpro.web.tab', editTab); renderEditBody(); $('#editBody').scrollTop = 0;
+        // slide the strip to the new tab
+        var nv = $('#editBody .etabs'), on2 = nv && nv.querySelector('[aria-selected="true"]');
+        if (on2) {
+          var to = Math.max(0, on2.offsetLeft - (nv.clientWidth - on2.offsetWidth) / 2);
+          nv.scrollTo({ left: from, behavior: 'instant' });
+          requestAnimationFrame(function () { nv.scrollTo({ left: to, behavior: 'smooth' }); });
+        }
         return;
       }
       if ((a = b.getAttribute('data-tab'))) { editTab = a; save('panelpro.web.tab', a); renderEditBody(); $('#editBody').scrollTop = 0; return; }
