@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.78';
-  var BUILD = '3303c1e48e';
+  var BUILD = 'b22bec2af7';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -495,7 +495,7 @@
       if (p[2] === 'compose') { return window.PPCompose.render(s); }
       return renderSite(s);
     }
-    if (p[0] === 'newsite') { return renderNewSite(); }
+    if (p[0] === 'newsite') { location.replace('#/'); return; }
     if (p[0] === 'projects') { return renderSites(); }
     if (p[0] === 'catalog') { return renderPick(null); }
     if (p[0] === 'hardware') { return p[1] ? renderHwEdit(p[1]) : renderHwList(); }
@@ -877,7 +877,7 @@
     }
     wireCards();
     wireSiteCards();
-    $('#heroNew').onclick = function () { go('#/newsite'); };
+    $('#heroNew').onclick = function () { renderNewSite(); };
     $('#heroOpen').onclick = function () { pickFile(null); };
     if ($('#langBtn')) { $('#langBtn').onclick = function () { setLang(lang === 'es' ? 'en' : 'es'); route(); }; }
     if (cloud) { if ($('#spaceBtn')) { $('#spaceBtn').onclick = cloud.spaceMenu; } cloud.wireInvites(); }
@@ -1205,7 +1205,7 @@
     });
     var qi = $('#dkQ');
     qi.oninput = function () { deskQuery = qi.value; var pos = qi.selectionStart; renderSitesDesk(cloud); var n = $('#dkQ'); n.focus(); n.setSelectionRange(pos, pos); };
-    $('#newSite').onclick = function () { go('#/newsite'); };
+    $('#newSite').onclick = function () { renderNewSite(); };
     $('#moreBtn').onclick = function () {
       menu(null, [{ label: t('Open a project file'), icon: 'file', run: function () { pickFile(null); } }]);
     };
@@ -1242,7 +1242,7 @@
     wireSiteCards();
     setTimeout(fillStats, 200);
     $('#homeBack').onclick = function () { go('#/'); };
-    $('#newSite').onclick = function () { go('#/newsite'); };
+    $('#newSite').onclick = function () { renderNewSite(); };
     $('#langBtn').onclick = function () { setLang(lang === 'es' ? 'en' : 'es'); route(); };
     if (cloud) { $('#spaceBtn').onclick = cloud.spaceMenu; cloud.wireInvites(); }
     $('#moreBtn').onclick = function () {
@@ -1256,30 +1256,49 @@
     };
   }
 
+  // New site / Rename site: a dialog over the current screen (✕, click outside or Esc closes it).
   function renderNewSite(s) {
-    var editing = !!s;
-    show(
-      '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(editing ? t('Rename site') : t('New site')) + '</h1></header>' +
-      '<div class="page">' +
+    var editing = !!s, prev = document.activeElement;
+    var m = document.createElement('div');
+    m.className = 'ask site-ask';
+    m.innerHTML = '<form class="ask-box site-box" role="dialog" aria-modal="true" aria-labelledby="siteT" novalidate>' +
+      '<button type="button" class="site-x" aria-label="' + esc(t('Close')) + '">✕</button>' +
+      (editing ? '' : '<div class="site-ico" aria-hidden="true">+</div>') +
+      '<h2 id="siteT">' + esc(editing ? t('Rename site') : t('New site')) + '</h2>' +
       '<label class="field"><span>' + esc(t('Site name')) + '</span><input class="text-in" id="sName" autocomplete="off" value="' + esc(s ? s.name : '') + '" placeholder="Kitchen, 12 Ocean Drive"></label>' +
       '<label class="field"><span>' + esc(t('Client')) + '</span><input class="text-in" id="sClient" autocomplete="off" value="' + esc(s ? s.client : '') + '"></label>' +
       '<label class="field"><span>' + esc(t('Notes')) + '</span><input class="text-in" id="sNotes" autocomplete="off" value="' + esc(s ? s.notes : '') + '"></label>' +
-      '</div>' +
-      '<div class="dock"><button type="button" class="btn primary" id="saveSite">' + esc(editing ? t('Save changes') : t('Create site')) + '</button></div>'
-    );
-    $('#back').onclick = function () { history.back(); };
-    if (!editing) { setTimeout(function () { $('#sName').focus(); }, 50); }
-    $('#saveSite').onclick = function () {
-      var name = $('#sName').value.trim() || (t('Site') + ' ' + (sites.length + 1));
+      '<div class="ask-btns"><button type="button" class="btn" data-a="0">' + esc(t('Cancel')) + '</button>' +
+      '<button type="submit" class="btn primary">' + esc(editing ? t('Save changes') : t('Create site')) + '</button></div></form>';
+    document.body.appendChild(m);
+    requestAnimationFrame(function () { m.classList.add('on'); });
+    var name = m.querySelector('#sName');
+    setTimeout(function () { name.focus(); if (editing) { name.select(); } }, 60);
+    function close() {
+      document.removeEventListener('keydown', key, true);
+      m.classList.remove('on');
+      setTimeout(function () { m.remove(); }, 160);
+      if (prev && prev.focus && prev.isConnected) { try { prev.focus(); } catch (e) { /* */ } }
+    }
+    function key(e) { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); } }
+    document.addEventListener('keydown', key, true);
+    m.addEventListener('mousedown', function (e) { if (e.target === m) { close(); } });
+    m.querySelector('.site-x').onclick = close;
+    m.querySelector('[data-a="0"]').onclick = close;
+    m.querySelector('form').onsubmit = function (e) {
+      e.preventDefault();
+      var nm = name.value.trim() || (t('Site') + ' ' + (sites.length + 1));
+      var client = m.querySelector('#sClient').value.trim(), notes = m.querySelector('#sNotes').value.trim();
+      close();
       if (editing) {
-        s.name = name; s.client = $('#sClient').value.trim(); s.notes = $('#sNotes').value.trim(); touch(s); persist();
-        renderSite(s);
+        s.name = nm; s.client = client; s.notes = notes; touch(s); persist();
+        route();
         return;
       }
-      var ns = { id: uid(), name: name, client: $('#sClient').value.trim(), notes: $('#sNotes').value.trim(),
+      var ns = { id: uid(), name: nm, client: client, notes: notes,
                  created: now(), updated: now(), next_order: 1, codes_state: null, modules: [] };
       sites.push(ns); persist();
-      go('#/site/' + encodeURIComponent(ns.id), true);
+      go('#/site/' + encodeURIComponent(ns.id));
     };
   }
 
@@ -1498,7 +1517,7 @@
         var recent = sites.slice().sort(function (a, c) { return a.updated < c.updated ? 1 : -1; }).slice(0, 8);
         menu(t('Add to which project?'), recent.map(function (x) {
           return { label: x.name + (x.client ? ' · ' + x.client : ''), icon: 'file', run: function () { go('#/site/' + encodeURIComponent(x.id) + '/new/' + encodeURIComponent(key)); } };
-        }).concat([{ label: '+ ' + t('New site'), icon: 'file', run: function () { go('#/newsite'); } }]));
+        }).concat([{ label: '+ ' + t('New site'), icon: 'file', run: function () { renderNewSite(); } }]));
       };
     });
   }

@@ -1178,3 +1178,13 @@ body.desk .top:has(~ .dk-body > .edit-layout), body.desk .top:has(~ .dk-body .co
 body.desk .etabs-w { margin: 4px 0 8px; }
 .etabs-w { position: sticky; top: 0; z-index: 3; background: var(--card); }
 .etabs-w .etabs { position: static; background: none; }
+
+/* New site / Rename site dialog */
+.site-box { position: relative; width: min(460px, 100%); text-align: left; }
+.site-box h2 { margin: 0 0 10px; }
+.site-box .field { margin: 10px 0 0; }
+.site-box .ask-btns { margin-top: 18px; }
+.site-ico { width: 40px; height: 40px; border-radius: 12px; background: #fff4cc; color: #8a6400; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+.site-ico { font-size: 26px; font-weight: 800; line-height: 1; }
+.site-x { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; color: var(--muted); font-size: 16px; cursor: pointer; }
+.site-x:hover { background: #f0f1f2; color: var(--ink); }
