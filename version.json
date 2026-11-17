@@ -1,15 +1,17 @@
 {
-  "version": "0.3.76",
-  "date": "2026-11-16",
-  "title": "Slimmer slides",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.76.rbz",
+  "version": "0.3.77",
+  "date": "2026-11-17",
+  "title": "Full-depth top and bottom, toe kick set back",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.77.rbz",
   "notes": [
-    "3D view: side-mount drawer slides (and the shoe pull-out slides) are drawn 30 mm high, like the real ones. In SketchUp the real slide model is still used…",
-    "PanelPro Web: welcome banner on the dashboard, your picture instead of ⋯, project card buttons lined up with a pop-up name, view button names slide in and…"
+    "Top and bottom are now always as deep as the sides. When the back panel is recessed, it sits between them, so nothing sticks out at the back any more.",
+    "Toe kick: its front face now sits the setback (20 mm by default) behind the carcass front — before, the setback was measured to the back of the board, so it…",
+    "Modules already drawn change when they are rebuilt or edited; check the cut list (top, bottom and plinth rail sizes change)."
   ],
-  "title_es": "Correderas más delgadas",
+  "title_es": "Techo y piso a toda la profundidad, zócalo retrasado",
   "notes_es": [
-    "Vista 3D: las correderas laterales de las gavetas (y las de los zapateros extraíbles) se dibujan de 30 mm de alto, como las reales. En SketchUp se sigue…",
-    "PanelPro Web: bienvenida en el inicio, su foto en lugar de ⋯, botones de las tarjetas de proyecto alineados con nombre emergente, y los nombres de los…"
+    "El techo y el piso ahora siempre tienen la misma profundidad que los costados. Si el fondo va retrasado, queda entre ellos y ya nada sobresale por detrás.",
+    "Zócalo: su cara frontal ahora queda retrasada la medida indicada (20 mm por defecto) desde el frente del cuerpo; antes se medía hasta la cara trasera de la…",
+    "Los módulos ya dibujados cambian al reconstruirlos o editarlos; revise la lista de corte (cambian las medidas del techo, el piso y los travesaños del zócalo)."
   ]
 }
