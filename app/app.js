@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.78';
-  var BUILD = 'b22bec2af7';
+  var VERSION = '0.3.79';
+  var BUILD = '6f5a4ddf47';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -619,7 +619,7 @@
     sheet.addEventListener('mousedown', function (e) { if (e.target === sheet && !sheet.classList.contains('placing')) { close(); } });
     window.PPRender.open(sheet.firstChild, {
       t: t, lang: lang, app: 'web', site: s.id, title: title, start: start || null,
-      scenes: ['studio', 'kitchen', 'bedroom', 'living', 'bathroom', 'office', 'music', 'closet'].concat(has3d ? ['photo'] : []), scene: 'studio',
+      scenes: ['studio', 'studio_grey', 'kitchen', 'bedroom', 'living', 'bathroom', 'office', 'music', 'closet'].concat(has3d ? ['photo'] : []), scene: 'studio',
       call: function (action, data) {
         return C.call('renderCall', Object.assign({ action: action }, data), 300000).catch(function (e) {
           // the function not published yet (or the server down) answers "internal" / "not-found"

@@ -72,7 +72,7 @@
   ].join('\n');
 
   var SCENE_LABEL = {
-    model: 'As in my SketchUp model', studio: 'Studio', kitchen: 'Kitchen', bedroom: 'Bedroom', living: 'Living room', bathroom: 'Bathroom',
+    model: 'As in my SketchUp model', studio: 'Product shot — white', studio_grey: 'Product shot — light grey', kitchen: 'Kitchen', bedroom: 'Bedroom', living: 'Living room', bathroom: 'Bathroom',
     office: 'Home office', music: 'Music studio', closet: 'Walk-in closet', photo: 'My photo of the room'
   };
 

@@ -232,7 +232,7 @@
     'Front + left + back': 'Frente + izquierda + atrás', 'Front + right + back': 'Frente + derecha + atrás', 'Crown position': 'Posición de la corona',
     'In line with the fronts': 'Alineada con los frentes', 'In line with the carcass edge': 'Alineada con el borde del casco', 'Recessed': 'Retranqueada', 'Recessed by': 'Retranqueo',
     'Crown height': 'Altura de la corona', 'Crown thickness': 'Grosor de la corona', 'Decorative top and crown': 'Tapa decorativa y corona',
-    'Render (AI)': 'Render (IA)', 'Render': 'Renderizar', 'New render': 'Nuevo render', 'Setting': 'Ambiente', 'Studio': 'Estudio fotográfico',
+    'Render (AI)': 'Render (IA)', 'Render': 'Renderizar', 'New render': 'Nuevo render', 'Setting': 'Ambiente', 'Studio': 'Estudio fotográfico', 'Product shot — white': 'Foto de producto — blanco', 'Product shot — light grey': 'Foto de producto — gris claro',
     'As in my SketchUp model': 'Como en mi modelo de SketchUp', 'Bedroom': 'Dormitorio', 'Living room': 'Sala', 'Bathroom': 'Baño',
     'Home office': 'Oficina en casa', 'Music studio': 'Estudio de música', 'Walk-in closet': 'Vestidor', 'My photo of the room': 'Mi foto del espacio',
     'Choose photo': 'Elegir foto', 'Change photo': 'Cambiar foto', 'Place on the photo': 'Ubicar en la foto', 'Choose a photo of the room first.': 'Primero elija una foto del espacio.',
