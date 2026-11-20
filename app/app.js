@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.79';
-  var BUILD = '6f5a4ddf47';
+  var VERSION = '0.3.80';
+  var BUILD = '543c9bfcc7';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -2682,6 +2682,23 @@
     } catch (e) { toast(e.message); return; }
     d.title = s.name + (s.client ? ' — ' + s.client : '');
     d.date = new Date().toISOString().slice(0, 10);
+    // the materials pages: brand, name, type and texture of every material these modules use
+    // (after the board catalog has loaded)
+    var PM = window.PPMaterials;
+    if (PM && PM.ready && !makeManual.waited) {
+      makeManual.waited = true;
+      PM.ready().then(function () { makeManual(s, one, onClose); makeManual.waited = false; });
+      return;
+    }
+    d.materials = {};
+    (d.modules || []).forEach(function (m) {
+      (m.parts || []).forEach(function (q) {
+        if (q.mat && !d.materials[q.mat] && window.PPMaterials && window.PPMaterials.meta) {
+          var mm = window.PPMaterials.meta(q.mat);
+          if (mm) { d.materials[q.mat] = mm; }
+        }
+      });
+    });
     var html;
     try { html = window.PPManual.build(d, { t: t, show: L, units: U(), esc: esc, mats: matInfo }); }
     catch (e) { toast(t('Could not make the manual: ') + e.message); return; }

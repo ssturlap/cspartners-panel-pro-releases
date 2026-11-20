@@ -146,6 +146,19 @@
     if (url) { return { color: '#ffffff', avg: e.color || '#d8d2c4', alpha: 1, thumb: url, tex_w: e.tex_w || e.sheet_l || 2440, tex_h: e.tex_h || e.sheet_w || 1220 }; }
     return { color: e.color || '#d8d2c4', alpha: 1 };
   }
+  // For the manual's materials pages: brand, name, board type, the full texture, sheet size.
+  function meta(name) {
+    var e = find(name), c = catFind(name);
+    if (!e && !c) { return null; }
+    var abs = function (u) { try { return u ? new URL(u, location.href).href : ''; } catch (x) { return u || ''; } };
+    var img = e && TEX[e.id] ? TEX[e.id] : (c && c.tex ? abs(c.tex) : '');
+    var sl = (e && e.sheet_l) || (c && c.sheet_l), sw = (e && e.sheet_w) || (c && c.sheet_w);
+    return { brand: (e && e.brand) || (c && c.brand) || '', label: (c && c.name && !(e && e.brand && e.brand !== c.brand)) ? c.name : name,
+             type: (e && e.type) || (c && c.type) || '', image: img, color: (e && e.color) || (c && c.color) || '',
+             sheet: sl && sw ? sl + ' × ' + sw : '',
+             // grain along the image's width (catalog boards with grain): stood upright on the page
+             rot: !!(c && c.grain !== false && (c.tex_px || [1, 1])[0] >= (c.tex_px || [1, 1])[1] && (!e || !TEX[e.id])) };
+  }
   // What the engine needs (no images).
   function engineList() {
     var out = data.list.map(function (e) {
@@ -654,6 +667,7 @@
     } };
   }
   window.PPMaterials = {
+    meta: meta,
     init: function () {
       loadCatalog().catch(function () {});
       if (cloud()) { fillDatalist(); return Promise.resolve(); }

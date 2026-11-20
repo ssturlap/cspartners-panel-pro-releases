@@ -190,6 +190,30 @@
     'td.n,th.n{text-align:right}',
     'h2{font-size:12pt;margin:5mm 0 2mm;color:#24221f}',
     '.bar{display:flex;height:5mm;border:.4pt solid #8a8478;margin:1mm 0 .5mm;font-size:6.5pt}.bar i{display:flex;align-items:center;justify-content:center;border-right:.4pt solid #fff;background:#c8ccd0;font-style:normal;overflow:hidden;white-space:nowrap}.bar i.off{background:repeating-linear-gradient(45deg,#fff,#fff 1mm,#eee 1mm,#eee 2mm);color:#8a8478}',
+    // materials: a summary page + a full-page swatch per material (the texture, the brand over it,
+    // the material's name in a display serif under the brand, then what it is used for)
+    '.mats-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:2mm}',
+    '.mcard{display:flex;gap:3mm;border:.4pt solid #ddd7cc;border-radius:2mm;padding:2.5mm;break-inside:avoid}',
+    '.mcard .sw{flex:none;width:24mm;height:24mm;border-radius:1.5mm;background:#ddd center/cover no-repeat;border:.4pt solid rgba(0,0,0,.12)}',
+    '.mcard small{display:block;color:#8a8478;font-weight:700;letter-spacing:.8px;font-size:7pt}.mcard b{display:block;font-size:10pt;margin:.3mm 0 1mm}.mcard span{display:block;font-size:7.6pt;color:#6c665c}',
+    '.mat-page{padding:0!important}',
+    '.mat-hero{position:absolute;left:0;right:0;top:0;height:205mm;background:#d8d2c4 center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 14mm 22mm;text-align:center}',
+    // wood grain runs along the image's width: turned upright on the portrait page
+    '.mat-tex{position:absolute;left:50%;top:50%;width:232mm;height:232mm;transform:translate(-50%,-50%);background:center/cover no-repeat}',
+    '.mat-tex.rot{transform:translate(-50%,-50%) rotate(90deg)}',
+    '.mat-hero{overflow:hidden}.mat-hero>*:not(.mat-tex){position:relative}',
+    '.mat-hero.dark{color:#fff}.mat-hero:not(.dark){color:#1d2620}',
+    '.mat-brand{font:900 26pt/1 "Arial Black","Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase}',
+    '.mat-brand img{max-height:22mm;max-width:110mm;display:block;margin:0 auto}',
+    '.mat-rule{display:flex;align-items:center;gap:2.5mm;width:82mm;margin:5mm auto 4mm;opacity:.75}.mat-rule i{flex:1;height:.4pt;background:currentColor}.mat-rule b{width:2.2mm;height:2.2mm;transform:rotate(45deg);background:currentColor}',
+    '.mat-name{font:400 34pt/1.05 Didot,"Bodoni 72","Bodoni MT","Playfair Display",Garamond,Georgia,"Times New Roman",serif;letter-spacing:1px}',
+    '.mat-hero:not(.dark) .mat-name{color:#3a2a18}',
+    '.mat-type{margin-top:5mm;font:600 8.5pt/1 Helvetica,Arial,sans-serif;letter-spacing:4px;text-transform:uppercase}',
+    '.mat-hero.dark .mat-brand,.mat-hero.dark .mat-name,.mat-hero.dark .mat-type{text-shadow:0 1px 6px rgba(0,0,0,.45)}',
+    '.mat-hero:not(.dark) .mat-brand,.mat-hero:not(.dark) .mat-name{text-shadow:0 0 10px rgba(255,255,255,.35)}',
+    '.mat-info{position:absolute;left:12mm;right:12mm;top:213mm;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;font-size:8pt}',
+    '.mat-info span{display:block;color:#8a8478;font-size:6.8pt;text-transform:uppercase;letter-spacing:.6px;margin-bottom:.6mm}.mat-info b{font-size:9.5pt}',
+    '@media screen{.mat-page .foot{left:6mm;right:6mm}}',
     '.np{position:fixed;top:4mm;right:4mm;z-index:9}.np button{font:600 11pt Helvetica,Arial;padding:3mm 5mm;border-radius:2mm;border:0;background:#b4532a;color:#fff;cursor:pointer}'
   ].join('');
 
@@ -264,9 +288,47 @@
         (m.movers || []).forEach(function (mv) { RR.snap.movers.push(Object.assign({}, mv, { id: pre + mv.id, grp: it.id })); });
       });
     }
+    // ---- materials used: from the cut panels of these modules (× their quantity)
+    var ROLE = { carcass: 'Carcass', front: 'Fronts', back: 'Back', shelf: 'Shelves', drawer: 'Drawer boxes', skin: 'Decorative panels',
+                 base: 'Toe kick', frame: 'Face frame', top: 'Decorative top', inner: 'Inner drawers', bed: 'Bed frame' };
+    var MATS = [], byMat = {};
+    mods.forEach(function (m) {
+      (m.parts || []).forEach(function (q) {
+        if (q.cut === false || !q.mat || q.deco) { return; }
+        var e = byMat[q.mat];
+        if (!e) { e = byMat[q.mat] = { name: q.mat, pieces: 0, area: 0, th: {}, roles: [], mods: [] }; MATS.push(e); }
+        var n = m.qty || 1;
+        e.pieces += n;
+        e.area += (Number(q.L) || 0) * (Number(q.W) || 0) * n / 1e6;
+        if (q.T) { e.th[ctx.show(q.T)] = 1; }
+        var r = ROLE[q.role] || null;
+        if (r && e.roles.indexOf(r) < 0) { e.roles.push(r); }
+        if (m.code && e.mods.indexOf(m.code) < 0) { e.mods.push(m.code); }
+      });
+    });
+    MATS.sort(function (a, b) { return b.area - a.area; });
+    var MD = d.materials || {};
+    function matMeta(e) {
+      var x = MD[e.name] || {}, inf = ctx.mats ? ctx.mats(e.name) : null;
+      var brand = String(x.brand || '').trim(), name = String(x.label || e.name);
+      if (brand && name.toUpperCase().indexOf(brand.toUpperCase() + ' ') === 0) { name = name.slice(brand.length + 1); }
+      name = name.replace(/^PanelPro /, '');
+      var color = x.color || (inf && (inf.avg || inf.color)) || '#d8d2c4';
+      return { brand: brand, name: name, type: x.type || '', image: x.image || (inf && inf.thumb) || '', logo: x.logo || '', color: color, rot: !!x.rot,
+               sheet: x.sheet || '', code: x.code || '' };
+    }
+    function dark(c) {
+      var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i.exec(String(c)), r, g, b;
+      if (m) { r = parseInt(m[1], 16); g = parseInt(m[2], 16); b = parseInt(m[3], 16); }
+      else if ((m = /rgb\((\d+),\s*(\d+),\s*(\d+)/.exec(String(c)))) { r = +m[1]; g = +m[2]; b = +m[3]; }
+      else { return false; }
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b < 128;
+    }
+    var TYPE = { melamine: 'Melamine', mdf: 'MDF', plywood: 'Plywood' };
+    var matPages = MATS.length ? 1 + MATS.length : 0;
     var R = d.room && d.room.layout && d.room.layout.walls && d.room.layout.walls.length && window.PPRoom ? d.room : null;
     var roomPages = R ? 1 + R.layout.walls.length : 0;
-    var pageNo = 0, total = 1 + roomPages + mods.length + 1;
+    var pageNo = 0, total = 1 + matPages + roomPages + mods.length + 1;
     function foot() {
       pageNo += 1;
       return '<div class="foot"><span class="brand">CSPARTNERS <span>PANEL PRO</span></span><span>' + esc(d.title || '') + ' · ' + esc(d.date) +
@@ -283,9 +345,35 @@
       '<table><tr><th>' + t('Code') + '</th><th class="n">' + t('Qty') + '</th><th>' + t('Module') + '</th><th>' + t('Type') + '</th><th class="n">' + t('Size') + ' (W × H × D)</th><th class="n">' + t('Page') + '</th></tr>';
     mods.forEach(function (m, i) {
       h += '<tr><td><b>' + esc(m.code || '') + '</b></td><td class="n">' + (m.qty || 1) + '</td><td>' + esc(m.name || '') + qcodes(m) + '</td><td>' + esc(m.label ? t(m.label) : '') +
-        '</td><td class="n">' + (m.error ? '—' : ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u) + '</td><td class="n">' + (i + 2 + roomPages) + '</td></tr>';
+        '</td><td class="n">' + (m.error ? '—' : ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u) + '</td><td class="n">' + (i + 2 + matPages + roomPages) + '</td></tr>';
     });
     h += '</table>' + foot() + '</section>';
+
+    // ---- materials: the list, then one page per material
+    if (MATS.length) {
+      h += '<section class="page"><div class="hd"><div><h1>' + esc(t('Materials')) + '</h1><div class="sub">' + esc(d.title || '') + ' · ' + MATS.length + ' ' +
+        esc(t(MATS.length === 1 ? 'material' : 'materials')) + '</div></div></div><div class="mats-grid">' + MATS.map(function (e) {
+          var mm = matMeta(e);
+          return '<div class="mcard"><div class="sw" style="background-color:' + esc(mm.color) + (mm.image ? ';background-image:url(\'' + esc(mm.image) + '\')' : '') + '"></div><div>' +
+            (mm.brand ? '<small>' + esc(mm.brand) + '</small>' : '') + '<b>' + esc(mm.name) + '</b>' +
+            '<span>' + esc(e.roles.map(t).join(', ')) + '</span><span>' + Object.keys(e.th).join(' / ') + u + ' · ' + e.pieces + ' ' + t('pieces') + ' · ' + (Math.round(e.area * 100) / 100) + ' m²</span></div></div>';
+        }).join('') + '</div>' + foot() + '</section>';
+      MATS.forEach(function (e) {
+        var mm = matMeta(e), dk = dark(mm.color);
+        var typ = mm.type ? t('%s collection').replace('%s', t(TYPE[mm.type] || mm.type)) : t('Board collection');
+        h += '<section class="page mat-page"><div class="mat-hero' + (dk ? ' dark' : '') + '" style="background-color:' + esc(mm.color) + '">' +
+          (mm.image ? '<div class="mat-tex' + (mm.rot ? ' rot' : '') + '" style="background-image:url(\'' + esc(mm.image) + '\')"></div>' : '') +
+          (mm.logo ? '<div class="mat-brand"><img alt="' + esc(mm.brand) + '" src="' + esc(mm.logo) + '"></div>' : mm.brand ? '<div class="mat-brand">' + esc(mm.brand) + '</div>' : '') +
+          '<div class="mat-rule"><i></i><b></b><i></i></div>' +
+          '<div class="mat-name">' + esc(mm.name) + '</div>' +
+          '<div class="mat-type">' + esc(typ) + '</div></div>' +
+          '<div class="mat-info"><div><span>' + esc(t('Used for')) + '</span><b>' + esc(e.roles.map(t).join(', ') || '—') + '</b></div>' +
+          '<div><span>' + esc(t('Thickness')) + '</span><b>' + Object.keys(e.th).join(' / ') + u + '</b></div>' +
+          '<div><span>' + esc(t('Pieces')) + '</span><b>' + e.pieces + ' · ' + (Math.round(e.area * 100) / 100) + ' m²</b></div>' +
+          '<div><span>' + esc(t('Modules')) + '</span><b>' + esc(e.mods.join(' · ') || '—') + '</b></div></div>' +
+          foot() + '</section>';
+      });
+    }
 
     // ---- installation: where everything goes
     if (R) {

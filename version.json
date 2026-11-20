@@ -1,15 +1,13 @@
 {
-  "version": "0.3.79",
-  "date": "2026-11-18",
-  "title": "Product shots",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.79.rbz",
+  "version": "0.3.80",
+  "date": "2026-11-20",
+  "title": "Materials in the manual",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.80.rbz",
   "notes": [
-    "Render (AI): \"Studio\" is now \"Product shot\" — the module alone, studio-lit, on a plain background with a soft shadow under it, with no lights, backdrop or…",
-    "PanelPro Web: New site and Rename site open as a dialog."
+    "Module / project manual: a Materials page lists every board used (swatch, brand, what it is used for, thickness, pieces, m²), then one full page per…"
   ],
-  "title_es": "Fotos de producto",
+  "title_es": "Materiales en el manual",
   "notes_es": [
-    "Render (IA): \"Estudio\" ahora es \"Foto de producto\": el módulo solo, con luz de estudio, sobre un fondo liso con una sombra suave debajo, sin luces, telón ni…",
-    "PanelPro Web: Nueva obra y Renombrar obra se abren como un diálogo."
+    "Manual del módulo / proyecto: una página de Materiales con cada tablero usado (muestra, marca, dónde se usa, espesor, piezas, m²) y luego una página…"
   ]
 }
