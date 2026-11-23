@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.81';
-  var BUILD = 'd5afee5ed1';
+  var BUILD = 'f139b13b5f';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -677,7 +677,7 @@
         delete q.note; delete q.edges; delete q.eb; delete q.grain_rule;
         return q;
       });
-      return { parts: parts, movers: m.movers || [], places: m.places || null, mats: mats, dims: m.dims || null, rows: m.rows || null, units: prefs.units || 'mm' };
+      return { parts: parts, movers: m.movers || [], places: m.places || null, mats: mats, dims: m.dims || null, rows: m.rows || null, units: prefs.units || 'mm', lang: lang };
     });
   }
   var shareTimers = {};

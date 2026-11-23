@@ -9,12 +9,13 @@
     'Could not open this link.': 'No se pudo abrir este enlace.', 'Open doors': 'Abrir puertas', 'Close doors': 'Cerrar puertas', 'Open drawers': 'Abrir gavetas',
     'Close drawers': 'Cerrar gavetas', 'Sizes': 'Medidas', 'Front': 'Frente', 'Fit': 'Ajustar', 'Overall size': 'Medidas generales', 'Width': 'Ancho', 'Height': 'Alto',
     'Depth': 'Fondo', 'Materials': 'Materiales', 'Renders': 'Imágenes', 'Version': 'Versión', 'latest': 'la más reciente', 'Drag to turn · pinch or scroll to zoom': 'Arrastre para girar · pellizque o use la rueda para acercar',
-    'Prepared for': 'Preparado para', 'Doors': 'Puertas', 'Drawers': 'Gavetas', 'Zoom in': 'Acercar', 'Zoom out': 'Alejar', 'Zoom +': 'Acercar', 'Zoom −': 'Alejar', 'Reset': 'Reiniciar', 'Details': 'Detalles',
+    'Prepared for': 'Preparado para', 'Dimensions in mm': 'Medidas en mm', 'Dimensions in cm': 'Medidas en cm', 'Doors': 'Puertas', 'Drawers': 'Gavetas', 'Zoom in': 'Acercar', 'Zoom out': 'Alejar', 'Zoom +': 'Acercar', 'Zoom −': 'Alejar', 'Reset': 'Reiniciar', 'Details': 'Detalles',
     'Open the doors': 'Abrir las puertas', 'Close the doors': 'Cerrar las puertas', 'Open the drawers': 'Abrir las gavetas', 'Close the drawers': 'Cerrar las gavetas',
     'Show the sizes': 'Mostrar las medidas', 'Hide the sizes': 'Ocultar las medidas', 'Look from the front': 'Ver de frente', 'Back to the starting view': 'Volver a la vista inicial',
     'Sizes, materials and pictures': 'Medidas, materiales e imágenes', 'Made with': 'Hecho con', 'Melamine': 'Melamina', 'Plywood': 'Contrachapado', '3D view': 'Vista 3D', 'Composition': 'Composición', 'Module': 'Módulo'
   };
   function t(s) { return ES && TX[s] ? TX[s] : s; }
+  window.I18N = { t: t };   // the 3D view's own labels ("Dimensions in mm")
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   var ICON = {
@@ -45,6 +46,8 @@
   function show(d) {
     D = d;
     var m = d.model || {};
+    // the page speaks the language the maker's app was in when the model was shared
+    if (m.lang === 'es' || m.lang === 'en') { ES = m.lang === 'es'; document.documentElement.lang = m.lang; }
     units = m.units === 'cm' ? { k: 10, name: 'cm' } : { k: 1, name: 'mm' };
     document.title = (d.title || t('3D view')) + (d.brand && d.brand.name ? ' — ' + d.brand.name : '');
     if (m.dims) { $('vDim').textContent = fmt(m.dims.w).replace(/ \w+$/, '') + ' × ' + fmt(m.dims.h).replace(/ \w+$/, '') + ' × ' + fmt(m.dims.d); $('vDim').hidden = false; }
