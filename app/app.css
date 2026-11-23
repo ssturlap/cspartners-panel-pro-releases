@@ -1188,3 +1188,30 @@ body.desk .etabs-w { margin: 4px 0 8px; }
 .site-ico { font-size: 26px; font-weight: 800; line-height: 1; }
 .site-x { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; color: var(--muted); font-size: 16px; cursor: pointer; }
 .site-x:hover { background: #f0f1f2; color: var(--ink); }
+/* project cards on a phone: the estimate gets its own full-width row so the amount is never cut */
+@media (max-width: 560px) {
+  .site-card .pstats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .site-card .pst.money { grid-column: 1 / -1; flex-direction: row; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .site-card .pst.money b { overflow: visible; text-overflow: clip; font-size: 16px; }
+}
+
+/* project tools as icon tiles: one line each, never wrapping */
+.tool-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+.tool-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: 0; padding: 12px 6px 10px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--ink); font: inherit; cursor: pointer; transition: border-color .15s, transform .15s, box-shadow .15s; }
+.tool-tile:hover { border-color: var(--ink); box-shadow: 0 4px 12px rgba(0,0,0,.06); }
+.tool-tile:active { transform: scale(.97); }
+.tool-tile .mi { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.tool-tile span { max-width: 100%; font-size: 12.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 560px) {
+  .tool-tiles { grid-template-columns: 1fr 1fr; }
+  .tool-tile { flex-direction: row; justify-content: flex-start; gap: 10px; padding: 12px 14px; }
+  .tool-tile span { font-size: 14px; }
+}
+/* render gallery: share button on each picture and in the big view */
+.gal-pic { position: relative; }
+.gal-share { position: absolute; top: 8px; right: 8px; width: 38px; height: 38px; border-radius: 50%; border: 0; background: rgba(255,255,255,.92);
+  color: #24221f; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,.18); cursor: pointer; }
+.gal-share .mi { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.gal-bar .btn .mi { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; margin-right: 5px; }

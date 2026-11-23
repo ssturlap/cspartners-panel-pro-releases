@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.80';
-  var BUILD = '543c9bfcc7';
+  var BUILD = '2aac19175d';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -43,7 +43,7 @@
     'Names used in the cut list and its files. Leave a box empty for the default.': 'Nombres usados en la lista de corte y sus archivos. Deje la casilla vacía para el nombre por defecto.',
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
-    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Renders': 'Renders', 'No renders yet': 'Aún no hay renders',
+    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Picture saved.': 'Imagen guardada.', 'Renders': 'Renders', 'No renders yet': 'Aún no hay renders',
     'Open a module or the composition and press the camera button on the 3D view.': 'Abra un módulo o la composición y pulse el botón de cámara en la vista 3D.',
     'pictures': 'imágenes', 'renders': 'renders', 'Project': 'Proyecto', 'Undo': 'Deshacer', 'The render server is not switched on yet — renders start working once it is set up.': 'El servidor de renders aún no está activado — los renders funcionarán cuando se configure.', 'Redo': 'Rehacer', 'Undone': 'Deshecho', 'Redone': 'Rehecho', 'Nothing to undo': 'Nada que deshacer', 'Outside': 'Exterior', 'Between the sides': 'Entre costados', 'Module name': 'Nombre del módulo', 'Height from the floor': 'Altura desde el piso',
     'Raised off the floor (besides the toe kick)': 'Elevado del piso (además del zócalo)', 'Are you sure?': '¿Está seguro?', 'Discard': 'Descartar', 'Replace': 'Reemplazar', 'OK': 'Aceptar',
@@ -438,6 +438,8 @@
     upload: '<path d="M12 15V4M8 8l4-4 4 4M5 20h14"/>',
     layout: '<path d="M3 20h18M5 20V10h5v10M12 20V6h7v14"/>',
     plus: '<path d="M12 5v14M5 12h14"/>',
+    cut: '<circle cx="6" cy="7" r="2.6"/><circle cx="6" cy="17" r="2.6"/><path d="M8.2 8.5L20 17M8.2 15.5L20 7"/>',
+    camera: '<path d="M3 8.5h4l1.6-2.5h6.8L17 8.5h4V19H3z"/><circle cx="12" cy="13.5" r="3.5"/>',
     close: '<path d="M6 6l12 12M18 6L6 18"/>',
     blank: ''
   };
@@ -539,6 +541,21 @@
   // ------------------------------------------------------------------ render gallery
   // Every AI render of the project (its modules and compositions) with all their versions; tap a
   // picture to see it big, save it, or open it in the render window to change it.
+  // Share a picture (data URL) with the phone's share sheet (WhatsApp, mail…); where the browser
+  // can't share files, it is saved instead.
+  function shareImage(url, name, title) {
+    var save = function () {
+      var a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      toast(t('Picture saved.'));
+    };
+    fetch(url).then(function (r) { return r.blob(); }).then(function (b) {
+      var f = new File([b], name, { type: b.type || 'image/jpeg' });
+      if (navigator.canShare && navigator.canShare({ files: [f] })) {
+        return navigator.share({ files: [f], title: title }).catch(function (e) { if (e && e.name !== 'AbortError') { save(); } });
+      }
+      save();
+    }).catch(save);
+  }
   function renderGallery(s) {
     var C = window.PPCloud, base = '#/site/' + encodeURIComponent(s.id);
     show('<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button><h1>' + esc(t('Renders')) +
@@ -567,21 +584,30 @@
         var what = (r.title || '').split(' · ')[0] || t('Project');
         return '<section class="gal-r"><h3>' + esc(what) + ' <small>' + esc(new Date(r.created).toLocaleString(lang) + ' · ' + t((window.PPRender.SCENE_LABEL || {})[r.scene] || r.scene)) + '</small></h3>' +
           '<div class="gal-grid">' + r.versions.slice().reverse().map(function (x) {
-            return '<button type="button" class="gal-pic" data-rid="' + esc(r.id) + '" data-v="' + x.v + '"><span class="th"></span>' +
-              '<small>v' + x.v + (x.parent ? ' ← v' + x.parent : '') + (x.prompt ? ' · ' + esc(x.prompt) : '') + '</small></button>';
+            return '<div class="gal-pic" role="button" tabindex="0" data-rid="' + esc(r.id) + '" data-v="' + x.v + '"><span class="th"></span>' +
+              '<small>v' + x.v + (x.parent ? ' ← v' + x.parent : '') + (x.prompt ? ' · ' + esc(x.prompt) : '') + '</small>' +
+              '<button type="button" class="gal-share" aria-label="' + esc(t('Share')) + '" title="' + esc(t('Share')) + '">' + menuIcon('share') + '</button></div>';
           }).join('') + '</div></section>';
       }).join('');
       var n = 0;
       body.querySelectorAll('.gal-pic').forEach(function (b) {
         var th = b.querySelector('.th');
         if (n++ < 60) { img(b.getAttribute('data-rid'), +b.getAttribute('data-v'), th).catch(function () { th.classList.add('bad'); }); }
+        var fname = function (r, v) { return (s.name + ' ' + (r.title || '').split(' · ')[0] + ' v' + v).replace(/[^\w\- ]+/g, '').trim() + '.jpg'; };
+        b.querySelector('.gal-share').onclick = function (e) {
+          e.stopPropagation();
+          var rid = b.getAttribute('data-rid'), v = +b.getAttribute('data-v'), r = list.find(function (x) { return x.id === rid; });
+          img(rid, v, null).then(function (u) { shareImage(u, fname(r, v), r.title || s.name); });
+        };
+        b.onkeydown = function (e) { if (e.target === b && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); b.onclick(); } };
         b.onclick = function () {
           var rid = b.getAttribute('data-rid'), v = +b.getAttribute('data-v'), r = list.find(function (x) { return x.id === rid; });
           var box = document.createElement('div');
           box.className = 'gal-view';
           box.innerHTML = '<div class="gal-in"><button type="button" class="rd-x gal-x" aria-label="' + esc(t('Close')) + '">✕</button><div class="gal-big"><span>' + esc(t('Loading…')) + '</span></div>' +
             '<div class="gal-bar"><b>' + esc((r.title || '').split(' · ')[0]) + ' · v' + v + '</b><span class="grow"></span>' +
-            '<button type="button" class="btn small" data-g="save">' + esc(t('Save image')) + '</button>' +
+            '<button type="button" class="btn small" data-g="share">' + menuIcon('share') + esc(t('Share')) + '</button>' +
+            '<button type="button" class="btn small" data-g="save">' + menuIcon('download') + esc(t('Save image')) + '</button>' +
             '<button type="button" class="btn small primary" data-g="open">' + esc(t('Change this picture')) + '</button></div></div>';
           document.body.appendChild(box);
           function close() { box.remove(); document.removeEventListener('keydown', k1, true); }
@@ -596,6 +622,7 @@
             var a = document.createElement('a'); a.href = url; a.download = (s.name + ' ' + (r.title || '').split(' · ')[0] + ' v' + v).replace(/[^\w\- ]+/g, '') + '.jpg';
             document.body.appendChild(a); a.click(); a.remove();
           };
+          box.querySelector('[data-g="share"]').onclick = function () { if (url) { shareImage(url, fname(r, v), r.title || s.name); } };
           box.querySelector('[data-g="open"]').onclick = function () { close(); openRender(s, r.title || s.name, [], null, { rid: rid, v: v }); };
         };
       });
@@ -1371,11 +1398,12 @@
           '<span class="grow"><span class="t1">' + esc(m.params.name || presetLabel(m.params.type)) + '</span>' +
           '<span class="t2 dims">' + dimsOf(m.params) + '</span></span></button>';
       }).join('') + '</div>' +
-      '<div class="actions-row" style="margin-top:16px"><button type="button" class="btn" id="compBtn">' + esc(t('Composition')) + '</button>' +
-      '<button type="button" class="btn" id="cutBtn">' + esc(t('Cut list')) + '</button>' +
-      '<button type="button" class="btn" id="galBtn">' + esc(t('Renders')) + '</button></div>' +
-      '<div class="actions-row">' +
-      '<button type="button" class="btn" id="shareBtn">' + esc(t('Share project file')) + '</button></div>'
+      // project tools: icon tiles with a one-line label (the full name on hover / for screen readers)
+      '<div class="tool-tiles">' + [['compBtn', 'layout', 'Composition', 'Composition'], ['cutBtn', 'cut', lang === 'es' ? 'Corte' : 'Cut list', 'Cut list'],
+        ['galBtn', 'camera', 'Renders', 'Renders'], ['shareBtn', 'share', 'Share', 'Share project file']].map(function (b) {
+        return '<button type="button" class="tool-tile" id="' + b[0] + '" title="' + esc(t(b[3])) + '" aria-label="' + esc(t(b[3])) + '">' +
+          menuIcon(b[1]) + '<span>' + esc(t(b[2])) + '</span></button>';
+      }).join('') + '</div>'
         : '<div class="empty"><h2>' + esc(t('No modules yet')) + '</h2><p>' + esc(t('Add the first module for this site.')) + '</p></div>') +
       '</div>' +
       '<div class="dock"><button type="button" class="btn primary" id="addMod">' + esc(t('Add module')) + '</button></div>'
