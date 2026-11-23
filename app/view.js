@@ -9,7 +9,7 @@
     'Could not open this link.': 'No se pudo abrir este enlace.', 'Open doors': 'Abrir puertas', 'Close doors': 'Cerrar puertas', 'Open drawers': 'Abrir gavetas',
     'Close drawers': 'Cerrar gavetas', 'Sizes': 'Medidas', 'Front': 'Frente', 'Fit': 'Ajustar', 'Overall size': 'Medidas generales', 'Width': 'Ancho', 'Height': 'Alto',
     'Depth': 'Fondo', 'Materials': 'Materiales', 'Renders': 'Imágenes', 'Version': 'Versión', 'latest': 'la más reciente', 'Drag to turn · pinch or scroll to zoom': 'Arrastre para girar · pellizque o use la rueda para acercar',
-    'Prepared for': 'Preparado para', 'Dimensions in mm': 'Medidas en mm', 'Dimensions in cm': 'Medidas en cm', 'Doors': 'Puertas', 'Drawers': 'Gavetas', 'Zoom in': 'Acercar', 'Zoom out': 'Alejar', 'Zoom +': 'Acercar', 'Zoom −': 'Alejar', 'Reset': 'Reiniciar', 'Details': 'Detalles',
+    'Prepared for': 'Preparado para', 'Language': 'Idioma', 'Dimensions in mm': 'Medidas en mm', 'Dimensions in cm': 'Medidas en cm', 'Doors': 'Puertas', 'Drawers': 'Gavetas', 'Zoom in': 'Acercar', 'Zoom out': 'Alejar', 'Zoom +': 'Acercar', 'Zoom −': 'Alejar', 'Reset': 'Reiniciar', 'Details': 'Detalles',
     'Open the doors': 'Abrir las puertas', 'Close the doors': 'Cerrar las puertas', 'Open the drawers': 'Abrir las gavetas', 'Close the drawers': 'Cerrar las gavetas',
     'Show the sizes': 'Mostrar las medidas', 'Hide the sizes': 'Ocultar las medidas', 'Look from the front': 'Ver de frente', 'Back to the starting view': 'Volver a la vista inicial',
     'Sizes, materials and pictures': 'Medidas, materiales e imágenes', 'Made with': 'Hecho con', 'Melamine': 'Melamina', 'Plywood': 'Contrachapado', '3D view': 'Vista 3D', 'Composition': 'Composición', 'Module': 'Módulo'
@@ -140,7 +140,7 @@
         else if (a === 'zin') { P3D.zoomBy(0.8); }
         else if (a === 'zout') { P3D.zoomBy(1.25); }
         else if (a === 'front') { P3D.reset('front'); }
-        else if (a === 'info') { $('vSheetBody').innerHTML = $('vSide').innerHTML; wireRends($('vSheetBody')); $('vSheet').hidden = false; }
+        else if (a === 'info') { fillSheet(); $('vSheet').hidden = false; }
         else { P3D.reset('iso'); }
       };
     });
@@ -151,7 +151,8 @@
   }
   var TYPE = { melamine: 'Melamine', mdf: 'MDF', plywood: 'Plywood' };
   function side(d, m) {
-    var h = '';
+    var h = '<div class="card langcard"><h2>' + t('Language') + '</h2><div class="vh-lang" role="group" aria-label="' + esc(t('Language')) + '">' +
+      '<button type="button" data-l="en">EN</button><button type="button" data-l="es">ES</button></div></div>';
     if (m.dims) {
       h += '<div class="card"><h2>' + t('Overall size') + '</h2><div class="dims"><div><small>' + t('Width') + '</small><b>' + fmt(m.dims.w) + '</b></div>' +
         '<div><small>' + t('Height') + '</small><b>' + fmt(m.dims.h) + '</b></div><div><small>' + t('Depth') + '</small><b>' + fmt(m.dims.d) + '</b></div></div></div>';
@@ -180,7 +181,10 @@
     h += '<p class="made">' + esc(t('Made with')) + ' <b>CSPARTNERS</b> PANEL PRO</p>';
     $('vSide').innerHTML = h;
     wireRends($('vSide'));
+    if (!$('vSheet').hidden) { fillSheet(); }
+    langBtns();
   }
+  function fillSheet() { $('vSheetBody').innerHTML = $('vSide').innerHTML; wireRends($('vSheetBody')); langBtns(); }
   function wireRends(root) {
     root.querySelectorAll('.rends button').forEach(function (b) {
       b.onclick = function () { var lb = $('vLb'); lb.querySelector('img').src = b.getAttribute('data-u'); lb.hidden = false; };
