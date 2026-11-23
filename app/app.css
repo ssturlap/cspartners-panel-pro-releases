@@ -1105,13 +1105,14 @@ body.desk .top:has(~ .dk-body > .edit-layout), body.desk .top:has(~ .dk-body .co
   .view-tools .vt { position: relative; }
   /* plain dark text, no box: it slides out of the button and settles 10 px to its left; the part still
      "inside" the button is clipped, going out and coming back, so it never shows past the button */
-  .view-tools .vt[data-label]::after { content: attr(data-label); position: absolute; right: calc(100% + 10px); top: 50%;
-    color: var(--ink); font: 700 12.5px/1 -apple-system, "Segoe UI", Inter, Roboto, sans-serif; letter-spacing: 0; white-space: nowrap; pointer-events: none;
-    text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 10px rgba(255,255,255,.9);
-    opacity: 0; transform: translate(calc(100% + 10px), -50%); clip-path: inset(-6px 100% -6px -6px);
-    transition: transform .26s cubic-bezier(.2,.8,.2,1), clip-path .26s cubic-bezier(.2,.8,.2,1), opacity .26s step-end; }
-  .view-tools .vt[data-label]:hover::after, .view-tools .vt[data-label]:focus-visible::after { opacity: 1; transform: translate(0, -50%); clip-path: inset(-6px 0 -6px -6px); transition: transform .26s cubic-bezier(.2,.8,.2,1), clip-path .26s cubic-bezier(.2,.8,.2,1), opacity 0s; }
-  .view-tools .vt[aria-pressed="true"][data-label]::after { color: var(--ink); }
+  /* the name: its box sits 10 px left of the button and clips the text, which slides in from the box's
+     right edge and back out to it (so it never shows past the button) */
+  .view-tools .vt .vt-tip { position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%); overflow: hidden; pointer-events: none;
+    padding: 4px 0 4px 6px; visibility: hidden; transition: visibility 0s linear .26s; }
+  .view-tools .vt .vt-tip i { display: block; font: 700 12.5px/1 -apple-system, "Segoe UI", Inter, Roboto, sans-serif; font-style: normal; color: var(--ink); white-space: nowrap;
+    transform: translateX(calc(100% + 8px)); transition: transform .26s cubic-bezier(.2,.8,.2,1); text-shadow: 0 0 4px #fff, 0 0 8px #fff; }
+  .view-tools .vt:hover .vt-tip, .view-tools .vt:focus-visible .vt-tip { visibility: visible; transition-delay: 0s; }
+  .view-tools .vt:hover .vt-tip i, .view-tools .vt:focus-visible .vt-tip i { transform: none; }
 }
 
 /* render gallery */
@@ -1245,5 +1246,10 @@ body.desk .etabs-w { margin: 4px 0 8px; }
 .sh-logo .btn, .sh-brand > .btn { width: auto; margin: 0; }
 /* phone: the view buttons wrap into a second (third…) column instead of running out of the preview */
 body:not(.desk) .view-tools { flex-flow: column wrap-reverse; align-content: flex-start; max-height: calc(100% - 16px); }
-body:not(.desk) .view-tools .vt[data-label]::after { display: none; }
+body:not(.desk) .view-tools .vt .vt-tip { display: none; }
 body:not(.desk) .view-hint { max-width: calc(100% - 110px); }
+
+.vt-tip { display: none; }
+@media (hover: hover) { .view-tools .vt .vt-tip { display: block; } }
+body:not(.desk) .view-tools .vt .vt-tip { display: none; }
+.vt .vt-t { font: inherit; }

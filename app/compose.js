@@ -803,7 +803,7 @@
     var host = document.getElementById('cview');
     if (!host) { return; }
     host.classList.toggle('is2d', C.mode === '2d');
-    document.getElementById('cMode').textContent = C.mode === '2d' ? '3D' : '2D';
+    document.getElementById('cMode').querySelector('.vt-t').textContent = C.mode === '2d' ? '3D' : '2D';
     document.getElementById('cOpen').hidden = C.mode !== '3d';
     if (C.mode === '2d') { draw2d(); } else { P3D.resize(); draw3d(reset); }
   }
@@ -823,7 +823,7 @@
       '<button type="button" class="icon-btn" id="cMore" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
       '<div class="compose"><div class="cview view3d" id="cview"><div id="ctabs">' + tabsHtml() + '</div><svg id="csvg" class="csvg" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<div class="dim-note" id="cNote">' + esc(t('Dimensions in ' + A.U())) + '</div>' +
-      '<div class="view-tools"><button type="button" id="cMode" class="vt vt-txt" data-label="2D / 3D" aria-label="2D / 3D">3D</button>' + A.vtBtn('cOpen', 'open', t('Open all'), ' aria-pressed="false"') +
+      '<div class="view-tools"><button type="button" id="cMode" class="vt vt-txt" data-label="2D / 3D" aria-label="2D / 3D"><b class="vt-t">3D</b>' + A.vtTip('2D / 3D') + '</button>' + A.vtBtn('cOpen', 'open', t('Open all'), ' aria-pressed="false"') +
       A.diagBtn() + A.vtBtn('cUndo', 'undo', t('Undo') + ' (Ctrl+Z)') + A.vtBtn('cRedo', 'redo', t('Redo') + ' (Ctrl+Shift+Z)') + A.vtBtn('cRender', 'render', t('Render (AI)')) + A.vtBtn('cShare', 'share', t('Share 3D view')) + A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
       '<div class="cpanel" id="cpanel"></div></div>'
     );

@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.81';
-  var BUILD = '3a84064f81';
+  var BUILD = 'd5afee5ed1';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -24,7 +24,7 @@
     'Pick a module': 'Elija un módulo', 'Width': 'Ancho', 'Height': 'Alto', 'Depth': 'Fondo',
     'Name': 'Nombre', 'Fronts': 'Frentes', 'Section': 'Sección', 'Row': 'Fila', 'auto': 'auto', 'Auto': 'Auto',
     'Door': 'Puerta', 'Door pair': 'Par de puertas', 'Drawer': 'Gaveta', 'False front': 'Frente falso', 'Open': 'Abierto',
-    'Hinge left': 'Bisagra izq.', 'Hinge right': 'Bisagra der.', 'Lift up': 'Abre hacia arriba', 'Drop down': 'Abatible',
+    'Hinge left': 'Izq.', 'Hinge right': 'Der.', 'Lift up': 'Arriba', 'Drop down': 'Abajo',
     '+ Row': '+ Fila', 'Front style': 'Estilo de frente', 'Slab': 'Liso', 'Shaker': 'Shaker', 'Plank': 'Tablillas',
     'Grooved': 'Ranurado', 'Glass': 'Vidrio', 'Toe kick': 'Zócalo', 'Legs': 'Patas', 'Plinth': 'Zócalo aparte',
     'Built in': 'Integrado', 'None': 'Ninguno', 'Kick height': 'Altura del zócalo', 'Off the floor': 'Altura desde el piso',
@@ -898,7 +898,11 @@
   };
   function vtBtn(id, icon, label, extra) {
     return '<button type="button" id="' + id + '" class="vt" data-label="' + esc(label) + '" aria-label="' + esc(label) + '"' + (extra || '') + '>' +
-      '<svg viewBox="0 0 24 24" aria-hidden="true">' + VT_ICONS[icon] + '</svg></button>';
+      '<svg viewBox="0 0 24 24" aria-hidden="true">' + VT_ICONS[icon] + '</svg>' + vtTip(label) + '</button>';
+  }
+  // the name that slides out of a view button: a real element whose box clips the text (no clip-path,
+  // which left broken bits of text behind on some screens)
+  function vtTip(label) { return '<span class="vt-tip" aria-hidden="true"><i>' + esc(label) + '</i></span>';
   }
   // Diagnostic view: flat colours by kind of part (remembered on this device)
   function diagBtn() { return vtBtn('diagBtn', 'diag', t('Diagnostic view'), ' aria-pressed="' + !!(has3d && P3D.diagOn()) + '"'); }
@@ -1825,7 +1829,7 @@
       '<div class="view3d" id="v3d"><svg class="elev" id="elev" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<span class="view-hint" id="viewHint"></span><div class="dimchips" id="dimChips"></div>' +
       '<div class="side-bar" id="sideBar" role="tablist">' + SIDES.map(function (k) { return '<button type="button" data-side="' + k + '">' + esc(sideLabel(k)) + '</button>'; }).join('') + '</div>' +
-      '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" data-label="2D / 3D" aria-label="2D / 3D">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
+      '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" data-label="2D / 3D" aria-label="2D / 3D"><b class="vt-t">' + (view.mode === '3d' ? '2D' : '3D') + '</b>' + vtTip('2D / 3D') + '</button>' +
       vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View')) +
       vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('undoV', 'undo', t('Undo') + ' (Ctrl+Z)') + vtBtn('redoV', 'redo', t('Redo') + ' (Ctrl+Shift+Z)') + vtBtn('renderV', 'render', t('Render (AI)')) + vtBtn('shareV', 'share', t('Share 3D view')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
       '<div class="edit-side"><div class="page" id="editBody"></div>' +
@@ -1967,7 +1971,7 @@
     var host = $('#v3d');
     if (!host) { return; }
     host.classList.toggle('is2d', view.mode === '2d');
-    $('#dimBtn').textContent = view.mode === '3d' ? '2D' : '3D';
+    $('#dimBtn .vt-t').textContent = view.mode === '3d' ? '2D' : '3D';
     $('#dimBtn').hidden = !has3d;
     var vh = $('#viewHint');
     vh.classList.remove('gone'); clearTimeout(hintT); hintT = setTimeout(function () { vh.classList.add('gone'); }, 4000);
@@ -3321,7 +3325,7 @@
   window.PPApp = {
     t: t, esc: esc, fmt: fmt, L: L, LU: LU, U: U, show: show, go: go, menu: menu, toast: toast, openPad: openPad,
     persist: function () { persist(); }, codesOf: codesOf, codeSort: codeSort, dimsOf: dimsOf, matInfo: matInfo,
-    viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown, openRender: openRender, openShare: openShare, shareRefresh: shareRefresh,
+    viewer: ensureViewer, vtTip: vtTip, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown, openRender: openRender, openShare: openShare, shareRefresh: shareRefresh,
     loadPref: load, savePref: save, uid: uid, menuItemHtml: menuItemHtml, version: VERSION, build: BUILD, checkUpdate: checkUpdate, ask: ask, vtBtn: vtBtn, setOpenBtn: setOpenBtn, diagBtn: diagBtn, wireDiag: wireDiag, lang: function () { return lang; }, site: site, uk: uk,
     prefsOpt: function () { return prefs.opt; }, shareFile: shareFile, pickFile: pickFile,
     sites: function () { return sites; }, prefs: function () { return prefs; }, resetPrefs: resetPrefs, fixPrefs: fixPrefs,
