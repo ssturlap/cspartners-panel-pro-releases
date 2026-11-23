@@ -331,6 +331,7 @@
     'Gallery rails (tall back on low sides)': 'Barandillas (respaldo alto sobre lados bajos)', 'Gallery back height': 'Alto del respaldo con barandillas',
     'Enter the sizes by hand': 'Escribir las medidas a mano',
     'Drawers open': 'Gavetas abiertas', 'Staircase — top least, lower ones further (for show)': 'En escalera — la de arriba menos, las de abajo más (para mostrar)', 'All the way': 'Hasta el final',
+    'Space': 'Espacio', 'Spaces': 'Espacios', 'Not in a space': 'Fuera de un espacio', 'Codes': 'Códigos',
     'Module manual…': 'Manual de módulos…', 'Module manual': 'Manual de módulos', 'module manual': 'manual de módulos', 'Making the module manual…': 'Preparando el manual de módulos…',
     'Could not make the manual: ': 'No se pudo preparar el manual: ', 'Untitled project': 'Proyecto sin nombre', 'Date': 'Fecha', 'Modules': 'Módulos', 'modules': 'módulos',
     'Scope': 'Alcance', 'All modules': 'Todos los módulos', 'Selected modules': 'Módulos seleccionados', 'Code': 'Código', 'Module': 'Módulo', 'Type': 'Tipo', 'Size': 'Medida',

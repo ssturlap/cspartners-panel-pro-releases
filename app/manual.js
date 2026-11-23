@@ -269,44 +269,10 @@
 
   function build(d, ctx) {
     var t = ctx.t, esc = ctx.esc, u = ' ' + ctx.units;
-    var mods = d.modules || [], nAll = d.count || mods.reduce(function (a, m) { return a + (m.qty || 1); }, 0);
     function qx(m) { return (m.qty || 1) > 1 ? ' <span class="qx">× ' + m.qty + '</span>' : ''; }
     function qcodes(m) { return (m.qty || 1) > 1 && m.codes ? ' <small style="color:#6c665c">(' + m.codes.map(esc).join(', ') + ')</small>' : ''; }
-    // installer pages (a project placed in a room, from SketchUp): the plan + one elevation per wall
-    // from the plugin: the placed modules (items) point at their code's page for the parts
-    if (d.room && d.room.items && !d.room.mods) {
-      var byCode = {}, RR = d.room;
-      mods.forEach(function (m) { byCode[m.code] = m; });
-      RR.mods = {}; RR.snap = { parts: [], movers: [], places: {} };
-      RR.items.forEach(function (it) {
-        var m = byCode[it.group] || byCode[it.code];
-        if (!m || !m.parts) { return; }
-        var pre = it.id + ':';
-        RR.mods[it.id] = { parts: m.parts, bb: m.bbox, code: it.code };
-        RR.snap.places[it.id] = { x: it.room.x, y: it.room.y, z: it.room.z, rz: it.room.rot };
-        m.parts.forEach(function (q) { var c = Object.assign({}, q, { grp: it.id }); if (q.mover) { c.mover = pre + q.mover; } RR.snap.parts.push(c); });
-        (m.movers || []).forEach(function (mv) { RR.snap.movers.push(Object.assign({}, mv, { id: pre + mv.id, grp: it.id })); });
-      });
-    }
-    // ---- materials used: from the cut panels of these modules (× their quantity)
     var ROLE = { carcass: 'Carcass', front: 'Fronts', back: 'Back', shelf: 'Shelves', drawer: 'Drawer boxes', skin: 'Decorative panels',
                  base: 'Toe kick', frame: 'Face frame', top: 'Decorative top', inner: 'Inner drawers', bed: 'Bed frame' };
-    var MATS = [], byMat = {};
-    mods.forEach(function (m) {
-      (m.parts || []).forEach(function (q) {
-        if (q.cut === false || !q.mat || q.deco) { return; }
-        var e = byMat[q.mat];
-        if (!e) { e = byMat[q.mat] = { name: q.mat, pieces: 0, area: 0, th: {}, roles: [], mods: [] }; MATS.push(e); }
-        var n = m.qty || 1;
-        e.pieces += n;
-        e.area += (Number(q.L) || 0) * (Number(q.W) || 0) * n / 1e6;
-        if (q.T) { e.th[ctx.show(q.T)] = 1; }
-        var r = ROLE[q.role] || null;
-        if (r && e.roles.indexOf(r) < 0) { e.roles.push(r); }
-        if (m.code && e.mods.indexOf(m.code) < 0) { e.mods.push(m.code); }
-      });
-    });
-    MATS.sort(function (a, b) { return b.area - a.area; });
     var MD = d.materials || {};
     function matMeta(e) {
       var x = MD[e.name] || {}, inf = ctx.mats ? ctx.mats(e.name) : null;
@@ -325,159 +291,244 @@
       return 0.2126 * r + 0.7152 * g + 0.0722 * b < 128;
     }
     var TYPE = { melamine: 'Melamine', mdf: 'MDF', plywood: 'Plywood' };
-    var matPages = MATS.length ? 1 + MATS.length : 0;
-    var R = d.room && d.room.layout && d.room.layout.walls && d.room.layout.walls.length && window.PPRoom ? d.room : null;
-    var roomPages = R ? 1 + R.layout.walls.length : 0;
-    var pageNo = 0, total = 1 + matPages + roomPages + mods.length + 1;
+    // one part of the manual: the whole project, or one space (SketchUp "Space: Kitchen" groups)
+    function prep(sd) {
+      var mods = sd.modules || [], nAll = sd.count || mods.reduce(function (a, m) { return a + (m.qty || 1); }, 0);
+      // installer pages (a project placed in a room, from SketchUp): the plan + one elevation per wall
+      // from the plugin: the placed modules (items) point at their code's page for the parts
+      if (sd.room && sd.room.items && !sd.room.mods) {
+        var byCode = {}, RR = sd.room;
+        mods.forEach(function (m) { byCode[m.code] = m; });
+        RR.mods = {}; RR.snap = { parts: [], movers: [], places: {} };
+        RR.items.forEach(function (it) {
+          var m = byCode[it.group] || byCode[it.code];
+          if (!m || !m.parts) { return; }
+          var pre = it.id + ':';
+          RR.mods[it.id] = { parts: m.parts, bb: m.bbox, code: it.code };
+          RR.snap.places[it.id] = { x: it.room.x, y: it.room.y, z: it.room.z, rz: it.room.rot };
+          m.parts.forEach(function (q) { var c = Object.assign({}, q, { grp: it.id }); if (q.mover) { c.mover = pre + q.mover; } RR.snap.parts.push(c); });
+          (m.movers || []).forEach(function (mv) { RR.snap.movers.push(Object.assign({}, mv, { id: pre + mv.id, grp: it.id })); });
+        });
+      }
+      // ---- materials used: from the cut panels of these modules (× their quantity)
+      var MATS = [], byMat = {};
+      mods.forEach(function (m) {
+        (m.parts || []).forEach(function (q) {
+          if (q.cut === false || !q.mat || q.deco) { return; }
+          var e = byMat[q.mat];
+          if (!e) { e = byMat[q.mat] = { name: q.mat, pieces: 0, area: 0, th: {}, roles: [], mods: [] }; MATS.push(e); }
+          var n = m.qty || 1;
+          e.pieces += n;
+          e.area += (Number(q.L) || 0) * (Number(q.W) || 0) * n / 1e6;
+          if (q.T) { e.th[ctx.show(q.T)] = 1; }
+          var r = ROLE[q.role] || null;
+          if (r && e.roles.indexOf(r) < 0) { e.roles.push(r); }
+          if (m.code && e.mods.indexOf(m.code) < 0) { e.mods.push(m.code); }
+        });
+      });
+      MATS.sort(function (a, b) { return b.area - a.area; });
+      var matPages = MATS.length ? 1 + MATS.length : 0;
+      var R = sd.room && sd.room.layout && sd.room.layout.walls && sd.room.layout.walls.length && window.PPRoom ? sd.room : null;
+      var roomPages = R ? 1 + R.layout.walls.length : 0;
+      return { sd: sd, name: sd.name, mods: mods, nAll: nAll, MATS: MATS, R: R, matPages: matPages, roomPages: roomPages,
+               n: 1 + matPages + roomPages + mods.length + 1 };
+    }
+    var spaced = !!(d.spaces && d.spaces.length);
+    var P = (spaced ? d.spaces : [d]).map(prep);
+    var pageNo = 0, label = '', total = (spaced ? 1 : 0) + P.reduce(function (a, p) { return a + p.n; }, 0);
+    var start = spaced ? 2 : 1;
+    P.forEach(function (p) { p.start = start; start += p.n; });
+    function spaceName(p) { return p.name ? p.name : t('Not in a space'); }
     function foot() {
       pageNo += 1;
-      return '<div class="foot"><span class="brand">CSPARTNERS <span>PANEL PRO</span></span><span>' + esc(d.title || '') + ' · ' + esc(d.date) +
+      return '<div class="foot"><span class="brand">CSPARTNERS <span>PANEL PRO</span></span><span>' + esc(d.title || '') + (label ? ' · ' + esc(label) : '') + ' · ' + esc(d.date) +
         '</span><span>' + t('Page') + ' ' + pageNo + ' / ' + total + '</span></div>';
+    }
+    function scopeTxt() {
+      if (String(d.scope || '').indexOf('space:') === 0) { return t('Space') + ': ' + d.scope.slice(6); }
+      return d.scope === 'all' ? t('All modules') : t('Selected modules');
+    }
+    // the table of modules (with their page numbers) on a cover / space page
+    function modTable(p) {
+      var o = '<table><tr><th>' + t('Code') + '</th><th class="n">' + t('Qty') + '</th><th>' + t('Module') + '</th><th>' + t('Type') + '</th><th class="n">' + t('Size') + ' (W × H × D)</th><th class="n">' + t('Page') + '</th></tr>';
+      p.mods.forEach(function (m, i) {
+        o += '<tr><td><b>' + esc(m.code || '') + '</b></td><td class="n">' + (m.qty || 1) + '</td><td>' + esc(m.name || '') + qcodes(m) + '</td><td>' + esc(m.label ? t(m.label) : '') +
+          '</td><td class="n">' + (m.error ? '—' : ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u) + '</td><td class="n">' + (p.start + 1 + p.matPages + p.roomPages + i) + '</td></tr>';
+      });
+      return o + '</table>';
     }
     var h = '<!doctype html><html><head><meta charset="utf-8"><title>' + esc((d.title || 'PanelPro') + ' — ' + t('Module manual')) + '</title><style>' + CSS + '</style></head><body>';
     h += '<div class="np"><button onclick="window.print()">' + esc(t('Print / save PDF…')) + '</button></div>';
-
-    // ---- cover
-    h += '<section class="page cover"><div class="brand" style="font-size:12pt">CSPARTNERS <span>PANEL PRO</span></div>' +
-      '<h1>' + esc(t('Module manual')) + '</h1><div class="proj">' + esc(d.title || t('Untitled project')) + '</div>' +
-      '<div class="facts" style="text-align:left;grid-template-columns:auto 1fr;margin-bottom:8mm"><span>' + t('Date') + '</span><b>' + esc(d.date) + '</b>' +
-      '<span>' + t('Modules') + '</span><b>' + nAll + (nAll !== mods.length ? ' (' + mods.length + ' ' + t('different') + ')' : '') + '</b><span>' + t('Scope') + '</span><b>' + esc(d.scope === 'all' ? t('All modules') : t('Selected modules')) + '</b></div>' +
-      '<table><tr><th>' + t('Code') + '</th><th class="n">' + t('Qty') + '</th><th>' + t('Module') + '</th><th>' + t('Type') + '</th><th class="n">' + t('Size') + ' (W × H × D)</th><th class="n">' + t('Page') + '</th></tr>';
-    mods.forEach(function (m, i) {
-      h += '<tr><td><b>' + esc(m.code || '') + '</b></td><td class="n">' + (m.qty || 1) + '</td><td>' + esc(m.name || '') + qcodes(m) + '</td><td>' + esc(m.label ? t(m.label) : '') +
-        '</td><td class="n">' + (m.error ? '—' : ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u) + '</td><td class="n">' + (i + 2 + matPages + roomPages) + '</td></tr>';
-    });
-    h += '</table>' + foot() + '</section>';
-
-    // ---- materials: the list, then one page per material
-    if (MATS.length) {
-      h += '<section class="page"><div class="hd"><div><h1>' + esc(t('Materials')) + '</h1><div class="sub">' + esc(d.title || '') + ' · ' + MATS.length + ' ' +
-        esc(t(MATS.length === 1 ? 'material' : 'materials')) + '</div></div></div><div class="mats-grid">' + MATS.map(function (e) {
-          var mm = matMeta(e);
-          return '<div class="mcard"><div class="sw" style="background-color:' + esc(mm.color) + (mm.image ? ';background-image:url(\'' + esc(mm.image) + '\')' : '') + '"></div><div>' +
-            (mm.brand ? '<small>' + esc(mm.brand) + '</small>' : '') + '<b>' + esc(mm.name) + '</b>' +
-            '<span>' + esc(e.roles.map(t).join(', ')) + '</span><span>' + Object.keys(e.th).join(' / ') + u + ' · ' + e.pieces + ' ' + t('pieces') + ' · ' + (Math.round(e.area * 100) / 100) + ' m²</span></div></div>';
-        }).join('') + '</div>' + foot() + '</section>';
-      MATS.forEach(function (e) {
-        var mm = matMeta(e), dk = dark(mm.color);
-        var typ = mm.type ? t('%s collection').replace('%s', t(TYPE[mm.type] || mm.type)) : t('Board collection');
-        h += '<section class="page mat-page"><div class="mat-hero' + (dk ? ' dark' : '') + '" style="background-color:' + esc(mm.color) + '">' +
-          (mm.image ? '<div class="mat-tex' + (mm.rot ? ' rot' : '') + '" style="background-image:url(\'' + esc(mm.image) + '\')"></div>' : '') +
-          (mm.logo ? '<div class="mat-brand"><img alt="' + esc(mm.brand) + '" src="' + esc(mm.logo) + '"></div>' : mm.brand ? '<div class="mat-brand">' + esc(mm.brand) + '</div>' : '') +
-          '<div class="mat-rule"><i></i><b></b><i></i></div>' +
-          '<div class="mat-name">' + esc(mm.name) + '</div>' +
-          '<div class="mat-type">' + esc(typ) + '</div></div>' +
-          '<div class="mat-info"><div><span>' + esc(t('Used for')) + '</span><b>' + esc(e.roles.map(t).join(', ') || '—') + '</b></div>' +
-          '<div><span>' + esc(t('Thickness')) + '</span><b>' + Object.keys(e.th).join(' / ') + u + '</b></div>' +
-          '<div><span>' + esc(t('Pieces')) + '</span><b>' + e.pieces + ' · ' + (Math.round(e.area * 100) / 100) + ' m²</b></div>' +
-          '<div><span>' + esc(t('Modules')) + '</span><b>' + esc(e.mods.join(' · ') || '—') + '</b></div></div>' +
-          foot() + '</section>';
-      });
-    }
-
-    // ---- installation: where everything goes
-    if (R) {
-      var L = R.layout, rctx = { t: t, show: ctx.show };
-      var snap = R.snap && window.P3D && window.P3D.snapshot ? window.P3D.snapshot(R.snap.parts, ctx.mats, R.snap.movers, { open: false, w: 1000, h: 620, places: R.snap.places }) : null;
-      h += '<section class="page"><div class="hd"><div><h1>' + esc(t('Room plan')) + '</h1><div class="sub">' + esc(t('Installation')) + ' · ' +
-        L.walls.length + ' ' + esc(t(L.walls.length === 1 ? 'wall' : 'walls')) + ' · ' + nAll + ' ' + t('modules') + '</div></div></div>' +
-        '<div class="v room-plan"><h3>' + esc(t('Plan from above')) + '</h3>' + window.PPRoom.planSvg(L, rctx) + '</div>' +
-        (snap ? '<div class="v room-3d"><h3>3D</h3><img src="' + snap + '"></div>' : '') +
-        '<div class="hw">' + L.walls.map(function (w) {
-          return '<div><b>' + esc(w.name) + '</b> ' + w.mods.map(function (x) { return esc(x.code || ''); }).join(' · ') + ' — ' + ctx.show(w.length) + u + '</div>';
-        }).join('') + '</div>' + foot() + '</section>';
-      L.walls.forEach(function (w) {
-        var low = w.mods.filter(function (x) { return x.z < 900; }), high = w.mods.filter(function (x) { return x.z >= 900; });
-        var list = function (a) { return a.map(function (x) { return esc(x.code || ''); }).join(' · '); };
-        h += '<section class="page"><div class="hd"><div><h1><b>' + esc(w.name) + '</b>' + esc(t('Elevation')) + '</h1><div class="sub">' +
-          esc(t('Seen from the front, left to right')) + ' · ' + ctx.show(w.length) + u + '</div></div>' +
-          '<div class="facts">' + (low.length ? '<span>' + t('Floor') + '</span><b>' + list(low) + '</b>' : '') +
-          (high.length ? '<span>' + t('Wall cabinets') + '</span><b>' + list(high) + '</b>' : '') + '</div></div>' +
-          '<div class="v room-wall"><h3>' + esc(t('Elevation')) + '</h3>' + window.PPRoom.wallSvg(w, R.mods, rctx) + '</div>' +
-          '<table style="margin-top:3mm"><tr><th>' + t('Code') + '</th><th class="n">' + t('From the left') + '</th><th class="n">' + t('Off the floor') + '</th><th class="n">' + t('Width') + '</th></tr>' +
-          w.mods.slice().sort(function (a, b) { return a.x0 - b.x0 || a.z - b.z; }).map(function (x) {
-            return '<tr><td><b>' + esc(x.code || '') + '</b></td><td class="n">' + ctx.show(x.x0) + u + '</td><td class="n">' + ctx.show(x.z) + u + '</td><td class="n">' + ctx.show(x.x1 - x.x0) + u + '</td></tr>';
-          }).join('') + '</table>' + foot() + '</section>';
-      });
-    }
-
-    // ---- one page per module
-    mods.forEach(function (m) {
-      h += '<section class="page">';
-      h += '<div class="hd"><div><h1><b>' + esc(m.code || '') + '</b>' + esc(m.name || '') + qx(m) + '</h1><div class="sub">' + esc(m.label ? t(m.label) : '') +
-        (m.error ? '' : ' · ' + ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u + ' · ' + t('panels') + ' ' + ctx.show(m.t) + u) + '</div></div>';
-      if (m.error) {
-        h += '</div><p class="warn">' + esc(m.error) + '</p>' + foot() + '</section>';
-        return;
-      }
-      var c = m.counts || {}, sl = Object.keys(c.slides || {}).map(function (nl) { return c.slides[nl] + ' × ' + ctx.show(+nl) + u; });
-      h += '<div class="facts">' +
-        '<span>' + t('Doors') + '</span><b>' + (c.doors || 0) + '</b>' +
-        '<span>' + t('Drawers') + '</span><b>' + (c.drawers || 0) + '</b>' +
-        '<span>' + t('Hinges') + '</span><b>' + (c.hinges || 0) + '</b>' +
-        '<span>' + t('Slides (pairs)') + '</span><b>' + (sl.length ? esc(sl.join(', ')) : '0') + '</b>' +
-        (c.legs ? '<span>' + t('Legs') + '</span><b>' + c.legs + '</b>' : '') +
-        '<span>' + t('Carcass') + '</span><b>' + esc(m.mat_carcass || '') + '</b>' +
-        '<span>' + t('Fronts') + '</span><b>' + esc(m.mat_front || '') + '</b></div></div>';
-      var all = m.parts || [];
-      var hv = { kick: m.kick || 0, height: m.height, bed: m.bed || null, mattress: (m.parts || []).some(function (p) { return p.name === 'Mattress'; }) };
-      var hvIn = Object.assign({}, hv, { inside: true });
-      var inside = all.filter(function (p) { return !p.mover && p.role !== 'front'; });
-      h += '<div class="views">' +
-        '<div class="v"><h3>' + t('Front view') + '</h3>' + viewSVG(all, 'front', ctx, hv) + '</div>' +
-        '<div class="v"><h3>' + t('Front view — without doors and fronts') + '</h3>' + viewSVG(inside, 'front', ctx, hvIn) + '</div>' +
-        '<div class="v"><h3>' + t('Top view') + '</h3>' + viewSVG(all, 'top', ctx) + '</div>' +
-        '<div class="v"><h3>' + t('Left view') + '</h3>' + viewSVG(all, 'left', ctx, hv) + '</div>' +
-        '<div class="v"><h3>' + t('Right view') + '</h3>' + viewSVG(all, 'right', ctx, hv) + '</div>' +
-        '<div class="v"><h3>' + t('Back view') + '</h3>' + viewSVG(all, 'back', ctx, hv) + '</div></div>';
-      // a Japanese bed: its ledge corner plan takes the place of the "open" picture (nothing opens)
-      var bedNotchBox = function (nb) {
-        if (nb.kind === 'butt') {
-          return '<div class="v"><h3>' + t('Ledge corner — plan (foot, left; the right one mirrored)') + '</h3>' + bedNotchSVG(nb, ctx, t) +
-            '<p class="sub">' + esc(t('Ledge bands butt at the corner (screws): the foot one full width, the side ones against it.')) + '</p></div>';
+    if (spaced) {
+      // ---- cover: the spaces, then one part per space (its own page, materials, installation, modules, totals)
+      h += '<section class="page cover"><div class="brand" style="font-size:12pt">CSPARTNERS <span>PANEL PRO</span></div>' +
+        '<h1>' + esc(t('Module manual')) + '</h1><div class="proj">' + esc(d.title || t('Untitled project')) + '</div>' +
+        '<div class="facts" style="text-align:left;grid-template-columns:auto 1fr;margin-bottom:8mm"><span>' + t('Date') + '</span><b>' + esc(d.date) + '</b>' +
+        '<span>' + t('Spaces') + '</span><b>' + P.length + '</b><span>' + t('Modules') + '</span><b>' + (d.count || 0) + '</b><span>' + t('Scope') + '</span><b>' + esc(scopeTxt()) + '</b></div>' +
+        '<table><tr><th>' + t('Space') + '</th><th class="n">' + t('Modules') + '</th><th>' + t('Codes') + '</th><th class="n">' + t('Page') + '</th></tr>' +
+        P.map(function (p) {
+          return '<tr><td><b>' + esc(spaceName(p)) + '</b></td><td class="n">' + p.nAll + '</td><td>' + esc(p.mods.map(function (m) { return m.code || ''; }).join(' · ')) +
+            '</td><td class="n">' + p.start + '</td></tr>';
+        }).join('') + '</table>' + foot() + '</section>';
+      P.forEach(function (p) {
+        label = spaceName(p);
+        var RS = p.sd.room;
+        if (RS && RS.snap && !RS._img && window.P3D && window.P3D.snapshot) {
+          RS._img = window.P3D.snapshot(RS.snap.parts, ctx.mats, RS.snap.movers, { open: false, w: 1000, h: 620, places: RS.snap.places });
         }
-        return '<div class="v"><h3>' + t('Ledge corner — plan (foot, left; the right one mirrored)') + '</h3>' + bedNotchSVG(nb, ctx, t) +
-          '<p class="sub">' + esc(t('Cut the foot ledge support as a plain board; the installer cuts the notch by hand:') + ' ' + ctx.show(nb.t) + ' × ' + ctx.show(nb.mid) + u + ', ' +
-          t('ears') + ' ' + ctx.show(nb.ear) + u + '. ' + t('Side supports') + ' ' + ctx.show(nb.side) + u + ' ' + t('wide, butting the ears with a biscuit.')) + '</p></div>';
-      };
-      // a bed (nothing opens): a section across the middle, with its heights
-      var bedSectionBox = function () {
-        var ym = (m.depth || 0) / 2;
-        var cut = all.filter(function (p) { var b = box(p); return b.mn[1] <= ym && b.mx[1] >= ym; });
-        return '<div class="v"><h3>' + t('Section across the middle') + '</h3>' + viewSVG(cut, 'front', ctx, hv) + '</div>';
-      };
-      var closed = window.P3D && window.P3D.snapshot ? window.P3D.snapshot(all, ctx.mats, m.movers, { open: false, w: 900, h: 640 }) : null;
-      var open = window.P3D && window.P3D.snapshot && (m.movers || []).length ? window.P3D.snapshot(all, ctx.mats, m.movers, { open: true, w: 900, h: 640 }) : null;
-      h += '<div class="three"><div class="v"><h3>' + t('3D — closed') + '</h3>' + (closed ? '<img src="' + closed + '">' : '') + '</div>' +
-        (m.bed && m.bed.notch ? bedNotchBox(m.bed.notch) : m.bed ? bedSectionBox() :
-        '<div class="v"><h3>' + t('3D — open') + '</h3>' + (open ? '<img src="' + open + '">' : '<p class="sub">' + t('No doors or drawers') + '</p>') + '</div>') + '</div>';
-      if ((m.qty || 1) > 1) { h += '<div class="warn" style="color:#6c665c">' + esc(t('Hardware for one module — build') + ' ' + m.qty + '.') + '</div>'; }
-      h += '<div class="hw">' + (m.hardware_l || []).map(function (x) { return '<div><b>' + x[1] + '×</b> ' + esc(x[0]) + '</div>'; }).join('') + '</div>';
-      if ((m.warnings || []).length) { h += '<div class="warn">⚠ ' + m.warnings.map(esc).join(' · ') + '</div>'; }
-      h += foot() + '</section>';
-    });
-
-    // ---- project parts
-    h += '<section class="page"><div class="hd"><div><h1>' + t('Project parts') + '</h1><div class="sub">' + esc(d.title || '') + ' · ' + nAll + ' ' + t('modules') + '</div></div></div>';
-    h += '<h2>' + t('Hardware totals') + '</h2><table><tr><th class="n">' + t('Qty') + '</th><th>' + t('Item') + '</th></tr>';
-    (d.totals || []).forEach(function (x) { h += '<tr><td class="n"><b>' + x[1] + '</b></td><td>' + esc(x[0]) + '</td></tr>'; });
-    h += '</table>';
-    (d.kick || []).forEach(function (k) {
-      var nb = k.bars.length;
-      h += '<h2>' + t('Plastic toe kick') + ' ' + ctx.show(k.h) + u + ' — ' + nb + ' ' + (nb === 1 ? t('bar') : t('bars')) + ' × ' + ctx.show(d.bar) + u + '</h2>';
-      h += '<p>' + t('Total length') + ' <b>' + k.metres + ' m</b> · ' + k.pieces + ' ' + t('pieces') + ' · ' + t('saw cut') + ' ' + ctx.show(d.kerf) + u + '</p>';
-      k.bars.forEach(function (b, i) {
-        h += '<div style="break-inside:avoid"><b>' + t('Bar') + ' ' + (i + 1) + '</b> — ' + b.cuts.map(function (c) {
-          return ctx.show(c.len) + (c.code ? ' (' + esc(c.code) + (c.part ? ' ' + t('part') + ' ' + esc(c.part.replace('(joint)', t('(joint)'))) : '') + ')' : '');
-        }).join(' + ') + ' · ' + t('offcut') + ' ' + ctx.show(b.offcut) + u;
-        h += '<div class="bar">' + b.cuts.map(function (c) { return '<i style="width:' + (c.len / d.bar * 100) + '%">' + ctx.show(c.len) + '</i>'; }).join('') +
-          (b.offcut > 0.5 ? '<i class="off" style="width:' + (b.offcut / d.bar * 100) + '%">' + ctx.show(b.offcut) + '</i>' : '') + '</div></div>';
+        h += '<section class="page cover space-cover"><div class="brand" style="font-size:12pt">CSPARTNERS <span>PANEL PRO</span></div>' +
+          '<div class="sub">' + esc(t('Space')) + '</div><h1>' + esc(label) + '</h1><div class="proj">' + esc(d.title || '') + '</div>' +
+          '<div class="facts" style="text-align:left;grid-template-columns:auto 1fr;margin-bottom:5mm"><span>' + t('Modules') + '</span><b>' + p.nAll +
+          (p.nAll !== p.mods.length ? ' (' + p.mods.length + ' ' + t('different') + ')' : '') + '</b></div>' +
+          (RS && RS._img ? '<div class="v"><img src="' + RS._img + '" style="width:100%;max-height:80mm;object-fit:contain"></div>' : '') +
+          modTable(p) + foot() + '</section>';
+        h += body(p);
       });
-    });
-    if (!(d.kick || []).length) { h += '<p class="sub">' + t('No plastic toe kick in these modules.') + '</p>'; }
-    h += '<p class="sub" style="margin-top:4mm">' + t('Panels: see the cut list and the sheet optimizer report.') + '</p>';
-    h += foot() + '</section></body></html>';
-    return h;
+    } else {
+      var p0 = P[0];
+      // ---- cover
+      h += '<section class="page cover"><div class="brand" style="font-size:12pt">CSPARTNERS <span>PANEL PRO</span></div>' +
+        '<h1>' + esc(t('Module manual')) + '</h1><div class="proj">' + esc(d.title || t('Untitled project')) + '</div>' +
+        '<div class="facts" style="text-align:left;grid-template-columns:auto 1fr;margin-bottom:8mm"><span>' + t('Date') + '</span><b>' + esc(d.date) + '</b>' +
+        '<span>' + t('Modules') + '</span><b>' + p0.nAll + (p0.nAll !== p0.mods.length ? ' (' + p0.mods.length + ' ' + t('different') + ')' : '') + '</b><span>' + t('Scope') + '</span><b>' + esc(scopeTxt()) + '</b></div>' +
+        modTable(p0) + foot() + '</section>';
+      h += body(p0);
+    }
+    return h + '</body></html>';
+
+    // materials, installation, one page per module and the totals of one part
+    function body(p) {
+      var mods = p.mods, nAll = p.nAll, MATS = p.MATS, R = p.R, sd = p.sd, h = '';
+      // ---- materials: the list, then one page per material
+      if (MATS.length) {
+        h += '<section class="page"><div class="hd"><div><h1>' + esc(t('Materials')) + '</h1><div class="sub">' + esc(d.title || '') + ' · ' + MATS.length + ' ' +
+          esc(t(MATS.length === 1 ? 'material' : 'materials')) + '</div></div></div><div class="mats-grid">' + MATS.map(function (e) {
+            var mm = matMeta(e);
+            return '<div class="mcard"><div class="sw" style="background-color:' + esc(mm.color) + (mm.image ? ';background-image:url(\'' + esc(mm.image) + '\')' : '') + '"></div><div>' +
+              (mm.brand ? '<small>' + esc(mm.brand) + '</small>' : '') + '<b>' + esc(mm.name) + '</b>' +
+              '<span>' + esc(e.roles.map(t).join(', ')) + '</span><span>' + Object.keys(e.th).join(' / ') + u + ' · ' + e.pieces + ' ' + t('pieces') + ' · ' + (Math.round(e.area * 100) / 100) + ' m²</span></div></div>';
+          }).join('') + '</div>' + foot() + '</section>';
+        MATS.forEach(function (e) {
+          var mm = matMeta(e), dk = dark(mm.color);
+          var typ = mm.type ? t('%s collection').replace('%s', t(TYPE[mm.type] || mm.type)) : t('Board collection');
+          h += '<section class="page mat-page"><div class="mat-hero' + (dk ? ' dark' : '') + '" style="background-color:' + esc(mm.color) + '">' +
+            (mm.image ? '<div class="mat-tex' + (mm.rot ? ' rot' : '') + '" style="background-image:url(\'' + esc(mm.image) + '\')"></div>' : '') +
+            (mm.logo ? '<div class="mat-brand"><img alt="' + esc(mm.brand) + '" src="' + esc(mm.logo) + '"></div>' : mm.brand ? '<div class="mat-brand">' + esc(mm.brand) + '</div>' : '') +
+            '<div class="mat-rule"><i></i><b></b><i></i></div>' +
+            '<div class="mat-name">' + esc(mm.name) + '</div>' +
+            '<div class="mat-type">' + esc(typ) + '</div></div>' +
+            '<div class="mat-info"><div><span>' + esc(t('Used for')) + '</span><b>' + esc(e.roles.map(t).join(', ') || '—') + '</b></div>' +
+            '<div><span>' + esc(t('Thickness')) + '</span><b>' + Object.keys(e.th).join(' / ') + u + '</b></div>' +
+            '<div><span>' + esc(t('Pieces')) + '</span><b>' + e.pieces + ' · ' + (Math.round(e.area * 100) / 100) + ' m²</b></div>' +
+            '<div><span>' + esc(t('Modules')) + '</span><b>' + esc(e.mods.join(' · ') || '—') + '</b></div></div>' +
+            foot() + '</section>';
+        });
+      }
+
+      // ---- installation: where everything goes
+      if (R) {
+        var L = R.layout, rctx = { t: t, show: ctx.show };
+        var snap = R._img || R.snap && window.P3D && window.P3D.snapshot ? window.P3D.snapshot(R.snap.parts, ctx.mats, R.snap.movers, { open: false, w: 1000, h: 620, places: R.snap.places }) : null;
+        h += '<section class="page"><div class="hd"><div><h1>' + esc(t('Room plan')) + '</h1><div class="sub">' + esc(t('Installation')) + ' · ' +
+          L.walls.length + ' ' + esc(t(L.walls.length === 1 ? 'wall' : 'walls')) + ' · ' + nAll + ' ' + t('modules') + '</div></div></div>' +
+          '<div class="v room-plan"><h3>' + esc(t('Plan from above')) + '</h3>' + window.PPRoom.planSvg(L, rctx) + '</div>' +
+          (snap ? '<div class="v room-3d"><h3>3D</h3><img src="' + snap + '"></div>' : '') +
+          '<div class="hw">' + L.walls.map(function (w) {
+            return '<div><b>' + esc(w.name) + '</b> ' + w.mods.map(function (x) { return esc(x.code || ''); }).join(' · ') + ' — ' + ctx.show(w.length) + u + '</div>';
+          }).join('') + '</div>' + foot() + '</section>';
+        L.walls.forEach(function (w) {
+          var low = w.mods.filter(function (x) { return x.z < 900; }), high = w.mods.filter(function (x) { return x.z >= 900; });
+          var list = function (a) { return a.map(function (x) { return esc(x.code || ''); }).join(' · '); };
+          h += '<section class="page"><div class="hd"><div><h1><b>' + esc(w.name) + '</b>' + esc(t('Elevation')) + '</h1><div class="sub">' +
+            esc(t('Seen from the front, left to right')) + ' · ' + ctx.show(w.length) + u + '</div></div>' +
+            '<div class="facts">' + (low.length ? '<span>' + t('Floor') + '</span><b>' + list(low) + '</b>' : '') +
+            (high.length ? '<span>' + t('Wall cabinets') + '</span><b>' + list(high) + '</b>' : '') + '</div></div>' +
+            '<div class="v room-wall"><h3>' + esc(t('Elevation')) + '</h3>' + window.PPRoom.wallSvg(w, R.mods, rctx) + '</div>' +
+            '<table style="margin-top:3mm"><tr><th>' + t('Code') + '</th><th class="n">' + t('From the left') + '</th><th class="n">' + t('Off the floor') + '</th><th class="n">' + t('Width') + '</th></tr>' +
+            w.mods.slice().sort(function (a, b) { return a.x0 - b.x0 || a.z - b.z; }).map(function (x) {
+              return '<tr><td><b>' + esc(x.code || '') + '</b></td><td class="n">' + ctx.show(x.x0) + u + '</td><td class="n">' + ctx.show(x.z) + u + '</td><td class="n">' + ctx.show(x.x1 - x.x0) + u + '</td></tr>';
+            }).join('') + '</table>' + foot() + '</section>';
+        });
+      }
+
+      // ---- one page per module
+      mods.forEach(function (m) {
+        h += '<section class="page">';
+        h += '<div class="hd"><div><h1><b>' + esc(m.code || '') + '</b>' + esc(m.name || '') + qx(m) + '</h1><div class="sub">' + esc(m.label ? t(m.label) : '') +
+          (m.error ? '' : ' · ' + ctx.show(m.width) + ' × ' + ctx.show(m.height) + ' × ' + ctx.show(m.depth) + u + ' · ' + t('panels') + ' ' + ctx.show(m.t) + u) + '</div></div>';
+        if (m.error) {
+          h += '</div><p class="warn">' + esc(m.error) + '</p>' + foot() + '</section>';
+          return;
+        }
+        var c = m.counts || {}, sl = Object.keys(c.slides || {}).map(function (nl) { return c.slides[nl] + ' × ' + ctx.show(+nl) + u; });
+        h += '<div class="facts">' +
+          '<span>' + t('Doors') + '</span><b>' + (c.doors || 0) + '</b>' +
+          '<span>' + t('Drawers') + '</span><b>' + (c.drawers || 0) + '</b>' +
+          '<span>' + t('Hinges') + '</span><b>' + (c.hinges || 0) + '</b>' +
+          '<span>' + t('Slides (pairs)') + '</span><b>' + (sl.length ? esc(sl.join(', ')) : '0') + '</b>' +
+          (c.legs ? '<span>' + t('Legs') + '</span><b>' + c.legs + '</b>' : '') +
+          '<span>' + t('Carcass') + '</span><b>' + esc(m.mat_carcass || '') + '</b>' +
+          '<span>' + t('Fronts') + '</span><b>' + esc(m.mat_front || '') + '</b></div></div>';
+        var all = m.parts || [];
+        var hv = { kick: m.kick || 0, height: m.height, bed: m.bed || null, mattress: (m.parts || []).some(function (p) { return p.name === 'Mattress'; }) };
+        var hvIn = Object.assign({}, hv, { inside: true });
+        var inside = all.filter(function (p) { return !p.mover && p.role !== 'front'; });
+        h += '<div class="views">' +
+          '<div class="v"><h3>' + t('Front view') + '</h3>' + viewSVG(all, 'front', ctx, hv) + '</div>' +
+          '<div class="v"><h3>' + t('Front view — without doors and fronts') + '</h3>' + viewSVG(inside, 'front', ctx, hvIn) + '</div>' +
+          '<div class="v"><h3>' + t('Top view') + '</h3>' + viewSVG(all, 'top', ctx) + '</div>' +
+          '<div class="v"><h3>' + t('Left view') + '</h3>' + viewSVG(all, 'left', ctx, hv) + '</div>' +
+          '<div class="v"><h3>' + t('Right view') + '</h3>' + viewSVG(all, 'right', ctx, hv) + '</div>' +
+          '<div class="v"><h3>' + t('Back view') + '</h3>' + viewSVG(all, 'back', ctx, hv) + '</div></div>';
+        // a Japanese bed: its ledge corner plan takes the place of the "open" picture (nothing opens)
+        var bedNotchBox = function (nb) {
+          if (nb.kind === 'butt') {
+            return '<div class="v"><h3>' + t('Ledge corner — plan (foot, left; the right one mirrored)') + '</h3>' + bedNotchSVG(nb, ctx, t) +
+              '<p class="sub">' + esc(t('Ledge bands butt at the corner (screws): the foot one full width, the side ones against it.')) + '</p></div>';
+          }
+          return '<div class="v"><h3>' + t('Ledge corner — plan (foot, left; the right one mirrored)') + '</h3>' + bedNotchSVG(nb, ctx, t) +
+            '<p class="sub">' + esc(t('Cut the foot ledge support as a plain board; the installer cuts the notch by hand:') + ' ' + ctx.show(nb.t) + ' × ' + ctx.show(nb.mid) + u + ', ' +
+            t('ears') + ' ' + ctx.show(nb.ear) + u + '. ' + t('Side supports') + ' ' + ctx.show(nb.side) + u + ' ' + t('wide, butting the ears with a biscuit.')) + '</p></div>';
+        };
+        // a bed (nothing opens): a section across the middle, with its heights
+        var bedSectionBox = function () {
+          var ym = (m.depth || 0) / 2;
+          var cut = all.filter(function (p) { var b = box(p); return b.mn[1] <= ym && b.mx[1] >= ym; });
+          return '<div class="v"><h3>' + t('Section across the middle') + '</h3>' + viewSVG(cut, 'front', ctx, hv) + '</div>';
+        };
+        var closed = window.P3D && window.P3D.snapshot ? window.P3D.snapshot(all, ctx.mats, m.movers, { open: false, w: 900, h: 640 }) : null;
+        var open = window.P3D && window.P3D.snapshot && (m.movers || []).length ? window.P3D.snapshot(all, ctx.mats, m.movers, { open: true, w: 900, h: 640 }) : null;
+        h += '<div class="three"><div class="v"><h3>' + t('3D — closed') + '</h3>' + (closed ? '<img src="' + closed + '">' : '') + '</div>' +
+          (m.bed && m.bed.notch ? bedNotchBox(m.bed.notch) : m.bed ? bedSectionBox() :
+          '<div class="v"><h3>' + t('3D — open') + '</h3>' + (open ? '<img src="' + open + '">' : '<p class="sub">' + t('No doors or drawers') + '</p>') + '</div>') + '</div>';
+        if ((m.qty || 1) > 1) { h += '<div class="warn" style="color:#6c665c">' + esc(t('Hardware for one module — build') + ' ' + m.qty + '.') + '</div>'; }
+        h += '<div class="hw">' + (m.hardware_l || []).map(function (x) { return '<div><b>' + x[1] + '×</b> ' + esc(x[0]) + '</div>'; }).join('') + '</div>';
+        if ((m.warnings || []).length) { h += '<div class="warn">⚠ ' + m.warnings.map(esc).join(' · ') + '</div>'; }
+        h += foot() + '</section>';
+      });
+
+      // ---- project parts
+      h += '<section class="page"><div class="hd"><div><h1>' + t('Project parts') + '</h1><div class="sub">' + esc(d.title || '') + ' · ' + nAll + ' ' + t('modules') + '</div></div></div>';
+      h += '<h2>' + t('Hardware totals') + '</h2><table><tr><th class="n">' + t('Qty') + '</th><th>' + t('Item') + '</th></tr>';
+      (sd.totals || []).forEach(function (x) { h += '<tr><td class="n"><b>' + x[1] + '</b></td><td>' + esc(x[0]) + '</td></tr>'; });
+      h += '</table>';
+      (sd.kick || []).forEach(function (k) {
+        var nb = k.bars.length;
+        h += '<h2>' + t('Plastic toe kick') + ' ' + ctx.show(k.h) + u + ' — ' + nb + ' ' + (nb === 1 ? t('bar') : t('bars')) + ' × ' + ctx.show(sd.bar) + u + '</h2>';
+        h += '<p>' + t('Total length') + ' <b>' + k.metres + ' m</b> · ' + k.pieces + ' ' + t('pieces') + ' · ' + t('saw cut') + ' ' + ctx.show(sd.kerf) + u + '</p>';
+        k.bars.forEach(function (b, i) {
+          h += '<div style="break-inside:avoid"><b>' + t('Bar') + ' ' + (i + 1) + '</b> — ' + b.cuts.map(function (c) {
+            return ctx.show(c.len) + (c.code ? ' (' + esc(c.code) + (c.part ? ' ' + t('part') + ' ' + esc(c.part.replace('(joint)', t('(joint)'))) : '') + ')' : '');
+          }).join(' + ') + ' · ' + t('offcut') + ' ' + ctx.show(b.offcut) + u;
+          h += '<div class="bar">' + b.cuts.map(function (c) { return '<i style="width:' + (c.len / sd.bar * 100) + '%">' + ctx.show(c.len) + '</i>'; }).join('') +
+            (b.offcut > 0.5 ? '<i class="off" style="width:' + (b.offcut / sd.bar * 100) + '%">' + ctx.show(b.offcut) + '</i>' : '') + '</div></div>';
+        });
+      });
+      if (!(sd.kick || []).length) { h += '<p class="sub">' + t('No plastic toe kick in these modules.') + '</p>'; }
+      h += '<p class="sub" style="margin-top:4mm">' + t('Panels: see the cut list and the sheet optimizer report.') + '</p>';
+      h += foot() + '</section>';
+      return h;
+    }
   }
 
   // The editors' 2D view: one side (front / right / back / left / top) drawn like the manual, with
