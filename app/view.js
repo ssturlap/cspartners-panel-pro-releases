@@ -47,8 +47,17 @@
     D = d;
     var m = d.model || {};
     // the page speaks the language the maker's app was in when the model was shared
-    if (m.lang === 'es' || m.lang === 'en') { ES = m.lang === 'es'; document.documentElement.lang = m.lang; }
+    var pick = picked();
+    if (pick) { ES = pick === 'es'; } else if (m.lang === 'es' || m.lang === 'en') { ES = m.lang === 'es'; }
+    document.documentElement.lang = ES ? 'es' : 'en';
+    langBtns();
     units = m.units === 'cm' ? { k: 10, name: 'cm' } : { k: 1, name: 'mm' };
+    header(d);
+    draw(m);
+    side(d, m);
+  }
+  function header(d) {
+    var m = d.model || {};
     document.title = (d.title || t('3D view')) + (d.brand && d.brand.name ? ' — ' + d.brand.name : '');
     if (m.dims) { $('vDim').textContent = fmt(m.dims.w).replace(/ \w+$/, '') + ' × ' + fmt(m.dims.h).replace(/ \w+$/, '') + ' × ' + fmt(m.dims.d); $('vDim').hidden = false; }
     $('vTitle').textContent = d.title || t('3D view');
@@ -61,8 +70,28 @@
         new Date(x.at).toLocaleDateString(ES ? 'es' : 'en', { dateStyle: 'medium' }) + (i === 0 ? ' (' + t('latest') + ')' : '') + '</option>';
     }).join('');
     sel.onchange = function () { load(this.value); };
-    draw(m);
+  }
+  // EN / ES in the top bar: the viewer's own choice wins (remembered on this device)
+  function picked() { try { return localStorage.getItem('pp.view.lang'); } catch (e) { return null; } }
+  function langBtns() {
+    document.querySelectorAll('.vh-lang button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String((b.getAttribute('data-l') === 'es') === ES));
+      b.onclick = function () {
+        var l = b.getAttribute('data-l');
+        try { localStorage.setItem('pp.view.lang', l); } catch (e) { /* this browser keeps nothing */ }
+        ES = l === 'es';
+        if (D) { var m = D.model || {}; relabel(D, m); } else { langBtns(); }
+      };
+    });
+  }
+  // the words again in the other language (the 3D view stays as it is)
+  function relabel(d, m) {
+    document.documentElement.lang = ES ? 'es' : 'en';
+    langBtns();
+    header(d);
+    tools(m);
     side(d, m);
+    if (window.P3D && window.P3D.dimsOn && window.P3D.dimsOn()) { window.P3D.setDimUnits(units.k, units.name); }
   }
   function matFn(m) {
     var mats = m.mats || {};
@@ -160,5 +189,6 @@
   $('vSheet').onclick = function (e) { if (e.target === this || e.target.classList.contains('sheet-x')) { this.hidden = true; } };
   $('vLb').onclick = function (e) { if (e.target === this || e.target.classList.contains('lb-x')) { this.hidden = true; } };
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('vLb').hidden = true; $('vSheet').hidden = true; } });
+  langBtns();
   if (!sid) { fail('No such link.'); } else { load(want); }
 })();

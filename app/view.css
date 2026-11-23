@@ -5,13 +5,17 @@ html, body { margin: 0; height: 100%; overflow: hidden; }
 body { height: 100dvh; font: 15px/1.4 -apple-system, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: #fff; display: flex; flex-direction: column; }
 /* header: white, so the maker's logo shows as it is (no box behind it) */
 .vh { flex: none; display: flex; align-items: center; gap: 14px; padding: 10px 18px; padding-top: max(10px, env(safe-area-inset-top)); border-bottom: 1px solid var(--line); background: #fff; }
-.vh-logo { flex: none; display: flex; align-items: center; }
-.vh-logo img { display: block; max-height: 44px; max-width: 150px; object-fit: contain; }
-.vh-logo:empty { display: none; }
+/* the maker's logo: in the 3D view's bottom-right corner, like a watermark */
+.wm { position: absolute; z-index: 2; right: 14px; bottom: 12px; pointer-events: none; opacity: .88; }
+.wm img { display: block; max-height: 46px; max-width: 160px; object-fit: contain; }
+.wm:empty { display: none; }
 .vh-title { flex: 1; min-width: 0; }
 .vh-title h1 { margin: 0; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vh-title p { margin: 1px 0 0; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vh-ver { flex: none; max-width: 42vw; font: inherit; font-size: 13px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 6px 8px; }
+.vh-lang { flex: none; display: flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.vh-lang button { border: 0; background: #fff; color: var(--muted); font: 700 12px/1 inherit; font-family: inherit; padding: 7px 9px; cursor: pointer; }
+.vh-lang button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 .vm { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 330px; }
 .stagewrap { min-height: 0; min-width: 0; display: flex; flex-direction: column; }
 .stage { position: relative; flex: 1; min-height: 0; background: #fff; touch-action: none; overflow: hidden; }
@@ -36,7 +40,7 @@ body { height: 100dvh; font: 15px/1.4 -apple-system, "Segoe UI", Inter, Roboto, 
 .dims { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .dims div { background: var(--bg); border-radius: 10px; padding: 8px 10px; }
 .dims small { display: block; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
-.dims b { font-size: 17px; font-variant-numeric: tabular-nums; }
+.dims b { font-size: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .mat { display: flex; gap: 12px; align-items: center; padding: 6px 0; }
 .mat + .mat { border-top: 1px solid var(--line); }
 .sw { flex: none; width: 50px; height: 50px; border-radius: 10px; background: #ddd center/cover no-repeat; border: 1px solid rgba(0,0,0,.08); }
@@ -62,7 +66,8 @@ body { height: 100dvh; font: 15px/1.4 -apple-system, "Segoe UI", Inter, Roboto, 
   .side { display: none; }
   .tool.info { display: flex; }
   .vh { padding: 8px 12px; padding-top: max(8px, env(safe-area-inset-top)); gap: 10px; }
-  .vh-logo img { max-height: 34px; max-width: 110px; }
+  .wm img { max-height: 36px; max-width: 120px; }
+  .wm { right: 10px; bottom: 10px; }
   .vh-title h1 { font-size: 15.5px; }
   .vh-ver { max-width: 34vw; font-size: 12px; padding: 5px 6px; }
   .tool { font-size: 10.5px; padding: 6px 1px 5px; }

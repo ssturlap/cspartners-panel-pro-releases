@@ -11,14 +11,15 @@
 </head>
 <body>
 <header class="vh">
-  <div class="vh-logo" id="vLogo"></div>
   <div class="vh-title"><h1 id="vTitle">…</h1><p id="vSub"></p></div>
   <select id="vVer" class="vh-ver" hidden aria-label="Version"></select>
+  <div class="vh-lang" role="group" aria-label="Language"><button type="button" data-l="en">EN</button><button type="button" data-l="es">ES</button></div>
 </header>
 <main class="vm">
   <div class="stagewrap">
     <section class="stage" id="stage">
       <div class="dimchip" id="vDim" hidden></div>
+      <div class="wm" id="vLogo"></div>
       <div class="v-msg" id="vMsg"><span class="spin"></span><b id="vMsgT">Loading the 3D view…</b></div>
     </section>
     <nav class="tools" id="vTools" aria-label="View"></nav>
