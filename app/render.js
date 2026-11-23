@@ -163,7 +163,7 @@
       ctx.capture({ scene: S.scene, photo: S.photo }).then(function (cap) {
         S.busy = t('Rendering… this takes 20–60 seconds'); draw();
         return ctx.call('new', {
-          site: ctx.site, title: ctx.title, scene: S.scene, notes: S.notes, size: S.size, image: cap.image, w: cap.w, h: cap.h,
+          site: ctx.site, target: ctx.target || '', title: ctx.title, scene: S.scene, notes: S.notes, size: S.size, image: cap.image, w: cap.w, h: cap.h,
           photo: cap.photo || null, materials: cap.materials || [], swatches: cap.swatches || [], dims: cap.dims || null
         });
       }).then(function (r) {

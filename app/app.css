@@ -1215,3 +1215,35 @@ body.desk .etabs-w { margin: 4px 0 8px; }
   color: #24221f; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,.18); cursor: pointer; }
 .gal-share .mi { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .gal-bar .btn .mi { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; margin-right: 5px; }
+
+/* Share 3D view dialog */
+.share-box { position: relative; width: min(500px, 100%); text-align: left; }
+.share-box h2 { margin: 0; }
+.sh-ico svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sh-sub { margin: 2px 0 8px; color: var(--muted); font-weight: 600; }
+.sh-note { margin: 0 0 14px; font-size: 13.5px; color: var(--ink-2, #444); }
+.sh-toggle { display: flex; align-items: center; gap: 10px; font-weight: 650; margin-bottom: 10px; cursor: pointer; }
+.sh-toggle input { width: 20px; height: 20px; accent-color: #1d2a30; }
+.sh-link { display: flex; gap: 8px; }
+.sh-link input { flex: 1; min-width: 0; font-size: 13px; }
+.sh-link .btn { width: auto; margin: 0; flex: none; }
+.sh-link.off input { text-decoration: line-through; opacity: .55; }
+.sh-acts { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+.sh-acts .btn { width: auto; margin: 0; flex: 1 1 auto; text-align: center; text-decoration: none; }
+.sh-sec { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.sh-sec summary { cursor: pointer; font-weight: 700; }
+.sh-sec summary small { color: var(--muted); font-weight: 600; margin-left: 4px; }
+.sh-vers { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; max-height: 200px; overflow: auto; }
+.sh-vers a { display: flex; gap: 10px; align-items: baseline; padding: 6px 8px; border-radius: 8px; color: inherit; text-decoration: none; }
+.sh-vers a:hover { background: #f2f4f5; }
+.sh-vers span { color: var(--muted); font-size: 13px; }
+.sh-vers em { margin-left: auto; font-style: normal; font-size: 12px; font-weight: 700; color: #8a6400; }
+.sh-brand { margin-top: 8px; }
+.sh-logo { display: flex; align-items: center; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
+.sh-logo img { max-height: 44px; max-width: 160px; border: 1px solid var(--line); border-radius: 6px; padding: 3px; background: #fff; }
+.sh-logo span { color: var(--muted); font-size: 13px; }
+.sh-logo .btn, .sh-brand > .btn { width: auto; margin: 0; }
+/* phone: the view buttons wrap into a second (third…) column instead of running out of the preview */
+body:not(.desk) .view-tools { flex-flow: column wrap-reverse; align-content: flex-start; max-height: calc(100% - 16px); }
+body:not(.desk) .view-tools .vt[data-label]::after { display: none; }
+body:not(.desk) .view-hint { max-width: calc(100% - 110px); }

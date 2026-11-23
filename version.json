@@ -1,13 +1,17 @@
 {
-  "version": "0.3.80",
-  "date": "2026-11-20",
-  "title": "Materials in the manual",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.80.rbz",
+  "version": "0.3.81",
+  "date": "2026-11-22",
+  "title": "Share the 3D view with your client",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.81.rbz",
   "notes": [
-    "Module / project manual: a Materials page lists every board used (swatch, brand, what it is used for, thickness, pieces, m²), then one full page per…"
+    "PanelPro Web: a Share 3D view button on a module and on a composition makes a view-only link. Your client turns the model, opens and closes doors and…",
+    "The link always shows your latest version (sent again when you save); earlier versions are kept and can be picked on the page. Turn a link off at any time.",
+    "PanelPro Web: on a phone the 3D view buttons wrap into a second column instead of running out of the view; project tools as icon buttons; the estimate no…"
   ],
-  "title_es": "Materiales en el manual",
+  "title_es": "Comparta la vista 3D con su cliente",
   "notes_es": [
-    "Manual del módulo / proyecto: una página de Materiales con cada tablero usado (muestra, marca, dónde se usa, espesor, piezas, m²) y luego una página…"
+    "PanelPro Web: un botón Compartir vista 3D en un módulo y en una composición crea un enlace de solo vista. Su cliente gira el modelo, abre y cierra puertas y…",
+    "El enlace siempre muestra su última versión (se envía de nuevo al guardar); las versiones anteriores se guardan y se pueden elegir en la página. Puede…",
+    "PanelPro Web: en el teléfono los botones de la vista 3D pasan a una segunda columna en lugar de salirse de la vista; herramientas del proyecto con íconos;…"
   ]
 }

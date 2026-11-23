@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.80';
-  var BUILD = '2aac19175d';
+  var VERSION = '0.3.81';
+  var BUILD = '7080d5df4b';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -43,7 +43,7 @@
     'Names used in the cut list and its files. Leave a box empty for the default.': 'Nombres usados en la lista de corte y sus archivos. Deje la casilla vacía para el nombre por defecto.',
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
-    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Picture saved.': 'Imagen guardada.', 'Renders': 'Renders', 'No renders yet': 'Aún no hay renders',
+    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Share 3D view': 'Compartir vista 3D', 'Sharing needs a signed-in PanelPro account.': 'Para compartir necesita una cuenta de PanelPro.', 'Your client can turn it, open and close doors and drawers, and see the sizes, materials and renders. They cannot change anything. The link always shows your latest version.': 'Su cliente puede girarlo, abrir y cerrar puertas y gavetas, y ver las medidas, los materiales y los renders. No puede cambiar nada. El enlace siempre muestra su última versión.', 'Create share link': 'Crear enlace para compartir', 'Link is on': 'Enlace activo', 'Link is off — nobody can open it': 'Enlace desactivado: nadie puede abrirlo', 'Copy': 'Copiar', 'Send to client': 'Enviar al cliente', 'Open': 'Abrir', 'Update now': 'Actualizar ahora', 'Versions': 'Versiones', 'latest': 'la más reciente', 'Your name and logo on the page': 'Su nombre y logo en la página', 'Business name': 'Nombre del negocio', 'No logo': 'Sin logo', 'Choose logo…': 'Elegir logo…', 'Remove': 'Quitar', 'Link copied.': 'Enlace copiado.', 'Creating the link…': 'Creando el enlace…', 'Sending the latest version…': 'Enviando la última versión…', 'Nothing to share yet.': 'Todavía no hay nada para compartir.', 'Sent: version': 'Enviada: versión', 'Already up to date.': 'Ya está al día.', 'Save the module first.': 'Primero guarde el módulo.', 'Picture saved.': 'Imagen guardada.', 'Renders': 'Renders', 'No renders yet': 'Aún no hay renders',
     'Open a module or the composition and press the camera button on the 3D view.': 'Abra un módulo o la composición y pulse el botón de cámara en la vista 3D.',
     'pictures': 'imágenes', 'renders': 'renders', 'Project': 'Proyecto', 'Undo': 'Deshacer', 'The render server is not switched on yet — renders start working once it is set up.': 'El servidor de renders aún no está activado — los renders funcionarán cuando se configure.', 'Redo': 'Rehacer', 'Undone': 'Deshecho', 'Redone': 'Rehecho', 'Nothing to undo': 'Nada que deshacer', 'Outside': 'Exterior', 'Between the sides': 'Entre costados', 'Module name': 'Nombre del módulo', 'Height from the floor': 'Altura desde el piso',
     'Raised off the floor (besides the toe kick)': 'Elevado del piso (además del zócalo)', 'Are you sure?': '¿Está seguro?', 'Discard': 'Descartar', 'Replace': 'Reemplazar', 'OK': 'Aceptar',
@@ -623,9 +623,186 @@
             document.body.appendChild(a); a.click(); a.remove();
           };
           box.querySelector('[data-g="share"]').onclick = function () { if (url) { shareImage(url, fname(r, v), r.title || s.name); } };
-          box.querySelector('[data-g="open"]').onclick = function () { close(); openRender(s, r.title || s.name, [], null, { rid: rid, v: v }); };
+          box.querySelector('[data-g="open"]').onclick = function () { close(); openRender.target = ''; openRender(s, r.title || s.name, [], null, { rid: rid, v: v }); };
         };
       });
+    }, function (e) { body.innerHTML = '<p class="meta-line">' + esc(e.message) + '</p>'; });
+  }
+
+  // ------------------------------------------------------------------ shared 3D views
+  // A view-only link to a module or a composition (cloud/functions/share.js): the client turns it,
+  // opens doors and drawers, sees sizes, materials, the maker's name / logo and the renders. The link
+  // keeps showing the latest version: the app sends the model again when it changes (s.shares
+  // remembers which targets have a link: { target: sid }).
+  function viewUrl(sid) {
+    var base = window.PP_WEB_URL || (location.origin + location.pathname.replace(/[^/]*$/, ''));
+    return base.replace(/\/?$/, '/') + 'view.html?s=' + encodeURIComponent(sid);
+  }
+  // a texture the page can load: catalog images by their web address, your own photos made small
+  function shareTex(url) {
+    if (!url) { return Promise.resolve(''); }
+    if (!/^(data|blob):/.test(url)) {
+      try { return Promise.resolve(new URL(url, location.href).href); } catch (e) { return Promise.resolve(url); }
+    }
+    return new Promise(function (ok) {
+      var im = new Image();
+      im.onload = function () {
+        var k = Math.min(1, 768 / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(im.naturalWidth * k)); c.height = Math.max(1, Math.round(im.naturalHeight * k));
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        try { ok(c.toDataURL('image/jpeg', 0.8)); } catch (e) { ok(''); }
+      };
+      im.onerror = function () { ok(''); };
+      im.src = url;
+    });
+  }
+  // m: { parts, movers, places, dims: { w, h, d }, rows } → the model the page draws (with the materials)
+  function shareModel(m) {
+    var names = {};
+    (m.parts || []).forEach(function (p) { if (p.mat) { names[p.mat] = 1; } });
+    var list = Object.keys(names);
+    return Promise.all(list.map(function (n) {
+      var inf = matInfo(n) || {}, mm = window.PPMaterials && window.PPMaterials.meta ? window.PPMaterials.meta(n) : null;
+      return shareTex(inf.thumb).then(function (tex) {
+        var o = { color: inf.color || '#d8d2c4', alpha: inf.alpha == null ? 1 : inf.alpha, avg: inf.avg || '' };
+        if (tex) { o.thumb = tex; o.tex_w = inf.tex_w; o.tex_h = inf.tex_h; }
+        if (mm) { o.brand = mm.brand || ''; o.label = mm.label || ''; o.type = mm.type || ''; }
+        return o;
+      });
+    })).then(function (infos) {
+      var mats = {};
+      list.forEach(function (n, i) { mats[n] = infos[i]; });
+      var parts = (m.parts || []).filter(function (p) { return p.deco !== 'grain'; }).map(function (p) {
+        var q = Object.assign({}, p);
+        delete q.note; delete q.edges; delete q.eb; delete q.grain_rule;
+        return q;
+      });
+      return { parts: parts, movers: m.movers || [], places: m.places || null, mats: mats, dims: m.dims || null, rows: m.rows || null, units: prefs.units || 'mm' };
+    });
+  }
+  var shareTimers = {};
+  // Send the model again to an existing link (quietly; a new version only when something changed).
+  function shareRefresh(s, target, title, getModel, now) {
+    var sid = s.shares && s.shares[target];
+    if (!sid || !window.PPCloud || !window.PPCloud.on || !window.PPCloud.user()) { return; }
+    clearTimeout(shareTimers[target]);
+    shareTimers[target] = setTimeout(function () {
+      Promise.resolve(getModel()).then(function (raw) {
+        if (!raw || !raw.parts || !raw.parts.length) { return null; }
+        return shareModel(raw).then(function (model) {
+          return window.PPCloud.call('shareCall', { action: 'publish', sid: sid, title: title, client: s.client || '', model: model }, 120000);
+        });
+      }).catch(function (e) { console.warn('share update', e && e.message); });
+    }, now ? 0 : 2500);
+  }
+  function openShare(s, target, kind, title, getModel) {
+    var C = window.PPCloud;
+    if (!C || !C.on || !C.user()) { toast(t('Sharing needs a signed-in PanelPro account.')); return; }
+    var box = document.createElement('div');
+    box.className = 'ask share-ask';
+    box.innerHTML = '<div class="ask-box share-box" role="dialog" aria-modal="true"><button type="button" class="site-x" aria-label="' + esc(t('Close')) + '">✕</button>' +
+      '<div class="site-ico sh-ico" aria-hidden="true"><svg viewBox="0 0 24 24">' + VT_ICONS.share + '</svg></div>' +
+      '<h2>' + esc(t('Share 3D view')) + '</h2><p class="sh-sub">' + esc(title) + '</p>' +
+      '<p class="sh-note">' + esc(t('Your client can turn it, open and close doors and drawers, and see the sizes, materials and renders. They cannot change anything. The link always shows your latest version.')) + '</p>' +
+      '<div class="sh-body"><p class="meta-line">' + esc(t('Loading…')) + '</p></div></div>';
+    document.body.appendChild(box);
+    requestAnimationFrame(function () { box.classList.add('on'); });
+    function close() { document.removeEventListener('keydown', key, true); box.classList.remove('on'); setTimeout(function () { box.remove(); }, 160); }
+    function key(e) { if (e.key === 'Escape') { e.preventDefault(); close(); } }
+    document.addEventListener('keydown', key, true);
+    box.addEventListener('mousedown', function (e) { if (e.target === box) { close(); } });
+    box.querySelector('.site-x').onclick = close;
+    var body = box.querySelector('.sh-body'), cur = null, brand = { name: '', logo: '' };
+    function fmtDate(v) { return new Date(v).toLocaleString(lang, { dateStyle: 'medium', timeStyle: 'short' }); }
+    function draw() {
+      if (!cur) {
+        body.innerHTML = '<button type="button" class="btn primary sh-make">' + esc(t('Create share link')) + '</button>';
+        body.querySelector('.sh-make').onclick = function () { publish(true); };
+        return;
+      }
+      var url = viewUrl(cur.sid), on = cur.active;
+      body.innerHTML = '<label class="sh-toggle"><input type="checkbox" id="shOn"' + (on ? ' checked' : '') + '><span>' + esc(on ? t('Link is on') : t('Link is off — nobody can open it')) + '</span></label>' +
+        '<div class="sh-link' + (on ? '' : ' off') + '"><input class="text-in" readonly value="' + esc(url) + '">' +
+        '<button type="button" class="btn small" data-a="copy">' + esc(t('Copy')) + '</button></div>' +
+        '<div class="sh-acts"><button type="button" class="btn primary" data-a="send"' + (on ? '' : ' disabled') + '>' + esc(t('Send to client')) + '</button>' +
+        '<a class="btn" data-a="open" href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(t('Open')) + '</a>' +
+        '<button type="button" class="btn" data-a="now">' + esc(t('Update now')) + '</button></div>' +
+        '<details class="sh-sec"><summary>' + esc(t('Versions')) + ' <small>' + cur.versions.length + '</small></summary><div class="sh-vers">' +
+          cur.versions.slice().reverse().map(function (v, i) {
+            return '<a href="' + esc(url + '&v=' + v.v) + '" target="_blank" rel="noopener"><b>v' + v.v + '</b><span>' + esc(fmtDate(v.at)) + '</span>' + (i === 0 ? '<em>' + esc(t('latest')) + '</em>' : '') + '</a>';
+          }).join('') + '</div></details>' +
+        '<details class="sh-sec"><summary>' + esc(t('Your name and logo on the page')) + '</summary><div class="sh-brand">' +
+          '<label class="field"><span>' + esc(t('Business name')) + '</span><input class="text-in" id="shBName" value="' + esc(brand.name) + '"></label>' +
+          '<div class="sh-logo">' + (brand.logo ? '<img alt="" src="' + esc(brand.logo) + '">' : '<span>' + esc(t('No logo')) + '</span>') +
+          '<label class="btn small">' + esc(t('Choose logo…')) + '<input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden id="shLogo"></label>' +
+          (brand.logo ? '<button type="button" class="btn small" data-a="nologo">' + esc(t('Remove')) + '</button>' : '') + '</div>' +
+          '<button type="button" class="btn small primary" data-a="brand">' + esc(t('Save')) + '</button></div></details>';
+      body.querySelector('#shOn').onchange = function () {
+        var v = this.checked;
+        C.call('shareCall', { action: 'set', sid: cur.sid, active: v }).then(function (r) { cur = r.share; draw(); }, function (e) { toast(e.message); draw(); });
+      };
+      body.querySelector('[data-a="copy"]').onclick = function () {
+        var inp = body.querySelector('.sh-link input');
+        (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).catch(function () { inp.select(); document.execCommand('copy'); });
+        toast(t('Link copied.'));
+      };
+      body.querySelector('[data-a="send"]').onclick = function () {
+        if (navigator.share) { navigator.share({ title: title, text: title, url: url }).catch(function () {}); }
+        else { (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.resolve()).then(function () { toast(t('Link copied.')); }); }
+      };
+      body.querySelector('[data-a="now"]').onclick = function () { publish(false); };
+      var logo = brand.logo;
+      body.querySelector('#shLogo').onchange = function () {
+        var f = this.files && this.files[0];
+        if (!f) { return; }
+        var rd = new FileReader();
+        rd.onload = function () {
+          var src = String(rd.result);
+          if (/svg/.test(f.type)) { logo = src; brand.logo = logo; draw(); return; }
+          var im = new Image();
+          im.onload = function () {
+            var k = Math.min(1, 600 / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas');
+            c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k);
+            c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+            brand.logo = c.toDataURL('image/png'); brand.name = body.querySelector('#shBName').value; draw();
+            body.querySelector('.sh-brand').parentNode.open = true;
+          };
+          im.src = src;
+        };
+        rd.readAsDataURL(f);
+      };
+      var nl = body.querySelector('[data-a="nologo"]');
+      if (nl) { nl.onclick = function () { brand.logo = ''; brand.name = body.querySelector('#shBName').value; draw(); body.querySelectorAll('.sh-sec')[1].open = true; }; }
+      body.querySelector('[data-a="brand"]').onclick = function () {
+        brand.name = body.querySelector('#shBName').value.trim();
+        C.call('shareCall', { action: 'brand', set: true, name: brand.name, logo: brand.logo }).then(function (b) { brand = b; toast(t('Saved')); }, function (e) { toast(e.message); });
+      };
+    }
+    function publish(first) {
+      body.innerHTML = '<p class="meta-line">' + esc(first ? t('Creating the link…') : t('Sending the latest version…')) + '</p>';
+      Promise.resolve(getModel()).then(function (raw) {
+        if (!raw || !raw.parts || !raw.parts.length) { throw new Error(t('Nothing to share yet.')); }
+        return shareModel(raw);
+      }).then(function (model) {
+        var q = { action: 'publish', title: title, client: s.client || '', model: model };
+        if (cur) { q.sid = cur.sid; } else { q.site = s.id; q.kind = kind; q.target = target; }
+        return C.call('shareCall', q, 120000);
+      }).then(function (r) {
+        cur = r.share;
+        s.shares = s.shares || {};
+        if (s.shares[target] !== r.sid) { s.shares[target] = r.sid; touch(s); persist(); }
+        draw();
+        if (!first) { toast(r.changed ? t('Sent: version') + ' ' + cur.versions[cur.versions.length - 1].v : t('Already up to date.')); }
+      }, function (e) { toast(e.message); draw(); });
+    }
+    Promise.all([C.call('shareCall', { action: 'list', site: s.id }), C.call('shareCall', { action: 'brand' })]).then(function (rs) {
+      brand = rs[1] || brand;
+      cur = (rs[0].shares || []).find(function (x) { return x.target === target; }) || null;
+      if (cur) {
+        s.shares = s.shares || {};
+        if (s.shares[target] !== cur.sid) { s.shares[target] = cur.sid; touch(s); persist(); }
+        publish(false);   // bring it up to date as it opens
+      } else { draw(); }
     }, function (e) { body.innerHTML = '<p class="meta-line">' + esc(e.message) + '</p>'; });
   }
 
@@ -645,7 +822,7 @@
     // a click outside the panel closes it (not while placing the furniture on a photo)
     sheet.addEventListener('mousedown', function (e) { if (e.target === sheet && !sheet.classList.contains('placing')) { close(); } });
     window.PPRender.open(sheet.firstChild, {
-      t: t, lang: lang, app: 'web', site: s.id, title: title, start: start || null,
+      t: t, lang: lang, app: 'web', site: s.id, title: title, start: start || null, target: (start && start.target) || openRender.target || '',
       scenes: ['studio', 'studio_grey', 'kitchen', 'bedroom', 'living', 'bathroom', 'office', 'music', 'closet'].concat(has3d ? ['photo'] : []), scene: 'studio',
       call: function (action, data) {
         return C.call('renderCall', Object.assign({ action: action }, data), 300000).catch(function (e) {
@@ -686,6 +863,7 @@
 
   // Small icon buttons over the 3D view (the label shows as a tooltip and is read out).
   var VT_ICONS = {
+    share: '<circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="M8.2 10.8l7.6-4.1M8.2 13.2l7.6 4.1"/>',
     sizes: '<path d="M3.5 15.5 15.5 3.5l5 5-12 12z"/><path d="M7.5 11.5l2 2M10.5 8.5l2 2M13.5 5.5l2 2"/>',
     diag: '<rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><path d="M13 17h8M17 13v8"/>',
     doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 11h7M9 14h7M9 17h5"/>',
@@ -1618,7 +1796,7 @@
       '<div class="side-bar" id="sideBar" role="tablist">' + SIDES.map(function (k) { return '<button type="button" data-side="' + k + '">' + esc(sideLabel(k)) + '</button>'; }).join('') + '</div>' +
       '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" data-label="2D / 3D" aria-label="2D / 3D">' + (view.mode === '3d' ? '2D' : '3D') + '</button>' +
       vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View')) +
-      vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('undoV', 'undo', t('Undo') + ' (Ctrl+Z)') + vtBtn('redoV', 'redo', t('Redo') + ' (Ctrl+Shift+Z)') + vtBtn('renderV', 'render', t('Render (AI)')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
+      vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('undoV', 'undo', t('Undo') + ' (Ctrl+Z)') + vtBtn('redoV', 'redo', t('Redo') + ' (Ctrl+Shift+Z)') + vtBtn('renderV', 'render', t('Render (AI)')) + vtBtn('shareV', 'share', t('Share 3D view')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
       '<div class="edit-side"><div class="page" id="editBody"></div>' +
       '<div class="dock"><span class="steps" id="steps"></span><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save') : t('Add to site')) + '</button></div></div>' +
       '</div>'
@@ -1650,7 +1828,11 @@
     $('#undoV').onclick = function () { histGo(-1); };
     $('#redoV').onclick = function () { histGo(1); };
     undoState();
-    $('#renderV').onclick = function () { if (view.mode !== '3d') { setViewMode('3d'); } openRender(s, (E.params.name || t('Module')) + ' · ' + s.name, [E.params], function () {
+    $('#shareV').onclick = function () {
+      if (!E.mod) { toast(t('Save the module first.')); return; }
+      openShare(s, 'm:' + E.mod.id, 'module', (E.params.name || t('Module')) + ' · ' + s.name, moduleShareModel);
+    };
+    $('#renderV').onclick = function () { openRender.target = E.mod ? 'm:' + E.mod.id : ''; if (view.mode !== '3d') { setViewMode('3d'); } openRender(s, (E.params.name || t('Module')) + ' · ' + s.name, [E.params], function () {
       var b = E.res && E.res.bbox;
       return b ? { w: b[1][0] - b[0][0], h: b[1][2] - b[0][2], d: b[1][1] - b[0][1] } : { w: E.params.width, h: E.params.height, d: E.params.depth };
     }); };
@@ -2446,6 +2628,7 @@
     touch(s); persist();
     E.dirty = false;
     E.changed = {};
+    if (s.shares && s.shares['m:' + E.mod.id]) { shareRefresh(s, 'm:' + E.mod.id, (E.params.name || t('Module')) + ' · ' + s.name, moduleShareModel()); }
     if (desk()) {
       var side = screen.querySelector('.ws-mods');
       if (side) {
@@ -2456,6 +2639,14 @@
       }
     }
     return E.mod.id;
+  }
+  // the module as the share page draws it
+  function moduleShareModel() {
+    var r = E && E.res;
+    if (!r) { return null; }
+    var b = r.bbox;
+    return { parts: r.parts, movers: r.movers, rows: bedHeights(r) || rowHeights(r), soft: E.params.soft_close,
+             dims: b ? { w: b[1][0] - b[0][0], h: b[1][2] - b[0][2], d: b[1][1] - b[0][1] } : { w: E.params.width, h: E.params.height, d: E.params.depth } };
   }
   function saveModule() {
     if (E.wizard) {
@@ -3099,7 +3290,7 @@
   window.PPApp = {
     t: t, esc: esc, fmt: fmt, L: L, LU: LU, U: U, show: show, go: go, menu: menu, toast: toast, openPad: openPad,
     persist: function () { persist(); }, codesOf: codesOf, codeSort: codeSort, dimsOf: dimsOf, matInfo: matInfo,
-    viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown, openRender: openRender,
+    viewer: ensureViewer, has3d: function () { ensureViewer(); return has3d; }, dimsShown: dimsShown, openRender: openRender, openShare: openShare, shareRefresh: shareRefresh,
     loadPref: load, savePref: save, uid: uid, menuItemHtml: menuItemHtml, version: VERSION, build: BUILD, checkUpdate: checkUpdate, ask: ask, vtBtn: vtBtn, setOpenBtn: setOpenBtn, diagBtn: diagBtn, wireDiag: wireDiag, lang: function () { return lang; }, site: site, uk: uk,
     prefsOpt: function () { return prefs.opt; }, shareFile: shareFile, pickFile: pickFile,
     sites: function () { return sites; }, prefs: function () { return prefs; }, resetPrefs: resetPrefs, fixPrefs: fixPrefs,

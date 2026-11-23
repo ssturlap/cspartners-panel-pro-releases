@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d2a30">
+<meta name="robots" content="noindex">
+<title>3D view</title>
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="view.css">
+</head>
+<body>
+<header class="vh">
+  <div class="vh-brand" id="vBrand"></div>
+  <div class="vh-title"><h1 id="vTitle">…</h1><p id="vSub"></p></div>
+  <select id="vVer" class="vh-ver" hidden aria-label="Version"></select>
+</header>
+<main class="vm">
+  <div class="stagewrap">
+    <section class="stage" id="stage">
+      <div class="v-msg" id="vMsg"><span class="spin"></span><b id="vMsgT">Loading the 3D view…</b></div>
+    </section>
+    <div class="tools" id="vTools"></div>
+  </div>
+  <aside class="side" id="vSide"></aside>
+</main>
+<footer class="vf">Made with <b>CSPARTNERS</b> PANEL PRO · <span id="vHint"></span></footer>
+<div class="lb" id="vLb" hidden><button type="button" class="lb-x" aria-label="Close">✕</button><img alt=""></div>
+<script src="vendor/three.min.js"></script>
+<script src="preview3d.js"></script>
+<script src="firebase-config.js"></script>
+<script src="view.js"></script>
+</body>
+</html>

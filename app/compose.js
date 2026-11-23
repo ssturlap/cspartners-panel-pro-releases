@@ -109,7 +109,31 @@
                     z: it.m.pos.z, rot: r.rot != null ? r.rot : w.rot };
     });
   }
-  function save() { syncRoom(); A.persist(); histPush(); }
+  function save() { syncRoom(); A.persist(); histPush(); shareKick(); }
+  // ------------------------------------------------------------------ shared 3D view of this composition
+  function shareTarget() { return 'c:' + (C.room ? String(C.tab) : 'main'); }
+  function shareTitle() { return t('Composition') + (C.room && C.wall ? ' — ' + (C.wall.name || '') : '') + ' · ' + C.s.name; }
+  function shareData() {
+    var parts = [], movers = [], places = null;
+    if (isAll()) {
+      places = {};
+      C.all.forEach(function (it) {
+        var r = it.m.room, pre = it.m.id + ':';
+        if (!r || !it.res) { return; }
+        places[it.m.id] = { x: r.x, y: r.y, z: r.z, rz: r.rot };
+        it.res.parts.forEach(function (q) { var c = Object.assign({}, q, { grp: it.m.id }); if (q.mover) { c.mover = pre + q.mover; } parts.push(c); });
+        (it.res.movers || []).forEach(function (m) { movers.push(Object.assign({}, m, { id: pre + m.id, grp: it.m.id })); });
+      });
+    } else {
+      C.depth = depthOf();
+      C.items.forEach(function (it) { var x = shifted(it); parts = parts.concat(x.parts); movers = movers.concat(x.movers); });
+    }
+    var e = extents(), d = C.items.reduce(function (a, it) { return Math.max(a, it.bb ? it.bb.y1 - it.bb.y0 : 0); }, 0);
+    return { parts: parts, movers: movers, places: places, dims: isAll() ? null : { w: e.x1 - e.x0, h: e.z1 - e.z0, d: d } };
+  }
+  // a link to this composition is brought up to date after a change (and when the screen opens:
+  // its modules may have been edited since)
+  function shareKick() { if (A.shareRefresh) { A.shareRefresh(C.s, shareTarget(), shareTitle(), shareData()); } }
   // ------------------------------------------------------------------ undo / redo
   // Every change of the composition (moves, pieces, compositions) is kept: Ctrl+Z / Ctrl+Shift+Z
   // (Ctrl+Y) or the ↶ ↷ buttons step back and forth.
@@ -800,7 +824,7 @@
       '<div class="compose"><div class="cview view3d" id="cview"><div id="ctabs">' + tabsHtml() + '</div><svg id="csvg" class="csvg" preserveAspectRatio="xMidYMid meet"></svg>' +
       '<div class="dim-note" id="cNote">' + esc(t('Dimensions in ' + A.U())) + '</div>' +
       '<div class="view-tools"><button type="button" id="cMode" class="vt vt-txt" data-label="2D / 3D" aria-label="2D / 3D">3D</button>' + A.vtBtn('cOpen', 'open', t('Open all'), ' aria-pressed="false"') +
-      A.diagBtn() + A.vtBtn('cUndo', 'undo', t('Undo') + ' (Ctrl+Z)') + A.vtBtn('cRedo', 'redo', t('Redo') + ' (Ctrl+Shift+Z)') + A.vtBtn('cRender', 'render', t('Render (AI)')) + A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
+      A.diagBtn() + A.vtBtn('cUndo', 'undo', t('Undo') + ' (Ctrl+Z)') + A.vtBtn('cRedo', 'redo', t('Redo') + ' (Ctrl+Shift+Z)') + A.vtBtn('cRender', 'render', t('Render (AI)')) + A.vtBtn('cShare', 'share', t('Share 3D view')) + A.vtBtn('cFit', 'fit', t('Fit')) + '</div></div>' +
       '<div class="cpanel" id="cpanel"></div></div>'
     );
     var host = document.getElementById('cview');
@@ -816,7 +840,10 @@
     document.getElementById('cUndo').onclick = function () { undo(-1); };
     document.getElementById('cRedo').onclick = function () { undo(1); };
     undoState();
+    document.getElementById('cShare').onclick = function () { A.openShare(C.s, shareTarget(), 'comp', shareTitle(), shareData); };
+    if (C.s.shares && C.s.shares[shareTarget()]) { setTimeout(shareKick, 1500); }
     document.getElementById('cRender').onclick = function () {
+      A.openRender.target = shareTarget();
       if (!A.has3d()) { A.toast(t('The 3D view is not available on this device.')); return; }
       if (C.mode !== '3d') { C.mode = '3d'; A.savePref('panelpro.web.cmode', '3d'); redraw(true); }
       A.openRender(C.s, t('Composition') + ' · ' + C.s.name, C.items.map(function (it) { return it.m.params; }), function () {
