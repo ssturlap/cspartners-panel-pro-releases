@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.81';
-  var BUILD = '7080d5df4b';
+  var BUILD = '3a84064f81';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -43,7 +43,7 @@
     'Names used in the cut list and its files. Leave a box empty for the default.': 'Nombres usados en la lista de corte y sus archivos. Deje la casilla vacía para el nombre por defecto.',
     'Laying the panels out on sheets the way a beam saw cuts them. This can take a little while on a phone.': 'Acomodando las piezas en tableros como las corta una seccionadora. En el teléfono puede tardar un poco.',
     'Drag modules to arrange them: they snap to the floor, side by side and on top of each other. Tap one to type its position.': 'Arrastre los módulos para acomodarlos: se ajustan al piso, uno al lado del otro y uno encima del otro. Toque uno para escribir su posición.',
-    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Share 3D view': 'Compartir vista 3D', 'Sharing needs a signed-in PanelPro account.': 'Para compartir necesita una cuenta de PanelPro.', 'Your client can turn it, open and close doors and drawers, and see the sizes, materials and renders. They cannot change anything. The link always shows your latest version.': 'Su cliente puede girarlo, abrir y cerrar puertas y gavetas, y ver las medidas, los materiales y los renders. No puede cambiar nada. El enlace siempre muestra su última versión.', 'Create share link': 'Crear enlace para compartir', 'Link is on': 'Enlace activo', 'Link is off — nobody can open it': 'Enlace desactivado: nadie puede abrirlo', 'Copy': 'Copiar', 'Send to client': 'Enviar al cliente', 'Open': 'Abrir', 'Update now': 'Actualizar ahora', 'Versions': 'Versiones', 'latest': 'la más reciente', 'Your name and logo on the page': 'Su nombre y logo en la página', 'Business name': 'Nombre del negocio', 'No logo': 'Sin logo', 'Choose logo…': 'Elegir logo…', 'Remove': 'Quitar', 'Link copied.': 'Enlace copiado.', 'Creating the link…': 'Creando el enlace…', 'Sending the latest version…': 'Enviando la última versión…', 'Nothing to share yet.': 'Todavía no hay nada para compartir.', 'Sent: version': 'Enviada: versión', 'Already up to date.': 'Ya está al día.', 'Save the module first.': 'Primero guarde el módulo.', 'Picture saved.': 'Imagen guardada.', 'Renders': 'Renders', 'No renders yet': 'Aún no hay renders',
+    'Add modules to the site first.': 'Primero agregue módulos a la obra.', 'Share with your client': 'Compartir con su cliente', '3D view for your client (link)': 'Vista 3D para su cliente (enlace)', 'Project file (copy of the data, for PanelPro or SketchUp)': 'Archivo del proyecto (copia de los datos, para PanelPro o SketchUp)', 'Your logo on the page': 'Su logo en la página', 'It shows on a white bar at the top of the page, as it is: use your logo in dark colours on a transparent background (PNG or SVG). A white logo would not be seen.': 'Se muestra tal cual en una barra blanca arriba de la página: use su logo en colores oscuros sobre fondo transparente (PNG o SVG). Un logo blanco no se vería.', 'This logo is white or very light': 'Este logo es blanco o muy claro', 'This logo has a coloured box behind it': 'Este logo tiene un recuadro de color detrás', 'The share page shows your logo on a white bar, so a white logo would not be seen. Use a dark version of your logo on a transparent background.': 'La página compartida muestra su logo sobre una barra blanca, así que un logo blanco no se vería. Use una versión oscura de su logo sobre fondo transparente.', 'The share page shows your logo as it is, with no box behind it. For a clean look, use your logo on a transparent background (PNG or SVG).': 'La página compartida muestra su logo tal cual, sin recuadro detrás. Para que se vea limpio, use su logo sobre fondo transparente (PNG o SVG).', 'Use it anyway': 'Usarlo igual', 'Choose another': 'Elegir otro', 'Could not read that picture.': 'No se pudo leer esa imagen.', 'Share 3D view': 'Compartir vista 3D', 'Sharing needs a signed-in PanelPro account.': 'Para compartir necesita una cuenta de PanelPro.', 'Your client can turn it, open and close doors and drawers, and see the sizes, materials and renders. They cannot change anything. The link always shows your latest version.': 'Su cliente puede girarlo, abrir y cerrar puertas y gavetas, y ver las medidas, los materiales y los renders. No puede cambiar nada. El enlace siempre muestra su última versión.', 'Create share link': 'Crear enlace para compartir', 'Link is on': 'Enlace activo', 'Link is off — nobody can open it': 'Enlace desactivado: nadie puede abrirlo', 'Copy': 'Copiar', 'Send to client': 'Enviar al cliente', 'Open': 'Abrir', 'Update now': 'Actualizar ahora', 'Versions': 'Versiones', 'latest': 'la más reciente', 'Your name and logo on the page': 'Su nombre y logo en la página', 'Business name': 'Nombre del negocio', 'No logo': 'Sin logo', 'Choose logo…': 'Elegir logo…', 'Remove': 'Quitar', 'Link copied.': 'Enlace copiado.', 'Creating the link…': 'Creando el enlace…', 'Sending the latest version…': 'Enviando la última versión…', 'Nothing to share yet.': 'Todavía no hay nada para compartir.', 'Sent: version': 'Enviada: versión', 'Already up to date.': 'Ya está al día.', 'Save the module first.': 'Primero guarde el módulo.', 'Picture saved.': 'Imagen guardada.', 'Renders': 'Renders', 'No renders yet': 'Aún no hay renders',
     'Open a module or the composition and press the camera button on the 3D view.': 'Abra un módulo o la composición y pulse el botón de cámara en la vista 3D.',
     'pictures': 'imágenes', 'renders': 'renders', 'Project': 'Proyecto', 'Undo': 'Deshacer', 'The render server is not switched on yet — renders start working once it is set up.': 'El servidor de renders aún no está activado — los renders funcionarán cuando se configure.', 'Redo': 'Rehacer', 'Undone': 'Deshecho', 'Redone': 'Rehecho', 'Nothing to undo': 'Nada que deshacer', 'Outside': 'Exterior', 'Between the sides': 'Entre costados', 'Module name': 'Nombre del módulo', 'Height from the floor': 'Altura desde el piso',
     'Raised off the floor (besides the toe kick)': 'Elevado del piso (además del zócalo)', 'Are you sure?': '¿Está seguro?', 'Discard': 'Descartar', 'Replace': 'Reemplazar', 'OK': 'Aceptar',
@@ -731,8 +731,8 @@
           cur.versions.slice().reverse().map(function (v, i) {
             return '<a href="' + esc(url + '&v=' + v.v) + '" target="_blank" rel="noopener"><b>v' + v.v + '</b><span>' + esc(fmtDate(v.at)) + '</span>' + (i === 0 ? '<em>' + esc(t('latest')) + '</em>' : '') + '</a>';
           }).join('') + '</div></details>' +
-        '<details class="sh-sec"><summary>' + esc(t('Your name and logo on the page')) + '</summary><div class="sh-brand">' +
-          '<label class="field"><span>' + esc(t('Business name')) + '</span><input class="text-in" id="shBName" value="' + esc(brand.name) + '"></label>' +
+        '<details class="sh-sec"><summary>' + esc(t('Your logo on the page')) + '</summary><div class="sh-brand">' +
+          '<p class="sh-note">' + esc(t('It shows on a white bar at the top of the page, as it is: use your logo in dark colours on a transparent background (PNG or SVG). A white logo would not be seen.')) + '</p>' +
           '<div class="sh-logo">' + (brand.logo ? '<img alt="" src="' + esc(brand.logo) + '">' : '<span>' + esc(t('No logo')) + '</span>') +
           '<label class="btn small">' + esc(t('Choose logo…')) + '<input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden id="shLogo"></label>' +
           (brand.logo ? '<button type="button" class="btn small" data-a="nologo">' + esc(t('Remove')) + '</button>' : '') + '</div>' +
@@ -757,24 +757,46 @@
         if (!f) { return; }
         var rd = new FileReader();
         rd.onload = function () {
-          var src = String(rd.result);
-          if (/svg/.test(f.type)) { logo = src; brand.logo = logo; draw(); return; }
-          var im = new Image();
+          var src = String(rd.result), im = new Image();
           im.onload = function () {
-            var k = Math.min(1, 600 / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas');
-            c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k);
-            c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
-            brand.logo = c.toDataURL('image/png'); brand.name = body.querySelector('#shBName').value; draw();
-            body.querySelector('.sh-brand').parentNode.open = true;
+            var w = im.naturalWidth || 600, hgt = im.naturalHeight || 200;
+            var k = Math.min(1, 600 / Math.max(w, hgt)), c = document.createElement('canvas');
+            c.width = Math.max(1, Math.round(w * k)); c.height = Math.max(1, Math.round(hgt * k));
+            var g = c.getContext('2d');
+            g.drawImage(im, 0, 0, c.width, c.height);
+            // what it looks like on the page's white bar: mostly white → not seen; a box behind it → not "no background"
+            var px = null;
+            try { px = g.getImageData(0, 0, c.width, c.height).data; } catch (e) { px = null; }
+            var light = false, boxed = false;
+            if (px) {
+              var sum = 0, n = 0;
+              for (var i = 0; i < px.length; i += 16) { if (px[i + 3] > 128) { sum += 0.2126 * px[i] + 0.7152 * px[i + 1] + 0.0722 * px[i + 2]; n++; } }
+              light = n > 0 && sum / n > 225;
+              var corner = function (x, y) { var o = (y * c.width + x) * 4; return px[o + 3] > 200 && (px[o] < 235 || px[o + 1] < 235 || px[o + 2] < 235); };
+              boxed = corner(0, 0) && corner(c.width - 1, 0) && corner(0, c.height - 1) && corner(c.width - 1, c.height - 1);
+            }
+            var keep = function () {
+              brand.logo = /svg/.test(f.type) ? src : c.toDataURL('image/png');
+              draw();
+              body.querySelectorAll('.sh-sec')[1].open = true;
+            };
+            if (light || boxed) {
+              ask({ title: light ? t('This logo is white or very light') : t('This logo has a coloured box behind it'),
+                    text: light ? t('The share page shows your logo on a white bar, so a white logo would not be seen. Use a dark version of your logo on a transparent background.')
+                                : t('The share page shows your logo as it is, with no box behind it. For a clean look, use your logo on a transparent background (PNG or SVG).'),
+                    ok: t('Use it anyway'), cancel: t('Choose another') }).then(function (yes) { if (yes) { keep(); } });
+              return;
+            }
+            keep();
           };
+          im.onerror = function () { toast(t('Could not read that picture.')); };
           im.src = src;
         };
         rd.readAsDataURL(f);
       };
       var nl = body.querySelector('[data-a="nologo"]');
-      if (nl) { nl.onclick = function () { brand.logo = ''; brand.name = body.querySelector('#shBName').value; draw(); body.querySelectorAll('.sh-sec')[1].open = true; }; }
+      if (nl) { nl.onclick = function () { brand.logo = ''; draw(); body.querySelectorAll('.sh-sec')[1].open = true; }; }
       body.querySelector('[data-a="brand"]').onclick = function () {
-        brand.name = body.querySelector('#shBName').value.trim();
         C.call('shareCall', { action: 'brand', set: true, name: brand.name, logo: brand.logo }).then(function (b) { brand = b; toast(t('Saved')); }, function (e) { toast(e.message); });
       };
     }
@@ -1578,7 +1600,7 @@
       }).join('') + '</div>' +
       // project tools: icon tiles with a one-line label (the full name on hover / for screen readers)
       '<div class="tool-tiles">' + [['compBtn', 'layout', 'Composition', 'Composition'], ['cutBtn', 'cut', lang === 'es' ? 'Corte' : 'Cut list', 'Cut list'],
-        ['galBtn', 'camera', 'Renders', 'Renders'], ['shareBtn', 'share', 'Share', 'Share project file']].map(function (b) {
+        ['galBtn', 'camera', 'Renders', 'Renders'], ['shareBtn', 'share', 'Share', 'Share with your client']].map(function (b) {
         return '<button type="button" class="tool-tile" id="' + b[0] + '" title="' + esc(t(b[3])) + '" aria-label="' + esc(t(b[3])) + '">' +
           menuIcon(b[1]) + '<span>' + esc(t(b[2])) + '</span></button>';
       }).join('') + '</div>'
@@ -1591,7 +1613,16 @@
     if ($('#cutBtn')) { $('#cutBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/cut'); }; }
     if ($('#compBtn')) { $('#compBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/compose'); }; }
     if ($('#galBtn')) { $('#galBtn').onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/renders'); }; }
-    if ($('#shareBtn')) { $('#shareBtn').onclick = function () { shareSite(s); }; }
+    // Share: the 3D view of the whole project (a link for the client), or the project file (a copy of
+    // the project's data to open in PanelPro on another phone or in SketchUp)
+    if ($('#shareBtn')) {
+      $('#shareBtn').onclick = function () {
+        menu(t('Share'), [
+          { label: t('3D view for your client (link)'), icon: 'globe', run: function () { openRender.shareNext = true; go('#/site/' + encodeURIComponent(s.id) + '/compose'); } },
+          { label: t('Project file (copy of the data, for PanelPro or SketchUp)'), icon: 'download', run: function () { shareSite(s); } }
+        ]);
+      };
+    }
     screen.querySelectorAll('[data-mod]').forEach(function (b) {
       b.onclick = function () { go('#/site/' + encodeURIComponent(s.id) + '/m/' + encodeURIComponent(b.getAttribute('data-mod'))); };
     });
@@ -1602,7 +1633,7 @@
   function siteMenu(s) {
       menu(s.name, [
         { label: t('Project manual'), icon: 'doc', run: function () { makeManual(s); } },
-        { label: t('Share project file'), icon: 'share', run: function () { shareSite(s); } },
+        { label: t('Project file (copy of the data, for PanelPro or SketchUp)'), icon: 'download', run: function () { shareSite(s); } },
         { label: t('Rename site'), icon: 'edit', run: function () { renderNewSite(s); } },
         window.PPCloud && window.PPCloud.on && (window.PPCloud.hasCompanies() || window.PPCloud.space().kind === 'company') ? { label: window.PPCloud.t('Move to a company…'), icon: 'move', run: function () { window.PPCloud.moveSite(s); } } : null,
         { label: t('Delete site'), icon: 'trash', danger: true, run: function () { deleteSite(s, function () { go('#/projects', true); }); } }

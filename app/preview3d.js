@@ -668,6 +668,8 @@
   };
 
   P3D.zoomExtents = function () { fit(null, true); };
+  // zoom in (factor < 1) or out (> 1) towards the centre — for + / − buttons
+  P3D.zoomBy = function (f) { zoom(f); };
 
   // ------------------------------------------------------------------ navigation
   function viewH() { return host.clientHeight || 200; }

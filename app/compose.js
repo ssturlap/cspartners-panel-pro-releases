@@ -112,7 +112,7 @@
   function save() { syncRoom(); A.persist(); histPush(); shareKick(); }
   // ------------------------------------------------------------------ shared 3D view of this composition
   function shareTarget() { return 'c:' + (C.room ? String(C.tab) : 'main'); }
-  function shareTitle() { return t('Composition') + (C.room && C.wall ? ' — ' + (C.wall.name || '') : '') + ' · ' + C.s.name; }
+  function shareTitle() { return A.t('Composition') + (C.room && C.wall ? ' — ' + (C.wall.name || '') : '') + ' · ' + C.s.name; }
   function shareData() {
     var parts = [], movers = [], places = null;
     if (isAll()) {
@@ -842,6 +842,8 @@
     undoState();
     document.getElementById('cShare').onclick = function () { A.openShare(C.s, shareTarget(), 'comp', shareTitle(), shareData); };
     if (C.s.shares && C.s.shares[shareTarget()]) { setTimeout(shareKick, 1500); }
+    // came from the project's Share › 3D view: open the share window straight away
+    if (A.openRender.shareNext) { A.openRender.shareNext = false; setTimeout(function () { document.getElementById('cShare').click(); }, 300); }
     document.getElementById('cRender').onclick = function () {
       A.openRender.target = shareTarget();
       if (!A.has3d()) { A.toast(t('The 3D view is not available on this device.')); return; }

@@ -9,7 +9,10 @@
     'Could not open this link.': 'No se pudo abrir este enlace.', 'Open doors': 'Abrir puertas', 'Close doors': 'Cerrar puertas', 'Open drawers': 'Abrir gavetas',
     'Close drawers': 'Cerrar gavetas', 'Sizes': 'Medidas', 'Front': 'Frente', 'Fit': 'Ajustar', 'Overall size': 'Medidas generales', 'Width': 'Ancho', 'Height': 'Alto',
     'Depth': 'Fondo', 'Materials': 'Materiales', 'Renders': 'Imágenes', 'Version': 'Versión', 'latest': 'la más reciente', 'Drag to turn · pinch or scroll to zoom': 'Arrastre para girar · pellizque o use la rueda para acercar',
-    'Prepared for': 'Preparado para', 'Melamine': 'Melamina', 'Plywood': 'Contrachapado', '3D view': 'Vista 3D', 'Composition': 'Composición', 'Module': 'Módulo'
+    'Prepared for': 'Preparado para', 'Doors': 'Puertas', 'Drawers': 'Gavetas', 'Zoom in': 'Acercar', 'Zoom out': 'Alejar', 'Zoom +': 'Acercar', 'Zoom −': 'Alejar', 'Reset': 'Reiniciar', 'Details': 'Detalles',
+    'Open the doors': 'Abrir las puertas', 'Close the doors': 'Cerrar las puertas', 'Open the drawers': 'Abrir las gavetas', 'Close the drawers': 'Cerrar las gavetas',
+    'Show the sizes': 'Mostrar las medidas', 'Hide the sizes': 'Ocultar las medidas', 'Look from the front': 'Ver de frente', 'Back to the starting view': 'Volver a la vista inicial',
+    'Sizes, materials and pictures': 'Medidas, materiales e imágenes', 'Made with': 'Hecho con', 'Melamine': 'Melamina', 'Plywood': 'Contrachapado', '3D view': 'Vista 3D', 'Composition': 'Composición', 'Module': 'Módulo'
   };
   function t(s) { return ES && TX[s] ? TX[s] : s; }
   function $(id) { return document.getElementById(id); }
@@ -19,12 +22,15 @@
     drawer: '<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 12h18M10 8.5h4M10 15.5h4"/>',
     sizes: '<path d="M3.5 15.5 15.5 3.5l5 5-12 12z"/><path d="M7.5 11.5l2 2M10.5 8.5l2 2M13.5 5.5l2 2"/>',
     front: '<rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M4 12h16"/>',
-    fit: '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>'
+    fit: '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>',
+    zin: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/>',
+    zout: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M7.5 10.5h6"/>',
+    iso: '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>'
   };
   var q = new URLSearchParams(location.search), sid = q.get('s') || '', want = q.get('v');
   var fb = window.PP_FIREBASE || {}, API = 'https://us-central1-' + (fb.projectId || 'panelpro-bf92e') + '.cloudfunctions.net/shareView';
   $('vMsgT').textContent = t('Loading the 3D view…');
-  $('vHint').textContent = t('Drag to turn · pinch or scroll to zoom');
   document.documentElement.lang = ES ? 'es' : 'en';
   function fail(msg) { $('vMsg').innerHTML = '<b>' + esc(t(msg)) + '</b>'; $('vMsg').hidden = false; }
 
@@ -41,9 +47,10 @@
     var m = d.model || {};
     units = m.units === 'cm' ? { k: 10, name: 'cm' } : { k: 1, name: 'mm' };
     document.title = (d.title || t('3D view')) + (d.brand && d.brand.name ? ' — ' + d.brand.name : '');
+    if (m.dims) { $('vDim').textContent = fmt(m.dims.w).replace(/ \w+$/, '') + ' × ' + fmt(m.dims.h).replace(/ \w+$/, '') + ' × ' + fmt(m.dims.d); $('vDim').hidden = false; }
     $('vTitle').textContent = d.title || t('3D view');
     $('vSub').textContent = [d.client ? t('Prepared for') + ' ' + d.client : '', new Date(d.at).toLocaleDateString(ES ? 'es' : 'en', { dateStyle: 'medium' })].filter(Boolean).join(' · ');
-    $('vBrand').innerHTML = d.brand ? (d.brand.logo ? '<img alt="' + esc(d.brand.name) + '" src="' + esc(d.brand.logo) + '">' : '') + (d.brand.name ? '<span>' + esc(d.brand.name) + '</span>' : '') : '';
+    $('vLogo').innerHTML = d.brand && d.brand.logo ? '<img alt="' + esc(d.brand.name || '') + '" src="' + esc(d.brand.logo) + '">' : '';
     var sel = $('vVer');
     sel.hidden = (d.versions || []).length < 2;
     sel.innerHTML = (d.versions || []).map(function (x, i) {
@@ -64,6 +71,11 @@
     if (!ready) { P3D.init($('stage')); ready = true; window.addEventListener('resize', function () { P3D.resize(); }); }
     var urls = Object.keys(m.mats || {}).map(function (k) { return m.mats[k].thumb; }).filter(Boolean);
     P3D.loadTex(urls, function () {
+      // a picture that could not load: that material shows its colour instead
+      Object.keys(m.mats || {}).forEach(function (k) {
+        var x = m.mats[k];
+        if (x.thumb && !P3D.texReady(x.thumb)) { delete x.thumb; x.color = x.avg || '#d8d2c4'; }
+      });
       P3D.setDimUnits(units.k, units.name);
       P3D.setSoft(m.soft !== false);
       P3D.setHeights(m.rows || []);
@@ -74,27 +86,36 @@
       requestAnimationFrame(function () { P3D.resize(); P3D.reset('iso'); });
     });
   }
+  // the view buttons: icon + one word; the full meaning on hover / for screen readers
   function tools(m) {
     var P3D = window.P3D, n = { door: 0, drawer: 0 };
     (m.movers || []).forEach(function (x) { n[x.kind] = (n[x.kind] || 0) + 1; });
+    var dOpen = P3D.isOpen('door'), wOpen = P3D.isOpen('drawer'), dims = P3D.dimsOn();
     var h = '';
-    if (n.door) { h += btn('door', 'door', P3D.isOpen('door') ? t('Close doors') : t('Open doors')); }
-    if (n.drawer) { h += btn('drawer', 'drawer', P3D.isOpen('drawer') ? t('Close drawers') : t('Open drawers')); }
-    h += btn('sizes', 'sizes', t('Sizes'), P3D.dimsOn()) + btn('front', 'front', t('Front')) + btn('fit', 'fit', t('Fit'));
+    if (n.door) { h += btn('door', 'door', t('Doors'), dOpen ? t('Close the doors') : t('Open the doors'), dOpen); }
+    if (n.drawer) { h += btn('drawer', 'drawer', t('Drawers'), wOpen ? t('Close the drawers') : t('Open the drawers'), wOpen); }
+    h += btn('sizes', 'sizes', t('Sizes'), dims ? t('Hide the sizes') : t('Show the sizes'), dims) +
+      btn('zin', 'zin', t('Zoom +'), t('Zoom in')) + btn('zout', 'zout', t('Zoom −'), t('Zoom out')) +
+      btn('front', 'front', t('Front'), t('Look from the front')) + btn('iso', 'iso', t('Reset'), t('Back to the starting view')) +
+      btn('info', 'info', t('Details'), t('Sizes, materials and pictures'), null, 'info');
     var box = $('vTools');
     box.innerHTML = h;
     box.querySelectorAll('.tool').forEach(function (b) {
       b.onclick = function () {
         var a = b.getAttribute('data-a');
-        if (a === 'door' || a === 'drawer') { P3D.toggle(a); setTimeout(function () { tools(m); }, 50); }
+        if (a === 'door' || a === 'drawer') { P3D.toggle(a); setTimeout(function () { tools(m); }, 30); }
         else if (a === 'sizes') { P3D.setDims(!P3D.dimsOn()); P3D.zoomExtents(); tools(m); }
+        else if (a === 'zin') { P3D.zoomBy(0.8); }
+        else if (a === 'zout') { P3D.zoomBy(1.25); }
         else if (a === 'front') { P3D.reset('front'); }
+        else if (a === 'info') { $('vSheetBody').innerHTML = $('vSide').innerHTML; wireRends($('vSheetBody')); $('vSheet').hidden = false; }
         else { P3D.reset('iso'); }
       };
     });
   }
-  function btn(a, icon, label, pressed) {
-    return '<button type="button" class="tool" data-a="' + a + '"' + (pressed != null ? ' aria-pressed="' + !!pressed + '"' : '') + '><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[icon] + '</svg>' + esc(label) + '</button>';
+  function btn(a, icon, label, title, pressed, cls) {
+    return '<button type="button" class="tool' + (cls ? ' ' + cls : '') + '" data-a="' + a + '" title="' + esc(title) + '" aria-label="' + esc(title) + '"' +
+      (pressed != null ? ' aria-pressed="' + !!pressed + '"' : '') + '><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[icon] + '</svg><span>' + esc(label) + '</span></button>';
   }
   var TYPE = { melamine: 'Melamine', mdf: 'MDF', plywood: 'Plywood' };
   function side(d, m) {
@@ -124,12 +145,17 @@
         return '<button type="button" data-u="' + esc(u) + '"><img loading="lazy" alt="" src="' + esc(u) + '"></button>';
       }).join('') + '</div></div>';
     }
+    h += '<p class="made">' + esc(t('Made with')) + ' <b>CSPARTNERS</b> PANEL PRO</p>';
     $('vSide').innerHTML = h;
-    $('vSide').querySelectorAll('.rends button').forEach(function (b) {
+    wireRends($('vSide'));
+  }
+  function wireRends(root) {
+    root.querySelectorAll('.rends button').forEach(function (b) {
       b.onclick = function () { var lb = $('vLb'); lb.querySelector('img').src = b.getAttribute('data-u'); lb.hidden = false; };
     });
   }
+  $('vSheet').onclick = function (e) { if (e.target === this || e.target.classList.contains('sheet-x')) { this.hidden = true; } };
   $('vLb').onclick = function (e) { if (e.target === this || e.target.classList.contains('lb-x')) { this.hidden = true; } };
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('vLb').hidden = true; } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('vLb').hidden = true; $('vSheet').hidden = true; } });
   if (!sid) { fail('No such link.'); } else { load(want); }
 })();
