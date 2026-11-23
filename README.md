@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.82** — Manual from the palette  
-Download [cspartners_panel_pro_0.3.82.rbz](releases/cspartners_panel_pro_0.3.82.rbz) and install it in SketchUp:
+**Latest: 0.3.83** — Manual shows the model's materials  
+Download [cspartners_panel_pro_0.3.83.rbz](releases/cspartners_panel_pro_0.3.83.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.83 | [cspartners_panel_pro_0.3.83.rbz](releases/cspartners_panel_pro_0.3.83.rbz) |
 | 0.3.82 | [cspartners_panel_pro_0.3.82.rbz](releases/cspartners_panel_pro_0.3.82.rbz) |
 | 0.3.81 | [cspartners_panel_pro_0.3.81.rbz](releases/cspartners_panel_pro_0.3.81.rbz) |
 | 0.3.80 | [cspartners_panel_pro_0.3.80.rbz](releases/cspartners_panel_pro_0.3.80.rbz) |

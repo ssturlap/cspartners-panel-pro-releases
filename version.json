@@ -1,13 +1,15 @@
 {
-  "version": "0.3.82",
+  "version": "0.3.83",
   "date": "2026-11-23",
-  "title": "Manual from the palette",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.82.rbz",
+  "title": "Manual shows the model's materials",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.83.rbz",
   "notes": [
-    "The CSPARTNERS palette has a Module manual button under Cut list: it makes the manual of the selected modules (or of all of them when nothing is selected)…"
+    "Module manual: panels painted by hand in the model now show, and are listed under Materials, with the material they have in SketchUp (as in the cut list) —…",
+    "Module manual: the 3D pictures no longer use made-up bright colours for a material they cannot find; it shows as plain board. Material pages get the texture…"
   ],
-  "title_es": "Manual desde la paleta",
+  "title_es": "El manual muestra los materiales del modelo",
   "notes_es": [
-    "La paleta de CSPARTNERS tiene un botón Manual de módulos debajo de Lista de corte: prepara el manual de los módulos seleccionados (o de todos si no hay nada…"
+    "Manual de módulos: los paneles pintados a mano en el modelo ahora se ven, y se listan en Materiales, con el material que tienen en SketchUp (como en la…",
+    "Manual de módulos: las vistas 3D ya no usan colores llamativos inventados para un material que no encuentran; se ve como tablero liso. Las páginas de…"
   ]
 }
