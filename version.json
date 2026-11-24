@@ -1,19 +1,15 @@
 {
-  "version": "0.3.84",
-  "date": "2026-11-23",
-  "title": "Spaces: the manual and cut list by area",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.84.rbz",
+  "version": "0.3.85",
+  "date": "2026-11-24",
+  "title": "PanelPro Web at cspanelpro.com",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.85.rbz",
   "notes": [
-    "Spaces: select the modules of one area (walls too, if you like), right-click › CSPARTNERS PANEL PRO › Create space… and name it. It makes a top-level group…",
-    "Module manual: with spaces in the model, the manual comes in one part per space — its own page with a 3D view and module list, materials, installation…",
-    "Cut list window and Excel export (By module tab): modules grouped under a title row per space.",
-    "Panels painted inside the part itself (faces painted while editing the part) are now picked up by the cut list, the Excel export and the manual, not only…"
+    "PanelPro Web now lives at https://cspanelpro.com/app/ (the old address forwards to it). The material catalog and the links to the web app use the new address.",
+    "PanelPro Web, Composition: the 2D view can be switched to Front, Right, Back, Left or Top; drag modules in any of them (forward and back too), type how far…"
   ],
-  "title_es": "Espacios: el manual y la lista de corte por zona",
+  "title_es": "PanelPro Web en cspanelpro.com",
   "notes_es": [
-    "Espacios: seleccione los módulos de una zona (también las paredes, si quiere), clic derecho › CSPARTNERS PANEL PRO › Crear espacio… y póngale nombre. Crea…",
-    "Manual de módulos: con espacios en el modelo, el manual sale en una parte por espacio: su página con vista 3D y lista de módulos, materiales, páginas de…",
-    "Ventana de lista de corte y exportación a Excel (pestaña Por módulo): módulos agrupados bajo una fila de título por espacio.",
-    "Los paneles pintados dentro de la propia pieza (caras pintadas editando la pieza) ahora se detectan en la lista de corte, el Excel y el manual, no solo la…"
+    "PanelPro Web ahora está en https://cspanelpro.com/app/ (la dirección anterior lleva a la nueva). El catálogo de materiales y los enlaces a la app web usan…",
+    "PanelPro Web, Composición: la vista 2D se puede cambiar a Frente, Derecha, Atrás, Izquierda o Arriba; arrastre los módulos en cualquiera de ellas (también…"
   ]
 }

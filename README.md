@@ -2,19 +2,20 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.84** — Spaces: the manual and cut list by area  
-Download [cspartners_panel_pro_0.3.84.rbz](releases/cspartners_panel_pro_0.3.84.rbz) and install it in SketchUp:
+**Latest: 0.3.85** — PanelPro Web at cspanelpro.com  
+Download [cspartners_panel_pro_0.3.85.rbz](releases/cspartners_panel_pro_0.3.85.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
 
-**Phone app (PanelPro Web):** open https://ssturlap.github.io/cspartners-panel-pro-releases/app/ on the phone and add it to the home screen.
+**Phone app (PanelPro Web):** open https://cspanelpro.com/app/ on the phone and add it to the home screen.
 
 Installed copies check `version.json` here (at most once a day, or *Extensions › CSPARTNERS PANEL PRO › Check for updates…*)
 and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.85 | [cspartners_panel_pro_0.3.85.rbz](releases/cspartners_panel_pro_0.3.85.rbz) |
 | 0.3.84 | [cspartners_panel_pro_0.3.84.rbz](releases/cspartners_panel_pro_0.3.84.rbz) |
 | 0.3.83 | [cspartners_panel_pro_0.3.83.rbz](releases/cspartners_panel_pro_0.3.83.rbz) |
 | 0.3.82 | [cspartners_panel_pro_0.3.82.rbz](releases/cspartners_panel_pro_0.3.82.rbz) |
