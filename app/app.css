@@ -719,6 +719,8 @@ body.desk .compose { height: 100%; }
 
 /* composition drawing: lines one screen pixel wide at any zoom, real dashes, labels with a halo */
 .csvg .floor { stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+.csvg .floor.wall { stroke-dasharray: 10 6; }
+.cview.is2d .side-bar { bottom: 10px; }
 .csvg .cdims line { stroke-width: 1px; vector-effect: non-scaling-stroke; }
 .csvg .cdims line.d-all, .csvg .cdims line.d-grp { stroke-width: 1.3px; }
 .csvg .cdims line.d-gap { stroke-dasharray: 5 4; stroke-width: 1px; }
