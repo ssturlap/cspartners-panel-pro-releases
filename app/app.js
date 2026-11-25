@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.85';
-  var BUILD = '531fd0f90f';
+  var BUILD = 'ca78439ff9';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1823,7 +1823,10 @@
     var title = mod ? (p.name || presetLabel(p.type)) : presetTitle(presetKey);
     show(
       '<header class="top"><button type="button" class="icon-btn" id="back" aria-label="' + esc(t('Back')) + '">‹</button>' +
-      '<h1>' + esc(title) + '</h1>' +
+      // phone: the name is typed in the top bar, with the size chips beside it (no second title row)
+      (desk() ? '<h1>' + esc(title) + '</h1>'
+              : '<input class="top-name" id="topName" value="' + esc(p.name || title) + '" placeholder="' + esc(t('Module name')) + '" autocomplete="off" aria-label="' + esc(t('Name')) + '">' +
+                '<div class="dimchips intop" data-dimhost="1"></div>') +
       '<button type="button" class="icon-btn" id="moreBtn" aria-label="' + esc(t('More')) + '">⋯</button></header>' +
       '<div class="edit-layout' + (desk() ? ' ws' : '') + '">' + (desk() ? deskModsHtml(s, mod ? mod.id : 'new') : '') +
       '<div class="view3d" id="v3d"><svg class="elev" id="elev" preserveAspectRatio="xMidYMid meet"></svg>' +
@@ -1838,6 +1841,11 @@
     );
     var host = $('#v3d');
     host.insertBefore(ensureViewer(), host.firstChild);
+    var tn = $('#topName');
+    if (tn) {
+      tn.oninput = function () { E.params.name = tn.value.trim(); E.dirty = true; };
+      tn.onkeydown = function (e) { if (e.key === 'Enter') { tn.blur(); } };
+    }
     if (desk()) {
       wireDeskMods(s);
       // the 3D view's size is known only once the three panels are laid out: fit it then
@@ -2404,8 +2412,7 @@
     var p = E.params;
     var scrollY = body.scrollTop;
     // the name, with the size chips beside it on a phone (the 3D view stays clear)
-    var html = '<div class="ed-namerow"><input class="ed-name" data-text="name" value="' + esc(p.name || '') + '" placeholder="' + esc(t('Module name')) + '" autocomplete="off" aria-label="' + esc(t('Name')) + '">' +
-      '<div class="dimchips inline" data-dimhost="1"></div></div>' +
+    var html = (desk() ? '<input class="ed-name" data-text="name" value="' + esc(p.name || '') + '" placeholder="' + esc(t('Module name')) + '" autocomplete="off" aria-label="' + esc(t('Name')) + '">' : '') +
       '<div class="measure">' + (p.panel ? panelDims(p).map(function (d) {
       // a loose panel: Length (the grain) × Width × Thickness, whichever way it stands
       return '<button type="button" data-pdim="' + d[0] + '" class="' + (E.changed[d[1]] ? 'changed' : '') + '"><span class="lbl">' + esc(t(d[2])) + '</span>' +
@@ -2707,7 +2714,7 @@
   // Put the module in the site (new) or update it; returns its id.
   function storeModule() {
     var s = E.site;
-    var nameIn = document.querySelector('[data-text="name"]');
+    var nameIn = document.querySelector('[data-text="name"]') || $('#topName');
     if (nameIn) { E.params.name = nameIn.value.trim(); }
     if (E.mod) {
       if (E.mod.params && E.mod.params.edges) { E.params.edges = clone(E.mod.params.edges); } else { delete E.params.edges; }
