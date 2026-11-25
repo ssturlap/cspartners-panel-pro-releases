@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.85';
-  var BUILD = 'ca78439ff9';
+  var BUILD = 'e4912a4f79';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -1808,6 +1808,9 @@
     return presetLabel(key);
   }
 
+  // the View button shows pressed while doors, drawer fronts or drawer boxes are hidden
+  function visHidden() { return !(view.vis.doors && view.vis.dfronts && view.vis.dboxes); }
+  function markVis() { var b = $('#viewBtn'); if (b) { b.setAttribute('aria-pressed', String(visHidden())); } }
   function renderEdit(s, mod, presetKey) {
     if (!E || E.site !== s || E.mod !== mod || (!mod && E.presetKey !== presetKey)) {
       var params;
@@ -1833,7 +1836,7 @@
       '<span class="view-hint" id="viewHint"></span><div class="dimchips" id="dimChips"></div>' +
       '<div class="side-bar" id="sideBar" role="tablist">' + SIDES.map(function (k) { return '<button type="button" data-side="' + k + '">' + esc(sideLabel(k)) + '</button>'; }).join('') + '</div>' +
       '<div class="view-tools"><button type="button" id="dimBtn" class="vt vt-txt" data-label="2D / 3D" aria-label="2D / 3D"><b class="vt-t">' + (view.mode === '3d' ? '2D' : '3D') + '</b>' + vtTip('2D / 3D') + '</button>' +
-      vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View')) +
+      vtBtn('dimsBtn', 'sizes', t('Sizes'), ' aria-pressed="' + dimsShown() + '"') + vtBtn('viewBtn', 'view', t('View'), ' aria-pressed="' + visHidden() + '"') +
       vtBtn('openAll', 'open', t('Open all'), ' aria-pressed="false"') + diagBtn() + vtBtn('manualV', 'doc', t('Module manual')) + vtBtn('undoV', 'undo', t('Undo') + ' (Ctrl+Z)') + vtBtn('redoV', 'redo', t('Redo') + ' (Ctrl+Shift+Z)') + vtBtn('renderV', 'render', t('Render (AI)')) + vtBtn('shareV', 'share', t('Share 3D view')) + vtBtn('fitBtn', 'fit', t('Fit')) + '</div></div>' +
       '<div class="edit-side"><div class="page" id="editBody"></div>' +
       '<div class="dock"><span class="steps" id="steps"></span><button type="button" class="btn primary" id="saveMod">' + esc(mod ? t('Save') : t('Add to site')) + '</button></div></div>' +
@@ -1885,14 +1888,15 @@
       this.setAttribute('aria-pressed', String(on));
       if (has3d) { P3D.setDims(on); P3D.zoomExtents(); }
     };
+    markVis();
     $('#viewBtn').onclick = function () {
       var r = E.res || { movers: [] }, n = { door: 0, drawer: 0 };
       (r.movers || []).forEach(function (m) { n[m.kind] = (n[m.kind] || 0) + 1; });
       var mark = function (on) { return on ? '✓ ' : '  '; };
       var items = [
-        { label: t('Show doors'), icon: view.vis.doors ? 'check' : 'blank', run: function () { view.vis.doors = !view.vis.doors; saveView(); draw3d(false); } },
-        { label: t('Show drawer fronts'), icon: view.vis.dfronts ? 'check' : 'blank', run: function () { view.vis.dfronts = !view.vis.dfronts; saveView(); draw3d(false); } },
-        { label: t('Show drawer boxes'), icon: view.vis.dboxes ? 'check' : 'blank', run: function () { view.vis.dboxes = !view.vis.dboxes; saveView(); draw3d(false); } }
+        { label: t('Show doors'), icon: view.vis.doors ? 'check' : 'blank', run: function () { view.vis.doors = !view.vis.doors; saveView(); markVis(); draw3d(false); } },
+        { label: t('Show drawer fronts'), icon: view.vis.dfronts ? 'check' : 'blank', run: function () { view.vis.dfronts = !view.vis.dfronts; saveView(); markVis(); draw3d(false); } },
+        { label: t('Show drawer boxes'), icon: view.vis.dboxes ? 'check' : 'blank', run: function () { view.vis.dboxes = !view.vis.dboxes; saveView(); markVis(); draw3d(false); } }
       ];
       if (has3d && view.mode === '3d') {
         if (n.door) { items.push({ label: t(P3D.isOpen('door') ? 'Close doors' : 'Open doors'), icon: 'door', run: function () { P3D.toggle('door'); } }); }
