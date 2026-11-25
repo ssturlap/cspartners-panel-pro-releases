@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.85';
-  var BUILD = '1c2ec9a557';
+  var BUILD = '9d73b755fa';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -2164,6 +2164,58 @@
   var editTab = load('panelpro.web.tab', 'box');
 
   function F() { return window.PPFields; }
+  // Choices shown as pictures (tap one) instead of a list: door mounting, front style, pulls.
+  var PIC_C = { box: '#e2c9a4', door: '#c79c66', line: '#8a6a44', pull: '#2b2b2d', mark: '#e0a800' };
+  function picRect(x, y, w, h, fill, extra) {
+    return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + fill + '" stroke="' + PIC_C.line + '" stroke-width="1"' + (extra || '') + '/>';
+  }
+  var DOOR = function () { return picRect(12, 4, 24, 40, PIC_C.door) + picRect(11, 9, 2, 5, PIC_C.pull, ' stroke="none"') + picRect(11, 34, 2, 5, PIC_C.pull, ' stroke="none"'); };
+  var DRAWER = function () { return picRect(4, 14, 40, 20, PIC_C.door); };
+  var PULL = function (x, y, w, h) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="1" fill="' + PIC_C.pull + '"/>'; };
+  var DOT = function (x, y) { return '<circle cx="' + x + '" cy="' + y + '" r="3.4" fill="' + PIC_C.mark + '" stroke="' + PIC_C.pull + '" stroke-width="1"/>'; };
+  var PICS = {
+    overlay: function (v) {
+      var sides = v === 'inset' ? picRect(6, 8, 4, 30, PIC_C.box) + picRect(38, 8, 4, 30, PIC_C.box) : picRect(6, 8, 4, 28, PIC_C.box) + picRect(38, 8, 4, 28, PIC_C.box);
+      var back = picRect(10, 8, 28, 2, PIC_C.box);
+      var door = v === 'full' ? picRect(5, 37, 38, 4, PIC_C.door) : v === 'half' ? picRect(8, 37, 32, 4, PIC_C.door) : picRect(10.5, 33, 27, 4, PIC_C.door);
+      return back + sides + door;
+    },
+    front_style: function (v) {
+      if (v === 'shaker') { return picRect(9, 4, 30, 40, PIC_C.door) + picRect(15, 10, 18, 28, '#d8b386'); }
+      if (v === 'plank') { return [0, 1, 2, 3].map(function (i) { return picRect(9 + i * 7.75, 4, 6.5, 40, PIC_C.door); }).join(''); }
+      if (v === 'grooved') { return picRect(9, 4, 30, 40, PIC_C.door) + [16.5, 24, 31.5].map(function (x) { return '<line x1="' + x + '" y1="4" x2="' + x + '" y2="44" stroke="' + PIC_C.line + '" stroke-width="1.4"/>'; }).join(''); }
+      if (v === 'glass') { return '<rect x="10" y="5" width="28" height="38" fill="#a9c3cf" fill-opacity=".75" stroke="#222" stroke-width="3.5"/><path d="M15 12 L22 9 M15 20 L28 14" stroke="#fff" stroke-width="1.2" opacity=".8"/>'; }
+      return picRect(9, 4, 30, 40, PIC_C.door);
+    },
+    plank_dir: function (v) {
+      return picRect(9, 4, 30, 40, PIC_C.door) + [1, 2, 3].map(function (i) {
+        return v === 'horizontal' ? '<line x1="9" y1="' + (4 + i * 10) + '" x2="39" y2="' + (4 + i * 10) + '" stroke="' + PIC_C.line + '" stroke-width="1.4"/>'
+                                  : '<line x1="' + (9 + i * 7.5) + '" y1="4" x2="' + (9 + i * 7.5) + '" y2="44" stroke="' + PIC_C.line + '" stroke-width="1.4"/>';
+      }).join('');
+    },
+    door_pull: function (v) {
+      return DOOR() + (v === 'tbar' ? PULL(30.5, 8, 2.5, 14) : v === 'wedge' ? PULL(25, 1.5, 10, 3.5) : v === 'profile' ? PULL(12, 4, 24, 3.5) : '');
+    },
+    drawer_pull: function (v) {
+      return DRAWER() + (v === 'tbar' ? PULL(16, 18, 16, 2.5) : v === 'wedge' ? PULL(19, 11.5, 10, 3.5) : v === 'profile' ? PULL(4, 14, 40, 3.5) : '');
+    },
+    pull_finish: function (v) {
+      var c = { black: '#232325', stainless: '#c0c2c4', aluminium: '#a9b0b8', gold: '#c6a052' }[v] || '#999';
+      return '<circle cx="24" cy="24" r="15" fill="' + c + '" stroke="#555" stroke-width="1"/><ellipse cx="19" cy="18" rx="6" ry="3" fill="#fff" opacity=".35"/>';
+    },
+    door_pull_corner: function (v) { var q = { A: [17, 9], B: [31, 9], C: [17, 39], D: [31, 39] }[v] || [24, 24]; return DOOR() + DOT(q[0], q[1]); },
+    drawer_pull_corner: function (v) { var q = { center: [24, 24], A: [9, 19], B: [39, 19], C: [9, 29], D: [39, 29] }[v] || [24, 24]; return DRAWER() + DOT(q[0], q[1]); },
+    door_pull_edge: function (v) { return DOOR() + (v === 'h' ? PULL(24, 2, 12, 3.5) : PULL(35, 4, 3.5, 12)); },
+    drawer_pull_edge: function (v) { return DRAWER() + (v === 'h' ? PULL(30, 12, 14, 3.5) : PULL(42.5, 14, 3.5, 10)); },
+    door_pull_orient: function (v) { return DOOR() + (v === 'h' ? PULL(20, 9, 14, 2.5) : PULL(30.5, 8, 2.5, 14)); },
+    drawer_pull_orient: function (v) { return DRAWER() + (v === 'h' ? PULL(16, 18, 16, 2.5) : PULL(23, 17, 2.5, 14)); }
+  };
+  function picsHtml(key, label, opts, p) {
+    return '<div class="frow-f stack"><span class="flbl">' + esc(label) + '</span><div class="pics" data-cards="' + key + '">' + opts.map(function (o) {
+      return '<button type="button" class="pic" data-v="' + esc(o[0]) + '" aria-pressed="' + (String(p[key]) === o[0]) + '">' +
+        '<svg viewBox="0 0 48 48" aria-hidden="true">' + PICS[key](o[0]) + '</svg><span>' + esc(t(o[1])) + '</span></button>';
+    }).join('') + '</div></div>';
+  }
   function rctx() {
     return { t: t, show: L, units: U(), es: lang === 'es', settings: { opt: prefs.opt }, bbox: E && E.res ? E.res.bbox : null };
   }
@@ -2197,6 +2249,8 @@
       ctl = '<button type="button" class="valbtn" data-len="' + key + '" data-type="' + type + '">' + esc(lenText(v, type)) + '</button>';
     } else if (type === 'bool') {
       ctl = '<label class="switch"><input type="checkbox" data-bool="' + key + '"' + (p[key] ? ' checked' : '') + '><span></span></label>';
+    } else if (type === 'sel' && PICS[key]) {
+      return picsHtml(key, label, d[3], p);
     } else if (type === 'sel') {
       var opts = d[3];
       if (key === 'bx_height') {
@@ -2868,6 +2922,27 @@
     document.body.appendChild(ov);
     var fr = ov.querySelector('iframe');
     fr.srcdoc = html.replace(/<div class="np">[\s\S]*?<\/div>/, '');
+    // phones: the Letter pages are shrunk to the width of the screen (printing keeps them full size)
+    var fit = function () {
+      try {
+        var d = fr.contentDocument, root = d && d.documentElement;
+        if (!root) { return; }
+        root.style.zoom = '';
+        var w = 0;
+        Array.prototype.forEach.call(d.querySelectorAll('.page, section'), function (pg) { w = Math.max(w, pg.offsetWidth); });
+        var k = w ? (fr.clientWidth - 12) / (w + 24) : 1;
+        if (k < 1) { root.style.zoom = String(Math.max(0.25, k)); }
+      } catch (e) { /* not ready */ }
+    };
+    fr.onload = function () {
+      fit();
+      try {
+        var cw = fr.contentWindow;
+        cw.addEventListener('beforeprint', function () { cw.document.documentElement.style.zoom = ''; });
+        cw.addEventListener('afterprint', fit);
+      } catch (e) { /* ignore */ }
+    };
+    window.addEventListener('resize', fit);
     var close = function () {
       if (!ov.isConnected) { return; }
       ov.remove(); document.removeEventListener('keydown', key, true); window.removeEventListener('hashchange', away);

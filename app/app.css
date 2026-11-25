@@ -755,6 +755,14 @@ body.desk .compose { height: 100%; }
 .card small { display: block; font-size: 12px; color: var(--muted); line-height: 1.25; margin-top: 2px; }
 .card[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); background: #fffbea; }
 @media (max-width: 480px) { .cards { grid-template-columns: 1fr; gap: 6px; } .card { padding: 7px 10px; } }
+/* picture choices (door mounting, front style, pulls): a tile per choice */
+.pics { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; width: 100%; margin-top: 6px; }
+.pic { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 6px 7px; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--card); color: var(--ink); font: inherit; cursor: pointer; min-width: 0; }
+.pic svg { width: 48px; height: 48px; flex: none; }
+.pic span { font-size: 12px; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+.pic[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); background: #fffbea; }
+@media (max-width: 480px) { .pics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; } }
 .seg.lmode { margin: 4px 0 6px; }
 #nkHost { padding: 10px; --nk-on: var(--ink); --nk-go: var(--tape); --nk-bg: #eef1f2; }
 /* composition: one tab per wall + the whole room (projects from SketchUp) */
@@ -1255,3 +1263,6 @@ body:not(.desk) .view-hint { max-width: calc(100% - 110px); }
 @media (hover: hover) { .view-tools .vt .vt-tip { display: block; } }
 body:not(.desk) .view-tools .vt .vt-tip { display: none; }
 .vt .vt-t { font: inherit; }
+/* Reset materials · Copy materials from…: side by side, the text wraps instead of being cut */
+.mattools { flex-wrap: nowrap !important; }
+.mattools .btn { flex: 1 1 0 !important; min-width: 0; height: auto; min-height: 40px; white-space: normal; line-height: 1.2; padding-top: 7px; padding-bottom: 7px; text-align: center; justify-content: center; }
