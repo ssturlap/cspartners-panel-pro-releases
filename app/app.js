@@ -7,8 +7,8 @@
 (function () {
   'use strict';
 
-  var VERSION = '0.3.85';
-  var BUILD = 'e4912a4f79';
+  var VERSION = '0.3.86';
+  var BUILD = '06f1cc246e';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';

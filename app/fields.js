@@ -310,6 +310,7 @@
       ['slide_lengths', 'Available runner lengths (NL)', 'text', DRAWER],
       ['db_clear_bottom', 'Clearance below box', 'len', DRAWER],
       ['db_clear_top', 'Clearance above box', 'len', DRAWER],
+      ['db_slide_clear', 'Slide clearance (both sides together)', 'len', function (p) { return DRAWER(p) && p.drawer_system === 'side_mount'; }],
       ['#', 'Wood box', function (p) { return DRAWER(p) && (p.drawer_system !== 'box_system'); }],
       ['db_t_same', 'Box sides: same as panel thickness', 'bool', function (p) { return DRAWER(p) && (p.drawer_system !== 'box_system'); }],
       ['db_t', 'Box side thickness', 'len', function (p) { return DRAWER(p) && (p.drawer_system !== 'box_system' && !p.db_t_same); }],

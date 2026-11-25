@@ -2,8 +2,8 @@
 
 Parametric cabinet and furniture modules for SketchUp.
 
-**Latest: 0.3.85** — PanelPro Web at cspanelpro.com  
-Download [cspartners_panel_pro_0.3.85.rbz](releases/cspartners_panel_pro_0.3.85.rbz) and install it in SketchUp:
+**Latest: 0.3.86** — Drawer boxes: 28 mm for side-mount slides  
+Download [cspartners_panel_pro_0.3.86.rbz](releases/cspartners_panel_pro_0.3.86.rbz) and install it in SketchUp:
 *Extensions › Extension Manager › Install Extension…*, then restart SketchUp.
 
 **User guide:** [English](docs/USER_GUIDE.md) · [Español](docs/GUIA_DE_USO.md)
@@ -15,6 +15,7 @@ and offer to install new versions.
 
 | Version | File |
 |---|---|
+| 0.3.86 | [cspartners_panel_pro_0.3.86.rbz](releases/cspartners_panel_pro_0.3.86.rbz) |
 | 0.3.85 | [cspartners_panel_pro_0.3.85.rbz](releases/cspartners_panel_pro_0.3.85.rbz) |
 | 0.3.84 | [cspartners_panel_pro_0.3.84.rbz](releases/cspartners_panel_pro_0.3.84.rbz) |
 | 0.3.83 | [cspartners_panel_pro_0.3.83.rbz](releases/cspartners_panel_pro_0.3.83.rbz) |

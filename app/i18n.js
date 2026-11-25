@@ -180,7 +180,7 @@
     // drawers
     'Drawer system': 'Sistema de gavetas', 'Runners': 'Correderas', 'Undermount, soft-close, full ext.': 'Ocultas, cierre suave, extensión total',
     'Side-mount ball-bearing, full ext.': 'Laterales de bolas, extensión total', 'Box system (Blum Merivobox / Legrabox type)': 'Sistema de caja (tipo Blum Merivobox / Legrabox)',
-    'Available runner lengths (NL)': 'Largos de corredera disponibles (NL)', 'Clearance below box': 'Holgura bajo la caja', 'Clearance above box': 'Holgura sobre la caja',
+    'Available runner lengths (NL)': 'Largos de corredera disponibles (NL)', 'Clearance below box': 'Holgura bajo la caja', 'Clearance above box': 'Holgura sobre la caja', 'Slide clearance (both sides together)': 'Holgura para correderas (ambos lados juntos)',
     'Wood box': 'Caja de madera', 'Box side thickness': 'Espesor de laterales', 'Box bottom thickness': 'Espesor del fondo',
     'Box system — verify against the manufacturer’s current tables': 'Sistema de caja — verifique con las tablas actuales del fabricante',
     'Metal side height': 'Altura del lateral metálico', 'Bottom & back thickness': 'Espesor de fondo y trasera',

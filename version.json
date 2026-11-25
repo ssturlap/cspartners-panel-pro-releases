@@ -1,15 +1,19 @@
 {
-  "version": "0.3.85",
-  "date": "2026-11-24",
-  "title": "PanelPro Web at cspanelpro.com",
-  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.85.rbz",
+  "version": "0.3.86",
+  "date": "2026-11-25",
+  "title": "Drawer boxes: 28 mm for side-mount slides",
+  "rbz": "https://raw.githubusercontent.com/ssturlap/cspartners-panel-pro-releases/main/releases/cspartners_panel_pro_0.3.86.rbz",
   "notes": [
-    "PanelPro Web now lives at https://cspanelpro.com/app/ (the old address forwards to it). The material catalog and the links to the web app use the new address.",
-    "PanelPro Web, Composition: the 2D view can be switched to Front, Right, Back, Left or Top; drag modules in any of them (forward and back too), type how far…"
+    "Built drawer boxes on side-mount slides are now the opening between the sides less 28 mm (14 mm a side: the slide plus room to adjust it), instead of 25.4…",
+    "Drawers tab › Slide clearance (both sides together): change the 28 mm for other slides. Each drawer side in the cut list says how the box was worked out,…",
+    "Modules already drawn take the new size when they are rebuilt or edited — check the cut list before ordering.",
+    "PanelPro Web on phones: pictures for door mounting, front style and pulls; the manual fits the screen; the name and sizes sit in the top bar; the View…"
   ],
-  "title_es": "PanelPro Web en cspanelpro.com",
+  "title_es": "Cajas de gaveta: 28 mm para correderas laterales",
   "notes_es": [
-    "PanelPro Web ahora está en https://cspanelpro.com/app/ (la dirección anterior lleva a la nueva). El catálogo de materiales y los enlaces a la app web usan…",
-    "PanelPro Web, Composición: la vista 2D se puede cambiar a Frente, Derecha, Atrás, Izquierda o Arriba; arrastre los módulos en cualquiera de ellas (también…"
+    "Las cajas de gaveta armadas con correderas laterales miden ahora el hueco entre costados menos 28 mm (14 mm por lado: la corredera más espacio para…",
+    "Pestaña Gavetas › Holgura para correderas (ambos lados juntos): cambie los 28 mm para otras correderas. Cada lateral de gaveta en la lista de corte dice…",
+    "Los módulos ya dibujados toman la nueva medida al reconstruirlos o editarlos; revise la lista de corte antes de pedir.",
+    "PanelPro Web en el teléfono: imágenes para el montaje de puertas, el estilo de frente y los tiradores; el manual cabe en la pantalla; el nombre y las…"
   ]
 }
