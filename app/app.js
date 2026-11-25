@@ -8,7 +8,7 @@
   'use strict';
 
   var VERSION = '0.3.85';
-  var BUILD = '9d73b755fa';
+  var BUILD = '531fd0f90f';
   var STORE = 'panelpro.web.sites.v1';
   var LANG_KEY = 'panelpro.web.lang';
   var FILE_FORMAT = 'panelpro-site';
@@ -2378,8 +2378,11 @@
                slab_l: 'Length', slab_w: sl && E.params.slab_kind !== 'top' ? 'Height' : 'Depth' }[k] || (k[0].toUpperCase() + k.slice(1)));
   }
   function fillDimChips(p) {
+    document.querySelectorAll('[data-dimhost]').forEach(function (h) { fillDimHost(h, p); });
     var host = $('#dimChips');
-    if (!host) { return; }
+    if (host) { fillDimHost(host, p); }
+  }
+  function fillDimHost(host, p) {
     var list = p.panel ? panelDims(p).map(function (d) { return ['pdim', d[0], d[1], d[0] === 'len' ? 'L' : d[0] === 'wid' ? t('W') : t('T')]; })
       : p.bed ? [['dim', 'bed_mw', 'bed_mw', t('Mattress W')], ['dim', 'bed_ml', 'bed_ml', t('Mattress L')], ['dim', 'height', 'height', t('H')]]
       : p.slab ? [['dim', 'slab_l', 'slab_l', 'L'], ['dim', 'slab_w', 'slab_w', p.slab_kind === 'top' ? t('D') : t('H')]]
@@ -2400,7 +2403,9 @@
     if (!body) { return; }
     var p = E.params;
     var scrollY = body.scrollTop;
-    var html = '<input class="ed-name" data-text="name" value="' + esc(p.name || '') + '" placeholder="' + esc(t('Module name')) + '" autocomplete="off" aria-label="' + esc(t('Name')) + '">' +
+    // the name, with the size chips beside it on a phone (the 3D view stays clear)
+    var html = '<div class="ed-namerow"><input class="ed-name" data-text="name" value="' + esc(p.name || '') + '" placeholder="' + esc(t('Module name')) + '" autocomplete="off" aria-label="' + esc(t('Name')) + '">' +
+      '<div class="dimchips inline" data-dimhost="1"></div></div>' +
       '<div class="measure">' + (p.panel ? panelDims(p).map(function (d) {
       // a loose panel: Length (the grain) × Width × Thickness, whichever way it stands
       return '<button type="button" data-pdim="' + d[0] + '" class="' + (E.changed[d[1]] ? 'changed' : '') + '"><span class="lbl">' + esc(t(d[2])) + '</span>' +
